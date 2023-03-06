@@ -11,11 +11,11 @@ import { map } from 'lodash';
 
 import { HoverBarContainer } from './StyledComponents';
 
-interface NodeHoverBarProps extends React.ComponentPropsWithoutRef<typeof HoverBarContainer> {
+interface ListItemHoverBarProps extends React.ComponentPropsWithoutRef<typeof HoverBarContainer> {
 	actions?: DSAction[];
 }
 
-export const NodeHoverBar = ({ actions, ...rest }: NodeHoverBarProps): JSX.Element => {
+export const ListItemHoverBar = ({ actions, ...rest }: ListItemHoverBarProps): JSX.Element => {
 	const actionsMapped = useMemo(
 		() =>
 			map(actions, (action) => ({

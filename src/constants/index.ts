@@ -17,4 +17,3 @@ export const LIST_WIDTH = '40%';
 export const DISPLAYER_WIDTH = '60%';
 
 export const LIST_ITEM_HEIGHT = '4rem';
-export const LIST_ITEM_AVATAR_HEIGHT = '2.625rem';

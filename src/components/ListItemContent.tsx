@@ -10,7 +10,7 @@ import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
 
 import { ContextualMenu } from './ContextualMenu';
-import { NodeHoverBar } from './NodeHoverBar';
+import { ListItemHoverBar } from './ListItemHoverBar';
 import { Reminder } from './Reminder';
 import { HoverContainer, ListItemContainer, TextWithLineHeight } from './StyledComponents';
 import { LIST_ITEM_HEIGHT } from '../constants';
@@ -23,7 +23,6 @@ type ListItemContentProps = Pick<
 	visible?: boolean;
 	active?: boolean;
 	onClick?: () => void;
-	disabled?: boolean;
 	timeZoneId: string;
 };
 
@@ -37,7 +36,6 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 		// others props
 		visible,
 		active,
-		disabled = false,
 		timeZoneId
 	}) => {
 		const [t] = useTranslation();
@@ -74,11 +72,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 				<ContextualMenu actions={[]}>
 					<ListItemContainer
 						height={'fit'}
-						data-testid={`node-item-${id}`}
 						crossAlignment={'flex-end'}
-						$contextualMenuActive={false}
-						$disableHover={disabled}
-						$disabled={disabled}
 						onMouseDown={preventTextSelection}
 					>
 						<HoverContainer
@@ -104,20 +98,14 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 									wrap="nowrap"
 									mainAlignment="space-between"
 								>
-									<TextWithLineHeight overflow="ellipsis" disabled={disabled} size="medium">
+									<TextWithLineHeight overflow="ellipsis" size="medium">
 										{title}
 									</TextWithLineHeight>
 									<Container orientation="horizontal" mainAlignment="flex-end" width="fit">
 										<Padding left="extrasmall">
-											{priority === Priority.High && (
-												<Icon icon="ArrowheadUp" color="error" disabled={disabled} />
-											)}
-											{priority === Priority.Low && (
-												<Icon icon="ArrowheadDown" color="info" disabled={disabled} />
-											)}
-											{priority === Priority.Medium && (
-												<Icon icon="MinusOutline" color="gray1" disabled={disabled} />
-											)}
+											{priority === Priority.High && <Icon icon="ArrowheadUp" color="error" />}
+											{priority === Priority.Low && <Icon icon="ArrowheadDown" color="info" />}
+											{priority === Priority.Medium && <Icon icon="MinusOutline" color="gray1" />}
 										</Padding>
 									</Container>
 								</Row>
@@ -143,7 +131,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 												reminderAllDay={reminderAllDay}
 											/>
 										) : (
-											<TextWithLineHeight color="secondary" disabled={disabled} size="small">
+											<TextWithLineHeight color="secondary" size="small">
 												{missingReminderLabel}
 											</TextWithLineHeight>
 										)}
@@ -160,19 +148,19 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 											padding={{ left: 'small' }}
 										>
 											<Padding left="extrasmall">
-												<Icon icon="AlertTriangle" color="warning" disabled={disabled} />
+												<Icon icon="AlertTriangle" color="warning" />
 											</Padding>
 										</Container>
 									)}
 								</Row>
 							</Container>
 						</HoverContainer>
-						{<NodeHoverBar actions={[]} />}
+						{<ListItemHoverBar actions={[]} />}
 					</ListItemContainer>
 				</ContextualMenu>
 			</Container>
 		) : (
-			<div style={{ height: '4rem' }} />
+			<div style={{ height: LIST_ITEM_HEIGHT }} />
 		);
 	}
 );
