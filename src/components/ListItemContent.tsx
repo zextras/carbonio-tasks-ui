@@ -82,7 +82,6 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 							crossAlignment="center"
 							padding={{ all: 'small' }}
 							width="fill"
-							background={active ? 'highlight' : 'gray6'}
 						>
 							<Container
 								orientation="vertical"

@@ -34,6 +34,8 @@ export const ListItemHoverBar = ({ actions, ...rest }: ListItemHoverBarProps): J
 			mainAlignment="flex-end"
 			data-testid="hover-bar"
 			padding={{ top: '0.5rem', right: '0.5rem' }}
+			width={'100%'}
+			height={'45%'}
 			{...rest}
 		>
 			<CollapsingActions actions={actionsMapped} color={'text'} size={'small'} gap={'0.5rem'} />

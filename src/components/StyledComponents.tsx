@@ -11,9 +11,7 @@ export const HoverContainer = styled(Row)`
 	width: 100%;
 `;
 
-export const HoverBarContainer = styled(Row).attrs(({ height = '45%' }) => ({
-	height
-}))`
+export const HoverBarContainer = styled(Row)`
 	display: none;
 	position: absolute;
 	top: 0;
@@ -27,6 +25,7 @@ export const HoverBarContainer = styled(Row).attrs(({ height = '45%' }) => ({
 
 export const ListItemContainer = styled(Container)`
 	position: relative;
+	cursor: pointer;
 	${HoverBarContainer} {
 		display: none;
 	}

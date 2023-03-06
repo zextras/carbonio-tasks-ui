@@ -10,6 +10,7 @@ import { Container, Divider, ListItem, ListV2, Row, Text } from '@zextras/carbon
 import { useUserSettings } from '@zextras/carbonio-shell-ui';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 import { ListItemContent } from './ListItemContent';
 import { LIST_WIDTH } from '../constants';
@@ -19,6 +20,10 @@ import { NonNullableList } from '../types/utils';
 type TaskListProps = {
 	tasks: NonNullableList<FindTasksQuery['findTasks']>;
 };
+
+const StyledListItem = styled(ListItem)`
+	transition: none;
+`;
 
 export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 	const settings = useUserSettings();
@@ -30,7 +35,7 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 	const items = useMemo(
 		() =>
 			map(tasks, (task) => (
-				<ListItem key={task.id} active={false}>
+				<StyledListItem key={task.id} active={false}>
 					{(visible): JSX.Element => (
 						<ListItemContent
 							active={false}
@@ -43,7 +48,7 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 							timeZoneId={timeZoneId}
 						/>
 					)}
-				</ListItem>
+				</StyledListItem>
 			)),
 		[tasks, timeZoneId]
 	);
@@ -73,7 +78,7 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 				<Text>{allTasksLabel}</Text>
 			</Row>
 			<Divider color="gray3" />
-			<ListV2>{items}</ListV2>
+			<ListV2 background={'gray6'}>{items}</ListV2>
 		</Container>
 	);
 };
