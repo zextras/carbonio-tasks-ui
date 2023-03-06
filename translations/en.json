@@ -30,7 +30,7 @@
     "tasksListItem": {
         "reminder": {
             "doNotRemindMe": "Do not remind me",
-            "remindMeOn": "Remind me on <1> {{reminderAtFormatted}} </1>"
+            "remindMeOn": "Remind me on"
         }
     }
 }

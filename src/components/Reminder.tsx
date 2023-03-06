@@ -37,7 +37,7 @@ export const Reminder = ({
 
 	return (
 		<>
-			<Text size="small">{t('tasksListItem.reminder.remindMeOn', 'Remind me on')}</Text>
+			<Text size="small">{t('tasksListItem.reminder.remindMeOn', 'Remind me on')}&nbsp;</Text>
 			<InlineText
 				color={isReminderExpired ? 'error' : 'text'}
 				weight={isReminderExpired ? 'bold' : 'regular'}
