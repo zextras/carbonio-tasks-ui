@@ -23,12 +23,11 @@ import {
 import userEvent from '@testing-library/user-event';
 import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
 import { PreviewManager } from '@zextras/carbonio-ui-preview';
-import { GraphQLError } from 'graphql';
+import i18next, { i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
-import i18next, { i18n } from 'i18next';
 import { Mock } from './mockUtils';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
@@ -123,18 +122,6 @@ const customQueries = {
 	findAllByRoleWithIcon,
 	findByRoleWithIcon
 };
-
-function escapeRegExp(string: string): string {
-	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-/**
- * Utility to generate an error for mocks that can be decoded with {@link decodeError}
- * @param message
- */
-export function generateError(message: string): GraphQLError {
-	return new GraphQLError(`Controlled error: ${message}`);
-}
 
 const getAppI18n = (): i18n => {
 	const newI18n = i18next.createInstance();

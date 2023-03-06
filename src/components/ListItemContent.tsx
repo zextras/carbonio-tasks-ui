@@ -4,15 +4,17 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useCallback, useMemo } from 'react';
+
 import { Container, Icon, Padding, Row } from '@zextras/carbonio-design-system';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
+
 import { ContextualMenu } from './ContextualMenu';
+import { NodeHoverBar } from './NodeHoverBar';
+import { Reminder } from './Reminder';
 import { HoverContainer, ListItemContainer, TextWithLineHeight } from './StyledComponents';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import { Priority, Task } from '../gql/types';
-import { NodeHoverBar } from './NodeHoverBar';
-import { Reminder } from './Reminder';
 
 type ListItemContentProps = Pick<
 	Task,
@@ -20,8 +22,6 @@ type ListItemContentProps = Pick<
 > & {
 	visible?: boolean;
 	active?: boolean;
-	selected?: boolean;
-	selecting?: boolean;
 	onClick?: () => void;
 	disabled?: boolean;
 	timeZoneId: string;
@@ -36,9 +36,6 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 		reminderAllDay,
 		// others props
 		visible,
-		selected,
-		selecting,
-		onClick,
 		active,
 		disabled = false,
 		timeZoneId

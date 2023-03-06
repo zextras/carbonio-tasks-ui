@@ -8,10 +8,11 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 import moment from 'moment-timezone';
-import { setup } from '../utils/testUtils';
+
 import { ListItemContent } from './ListItemContent';
-import { Priority } from '../gql/types';
 import { ICON_REGEXP } from '../contexts/tests';
+import { Priority } from '../gql/types';
+import { setup } from '../utils/testUtils';
 
 describe('Task list item', () => {
 	describe('Title', () => {

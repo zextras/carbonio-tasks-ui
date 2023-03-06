@@ -4,9 +4,11 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 import React, { useMemo } from 'react';
+
+import { Text } from '@zextras/carbonio-design-system';
 import moment from 'moment-timezone';
 import { useTranslation } from 'react-i18next';
-import { Text } from '@zextras/carbonio-design-system';
+
 import { InlineText } from './StyledComponents';
 import { Task } from '../gql/types';
 

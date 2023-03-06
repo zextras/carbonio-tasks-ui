@@ -5,10 +5,12 @@
  */
 
 import React, { useMemo } from 'react';
+
 import { Container, Divider, ListItem, ListV2, Row, Text } from '@zextras/carbonio-design-system';
-import { map } from 'lodash';
 import { useUserSettings } from '@zextras/carbonio-shell-ui';
+import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
+
 import { ListItemContent } from './ListItemContent';
 import { LIST_WIDTH } from '../constants';
 import { FindTasksQuery } from '../gql/types';

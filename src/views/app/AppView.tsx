@@ -5,8 +5,9 @@
  */
 
 import React from 'react';
-import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
+
 import { TasksView } from './TasksView';
+import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
 
 const AppView: React.VFC = () => (
 	<ProvidersWrapper>

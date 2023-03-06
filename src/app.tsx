@@ -5,6 +5,7 @@
  */
 
 import React, { lazy, Suspense, useEffect } from 'react';
+
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -15,8 +16,9 @@ import {
 	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
+
 import { Placeholder } from './components/placeholder';
+import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "appView" */ './views/app/AppView'));
 

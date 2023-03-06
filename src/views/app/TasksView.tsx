@@ -5,15 +5,17 @@
  */
 
 import React, { useMemo } from 'react';
-import { Container, Responsive } from '@zextras/carbonio-design-system';
+
 import { useQuery } from '@apollo/client';
+import { Container, Responsive } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
-import { DISPLAYER_WIDTH } from '../../constants';
+
 import { Displayer } from '../../components/Displayer';
-import { FindTasksDocument, FindTasksQuery } from '../../gql/types';
-import { ListContext } from '../../contexts';
-import { NonNullableList } from '../../types/utils';
 import { TaskList } from '../../components/TaskList';
+import { DISPLAYER_WIDTH } from '../../constants';
+import { ListContext } from '../../contexts';
+import { FindTasksDocument, FindTasksQuery } from '../../gql/types';
+import { NonNullableList } from '../../types/utils';
 
 function identity<Type>(arg: Type | null): arg is Type {
 	return arg !== null;

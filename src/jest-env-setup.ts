@@ -8,8 +8,8 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, configure } from '@testing-library/react';
 import failOnConsole from 'jest-fail-on-console';
 
-import server from './mocks/server';
 import buildClient from './apollo';
+import server from './mocks/server';
 
 type FileSystemDirectoryEntryMock = Omit<FileSystemDirectoryEntry, 'filesystem'> & {
 	filesystem: Partial<FileSystemDirectoryEntry['filesystem']>;

@@ -8,8 +8,9 @@ import React, { useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
-import buildClient from '../apollo';
+
 import { StyledWrapper } from './StyledWrapper';
+import buildClient from '../apollo';
 
 export const ProvidersWrapper: React.FC = ({ children }) => {
 	const apolloClient = useMemo(() => buildClient(), []);
