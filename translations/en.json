@@ -1,0 +1,36 @@
+{
+    "displayer": {
+        "allTasks": [
+            {
+                "message": "Click the \"NEW\" button to create a Task.",
+                "title": "Start organizing your day."
+            },
+            {
+                "message": "You can create up to 200 tasks.",
+                "title": "Click the \"NEW\" button to create a Task."
+            },
+            {
+                "title": "Click the \"NEW\" button to create a Task and start organizing your activities."
+            }
+        ],
+        "allTasks_limitReached": [
+            {
+                "message": "To create a new one, complete some existing tasks.",
+                "title": "You have reached the maximum number of tasks."
+            }
+        ]
+    },
+    "label": {
+        "app_name": "Tasks",
+        "new": "New Task"
+    },
+    "secondaryBar": {
+        "allTasks": "All Tasks"
+    },
+    "tasksListItem": {
+        "reminder": {
+            "doNotRemindMe": "Do not remind me",
+            "remindMeOn": "Remind me on <1> {{reminderAtFormatted}} </1>"
+        }
+    }
+}
