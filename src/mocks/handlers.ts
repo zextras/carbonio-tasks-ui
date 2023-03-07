@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { RequestHandler } from 'msw';
+import { type RequestHandler } from 'msw';
 
-declare const handlers: RequestHandler[];
+const handlers: RequestHandler[] = [];
+
 export default handlers;

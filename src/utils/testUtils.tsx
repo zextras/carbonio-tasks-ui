@@ -26,7 +26,7 @@ import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
-import { type Mock } from './mockUtils';
+import { type Mock } from '../mocks/utils';
 import { ContextsProvider, ManagersProvider } from '../providers/ProvidersWrapper';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
