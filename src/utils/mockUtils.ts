@@ -4,9 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ApolloError, ServerError } from '@apollo/client';
-import { MockedResponse } from '@apollo/client/testing';
-import { DocumentNode } from 'graphql';
+import type { ApolloError, ServerError } from '@apollo/client';
+import type { MockedResponse } from '@apollo/client/testing';
+import type { DocumentNode } from 'graphql';
 
 export interface Mock<
 	TData extends Record<string, unknown> = Record<string, unknown>,

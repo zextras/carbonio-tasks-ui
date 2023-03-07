@@ -4,31 +4,31 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ReactElement, useMemo } from 'react';
+import React, { type ReactElement, useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import {
-	ByRoleMatcher,
-	ByRoleOptions,
-	GetAllBy,
+	type ByRoleMatcher,
+	type ByRoleOptions,
+	type GetAllBy,
 	queries,
 	queryHelpers,
 	render,
-	RenderOptions,
-	RenderResult,
+	type RenderOptions,
+	type RenderResult,
 	screen,
 	within
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
 import { PreviewManager } from '@zextras/carbonio-ui-preview';
-import i18next, { i18n } from 'i18next';
+import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
-import { Mock } from './mockUtils';
+import { type Mock } from './mockUtils';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']>;

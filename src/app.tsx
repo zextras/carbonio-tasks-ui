@@ -12,7 +12,7 @@ import {
 	addBoardView,
 	addRoute,
 	registerActions,
-	SecondaryBarComponentProps,
+	type SecondaryBarComponentProps,
 	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
@@ -74,10 +74,7 @@ const App = (): React.ReactNode => {
 				},
 				disabled: false,
 				primary: true,
-				group: TASKS_APP_ID,
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				type: ACTION_TYPES.NEW
+				group: TASKS_APP_ID
 			})
 		});
 	}, [t]);

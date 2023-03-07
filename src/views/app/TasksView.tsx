@@ -14,8 +14,8 @@ import { Displayer } from '../../components/Displayer';
 import { TaskList } from '../../components/TaskList';
 import { DISPLAYER_WIDTH } from '../../constants';
 import { ListContext } from '../../contexts';
-import { FindTasksDocument, FindTasksQuery } from '../../gql/types';
-import { NonNullableList } from '../../types/utils';
+import { FindTasksDocument, type FindTasksQuery } from '../../gql/types';
+import type { NonNullableList } from '../../types/utils';
 
 function identity<Type>(arg: Type | null): arg is Type {
 	return arg !== null;

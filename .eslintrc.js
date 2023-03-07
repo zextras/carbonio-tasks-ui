@@ -41,7 +41,14 @@ module.exports = {
 		],
 		'no-shadow': 'off',
 		'@typescript-eslint/no-shadow': ['error'],
-		'no-console': ['warn', { allow: ['error'] }]
+		'no-console': ['warn', { allow: ['error'] }],
+		'no-duplicate-imports': ['error', { includeExports: true }],
+		'@typescript-eslint/consistent-type-imports': [
+			'error',
+			{
+				fixStyle: 'inline-type-imports'
+			}
+		]
 	},
 	overrides: [
 		{

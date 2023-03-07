@@ -6,7 +6,7 @@
 
 import React, { useMemo } from 'react';
 
-import { Accordion, AccordionItemType, Container } from '@zextras/carbonio-design-system';
+import { Accordion, type AccordionItemType, Container } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
