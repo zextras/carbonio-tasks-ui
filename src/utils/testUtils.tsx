@@ -21,14 +21,13 @@ import {
 	within
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
-import { PreviewManager } from '@zextras/carbonio-ui-preview';
 import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
 import { type Mock } from './mockUtils';
+import { ContextsProvider, ManagersProvider } from '../providers/ProvidersWrapper';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']>;
@@ -167,11 +166,9 @@ const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): JSX.E
 			>
 				<StyledWrapper>
 					<I18nextProvider i18n={i18nInstance}>
-						<SnackbarManager>
-							<ModalManager>
-								<PreviewManager>{children}</PreviewManager>
-							</ModalManager>
-						</SnackbarManager>
+						<ManagersProvider>
+							<ContextsProvider>{children}</ContextsProvider>
+						</ManagersProvider>
 					</I18nextProvider>
 				</StyledWrapper>
 			</MemoryRouter>

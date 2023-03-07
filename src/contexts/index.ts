@@ -5,6 +5,8 @@
  */
 import { createContext } from 'react';
 
+import { TIMEZONE_DEFAULT } from '../constants';
+
 export const ListContext = createContext<{
 	isFull: boolean;
 	setIsFull?: (full: boolean) => void;
@@ -15,4 +17,4 @@ export const ListContext = createContext<{
 	}
 });
 
-export const TimeZoneContext = createContext<string>('UTC');
+export const TimeZoneContext = createContext<string>(TIMEZONE_DEFAULT);

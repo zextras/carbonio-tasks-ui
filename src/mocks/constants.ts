@@ -5,6 +5,8 @@
  */
 import type { Account, AccountSettings } from '@zextras/carbonio-shell-ui';
 
+import { TIMEZONE_DEFAULT } from '../constants';
+
 export const LOGGED_USER: Account = {
 	displayName: '',
 	identities: undefined,
@@ -20,6 +22,6 @@ export const USER_SETTINGS: AccountSettings = {
 	attrs: {},
 	props: [],
 	prefs: {
-		zimbraPrefTimeZoneId: 'UTC'
+		zimbraPrefTimeZoneId: TIMEZONE_DEFAULT
 	}
 };
