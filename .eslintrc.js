@@ -55,6 +55,25 @@ module.exports = {
 				'testing-library/prefer-user-event': 'warn',
 				'import/no-extraneous-dependencies': 'off'
 			}
+		},
+		{
+			files: ['*.[jt]s(x)?'],
+			processor: '@graphql-eslint/graphql',
+			extends: ['plugin:prettier/recommended']
+		},
+		{
+			files: ['*.graphql'],
+			parser: '@graphql-eslint/eslint-plugin',
+			plugins: ['@graphql-eslint'],
+			rules: {
+				'prettier/prettier': 'error',
+				'@graphql-eslint/known-type-names': 'error',
+				'notice/notice': 'off'
+			},
+			parserOptions: {
+				operations: './src/gql/**/*.graphql',
+				schema: './src/gql/schema.graphql'
+			}
 		}
 	]
 };
