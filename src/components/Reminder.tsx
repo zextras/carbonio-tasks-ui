@@ -5,13 +5,15 @@
  */
 import React from 'react';
 
+import { type TextProps } from '@zextras/carbonio-design-system';
+
 import { TextExtended as Text } from './Text';
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';
 
-type ReminderProps = Pick<Task, 'reminderAt' | 'reminderAllDay'>;
+type ReminderProps = Pick<Task, 'reminderAt' | 'reminderAllDay'> & Pick<TextProps, 'overflow'>;
 
-export const Reminder = ({ reminderAt, reminderAllDay }: ReminderProps): JSX.Element => {
+export const Reminder = ({ reminderAt, reminderAllDay, overflow }: ReminderProps): JSX.Element => {
 	const { isExpired, formattedDate } = useReminder(reminderAt, reminderAllDay);
 
 	return (
@@ -20,6 +22,7 @@ export const Reminder = ({ reminderAt, reminderAllDay }: ReminderProps): JSX.Ele
 			weight={isExpired ? 'bold' : 'regular'}
 			size="small"
 			inline
+			overflow={overflow}
 		>
 			{formattedDate}
 		</Text>

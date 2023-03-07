@@ -36,12 +36,22 @@ const DetailItem = ({
 	children: OneOrMany<React.ReactNode>;
 }): JSX.Element | null =>
 	children ? (
-		<Container height={'auto'} mainAlignment={'flex-start'} crossAlignment={'flex-start'}>
+		<Container
+			height={'auto'}
+			width={'auto'}
+			mainAlignment={'flex-start'}
+			crossAlignment={'flex-start'}
+			flexGrow={1}
+			flexShrink={1}
+			flexBasis={'fit-content'}
+		>
 			<Text size={'extrasmall'} color={'gray1'}>
 				{label}
 			</Text>
 			<Text size={'small'} color={'gray0'} overflow={'break-word'}>
-				<Row gap={'0.5rem'}>{children}</Row>
+				<Row gap={'0.5rem'} wrap={'nowrap'}>
+					{children}
+				</Row>
 			</Text>
 		</Container>
 	) : null;
@@ -64,8 +74,20 @@ export const TaskDetails = ({
 
 	return (
 		<ScrollableContainer mainAlignment={'flex-start'}>
-			<Container background={'gray6'} padding={'1rem'} gap={'1rem'} height={'auto'}>
-				<Container height={'auto'} orientation={'horizontal'}>
+			<Container
+				background={'gray6'}
+				padding={'1rem'}
+				gap={'1rem'}
+				height={'auto'}
+				mainAlignment={'flex-start'}
+				crossAlignment={'flex-start'}
+			>
+				<Container
+					height={'auto'}
+					orientation={'horizontal'}
+					gap={'1rem'}
+					crossAlignment={'flex-start'}
+				>
 					<DetailItem label={t('displayer.details.creationDate', 'Creation date')}>
 						{creationDate}
 					</DetailItem>
@@ -79,8 +101,16 @@ export const TaskDetails = ({
 					<DetailItem label={t('displayer.details.reminder', 'Reminder')}>
 						{reminderAt && (
 							<>
-								<Reminder reminderAt={reminderAt} reminderAllDay={reminderAllDay} />
-								{isExpired && <Icon icon={'AlertTriangle'} color={'warning'} />}
+								<Reminder
+									reminderAt={reminderAt}
+									reminderAllDay={reminderAllDay}
+									overflow={'break-word'}
+								/>
+								{isExpired && (
+									<Container height={'fit'} width={'fit'} flexShrink={0}>
+										<Icon icon={'AlertTriangle'} color={'warning'} />
+									</Container>
+								)}
 							</>
 						)}
 					</DetailItem>
