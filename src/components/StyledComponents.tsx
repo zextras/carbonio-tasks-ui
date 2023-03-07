@@ -7,9 +7,7 @@
 import { Container, Row } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
-export const HoverContainer = styled(Row)`
-	width: 100%;
-`;
+export const HoverContainer = styled(Row)``;
 
 export const HoverBarContainer = styled(Row)`
 	display: none;

@@ -7,6 +7,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { Container, Icon, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
 
 import { ContextualMenu } from './ContextualMenu';
 import { ListItemHoverBar } from './ListItemHoverBar';
@@ -26,6 +27,14 @@ type ListItemContentProps = Pick<
 	active?: boolean;
 	onClick?: (id: string) => void;
 };
+
+const ReminderIconContainer = styled(Container)`
+	height: ${({ theme }): string => `${parseFloat(theme.sizes.font.small) * 1.5}rem`};
+`;
+
+const ContentContainer = styled(Container)`
+	overflow: hidden;
+`;
 
 export const ListItemContent = React.memo<ListItemContentProps>(
 	({
@@ -74,7 +83,14 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 							width="fill"
 							gap={'1rem'}
 						>
-							<Container orientation="vertical" height={'auto'} gap={'0.25rem'} width="fill">
+							<ContentContainer
+								orientation="vertical"
+								height={'auto'}
+								maxHeight={'100%'}
+								gap={'0.25rem'}
+								width="fill"
+								mainAlignment={'flex-start'}
+							>
 								<Row gap={'0.25rem'} width="fill" wrap="nowrap" mainAlignment="space-between">
 									<Text overflow="ellipsis" size="medium">
 										{title}
@@ -83,22 +99,33 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 										<PriorityIcon priority={priority} />
 									</Container>
 								</Row>
-								<Row gap={'0.25rem'} width="fill" wrap="nowrap" mainAlignment="space-between">
+								<Row
+									gap={'0.25rem'}
+									width="fill"
+									wrap="nowrap"
+									mainAlignment="space-between"
+									crossAlignment={'flex-start'}
+								>
 									<Container
-										flexShrink={0}
+										flexShrink={1}
 										flexGrow={1}
 										flexBasis="auto"
 										mainAlignment="flex-start"
 										orientation="horizontal"
-										width="fit"
+										minWidth={0}
+										width="auto"
 										height={'auto'}
+										wrap={'wrap-reverse'}
+										crossAlignment={'flex-start'}
 									>
 										{reminderAt ? (
 											<>
 												<Text size="small">
 													{t('tasksListItem.reminder.remindMeOn', 'Remind me on')}&nbsp;
 												</Text>
-												<Reminder reminderAt={reminderAt} reminderAllDay={reminderAllDay} />
+												<Container width={'fit'} height={'fit'} flexShrink={0} maxWidth={'100%'}>
+													<Reminder reminderAt={reminderAt} reminderAllDay={reminderAllDay} />
+												</Container>
 											</>
 										) : (
 											<Text color="secondary" size="small">
@@ -107,12 +134,12 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 										)}
 									</Container>
 									{isReminderExpired && (
-										<Container width={'fit'} height={'fit'} flexShrink={0}>
+										<ReminderIconContainer width={'fit'} flexShrink={0}>
 											<Icon icon="AlertTriangle" color="warning" />
-										</Container>
+										</ReminderIconContainer>
 									)}
 								</Row>
-							</Container>
+							</ContentContainer>
 						</HoverContainer>
 						{<ListItemHoverBar actions={[]} />}
 					</ListItemContainer>
