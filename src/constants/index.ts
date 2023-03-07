@@ -17,3 +17,6 @@ export const LIST_WIDTH = '40%';
 export const DISPLAYER_WIDTH = '60%';
 
 export const LIST_ITEM_HEIGHT = '4rem';
+
+export const DATE_FORMAT = 'MMM DD, YYYY';
+export const DATE_TIME_FORMAT = 'MMM DD, YYYY - HH:mm';

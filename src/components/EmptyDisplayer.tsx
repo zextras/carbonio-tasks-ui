@@ -9,9 +9,9 @@ import { Container, Padding } from '@zextras/carbonio-design-system';
 import { sample, debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-import { CenteredText } from './StyledComponents';
+import { TextExtended as Text } from './Text';
 import { ListContext } from '../contexts';
-import { OneOrMany } from '../types/utils';
+import type { OneOrMany } from '../types/utils';
 
 interface EmptyDisplayerProps {
 	translationKey: string;
@@ -59,13 +59,13 @@ export const EmptyDisplayer: React.VFC<EmptyDisplayerProps> = ({ translationKey 
 	return (
 		<Container>
 			<Padding all="medium">
-				<CenteredText color="gray1" overflow="break-word" weight="bold" size="large">
+				<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>
 					{randomPlaceholder?.title || ''}
-				</CenteredText>
+				</Text>
 			</Padding>
-			<CenteredText size="small" color="gray1" overflow="break-word" $width="60%">
+			<Text size="small" color="gray1" overflow="break-word" width="60%" centered>
 				{randomPlaceholder?.message || ''}
-			</CenteredText>
+			</Text>
 		</Container>
 	);
 };

@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { Container, Row, Text } from '@zextras/carbonio-design-system';
+import { Container, Row } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';
 
 export const HoverContainer = styled(Row)`
@@ -16,11 +16,7 @@ export const HoverBarContainer = styled(Row)`
 	position: absolute;
 	top: 0;
 	right: 0;
-	background: linear-gradient(
-		to right,
-		transparent,
-		${({ theme }): string => theme.palette.gray6.hover}
-	);
+	background: linear-gradient(to right, transparent, currentColor);
 `;
 
 export const ListItemContainer = styled(Container)`
@@ -35,17 +31,4 @@ export const ListItemContainer = styled(Container)`
 			display: flex;
 		}
 	}
-`;
-
-export const CenteredText = styled(Text)<{ $width?: string }>`
-	text-align: center;
-	width: ${({ $width }): string => $width || 'auto'};
-`;
-
-export const InlineText = styled(Text)`
-	display: inline;
-`;
-
-export const TextWithLineHeight = styled(Text)`
-	line-height: 1.5;
 `;

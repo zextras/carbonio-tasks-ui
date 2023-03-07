@@ -4,15 +4,18 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
+
+import { Route, useRouteMatch } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
 import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
 
-const AppView: React.VFC = () => (
-	<ProvidersWrapper>
-		<TasksView />
-	</ProvidersWrapper>
-);
+const AppView = (): JSX.Element => {
+	const { path } = useRouteMatch();
+	const routes = useMemo(() => <Route path={`${path}/:taskId?`} component={TasksView} />, [path]);
+
+	return <ProvidersWrapper>{routes}</ProvidersWrapper>;
+};
 
 export default AppView;

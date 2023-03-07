@@ -6,51 +6,64 @@
 
 import React, { useMemo } from 'react';
 
-import { Container, Divider, ListItem, ListV2, Row, Text } from '@zextras/carbonio-design-system';
-import { useUserSettings } from '@zextras/carbonio-shell-ui';
+import {
+	Container,
+	Divider,
+	ListItem,
+	type ListItemProps,
+	ListV2,
+	pseudoClasses,
+	Row,
+	Text
+} from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
+import styled, { type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
 import { ListItemContent } from './ListItemContent';
 import { LIST_WIDTH } from '../constants';
-import { FindTasksQuery } from '../gql/types';
-import { NonNullableList } from '../types/utils';
+import type { FindTasksQuery } from '../gql/types';
+import { useActiveItem } from '../hooks/useActiveItem';
+import type { NonNullableList } from '../types/utils';
 
 type TaskListProps = {
 	tasks: NonNullableList<FindTasksQuery['findTasks']>;
 };
 
-const StyledListItem = styled(ListItem)`
+const StyledListItem = styled(ListItem).attrs<
+	ListItemProps,
+	{ backgroundColor?: string | keyof DefaultTheme['palette'] }
+>(({ background, selectedBackground, activeBackground, active, selected }) => ({
+	backgroundColor: (active && activeBackground) || (selected && selectedBackground) || background
+}))`
+	${({ backgroundColor, theme }): SimpleInterpolation =>
+		backgroundColor && pseudoClasses(theme, backgroundColor, 'color')}
 	transition: none;
 `;
 
 export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
-	const settings = useUserSettings();
 	const [t] = useTranslation();
 	const allTasksLabel = useMemo(() => t('secondaryBar.allTasks', 'All Tasks'), [t]);
-
-	const timeZoneId = useMemo(() => settings.prefs.zimbraPrefTimeZoneId as string, [settings]);
+	const { isActive, setActive } = useActiveItem();
 
 	const items = useMemo(
 		() =>
 			map(tasks, (task) => (
-				<StyledListItem key={task.id} active={false}>
+				<StyledListItem key={task.id} active={isActive(task.id)}>
 					{(visible): JSX.Element => (
 						<ListItemContent
-							active={false}
 							visible={visible}
 							title={task.title}
 							priority={task.priority}
-							reminderAt={task.reminderAt || undefined}
-							reminderAllDay={task.reminderAllDay || undefined}
+							reminderAt={task.reminderAt}
+							reminderAllDay={task.reminderAllDay}
 							id={task.id}
-							timeZoneId={timeZoneId}
+							onClick={setActive}
 						/>
 					)}
 				</StyledListItem>
 			)),
-		[tasks, timeZoneId]
+		[isActive, setActive, tasks]
 	);
 
 	return (
@@ -59,7 +72,7 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 			mainAlignment="flex-start"
 			crossAlignment="unset"
 			borderRadius="none"
-			background="gray6"
+			background={'gray6'}
 		>
 			<Row
 				minHeight={'2.5rem'}

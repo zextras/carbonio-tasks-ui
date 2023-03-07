@@ -5,16 +5,18 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { Container, Icon, Padding, Row } from '@zextras/carbonio-design-system';
-import moment from 'moment-timezone';
+import { Container, Icon, Row } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
 import { ContextualMenu } from './ContextualMenu';
 import { ListItemHoverBar } from './ListItemHoverBar';
+import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';
-import { HoverContainer, ListItemContainer, TextWithLineHeight } from './StyledComponents';
+import { HoverContainer, ListItemContainer } from './StyledComponents';
+import { TextExtended as Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
-import { Priority, Task } from '../gql/types';
+import type { Task } from '../gql/types';
+import { useReminder } from '../hooks/useReminder';
 
 type ListItemContentProps = Pick<
 	Task,
@@ -22,8 +24,7 @@ type ListItemContentProps = Pick<
 > & {
 	visible?: boolean;
 	active?: boolean;
-	onClick?: () => void;
-	timeZoneId: string;
+	onClick?: (id: string) => void;
 };
 
 export const ListItemContent = React.memo<ListItemContentProps>(
@@ -33,35 +34,23 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 		reminderAt,
 		title,
 		reminderAllDay,
+		onClick,
 		// others props
-		visible,
-		active,
-		timeZoneId
+		visible
 	}) => {
 		const [t] = useTranslation();
+		const { isExpired: isReminderExpired } = useReminder(reminderAt, reminderAllDay);
 
-		const clickHandler = useCallback(() => {
-			// onClick(id);
-		}, []);
+		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
+			onClick?.(id);
+		}, [id, onClick]);
 
 		const missingReminderLabel = useMemo(
 			() => t('tasksListItem.reminder.doNotRemindMe', 'Do not remind me'),
 			[t]
 		);
 
-		const isReminderExpired = useMemo(() => {
-			if (reminderAt) {
-				const now = moment().tz(timeZoneId);
-				if (reminderAllDay) {
-					return moment(reminderAt).isBefore(now, 'day');
-				}
-
-				return moment(reminderAt).isBefore(now);
-			}
-			return false;
-		}, [reminderAllDay, reminderAt, timeZoneId]);
-
-		const preventTextSelection = useCallback<React.MouseEventHandler>((e): void => {
+		const preventTextSelection = useCallback<React.MouseEventHandler<HTMLDivElement>>((e) => {
 			if (e.detail > 1) {
 				e.preventDefault();
 			}
@@ -74,6 +63,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 						height={'fit'}
 						crossAlignment={'flex-end'}
 						onMouseDown={preventTextSelection}
+						onClick={clickHandler}
 					>
 						<HoverContainer
 							height={LIST_ITEM_HEIGHT}
@@ -82,38 +72,18 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 							crossAlignment="center"
 							padding={{ all: 'small' }}
 							width="fill"
+							gap={'1rem'}
 						>
-							<Container
-								orientation="vertical"
-								crossAlignment="flex-start"
-								mainAlignment="space-around"
-								padding={{ right: 'small', left: 'small' }}
-								minWidth="auto"
-								width="fill"
-							>
-								<Row
-									padding={{ vertical: 'extrasmall' }}
-									width="fill"
-									wrap="nowrap"
-									mainAlignment="space-between"
-								>
-									<TextWithLineHeight overflow="ellipsis" size="medium">
+							<Container orientation="vertical" height={'auto'} gap={'0.25rem'} width="fill">
+								<Row gap={'0.25rem'} width="fill" wrap="nowrap" mainAlignment="space-between">
+									<Text overflow="ellipsis" size="medium">
 										{title}
-									</TextWithLineHeight>
-									<Container orientation="horizontal" mainAlignment="flex-end" width="fit">
-										<Padding left="extrasmall">
-											{priority === Priority.High && <Icon icon="ArrowheadUp" color="error" />}
-											{priority === Priority.Low && <Icon icon="ArrowheadDown" color="info" />}
-											{priority === Priority.Medium && <Icon icon="MinusOutline" color="gray1" />}
-										</Padding>
+									</Text>
+									<Container width={'fit'} height={'fit'} flexShrink={0}>
+										<PriorityIcon priority={priority} />
 									</Container>
 								</Row>
-								<Row
-									padding={{ vertical: 'extrasmall' }}
-									width="fill"
-									wrap="nowrap"
-									mainAlignment="flex-start"
-								>
+								<Row gap={'0.25rem'} width="fill" wrap="nowrap" mainAlignment="space-between">
 									<Container
 										flexShrink={0}
 										flexGrow={1}
@@ -121,34 +91,24 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 										mainAlignment="flex-start"
 										orientation="horizontal"
 										width="fit"
+										height={'auto'}
 									>
 										{reminderAt ? (
-											<Reminder
-												timeZoneId={timeZoneId}
-												isReminderExpired={isReminderExpired}
-												reminderAt={reminderAt}
-												reminderAllDay={reminderAllDay}
-											/>
+											<>
+												<Text size="small">
+													{t('tasksListItem.reminder.remindMeOn', 'Remind me on')}&nbsp;
+												</Text>
+												<Reminder reminderAt={reminderAt} reminderAllDay={reminderAllDay} />
+											</>
 										) : (
-											<TextWithLineHeight color="secondary" size="small">
+											<Text color="secondary" size="small">
 												{missingReminderLabel}
-											</TextWithLineHeight>
+											</Text>
 										)}
 									</Container>
 									{isReminderExpired && (
-										<Container
-											width="fit"
-											minWidth={0}
-											flexShrink={1}
-											flexGrow={1}
-											flexBasis="auto"
-											orientation="horizontal"
-											mainAlignment="flex-end"
-											padding={{ left: 'small' }}
-										>
-											<Padding left="extrasmall">
-												<Icon icon="AlertTriangle" color="warning" />
-											</Padding>
+										<Container width={'fit'} height={'fit'} flexShrink={0}>
+											<Icon icon="AlertTriangle" color="warning" />
 										</Container>
 									)}
 								</Row>

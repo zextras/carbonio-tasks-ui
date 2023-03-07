@@ -6,8 +6,10 @@
 
 import React from 'react';
 
-import { Container, Text } from '@zextras/carbonio-design-system';
+import { Container } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
+
+import { TextExtended as Text } from '../../components/Text';
 
 const MainBoardView = (): JSX.Element => {
 	const [t] = useTranslation();

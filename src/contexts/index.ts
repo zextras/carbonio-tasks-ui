@@ -14,3 +14,5 @@ export const ListContext = createContext<{
 		// not implemented
 	}
 });
+
+export const TimeZoneContext = createContext<string>('UTC');
