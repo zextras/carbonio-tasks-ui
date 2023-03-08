@@ -12,6 +12,7 @@ import moment from 'moment-timezone';
 import { ListItemContent } from './ListItemContent';
 import { ICON_REGEXP } from '../constants/tests';
 import { Priority } from '../gql/types';
+import { populateTask } from '../mocks/utils';
 import { setup } from '../utils/testUtils';
 
 describe('Task list item', () => {
@@ -198,5 +199,31 @@ describe('Task list item', () => {
 			);
 			expect(screen.queryByTestId(ICON_REGEXP.reminderExpired)).not.toBeInTheDocument();
 		});
+	});
+
+	test('Click on item calls callback', async () => {
+		const task = populateTask();
+		const clickFn = jest.fn();
+		const { user } = setup(
+			<ListItemContent
+				id={task.id}
+				priority={task.priority}
+				title={task.title}
+				onClick={clickFn}
+				visible
+			/>
+		);
+		await user.click(screen.getByText(task.title));
+		expect(clickFn).toHaveBeenCalled();
+		expect(clickFn).toHaveBeenCalledTimes(1);
+	});
+
+	test('When not visible, no data is shown', () => {
+		const task = populateTask();
+		setup(
+			<ListItemContent id={task.id} priority={Priority.High} title={task.title} visible={false} />
+		);
+		expect(screen.queryByText(task.title)).not.toBeInTheDocument();
+		expect(screen.queryByTestId(ICON_REGEXP.highPriority)).not.toBeInTheDocument();
 	});
 });
