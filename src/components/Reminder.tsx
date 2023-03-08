@@ -11,9 +11,13 @@ import { TextExtended as Text } from './Text';
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';
 
-type ReminderProps = Pick<Task, 'reminderAt' | 'reminderAllDay'> & Pick<TextProps, 'overflow'>;
+type ReminderProps = Pick<Task, 'reminderAt' | 'reminderAllDay'> & TextProps;
 
-export const Reminder = ({ reminderAt, reminderAllDay, overflow }: ReminderProps): JSX.Element => {
+export const Reminder = ({
+	reminderAt,
+	reminderAllDay,
+	...textProps
+}: ReminderProps): JSX.Element => {
 	const { isExpired, formattedDate } = useReminder(reminderAt, reminderAllDay);
 
 	return (
@@ -22,7 +26,7 @@ export const Reminder = ({ reminderAt, reminderAllDay, overflow }: ReminderProps
 			weight={isExpired ? 'bold' : 'regular'}
 			size="small"
 			inline
-			overflow={overflow}
+			{...textProps}
 		>
 			{formattedDate}
 		</Text>

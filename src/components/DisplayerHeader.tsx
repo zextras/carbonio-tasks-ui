@@ -28,7 +28,7 @@ export const DisplayerHeader = ({ title }: DisplayerHeaderProps): JSX.Element =>
 				gap={'0.5rem'}
 			>
 				<Text withTooltip>{title}</Text>
-				<IconButton icon={'CloseOutline'} size={'small'} onClick={removeActive} />
+				<IconButton icon={'CloseOutline'} size={'medium'} onClick={removeActive} />
 			</Container>
 			<Divider color={'gray3'} />
 		</Container>

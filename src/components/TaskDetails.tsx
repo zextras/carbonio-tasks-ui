@@ -45,10 +45,10 @@ const DetailItem = ({
 			flexShrink={1}
 			flexBasis={'fit-content'}
 		>
-			<Text size={'extrasmall'} color={'gray1'}>
+			<Text size={'small'} color={'gray1'}>
 				{label}
 			</Text>
-			<Text size={'small'} color={'gray0'} overflow={'break-word'}>
+			<Text size={'medium'} color={'gray0'} overflow={'break-word'}>
 				<Row gap={'0.5rem'} wrap={'nowrap'}>
 					{children}
 				</Row>
@@ -105,6 +105,7 @@ export const TaskDetails = ({
 									reminderAt={reminderAt}
 									reminderAllDay={reminderAllDay}
 									overflow={'break-word'}
+									size={'medium'}
 								/>
 								{isExpired && (
 									<Container height={'fit'} width={'fit'} flexShrink={0}>
