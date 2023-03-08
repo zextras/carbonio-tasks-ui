@@ -7,8 +7,9 @@ import React from 'react';
 
 import { Container } from '@zextras/carbonio-design-system';
 
-import { DisplayerContent } from './DisplayerContent';
+import { ActionsHeader } from './ActionsHeader';
 import { DisplayerHeader } from './DisplayerHeader';
+import { TaskDetails } from './TaskDetails';
 import type { Task } from '../gql/types';
 
 interface TaskDisplayerProps {
@@ -17,6 +18,15 @@ interface TaskDisplayerProps {
 export const TaskDisplayer = ({ task }: TaskDisplayerProps): JSX.Element => (
 	<Container background={'gray5'} mainAlignment={'flex-start'}>
 		<DisplayerHeader title={task.title} />
-		<DisplayerContent task={task} />
+		<Container padding={{ horizontal: '1rem' }} mainAlignment={'flex-start'}>
+			<ActionsHeader />
+			<TaskDetails
+				createdAt={task.createdAt}
+				priority={task.priority}
+				reminderAt={task.reminderAt}
+				reminderAllDay={task.reminderAllDay}
+				description={task.description}
+			/>
+		</Container>
 	</Container>
 );
