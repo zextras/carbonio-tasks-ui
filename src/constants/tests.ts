@@ -14,3 +14,5 @@ export const ICON_REGEXP = {
 export const TEST_ID_SELECTOR = {
 	tooltip: 'tooltip'
 };
+
+export const EMPTY_DISPLAYER_HINT = 'Start organizing your day.';

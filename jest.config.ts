@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { ApolloClient } from '@apollo/client';
+
 export default {
 	// All imported modules in your tests should be mocked automatically
 	// automock: false,
@@ -75,7 +77,7 @@ export default {
 
 	// A set of global variables that need to be available in all test environments
 	globals: {
-		IS_SERVER: false
+		apolloClient: ApolloClient
 	},
 
 	// The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.

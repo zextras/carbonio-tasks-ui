@@ -4,12 +4,19 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { ApolloError, ServerError } from '@apollo/client';
+import type { FetchResult } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
 import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
 
-import { Priority, Status, type Task } from '../gql/types';
+import {
+	GetTaskDocument,
+	type GetTaskQuery,
+	type GetTaskQueryVariables,
+	Priority,
+	Status,
+	type Task
+} from '../gql/types';
 
 export interface Mock<
 	TData extends Record<string, unknown> = Record<string, unknown>,
@@ -19,7 +26,6 @@ export interface Mock<
 		query: DocumentNode;
 		variables: V;
 	};
-	error?: ServerError | ApolloError;
 }
 
 export function populateTask(): Task {
@@ -33,5 +39,26 @@ export function populateTask(): Task {
 		status: Status.Open,
 		reminderAt: faker.helpers.arrayElement([faker.datatype.datetime().getTime(), null]),
 		reminderAllDay: faker.helpers.arrayElement([faker.datatype.boolean(), null])
+	};
+}
+
+export function mockGetTask(
+	variables: GetTaskQueryVariables,
+	task: GetTaskQuery['getTask'],
+	error?: Error
+): Mock<GetTaskQuery, GetTaskQueryVariables> {
+	return {
+		request: {
+			query: GetTaskDocument,
+			variables
+		},
+		result: jest.fn(
+			(): FetchResult<GetTaskQuery> => ({
+				data: {
+					getTask: task
+				}
+			})
+		),
+		error
 	};
 }
