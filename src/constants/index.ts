@@ -11,6 +11,9 @@ export const TASKS_ROUTE = 'tasks';
 // endpoint
 // keep endpoint without trailing slash
 export const GRAPHQL_ENDPOINT = '/services/tasks/graphql/';
+export const ROUTES = {
+	task: '/:taskId?'
+} as const;
 
 export const LIST_WIDTH = '40%';
 

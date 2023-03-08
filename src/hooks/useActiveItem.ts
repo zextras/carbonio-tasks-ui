@@ -5,12 +5,13 @@
  */
 import { useCallback } from 'react';
 
-import { useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useNavigation } from './useNavigation';
 import type { TasksPathParams } from '../types/commons';
 
 type UseActiveItemReturnType = {
+	activeItem: string;
 	isActive: (id: string) => boolean;
 	setActive: (id: string) => void;
 	removeActive: () => void;
@@ -18,11 +19,11 @@ type UseActiveItemReturnType = {
 
 export const useActiveItem = (): UseActiveItemReturnType => {
 	const { navigateTo } = useNavigation();
-	const routeMatch = useRouteMatch<TasksPathParams>();
+	const { taskId } = useParams<TasksPathParams>();
 
 	const isActive = useCallback<UseActiveItemReturnType['isActive']>(
-		(id) => routeMatch?.params.taskId === id,
-		[routeMatch?.params.taskId]
+		(id) => taskId === id,
+		[taskId]
 	);
 
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(
@@ -36,5 +37,5 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 		navigateTo('/');
 	}, [navigateTo]);
 
-	return { isActive, setActive, removeActive };
+	return { activeItem: taskId, isActive, setActive, removeActive };
 };

@@ -9,11 +9,15 @@ import React, { useMemo } from 'react';
 import { Route, useRouteMatch } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
+import { ROUTES } from '../../constants';
 import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
 
 const AppView = (): JSX.Element => {
 	const { path } = useRouteMatch();
-	const routes = useMemo(() => <Route path={`${path}/:taskId?`} component={TasksView} />, [path]);
+	const routes = useMemo(
+		() => <Route path={`${path}${ROUTES.task}`} component={TasksView} />,
+		[path]
+	);
 
 	return <ProvidersWrapper>{routes}</ProvidersWrapper>;
 };

@@ -17,7 +17,7 @@ interface EmptyDisplayerProps {
 	translationKey: string;
 }
 
-export const EmptyDisplayer: React.VFC<EmptyDisplayerProps> = ({ translationKey }) => {
+export const EmptyDisplayer = ({ translationKey }: EmptyDisplayerProps): JSX.Element => {
 	const [t] = useTranslation();
 	const { isFull } = useContext(ListContext);
 	const [randomPlaceholder, setRandomPlaceholder] = useState<{ title: string; message?: string }>();
@@ -27,7 +27,18 @@ export const EmptyDisplayer: React.VFC<EmptyDisplayerProps> = ({ translationKey 
 			/* i18next-extract-disable-next-line */
 			t(translationKey, {
 				context: (isFull && 'limitReached') || '',
-				returnObjects: true
+				returnObjects: true,
+				defaultValue: [
+					isFull
+						? {
+								title: 'You have reached the maximum number of tasks.',
+								message: 'To create a new one, complete some existing tasks.'
+						  }
+						: {
+								title: 'Start organizing your day.',
+								message: 'Click the "NEW" button to create a Task.'
+						  }
+				]
 			}),
 		[isFull, t, translationKey]
 	);
@@ -36,10 +47,7 @@ export const EmptyDisplayer: React.VFC<EmptyDisplayerProps> = ({ translationKey 
 		() =>
 			debounce(
 				($placeholders: OneOrMany<{ title: string; message?: string }>) => {
-					const result =
-						$placeholders instanceof Array
-							? (sample($placeholders) as { title: string; message?: string })
-							: $placeholders;
+					const result = $placeholders instanceof Array ? sample($placeholders) : $placeholders;
 					setRandomPlaceholder(result);
 				},
 				250,

@@ -8,25 +8,25 @@ import React, { useMemo } from 'react';
 
 import { useQuery } from '@apollo/client';
 import { Container } from '@zextras/carbonio-design-system';
-import { useParams } from 'react-router-dom';
 
 import { EmptyDisplayer } from './EmptyDisplayer';
 import { TaskDisplayer } from './TaskDisplayer';
 import { GetTaskDocument } from '../gql/types';
-import type { TasksPathParams } from '../types/commons';
+import { useActiveItem } from '../hooks/useActiveItem';
 
 export interface DisplayerProps {
 	translationKey: string;
 }
 
 export const Displayer = ({ translationKey }: DisplayerProps): JSX.Element => {
-	const { taskId } = useParams<TasksPathParams>();
+	const { activeItem } = useActiveItem();
 	const { data } = useQuery(GetTaskDocument, {
 		variables: {
-			taskId
+			taskId: activeItem
 		},
-		skip: !taskId,
-		returnPartialData: true
+		skip: !activeItem,
+		returnPartialData: true,
+		errorPolicy: 'all'
 	});
 
 	const task = useMemo(
