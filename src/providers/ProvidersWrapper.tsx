@@ -8,17 +8,39 @@ import React, { useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
-import buildClient from '../apollo';
-import { StyledWrapper } from './StyledWrapper';
+import { useUserSettings } from '@zextras/carbonio-shell-ui';
 
-export const ProvidersWrapper: React.FC = ({ children }) => {
+import { StyledWrapper } from './StyledWrapper';
+import buildClient from '../apollo';
+import { TimeZoneContext } from '../contexts';
+import { type OneOrMany } from '../types/utils';
+
+interface ProvidersWrapperProps {
+	children?: OneOrMany<React.ReactNode>;
+}
+
+export const ManagersProvider = ({ children }: ProvidersWrapperProps): JSX.Element => (
+	<SnackbarManager>
+		<ModalManager>{children}</ModalManager>
+	</SnackbarManager>
+);
+
+export const ContextsProvider = ({ children }: ProvidersWrapperProps): JSX.Element => {
+	const settings = useUserSettings();
+	const timeZoneId = useMemo(() => settings.prefs.zimbraPrefTimeZoneId as string, [settings]);
+
+	return <TimeZoneContext.Provider value={timeZoneId}>{children}</TimeZoneContext.Provider>;
+};
+
+export const ProvidersWrapper = ({ children }: ProvidersWrapperProps): JSX.Element => {
 	const apolloClient = useMemo(() => buildClient(), []);
+
 	return (
 		<StyledWrapper>
 			<ApolloProvider client={apolloClient}>
-				<SnackbarManager>
-					<ModalManager>{children}</ModalManager>
-				</SnackbarManager>
+				<ManagersProvider>
+					<ContextsProvider>{children}</ContextsProvider>
+				</ManagersProvider>
 			</ApolloProvider>
 		</StyledWrapper>
 	);

@@ -8,8 +8,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import {
 	Dropdown,
-	DropdownItem,
-	DropdownProps,
+	type DropdownItem,
+	type DropdownProps,
 	useCombinedRefs
 } from '@zextras/carbonio-design-system';
 import styled from 'styled-components';

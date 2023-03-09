@@ -11,10 +11,17 @@ export const TASKS_ROUTE = 'tasks';
 // endpoint
 // keep endpoint without trailing slash
 export const GRAPHQL_ENDPOINT = '/services/tasks/graphql/';
+export const ROUTES = {
+	task: '/:taskId?'
+} as const;
 
 export const LIST_WIDTH = '40%';
 
 export const DISPLAYER_WIDTH = '60%';
 
 export const LIST_ITEM_HEIGHT = '4rem';
-export const LIST_ITEM_AVATAR_HEIGHT = '2.625rem';
+
+export const DATE_FORMAT = 'MMM DD, YYYY';
+export const DATE_TIME_FORMAT = 'MMM DD, YYYY - HH:mm';
+
+export const TIMEZONE_DEFAULT = 'UTC';

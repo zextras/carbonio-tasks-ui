@@ -8,12 +8,8 @@ import '@testing-library/jest-dom/extend-expect';
 import { act, configure } from '@testing-library/react';
 import failOnConsole from 'jest-fail-on-console';
 
-import server from './mocks/server';
 import buildClient from './apollo';
-
-type FileSystemDirectoryEntryMock = Omit<FileSystemDirectoryEntry, 'filesystem'> & {
-	filesystem: Partial<FileSystemDirectoryEntry['filesystem']>;
-};
+import server from './mocks/server';
 
 configure({
 	asyncUtilTimeout: 2000
@@ -86,23 +82,6 @@ beforeAll(() => {
 		value: jest.fn()
 	});
 
-	let mockedStore: Record<string, unknown> = {};
-	Object.defineProperty(window, 'localStorage', {
-		writable: true,
-		value: {
-			getItem: jest.fn().mockImplementation((key) => mockedStore[key] || null),
-			setItem: jest.fn().mockImplementation((key, value) => {
-				mockedStore[key] = value.toString();
-			}),
-			removeItem: jest.fn().mockImplementation((key) => {
-				delete mockedStore[key];
-			}),
-			clear() {
-				mockedStore = {};
-			}
-		}
-	});
-
 	window.resizeTo = function resizeTo(width, height): void {
 		Object.assign(this, {
 			innerWidth: width,
@@ -113,27 +92,6 @@ beforeAll(() => {
 	};
 
 	Element.prototype.scrollTo = jest.fn();
-
-	Object.defineProperty(window, 'FileSystemDirectoryEntry', {
-		writable: true,
-		// define it as a standard function and not arrow function because arrow functions can't be called with new
-		// eslint-disable-next-line no-shadow
-		value: function FileSystemDirectoryEntryMock(): FileSystemDirectoryEntryMock {
-			return {
-				createReader: jest.fn(),
-				fullPath: '',
-				getDirectory: jest.fn(),
-				getFile: jest.fn,
-				getParent: jest.fn,
-				isDirectory: true,
-				isFile: false,
-				name: '',
-				filesystem: {
-					name: ''
-				}
-			};
-		}
-	});
 });
 
 afterAll(() => server.close());

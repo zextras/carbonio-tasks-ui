@@ -4,32 +4,30 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ReactElement, useMemo } from 'react';
+import React, { type ReactElement, useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import {
-	ByRoleMatcher,
-	ByRoleOptions,
-	GetAllBy,
+	type ByRoleMatcher,
+	type ByRoleOptions,
+	type GetAllBy,
 	queries,
 	queryHelpers,
 	render,
-	RenderOptions,
-	RenderResult,
+	type RenderOptions,
+	type RenderResult,
 	screen,
 	within
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
-import { PreviewManager } from '@zextras/carbonio-ui-preview';
-import { GraphQLError } from 'graphql';
+import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
-import i18next, { i18n } from 'i18next';
-import { Mock } from './mockUtils';
+import { type Mock } from '../mocks/utils';
+import { ContextsProvider, ManagersProvider } from '../providers/ProvidersWrapper';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']>;
@@ -124,18 +122,6 @@ const customQueries = {
 	findByRoleWithIcon
 };
 
-function escapeRegExp(string: string): string {
-	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-/**
- * Utility to generate an error for mocks that can be decoded with {@link decodeError}
- * @param message
- */
-export function generateError(message: string): GraphQLError {
-	return new GraphQLError(`Controlled error: ${message}`);
-}
-
 const getAppI18n = (): i18n => {
 	const newI18n = i18next.createInstance();
 	newI18n
@@ -180,11 +166,9 @@ const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): JSX.E
 			>
 				<StyledWrapper>
 					<I18nextProvider i18n={i18nInstance}>
-						<SnackbarManager>
-							<ModalManager>
-								<PreviewManager>{children}</PreviewManager>
-							</ModalManager>
-						</SnackbarManager>
+						<ManagersProvider>
+							<ContextsProvider>{children}</ContextsProvider>
+						</ManagersProvider>
 					</I18nextProvider>
 				</StyledWrapper>
 			</MemoryRouter>

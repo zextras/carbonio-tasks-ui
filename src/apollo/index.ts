@@ -4,15 +4,15 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ApolloClient, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache, type NormalizedCacheObject } from '@apollo/client';
 
+import { typePolicies } from './typePolicies';
 import { GRAPHQL_ENDPOINT } from '../constants';
-// import introspection from '../types/graphql/possible-types';
-// import { typePolicies } from './typePolicies';
+import introspection from '../gql/possible-types';
 
 const cache = new InMemoryCache({
-	// possibleTypes: introspection.possibleTypes,
-	// typePolicies
+	possibleTypes: introspection.possibleTypes,
+	typePolicies
 });
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;

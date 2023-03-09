@@ -5,9 +5,10 @@
  */
 
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Accordion, AccordionItemType, Container } from '@zextras/carbonio-design-system';
+
+import { Accordion, type AccordionItemType, Container } from '@zextras/carbonio-design-system';
 import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import { useTranslation } from 'react-i18next';
 
 const SecondaryBarView = (props: { expanded: boolean }): JSX.Element => {
 	const [t] = useTranslation();

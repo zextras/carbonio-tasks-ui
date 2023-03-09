@@ -6,16 +6,16 @@
 
 import React, { useMemo } from 'react';
 
-import { Action as DSAction, CollapsingActions } from '@zextras/carbonio-design-system';
+import { type Action as DSAction, CollapsingActions } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 
 import { HoverBarContainer } from './StyledComponents';
 
-interface NodeHoverBarProps extends React.ComponentPropsWithoutRef<typeof HoverBarContainer> {
+interface ListItemHoverBarProps extends React.ComponentPropsWithoutRef<typeof HoverBarContainer> {
 	actions?: DSAction[];
 }
 
-export const NodeHoverBar = ({ actions, ...rest }: NodeHoverBarProps): JSX.Element => {
+export const ListItemHoverBar = ({ actions, ...rest }: ListItemHoverBarProps): JSX.Element => {
 	const actionsMapped = useMemo(
 		() =>
 			map(actions, (action) => ({
@@ -34,6 +34,8 @@ export const NodeHoverBar = ({ actions, ...rest }: NodeHoverBarProps): JSX.Eleme
 			mainAlignment="flex-end"
 			data-testid="hover-bar"
 			padding={{ top: '0.5rem', right: '0.5rem' }}
+			width={'100%'}
+			height={'45%'}
 			{...rest}
 		>
 			<CollapsingActions actions={actionsMapped} color={'text'} size={'small'} gap={'0.5rem'} />

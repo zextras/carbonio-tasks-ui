@@ -6,7 +6,8 @@
 /build/
 /dist/
 /e2e/output/
-.idea/jsLibraryMappings.xml
 /junit.xml
-/coverage/cobertura-coverage.xml
+/coverage
 /.idea
+/LICENSES
+.env

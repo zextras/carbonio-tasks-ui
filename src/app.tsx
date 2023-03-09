@@ -5,18 +5,20 @@
  */
 
 import React, { lazy, Suspense, useEffect } from 'react';
+
 import {
 	ACTION_TYPES,
 	addBoard,
 	addBoardView,
 	addRoute,
 	registerActions,
-	SecondaryBarComponentProps,
+	type SecondaryBarComponentProps,
 	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
+
 import { Placeholder } from './components/placeholder';
+import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "appView" */ './views/app/AppView'));
 
@@ -72,10 +74,7 @@ const App = (): React.ReactNode => {
 				},
 				disabled: false,
 				primary: true,
-				group: TASKS_APP_ID,
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				type: ACTION_TYPES.NEW
+				group: TASKS_APP_ID
 			})
 		});
 	}, [t]);

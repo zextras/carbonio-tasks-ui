@@ -3,9 +3,12 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { Container, Text } from '@zextras/carbonio-design-system';
-import { map } from 'lodash';
 import React from 'react';
+
+import { Container } from '@zextras/carbonio-design-system';
+import { map } from 'lodash';
+
+import { TextExtended as Text } from './Text';
 
 export const Placeholder = (props: object): JSX.Element => (
 	<Container mainAlignment="flex-start" crossAlignment="flex-start" padding={{ all: 'medium' }}>
