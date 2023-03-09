@@ -30,6 +30,11 @@
         "app_name": "Tasks",
         "new": "New Task"
     },
+    "newTaskBoard": {
+        "banner": {
+            "lastTask": "This is the last task you can create. To create more complete your previous tasks."
+        }
+    },
     "secondaryBar": {
         "allTasks": "All Tasks"
     },

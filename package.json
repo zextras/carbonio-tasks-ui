@@ -76,7 +76,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "~3.7.9",
-		"@zextras/carbonio-design-system": "^1.1.0",
+		"@zextras/carbonio-design-system": "^1.2.0",
 		"@zextras/carbonio-shell-ui": "^1.1.0",
 		"core-js": "^3.27.2",
 		"dotenv": "^16.0.3",
