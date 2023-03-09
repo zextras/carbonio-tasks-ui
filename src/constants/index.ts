@@ -25,3 +25,5 @@ export const DATE_FORMAT = 'MMM DD, YYYY';
 export const DATE_TIME_FORMAT = 'MMM DD, YYYY - HH:mm';
 
 export const TIMEZONE_DEFAULT = 'UTC';
+
+export const RANDOM_PLACEHOLDER_TIMEOUT = 250;

@@ -42,6 +42,14 @@ export function populateTask(): Task {
 	};
 }
 
+export function populateTaskList(limit = 10): Task[] {
+	const list: Task[] = [];
+	for (let i = 0; i < limit; i += 1) {
+		list.push(populateTask());
+	}
+	return list;
+}
+
 export function mockGetTask(
 	variables: GetTaskQueryVariables,
 	task: GetTaskQuery['getTask'],

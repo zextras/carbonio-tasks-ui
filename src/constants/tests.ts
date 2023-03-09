@@ -16,3 +16,4 @@ export const TEST_ID_SELECTOR = {
 };
 
 export const EMPTY_DISPLAYER_HINT = 'Start organizing your day.';
+export const EMPTY_LIST_HINT = "It looks like there's nothing here.";

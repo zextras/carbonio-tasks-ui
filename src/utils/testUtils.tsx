@@ -9,6 +9,7 @@ import React, { type ReactElement, useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import {
+	act,
 	type ByRoleMatcher,
 	type ByRoleOptions,
 	type GetAllBy,
@@ -146,20 +147,26 @@ interface WrapperProps {
 	mocks?: Mock[];
 }
 
+const ApolloProviderWrapper = ({
+	children,
+	mocks
+}: {
+	children: React.ReactNode;
+	mocks: Mock[] | undefined;
+}): JSX.Element =>
+	mocks ? (
+		<MockedProvider mocks={mocks} cache={global.apolloClient.cache}>
+			{children}
+		</MockedProvider>
+	) : (
+		<ApolloProvider client={global.apolloClient}>{children}</ApolloProvider>
+	);
+
 const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): JSX.Element => {
 	const i18nInstance = useMemo(() => getAppI18n(), []);
 
-	const ApolloProviderWrapper: React.FC = ({ children: apolloChildren }) =>
-		mocks ? (
-			<MockedProvider mocks={mocks} cache={global.apolloClient.cache}>
-				{apolloChildren}
-			</MockedProvider>
-		) : (
-			<ApolloProvider client={global.apolloClient}>{apolloChildren}</ApolloProvider>
-		);
-
 	return (
-		<ApolloProviderWrapper>
+		<ApolloProviderWrapper mocks={mocks}>
 			<MemoryRouter
 				initialEntries={initialRouterEntries}
 				initialIndex={(initialRouterEntries?.length || 1) - 1}
@@ -213,3 +220,27 @@ export const setup = (
 		...options?.renderOptions
 	})
 });
+
+export function makeListItemsVisible(): void {
+	const { calls, instances } = (
+		window.IntersectionObserver as jest.Mock<
+			IntersectionObserver,
+			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit]
+		>
+	).mock;
+	calls.forEach((call, index) => {
+		const [onChange] = call;
+		// trigger the intersection on the observed element
+		act(() => {
+			onChange(
+				[
+					{
+						intersectionRatio: 0,
+						isIntersecting: true
+					} as IntersectionObserverEntry
+				],
+				instances[index]
+			);
+		});
+	});
+}

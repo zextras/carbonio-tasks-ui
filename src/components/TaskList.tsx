@@ -13,17 +13,18 @@ import {
 	type ListItemProps,
 	ListV2,
 	pseudoClasses,
-	Row,
-	Text
+	Row
 } from '@zextras/carbonio-design-system';
-import { map } from 'lodash';
+import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
 import { ListItemContent } from './ListItemContent';
+import { TextExtended as Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import type { FindTasksQuery } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
+import { useRandomPlaceholder } from '../hooks/useRandomPlaceholder';
 import type { NonNullableList } from '../types/utils';
 
 type TaskListProps = {
@@ -45,6 +46,9 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 	const [t] = useTranslation();
 	const allTasksLabel = useMemo(() => t('secondaryBar.allTasks', 'All Tasks'), [t]);
 	const { isActive, setActive } = useActiveItem();
+	const [emptyListPlaceholder] = useRandomPlaceholder('list.empty', {
+		defaultValue: "It looks like there's nothing here."
+	});
 
 	const items = useMemo(
 		() =>
@@ -91,7 +95,13 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 				<Text>{allTasksLabel}</Text>
 			</Row>
 			<Divider color="gray3" />
-			<ListV2 background={'gray6'}>{items}</ListV2>
+			{(!isEmpty(items) && <ListV2 background={'gray6'}>{items}</ListV2>) || (
+				<Container>
+					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
+						{emptyListPlaceholder}
+					</Text>
+				</Container>
+			)}
 		</Container>
 	);
 };
