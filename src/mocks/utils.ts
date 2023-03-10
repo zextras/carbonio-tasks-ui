@@ -10,6 +10,9 @@ import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
 
 import {
+	FindTasksDocument,
+	type FindTasksQuery,
+	type FindTasksQueryVariables,
 	GetTaskDocument,
 	type GetTaskQuery,
 	type GetTaskQueryVariables,
@@ -64,6 +67,27 @@ export function mockGetTask(
 			(): FetchResult<GetTaskQuery> => ({
 				data: {
 					getTask: task
+				}
+			})
+		),
+		error
+	};
+}
+
+export function mockFindTasks(
+	variables: FindTasksQueryVariables,
+	tasks: Task[],
+	error?: Error
+): Mock<FindTasksQuery, FindTasksQueryVariables> {
+	return {
+		request: {
+			query: FindTasksDocument,
+			variables
+		},
+		result: jest.fn(
+			(): FetchResult<FindTasksQuery> => ({
+				data: {
+					findTasks: tasks
 				}
 			})
 		),

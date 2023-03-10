@@ -79,7 +79,8 @@ beforeEach(() => {
 beforeAll(() => {
 	server.listen({ onUnhandledRequest: 'warn' });
 
-	jest.retryTimes(2, { logErrorsBeforeRetry: true });
+	const retryTimes = process.env.JEST_RETRY_TIMES ? parseInt(process.env.JEST_RETRY_TIMES, 10) : 2;
+	jest.retryTimes(retryTimes, { logErrorsBeforeRetry: true });
 
 	// initialize an apollo client instance for test and makes it available globally
 	global.apolloClient = buildClient();
