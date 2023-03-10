@@ -6,10 +6,14 @@
 
 import '@testing-library/jest-dom/extend-expect';
 import { act, configure } from '@testing-library/react';
+import dotenv from 'dotenv';
 import failOnConsole from 'jest-fail-on-console';
+import 'jest-styled-components';
 
 import buildClient from './apollo';
 import server from './mocks/server';
+
+dotenv.config();
 
 configure({
 	asyncUtilTimeout: 2000

@@ -4,8 +4,20 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { type RequestHandler } from 'msw';
+import { graphql, type RequestHandler } from 'msw';
 
-const handlers: RequestHandler[] = [];
+import findTasks from './handlers/findTasks';
+import getTask from './handlers/getTask';
+import {
+	type FindTasksQuery,
+	type FindTasksQueryVariables,
+	type GetTaskQuery,
+	type GetTaskQueryVariables
+} from '../gql/types';
+
+const handlers: RequestHandler[] = [
+	graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', findTasks),
+	graphql.query<GetTaskQuery, GetTaskQueryVariables>('getTask', getTask)
+];
 
 export default handlers;

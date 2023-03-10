@@ -14,7 +14,10 @@ export const ICON_REGEXP = {
 } as const;
 
 export const TEST_ID_SELECTOR = {
-	tooltip: 'tooltip'
+	tooltip: 'tooltip',
+	hoverBar: 'hover-bar',
+	listItem: 'list-item',
+	dropdown: 'dropdown-popper-list'
 };
 
 export const EMPTY_DISPLAYER_HINT = 'Start organizing your day.';

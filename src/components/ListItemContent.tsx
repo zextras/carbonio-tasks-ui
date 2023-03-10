@@ -76,6 +76,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 							crossAlignment={'flex-end'}
 							onMouseDown={preventTextSelection}
 							onClick={clickHandler}
+							data-testid={'list-item'}
 						>
 							<HoverContainer
 								height={LIST_ITEM_HEIGHT}
