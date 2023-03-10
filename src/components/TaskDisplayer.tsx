@@ -11,22 +11,26 @@ import { ActionsHeader } from './ActionsHeader';
 import { DisplayerHeader } from './DisplayerHeader';
 import { TaskDetails } from './TaskDetails';
 import type { Task } from '../gql/types';
+import { useActions } from '../hooks/useActions';
 
 interface TaskDisplayerProps {
 	task: Task;
 }
-export const TaskDisplayer = ({ task }: TaskDisplayerProps): JSX.Element => (
-	<Container background={'gray5'} mainAlignment={'flex-start'}>
-		<DisplayerHeader title={task.title} />
-		<Container padding={{ horizontal: '1rem' }} mainAlignment={'flex-start'}>
-			<ActionsHeader />
-			<TaskDetails
-				createdAt={task.createdAt}
-				priority={task.priority}
-				reminderAt={task.reminderAt}
-				reminderAllDay={task.reminderAllDay}
-				description={task.description}
-			/>
+export const TaskDisplayer = ({ task }: TaskDisplayerProps): JSX.Element => {
+	const actions = useActions(task.id);
+	return (
+		<Container background={'gray5'} mainAlignment={'flex-start'}>
+			<DisplayerHeader title={task.title} />
+			<Container padding={{ horizontal: '1rem' }} mainAlignment={'flex-start'}>
+				<ActionsHeader actions={actions} />
+				<TaskDetails
+					createdAt={task.createdAt}
+					priority={task.priority}
+					reminderAt={task.reminderAt}
+					reminderAllDay={task.reminderAllDay}
+					description={task.description}
+				/>
+			</Container>
 		</Container>
-	</Container>
-);
+	);
+};

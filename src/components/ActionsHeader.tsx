@@ -3,16 +3,39 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import { Container } from '@zextras/carbonio-design-system';
+import { type Action, Button, Container } from '@zextras/carbonio-design-system';
 
-export const ActionsHeader = (): JSX.Element => (
-	<Container
-		orientation={'horizontal'}
-		height={'auto'}
-		padding={{ vertical: '0.5rem' }}
-		gap={'0.25rem'}
-		mainAlignment={'flex-end'}
-	></Container>
-);
+interface ActionsHeaderProps {
+	actions: Action[];
+}
+export const ActionsHeader = ({ actions }: ActionsHeaderProps): JSX.Element => {
+	const actionButtons = useMemo<JSX.Element[]>(
+		() =>
+			actions.map((action) => (
+				<Button
+					key={action.id}
+					label={action.label}
+					type={'outlined'}
+					onClick={action.onClick}
+					icon={action.icon}
+					size={'small'}
+					backgroundColor={'transparent'}
+				/>
+			)),
+		[actions]
+	);
+
+	return (
+		<Container
+			orientation={'horizontal'}
+			height={'auto'}
+			padding={{ vertical: '0.5rem' }}
+			gap={'0.25rem'}
+			mainAlignment={'flex-end'}
+		>
+			{actionButtons}
+		</Container>
+	);
+};

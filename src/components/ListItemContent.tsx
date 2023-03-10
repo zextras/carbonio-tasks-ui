@@ -17,6 +17,7 @@ import { HoverContainer, ListItemContainer } from './StyledComponents';
 import { TextExtended as Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import type { Task } from '../gql/types';
+import { useActions } from '../hooks/useActions';
 import { useReminder } from '../hooks/useReminder';
 
 type ListItemContentProps = Pick<
@@ -49,6 +50,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 	}) => {
 		const [t] = useTranslation();
 		const { isExpired: isReminderExpired } = useReminder(reminderAt, reminderAllDay);
+		const actions = useActions(id);
 
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);
@@ -68,7 +70,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 		return (
 			<Container data-testid={id} height={LIST_ITEM_HEIGHT}>
 				{visible && (
-					<ContextualMenu actions={[]}>
+					<ContextualMenu actions={actions}>
 						<ListItemContainer
 							height={'fit'}
 							crossAlignment={'flex-end'}
@@ -142,7 +144,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 									</Row>
 								</ContentContainer>
 							</HoverContainer>
-							{<ListItemHoverBar actions={[]} />}
+							<ListItemHoverBar actions={actions} />
 						</ListItemContainer>
 					</ContextualMenu>
 				)}
