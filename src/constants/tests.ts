@@ -5,6 +5,8 @@
  */
 export const ICON_REGEXP = {
 	close: /^icon: CloseOutline$/i,
+	completeAction: /^icon: CheckmarkCircle2Outline$/i,
+	editAction: /^icon: Edit2Outline$/i,
 	highPriority: /^icon: ArrowheadUp$/i,
 	lowPriority: /^icon: ArrowheadDown$/i,
 	mediumPriority: /^icon: MinusOutline$/i,

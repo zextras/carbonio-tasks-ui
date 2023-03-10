@@ -22,6 +22,7 @@ export const ActionsHeader = ({ actions }: ActionsHeaderProps): JSX.Element => {
 					icon={action.icon}
 					size={'small'}
 					backgroundColor={'transparent'}
+					disabled={action.disabled}
 				/>
 			)),
 		[actions]
