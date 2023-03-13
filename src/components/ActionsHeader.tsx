@@ -20,7 +20,7 @@ export const ActionsHeader = ({ actions }: ActionsHeaderProps): JSX.Element => {
 					type={'outlined'}
 					onClick={action.onClick}
 					icon={action.icon}
-					size={'small'}
+					size={'medium'}
 					backgroundColor={'transparent'}
 					disabled={action.disabled}
 				/>
