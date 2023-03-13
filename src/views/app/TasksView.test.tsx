@@ -51,7 +51,7 @@ describe('Task view', () => {
 			{ mocks }
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		await screen.findByText(tasks[0].title);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(/all tasks/i)).toBeVisible();
@@ -78,7 +78,7 @@ describe('Task view', () => {
 			}
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		await screen.findByText(task.title);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		await user.click(screen.getByText(task.title));
@@ -126,7 +126,7 @@ describe('Task view', () => {
 			}
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		await screen.findAllByText(task.title);
 		expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 		const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.close });
@@ -162,7 +162,7 @@ describe('Task view', () => {
 				}
 			);
 			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-			await makeListItemsVisible();
+			makeListItemsVisible();
 			await screen.findAllByText(task.title);
 			const action = screen.getByRole('button', { name: /complete/i });
 			await user.click(action);
@@ -194,7 +194,7 @@ describe('Task view', () => {
 				}
 			);
 			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-			await makeListItemsVisible();
+			makeListItemsVisible();
 			await screen.findAllByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
@@ -226,7 +226,7 @@ describe('Task view', () => {
 				}
 			);
 			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-			await makeListItemsVisible();
+			makeListItemsVisible();
 			await screen.findAllByText(task.title);
 			const listItem = find(
 				screen.getAllByTestId(TEST_ID_SELECTOR.listItem),

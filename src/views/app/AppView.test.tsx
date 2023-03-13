@@ -38,7 +38,7 @@ describe('App view', () => {
 		await screen.findByText(/all tasks/i);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		await waitFor(() => expect(findTasks).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		expect(screen.getByText(/all tasks/i)).toBeVisible();
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(screen.getByText(tasks[0].title)).toBeVisible();
@@ -67,7 +67,7 @@ describe('App view', () => {
 		await screen.findByText(/all tasks/i);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		await waitFor(() => expect(findTasks).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		expect(screen.getByText(/all tasks/i)).toBeVisible();
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(screen.getByText(task.title)).toBeVisible();
