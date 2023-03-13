@@ -126,6 +126,14 @@ export type UpdateTaskInput = {
 	title?: InputMaybe<Scalars['String']>;
 };
 
+export type CompleteTaskMutationVariables = Exact<{
+	id: Scalars['ID'];
+}>;
+
+export type CompleteTaskMutation = {
+	updateTask: { id: string; status: Status } & { __typename?: 'Task' };
+} & { __typename?: 'Mutation' };
+
 export type TaskFragment = {
 	id: string;
 	description?: string | null;
@@ -194,6 +202,63 @@ export type GetTaskQuery = {
 		| null;
 } & { __typename?: 'Query' };
 
+export const CompleteTaskDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'completeTask' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'updateTask' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'updateTask' },
+								value: {
+									kind: 'ObjectValue',
+									fields: [
+										{
+											kind: 'ObjectField',
+											name: { kind: 'Name', value: 'id' },
+											value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } }
+										},
+										{
+											kind: 'ObjectField',
+											name: { kind: 'Name', value: 'status' },
+											value: { kind: 'EnumValue', value: 'COMPLETE' }
+										}
+									]
+								}
+							}
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'status' } }
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<CompleteTaskMutation, CompleteTaskMutationVariables>;
 export const TaskFragmentDoc = {
 	kind: 'Document',
 	definitions: [

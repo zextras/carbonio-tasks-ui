@@ -17,10 +17,10 @@ interface ListItemHoverBarProps extends React.ComponentPropsWithoutRef<typeof Ho
 
 export const ListItemHoverBar = ({ actions, ...rest }: ListItemHoverBarProps): JSX.Element => {
 	const actionsMapped = useMemo(
-		() =>
+		(): DSAction[] =>
 			map(actions, (action) => ({
 				...action,
-				onClick: (event: Parameters<DSAction['onClick']>[0]): ReturnType<DSAction['onClick']> => {
+				onClick: (event): ReturnType<DSAction['onClick']> => {
 					event.stopPropagation();
 					action.onClick(event);
 				}
@@ -33,12 +33,12 @@ export const ListItemHoverBar = ({ actions, ...rest }: ListItemHoverBarProps): J
 			wrap="nowrap"
 			mainAlignment="flex-end"
 			data-testid="hover-bar"
-			padding={{ top: '0.5rem', right: '0.5rem' }}
+			padding={{ top: '0.25rem', right: '0.5rem' }}
 			width={'100%'}
-			height={'45%'}
+			height={'fit'}
 			{...rest}
 		>
-			<CollapsingActions actions={actionsMapped} color={'text'} size={'small'} gap={'0.5rem'} />
+			<CollapsingActions actions={actionsMapped} color={'text'} size={'medium'} gap={'0.25rem'} />
 		</HoverBarContainer>
 	);
 };

@@ -6,6 +6,7 @@
 
 import React, { useMemo } from 'react';
 
+import { trimEnd } from 'lodash';
 import { Route, useRouteMatch } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
@@ -14,8 +15,9 @@ import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
 
 const AppView = (): JSX.Element => {
 	const { path } = useRouteMatch();
+
 	const routes = useMemo(
-		() => <Route path={`${path}${ROUTES.task}`} component={TasksView} />,
+		() => <Route path={`${trimEnd(path, '/')}${ROUTES.task}`} component={TasksView} />,
 		[path]
 	);
 

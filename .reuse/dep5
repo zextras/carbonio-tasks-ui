@@ -9,10 +9,6 @@ Source:
 # Copyright: $YEAR $NAME <$CONTACT>
 # License: ...
 
-Files: *.graphql
-Copyright: 2023 Zextras <https://www.zextras.com>
-License: AGPL-3.0-only
-
 Files: *.json
 Copyright: 2023 Zextras <https://www.zextras.com>
 License: AGPL-3.0-only

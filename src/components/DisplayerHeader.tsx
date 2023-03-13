@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import { Container, Divider, IconButton } from '@zextras/carbonio-design-system';
 
@@ -17,6 +17,10 @@ interface DisplayerHeaderProps {
 export const DisplayerHeader = ({ title }: DisplayerHeaderProps): JSX.Element => {
 	const { removeActive } = useActiveItem();
 
+	const closeDisplayer = useCallback(() => {
+		removeActive();
+	}, [removeActive]);
+
 	return (
 		<Container orientation={'vertical'} width={'fill'} height={'auto'}>
 			<Container
@@ -28,7 +32,7 @@ export const DisplayerHeader = ({ title }: DisplayerHeaderProps): JSX.Element =>
 				gap={'0.5rem'}
 			>
 				<Text withTooltip>{title}</Text>
-				<IconButton icon={'CloseOutline'} size={'medium'} onClick={removeActive} />
+				<IconButton icon={'CloseOutline'} size={'medium'} onClick={closeDisplayer} />
 			</Container>
 			<Divider color={'gray3'} />
 		</Container>

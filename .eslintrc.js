@@ -48,7 +48,8 @@ module.exports = {
 			{
 				fixStyle: 'inline-type-imports'
 			}
-		]
+		],
+		'max-len': 'warn'
 	},
 	overrides: [
 		{

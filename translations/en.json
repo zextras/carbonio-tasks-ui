@@ -1,4 +1,8 @@
 {
+    "action": {
+        "complete": "Complete",
+        "edit": "Edit"
+    },
     "displayer": {
         "allTasks": [
             {

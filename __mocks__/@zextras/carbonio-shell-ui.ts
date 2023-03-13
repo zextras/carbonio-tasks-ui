@@ -4,33 +4,56 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { Account, AccountSettings } from '@zextras/carbonio-shell-ui';
-import { createMemoryHistory } from 'history';
+import { useCallback } from 'react';
+
+import { type Account, type AccountSettings, type HistoryParams } from '@zextras/carbonio-shell-ui';
+import { trimStart } from 'lodash';
+import { useHistory } from 'react-router-dom';
 
 import { LOGGED_USER, USER_SETTINGS } from '../../src/mocks/constants';
 
-const history = createMemoryHistory();
-
-function replaceHistoryMock(location: string | Location): void {
-	if (typeof location === 'string') {
-		history.replace(location);
-	} else {
-		history.replace({ ...location, pathname: location.pathname });
-	}
+function parsePath(path: string): string {
+	return `/${trimStart(path, '/')}`;
 }
 
-function pushHistoryMock(location: string | Location): void {
-	if (typeof location === 'string') {
-		history.push(location);
-	} else {
-		history.push({ ...location, pathname: location.pathname });
-	}
+function useReplaceHistoryMock(): (params: HistoryParams) => void {
+	const history = useHistory();
+
+	return useCallback(
+		(location: string | HistoryParams) => {
+			if (typeof location === 'string') {
+				history.replace(parsePath(location));
+			} else if (typeof location.path === 'string') {
+				history.replace(parsePath(location.path));
+			} else {
+				history.replace(location.path);
+			}
+		},
+		[history]
+	);
+}
+
+function usePushHistoryMock(): (params: HistoryParams) => void {
+	const history = useHistory();
+
+	return useCallback(
+		(location: string | HistoryParams) => {
+			if (typeof location === 'string') {
+				history.push(parsePath(location));
+			} else if (typeof location.path === 'string') {
+				history.push(parsePath(location.path));
+			} else {
+				history.push(location.path);
+			}
+		},
+		[history]
+	);
 }
 
 export const useUserAccounts = (): Account[] => [LOGGED_USER];
 export const useUserSettings = (): AccountSettings => USER_SETTINGS;
-export const replaceHistory = jest.fn(replaceHistoryMock);
-export const pushHistory = jest.fn(pushHistoryMock);
+export const useReplaceHistoryCallback = jest.fn(useReplaceHistoryMock);
+export const usePushHistoryCallback = jest.fn(usePushHistoryMock);
 export const ACTION_TYPES = {
 	NEW: 'new'
 };

@@ -17,6 +17,7 @@ import { HoverContainer, ListItemContainer } from './StyledComponents';
 import { TextExtended as Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import type { Task } from '../gql/types';
+import { useActions } from '../hooks/useActions';
 import { useReminder } from '../hooks/useReminder';
 
 type ListItemContentProps = Pick<
@@ -49,6 +50,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 	}) => {
 		const [t] = useTranslation();
 		const { isExpired: isReminderExpired } = useReminder(reminderAt, reminderAllDay);
+		const actions = useActions(id);
 
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);
@@ -65,88 +67,89 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 			}
 		}, []);
 
-		return visible ? (
-			<Container data-testid={id}>
-				<ContextualMenu actions={[]}>
-					<ListItemContainer
-						height={'fit'}
-						crossAlignment={'flex-end'}
-						onMouseDown={preventTextSelection}
-						onClick={clickHandler}
-					>
-						<HoverContainer
-							height={LIST_ITEM_HEIGHT}
-							wrap="nowrap"
-							mainAlignment="flex-start"
-							crossAlignment="center"
-							padding={{ all: 'small' }}
-							width="fill"
-							gap={'1rem'}
+		return (
+			<Container data-testid={id} height={LIST_ITEM_HEIGHT}>
+				{visible && (
+					<ContextualMenu actions={actions}>
+						<ListItemContainer
+							height={'fit'}
+							crossAlignment={'flex-end'}
+							onMouseDown={preventTextSelection}
+							onClick={clickHandler}
+							data-testid={'list-item'}
 						>
-							<ContentContainer
-								orientation="vertical"
-								height={'auto'}
-								maxHeight={'100%'}
-								gap={'0.25rem'}
+							<HoverContainer
+								height={LIST_ITEM_HEIGHT}
+								wrap="nowrap"
+								mainAlignment="flex-start"
+								crossAlignment="center"
+								padding={{ all: 'small' }}
 								width="fill"
-								mainAlignment={'flex-start'}
+								gap={'1rem'}
 							>
-								<Row gap={'0.25rem'} width="fill" wrap="nowrap" mainAlignment="space-between">
-									<Text overflow="ellipsis" size="medium">
-										{title}
-									</Text>
-									<Container width={'fit'} height={'fit'} flexShrink={0}>
-										<PriorityIcon priority={priority} />
-									</Container>
-								</Row>
-								<Row
+								<ContentContainer
+									orientation="vertical"
+									height={'auto'}
+									maxHeight={'100%'}
 									gap={'0.25rem'}
 									width="fill"
-									wrap="nowrap"
-									mainAlignment="space-between"
-									crossAlignment={'flex-start'}
+									mainAlignment={'flex-start'}
 								>
-									<Container
-										flexShrink={1}
-										flexGrow={1}
-										flexBasis="auto"
-										mainAlignment="flex-start"
-										orientation="horizontal"
-										minWidth={0}
-										width="auto"
-										height={'auto'}
-										wrap={'wrap-reverse'}
+									<Row gap={'0.25rem'} width="fill" wrap="nowrap" mainAlignment="space-between">
+										<Text overflow="ellipsis" size="medium">
+											{title}
+										</Text>
+										<Container width={'fit'} height={'fit'} flexShrink={0}>
+											<PriorityIcon priority={priority} />
+										</Container>
+									</Row>
+									<Row
+										gap={'0.25rem'}
+										width="fill"
+										wrap="nowrap"
+										mainAlignment="space-between"
 										crossAlignment={'flex-start'}
 									>
-										{reminderAt ? (
-											<>
-												<Text size="small">
-													{t('tasksListItem.reminder.remindMeOn', 'Remind me on')}&nbsp;
+										<Container
+											flexShrink={1}
+											flexGrow={1}
+											flexBasis="auto"
+											mainAlignment="flex-start"
+											orientation="horizontal"
+											minWidth={0}
+											width="auto"
+											height={'auto'}
+											wrap={'wrap-reverse'}
+											crossAlignment={'flex-start'}
+										>
+											{reminderAt ? (
+												<>
+													<Text size="small">
+														{t('tasksListItem.reminder.remindMeOn', 'Remind me on')}&nbsp;
+													</Text>
+													<Container width={'fit'} height={'fit'} flexShrink={0} maxWidth={'100%'}>
+														<Reminder reminderAt={reminderAt} reminderAllDay={reminderAllDay} />
+													</Container>
+												</>
+											) : (
+												<Text color="secondary" size="small">
+													{missingReminderLabel}
 												</Text>
-												<Container width={'fit'} height={'fit'} flexShrink={0} maxWidth={'100%'}>
-													<Reminder reminderAt={reminderAt} reminderAllDay={reminderAllDay} />
-												</Container>
-											</>
-										) : (
-											<Text color="secondary" size="small">
-												{missingReminderLabel}
-											</Text>
+											)}
+										</Container>
+										{isReminderExpired && (
+											<ReminderIconContainer width={'fit'} flexShrink={0}>
+												<Icon icon="AlertTriangle" color="warning" />
+											</ReminderIconContainer>
 										)}
-									</Container>
-									{isReminderExpired && (
-										<ReminderIconContainer width={'fit'} flexShrink={0}>
-											<Icon icon="AlertTriangle" color="warning" />
-										</ReminderIconContainer>
-									)}
-								</Row>
-							</ContentContainer>
-						</HoverContainer>
-						{<ListItemHoverBar actions={[]} />}
-					</ListItemContainer>
-				</ContextualMenu>
+									</Row>
+								</ContentContainer>
+							</HoverContainer>
+							<ListItemHoverBar actions={actions} />
+						</ListItemContainer>
+					</ContextualMenu>
+				)}
 			</Container>
-		) : (
-			<div style={{ height: LIST_ITEM_HEIGHT }} />
 		);
 	}
 );

@@ -6,10 +6,14 @@
 
 import '@testing-library/jest-dom/extend-expect';
 import { act, configure } from '@testing-library/react';
+import dotenv from 'dotenv';
 import failOnConsole from 'jest-fail-on-console';
+import 'jest-styled-components';
 
 import buildClient from './apollo';
 import server from './mocks/server';
+
+dotenv.config();
 
 configure({
 	asyncUtilTimeout: 2000
@@ -38,15 +42,6 @@ beforeEach(() => {
 
 	// reset apollo client cache
 	global.apolloClient.resetStore();
-});
-
-beforeAll(() => {
-	server.listen({ onUnhandledRequest: 'warn' });
-
-	jest.retryTimes(2, { logErrorsBeforeRetry: true });
-
-	// initialize an apollo client instance for test and makes it available globally
-	global.apolloClient = buildClient();
 
 	// define browser objects non available in jest
 	// https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
@@ -82,6 +77,18 @@ beforeAll(() => {
 		value: jest.fn()
 	});
 
+	Element.prototype.scrollTo = jest.fn();
+});
+
+beforeAll(() => {
+	server.listen({ onUnhandledRequest: 'warn' });
+
+	const retryTimes = process.env.JEST_RETRY_TIMES ? parseInt(process.env.JEST_RETRY_TIMES, 10) : 2;
+	jest.retryTimes(retryTimes, { logErrorsBeforeRetry: true });
+
+	// initialize an apollo client instance for test and makes it available globally
+	global.apolloClient = buildClient();
+
 	window.resizeTo = function resizeTo(width, height): void {
 		Object.assign(this, {
 			innerWidth: width,
@@ -90,8 +97,6 @@ beforeAll(() => {
 			outerHeight: height
 		}).dispatchEvent(new this.Event('resize'));
 	};
-
-	Element.prototype.scrollTo = jest.fn();
 });
 
 afterAll(() => server.close());

@@ -10,6 +10,12 @@ import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
 
 import {
+	CompleteTaskDocument,
+	type CompleteTaskMutation,
+	type CompleteTaskMutationVariables,
+	FindTasksDocument,
+	type FindTasksQuery,
+	type FindTasksQueryVariables,
 	GetTaskDocument,
 	type GetTaskQuery,
 	type GetTaskQueryVariables,
@@ -42,6 +48,14 @@ export function populateTask(): Task {
 	};
 }
 
+export function populateTaskList(limit = 10): Task[] {
+	const list: Task[] = [];
+	for (let i = 0; i < limit; i += 1) {
+		list.push(populateTask());
+	}
+	return list;
+}
+
 export function mockGetTask(
 	variables: GetTaskQueryVariables,
 	task: GetTaskQuery['getTask'],
@@ -60,5 +74,48 @@ export function mockGetTask(
 			})
 		),
 		error
+	};
+}
+
+export function mockFindTasks(
+	variables: FindTasksQueryVariables,
+	tasks: Task[],
+	error?: Error
+): Mock<FindTasksQuery, FindTasksQueryVariables> {
+	return {
+		request: {
+			query: FindTasksDocument,
+			variables
+		},
+		result: jest.fn(
+			(): FetchResult<FindTasksQuery> => ({
+				data: {
+					findTasks: tasks
+				}
+			})
+		),
+		error
+	};
+}
+
+export function mockCompleteTask(
+	variables: CompleteTaskMutationVariables
+): Mock<CompleteTaskMutation, CompleteTaskMutationVariables> {
+	return {
+		request: {
+			query: CompleteTaskDocument,
+			variables
+		},
+		result: jest.fn(
+			(): FetchResult<CompleteTaskMutation> => ({
+				data: {
+					updateTask: {
+						__typename: 'Task',
+						id: variables.id,
+						status: Status.Complete
+					}
+				}
+			})
+		)
 	};
 }
