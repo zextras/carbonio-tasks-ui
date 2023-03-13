@@ -5,28 +5,26 @@
  */
 import { useCallback } from 'react';
 
-import { pushHistory, replaceHistory } from '@zextras/carbonio-shell-ui';
+import { usePushHistoryCallback } from '@zextras/carbonio-shell-ui';
 
 import { TASKS_ROUTE } from '../constants';
 
 export type UseNavigationReturnType = {
-	navigateTo: (path: string, options?: { replace: boolean }) => void;
+	navigateTo: (path: string) => void;
 };
 
 export const useNavigation = (): UseNavigationReturnType => {
-	const navigateTo = useCallback<UseNavigationReturnType['navigateTo']>((path, options) => {
-		if (options?.replace) {
-			replaceHistory({
-				route: TASKS_ROUTE,
-				path
-			});
-		} else {
+	const pushHistory = usePushHistoryCallback();
+
+	const navigateTo = useCallback<UseNavigationReturnType['navigateTo']>(
+		(path) => {
 			pushHistory({
 				route: TASKS_ROUTE,
 				path
 			});
-		}
-	}, []);
+		},
+		[pushHistory]
+	);
 
 	return { navigateTo };
 };
