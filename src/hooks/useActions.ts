@@ -8,18 +8,15 @@ import { useCallback, useMemo } from 'react';
 import { type Action } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
+import { useCompleteAction } from './useCompleteAction';
 import { type Task } from '../gql/types';
 
 export const useActions = (taskId: Task['id']): Action[] => {
 	const [t] = useTranslation();
-
-	const completeAction = useCallback<Action['onClick']>(() => {
-		console.log('complete', taskId);
-		// todo: call update with status complete
-	}, [taskId]);
+	const completeAction = useCompleteAction(taskId);
 
 	const editAction = useCallback<Action['onClick']>(() => {
-		console.log('complete', taskId);
+		console.log('edit', taskId);
 		// todo: open board to edit task
 	}, [taskId]);
 
@@ -28,7 +25,7 @@ export const useActions = (taskId: Task['id']): Action[] => {
 		(): Action[] => [
 			{
 				id: 'complete',
-				label: t('action.markAsComplete', 'Complete'),
+				label: t('action.complete', 'Complete'),
 				icon: 'CheckmarkCircle2Outline',
 				onClick: completeAction
 			},

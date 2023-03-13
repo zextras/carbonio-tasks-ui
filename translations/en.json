@@ -1,7 +1,7 @@
 {
     "action": {
-        "edit": "Edit",
-        "markAsComplete": "Complete"
+        "complete": "Complete",
+        "edit": "Edit"
     },
     "displayer": {
         "allTasks": [
