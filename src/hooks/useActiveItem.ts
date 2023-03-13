@@ -7,14 +7,14 @@ import { useCallback } from 'react';
 
 import { useParams } from 'react-router-dom';
 
-import { useNavigation } from './useNavigation';
+import { useNavigation, type UseNavigationReturnType } from './useNavigation';
 import type { TasksPathParams } from '../types/commons';
 
 type UseActiveItemReturnType = {
 	activeItem: string;
 	isActive: (id: string) => boolean;
 	setActive: (id: string) => void;
-	removeActive: () => void;
+	removeActive: (options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
 };
 
 export const useActiveItem = (): UseActiveItemReturnType => {
@@ -33,9 +33,12 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 		[navigateTo]
 	);
 
-	const removeActive = useCallback<UseActiveItemReturnType['removeActive']>(() => {
-		navigateTo('/');
-	}, [navigateTo]);
+	const removeActive = useCallback<UseActiveItemReturnType['removeActive']>(
+		(options) => {
+			navigateTo('/', options);
+		},
+		[navigateTo]
+	);
 
 	return { activeItem: taskId, isActive, setActive, removeActive };
 };

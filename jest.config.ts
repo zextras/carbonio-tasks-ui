@@ -25,8 +25,8 @@ export default {
 	// An array of glob patterns indicating a set of files for which coverage information should be collected
 	collectCoverageFrom: [
 		'src/**/*.{js,ts}(x)?',
-		'!src/**/mocks/*', // exclude msw handlers
-		'!src/mocks/*', // exclude msw handlers
+		'!src/**/mocks/**/*', // exclude msw handlers
+		'!src/mocks/**/*', // exclude msw handlers
 		'!**/(test|mock)*.ts(x)?', // exclude file which name starts with test or mock
 		'!src/**/types/*' // exclude types
 	],
@@ -46,14 +46,14 @@ export default {
 	coverageReporters: ['text', 'cobertura'],
 
 	// An object that configures minimum threshold enforcement for coverage results
-	// coverageThreshold: {
-	// 	global: {
-	// 		branches: 75,
-	// 		functions: 75,
-	// 		lines: 75,
-	// 		statements: 75
-	// 	}
-	// },
+	coverageThreshold: {
+		global: {
+			branches: 75,
+			functions: 75,
+			lines: 75,
+			statements: 75
+		}
+	},
 
 	// A path to a custom dependency extractor
 	// dependencyExtractor: undefined,

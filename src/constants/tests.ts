@@ -5,6 +5,8 @@
  */
 export const ICON_REGEXP = {
 	close: /^icon: CloseOutline$/i,
+	completeAction: /^icon: CheckmarkCircle2Outline$/i,
+	editAction: /^icon: Edit2Outline$/i,
 	highPriority: /^icon: ArrowheadUp$/i,
 	lowPriority: /^icon: ArrowheadDown$/i,
 	mediumPriority: /^icon: MinusOutline$/i,
@@ -12,7 +14,10 @@ export const ICON_REGEXP = {
 } as const;
 
 export const TEST_ID_SELECTOR = {
-	tooltip: 'tooltip'
+	tooltip: 'tooltip',
+	hoverBar: 'hover-bar',
+	listItem: 'list-item',
+	dropdown: 'dropdown-popper-list'
 };
 
 export const EMPTY_DISPLAYER_HINT = 'Start organizing your day.';

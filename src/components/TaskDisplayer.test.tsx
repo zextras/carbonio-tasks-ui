@@ -49,4 +49,32 @@ describe('Task displayer', () => {
 		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeVisible();
 		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeEnabled();
 	});
+
+	describe('Actions', () => {
+		describe('Complete', () => {
+			test('Is visible and enabled', () => {
+				const task = populateTask();
+				const { getByRoleWithIcon } = setup(<TaskDisplayer task={task} />);
+				expect(
+					getByRoleWithIcon('button', { name: /complete/i, icon: ICON_REGEXP.completeAction })
+				).toBeVisible();
+				expect(
+					getByRoleWithIcon('button', { name: /complete/i, icon: ICON_REGEXP.completeAction })
+				).toBeEnabled();
+			});
+		});
+
+		describe('Edit', () => {
+			test('Is visible and enabled', () => {
+				const task = populateTask();
+				const { getByRoleWithIcon } = setup(<TaskDisplayer task={task} />);
+				expect(
+					getByRoleWithIcon('button', { name: /edit/i, icon: ICON_REGEXP.editAction })
+				).toBeVisible();
+				expect(
+					getByRoleWithIcon('button', { name: /edit/i, icon: ICON_REGEXP.editAction })
+				).toBeEnabled();
+			});
+		});
+	});
 });

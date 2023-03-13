@@ -6,13 +6,19 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
+import { find } from 'lodash';
 import { Route } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
 import { ROUTES, TIMEZONE_DEFAULT } from '../../constants';
-import { EMPTY_DISPLAYER_HINT, EMPTY_LIST_HINT, ICON_REGEXP } from '../../constants/tests';
-import { mockFindTasks, mockGetTask, populateTaskList } from '../../mocks/utils';
+import {
+	EMPTY_DISPLAYER_HINT,
+	EMPTY_LIST_HINT,
+	ICON_REGEXP,
+	TEST_ID_SELECTOR
+} from '../../constants/tests';
+import { mockCompleteTask, mockFindTasks, mockGetTask, populateTaskList } from '../../mocks/utils';
 import { formatDateFromTimestamp } from '../../utils';
 import { makeListItemsVisible, setup } from '../../utils/testUtils';
 
@@ -45,7 +51,7 @@ describe('Task view', () => {
 			{ mocks }
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		await screen.findByText(tasks[0].title);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(/all tasks/i)).toBeVisible();
@@ -72,7 +78,7 @@ describe('Task view', () => {
 			}
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		await screen.findByText(task.title);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		await user.click(screen.getByText(task.title));
@@ -120,7 +126,7 @@ describe('Task view', () => {
 			}
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-		await makeListItemsVisible();
+		makeListItemsVisible();
 		await screen.findAllByText(task.title);
 		expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 		const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.close });
@@ -131,5 +137,110 @@ describe('Task view', () => {
 		// title is shown only 1 time, inside the list
 		expect(screen.getByText(task.title)).toBeVisible();
 		expect(queryByRoleWithIcon('button', { icon: ICON_REGEXP.close })).not.toBeInTheDocument();
+	});
+
+	describe('Complete action', () => {
+		test('Displayer action remove the item from the list and close the displayer', async () => {
+			const tasks = populateTaskList();
+			const task = tasks[0];
+			task.reminderAt = faker.datatype.datetime().getTime();
+			task.description = faker.lorem.sentences();
+			const findTasksMock = mockFindTasks({}, tasks);
+			const mocks = [
+				findTasksMock,
+				mockGetTask({ taskId: task.id }, task),
+				mockCompleteTask({ id: task.id })
+			];
+
+			const { user } = setup(
+				<Route path={ROUTES.task}>
+					<TasksView />
+				</Route>,
+				{
+					mocks,
+					initialRouterEntries: [`/${task.id}`]
+				}
+			);
+			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+			makeListItemsVisible();
+			await screen.findAllByText(task.title);
+			const action = screen.getByRole('button', { name: /complete/i });
+			await user.click(action);
+			await screen.findByText(EMPTY_DISPLAYER_HINT);
+			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
+			expect(screen.getByText(tasks[1].title)).toBeVisible();
+		});
+
+		test('Hover action remove the item from the list and close the displayer', async () => {
+			const tasks = populateTaskList();
+			const task = tasks[0];
+			task.reminderAt = faker.datatype.datetime().getTime();
+			task.description = faker.lorem.sentences();
+			const findTasksMock = mockFindTasks({}, tasks);
+			const mocks = [
+				findTasksMock,
+				mockGetTask({ taskId: task.id }, task),
+				mockCompleteTask({ id: task.id })
+			];
+
+			const { user } = setup(
+				<Route path={ROUTES.task}>
+					<TasksView />
+				</Route>,
+				{
+					mocks,
+					initialRouterEntries: [`/${task.id}`]
+				}
+			);
+			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+			makeListItemsVisible();
+			await screen.findAllByText(task.title);
+			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
+			await user.click(action);
+			await screen.findByText(EMPTY_DISPLAYER_HINT);
+			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
+			expect(screen.getByText(tasks[1].title)).toBeVisible();
+		});
+
+		test('Contextual menu action remove the item from the list and close the displayer', async () => {
+			const tasks = populateTaskList();
+			const task = tasks[0];
+			task.reminderAt = faker.datatype.datetime().getTime();
+			task.description = faker.lorem.sentences();
+			const findTasksMock = mockFindTasks({}, tasks);
+			const mocks = [
+				findTasksMock,
+				mockGetTask({ taskId: task.id }, task),
+				mockCompleteTask({ id: task.id })
+			];
+
+			const { user } = setup(
+				<Route path={ROUTES.task}>
+					<TasksView />
+				</Route>,
+				{
+					mocks,
+					initialRouterEntries: [`/${task.id}`]
+				}
+			);
+			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+			makeListItemsVisible();
+			await screen.findAllByText(task.title);
+			const listItem = find(
+				screen.getAllByTestId(TEST_ID_SELECTOR.listItem),
+				(item) => within(item).queryByText(task.title) !== null
+			);
+			expect(listItem).toBeDefined();
+			await user.rightClick(listItem as HTMLElement);
+			const contextualMenu = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
+			const action = within(contextualMenu).getByText(/complete/i);
+			await user.click(action);
+			await screen.findByText(EMPTY_DISPLAYER_HINT);
+			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
+			expect(screen.getByText(tasks[1].title)).toBeVisible();
+		});
 	});
 });

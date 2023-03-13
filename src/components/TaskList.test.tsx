@@ -28,7 +28,7 @@ describe('Task list', () => {
 		expect(screen.queryByText(tasks[1].title)).not.toBeInTheDocument();
 		expect(screen.queryByText(tasks[2].title)).not.toBeInTheDocument();
 
-		await makeListItemsVisible();
+		makeListItemsVisible();
 
 		expect(screen.getByText(tasks[0].title)).toBeVisible();
 		expect(screen.getByText(tasks[1].title)).toBeVisible();
