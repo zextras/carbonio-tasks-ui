@@ -10,11 +10,13 @@ import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
 
 import NewTaskBoard from './NewTaskBoard';
+import { INFO_BANNER_LIMIT } from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import {
 	FindTasksDocument,
 	type FindTasksQuery,
 	type FindTasksQueryVariables,
+	type NewTaskInput,
 	Priority,
 	Status,
 	type Task
@@ -139,31 +141,39 @@ describe('New task board', () => {
 		});
 	});
 
-	test.skip('Info banner appears when the limit of 199 tasks is reached', async () => {
-		const tasks = populateTaskList(198);
+	test('Info banner appears when the limit of 199 tasks is reached', async () => {
+		const tasks = populateTaskList(INFO_BANNER_LIMIT - 1);
 		prepareCache(tasks);
 
-		const newTask: Task = {
-			__typename: 'Task',
-			id: faker.datatype.uuid(),
-			createdAt: new Date().getTime(),
+		const newTaskInput: NewTaskInput = {
 			priority: Priority.Medium,
 			status: Status.Open,
 			title: 'task nr 199'
 		};
 
-		const createTaskMock = mockCreateTask(newTask, newTask);
+		const newTaskResult: Required<Task> = {
+			__typename: 'Task',
+			createdAt: new Date().getTime(),
+			id: faker.datatype.uuid(),
+			description: null,
+			reminderAllDay: null,
+			reminderAt: null,
+			...newTaskInput,
+			priority: newTaskInput.priority || Priority.Medium,
+			status: newTaskInput.status || Status.Open
+		};
+
+		const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
 		const mocks = [createTaskMock];
 		const { user } = setup(<NewTaskBoard />, { mocks });
 
 		const infoBannerText =
-			/This is the last task you can create. To create more complete your previous tasks/i;
+			/This is the last task you can create\. To create more complete your previous tasks/i;
 		expect(screen.queryByText(infoBannerText)).not.toBeInTheDocument();
 		const createButton = screen.getByRole('button', { name: /create/i });
-		await user.type(screen.getByRole('textbox', { name: /title/i }), newTask.title);
+		await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 		await waitFor(() => expect(createButton).toBeEnabled());
 		await user.click(createButton);
-		await waitFor(() => expect(createTaskMock.result).toHaveBeenCalled());
 		await screen.findByText(infoBannerText);
 		expect(screen.getByText(infoBannerText)).toBeVisible();
 	});
