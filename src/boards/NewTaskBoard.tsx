@@ -8,6 +8,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import {
 	Button,
+	type ButtonProps,
 	Checkbox,
 	type CheckboxProps,
 	Container,
@@ -26,14 +27,20 @@ import {
 	TextArea,
 	type TextAreaProps
 } from '@zextras/carbonio-design-system';
-import { useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { useBoardHooks, t } from '@zextras/carbonio-shell-ui';
 import { filter, find, noop, trim } from 'lodash';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { CustomSelectLabelFactory } from '../components/CustomSelectLabelFactory';
 import { NewTaskLimitBanner } from '../components/NewTaskLimitBanner';
 import { TextExtended as Text } from '../components/Text';
+import {
+	ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT,
+	INFO_BANNER_LIMIT,
+	TASK_DESCRIPTION_MAX_LENGTH,
+	TASK_TITLE_MAX_LENGTH,
+	TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT
+} from '../constants';
 import TASK from '../gql/fragments/task.graphql';
 import {
 	CreateTaskDocument,
@@ -52,32 +59,32 @@ const CustomIconButton = styled(IconButton)`
 
 const priorityItems: Array<SelectItem> = [
 	{
-		label: 'High',
+		label: t('board.create.priority.high', 'High'),
 		value: Priority.High,
 		customComponent: (
 			<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
 				<Icon icon="ArrowheadUp" color="error" />
-				<Text>High</Text>
+				<Text>{t('board.create.priority.high', 'High')}</Text>
 			</Container>
 		)
 	},
 	{
-		label: 'Medium',
+		label: t('board.create.priority.medium', 'Medium'),
 		value: Priority.Medium,
 		customComponent: (
 			<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
 				<Icon icon="MinusOutline" color="gray1" />
-				<Text>Medium</Text>
+				<Text>{t('board.create.priority.medium', 'Medium')}</Text>
 			</Container>
 		)
 	},
 	{
-		label: 'Low',
+		label: t('board.create.priority.low', 'Low'),
 		value: Priority.Low,
 		customComponent: (
 			<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
 				<Icon icon="ArrowheadDown" color="info" />
-				<Text>Low</Text>
+				<Text>{t('board.create.priority.low', 'Low')}</Text>
 			</Container>
 		)
 	}
@@ -88,7 +95,6 @@ function isPriorityValidValue(value: string): value is Priority {
 }
 
 const NewTaskBoard = (): JSX.Element => {
-	const [t] = useTranslation();
 	const { closeBoard } = useBoardHooks();
 
 	const { data: findTasksResult } = useQuery(FindTasksDocument, {
@@ -176,9 +182,51 @@ const NewTaskBoard = (): JSX.Element => {
 
 	const isCreateDisabled = useMemo(
 		() =>
-			titleValue.length > 1024 || trim(titleValue).length === 0 || descriptionValue.length > 4096,
+			titleValue.length > TASK_TITLE_MAX_LENGTH ||
+			trim(titleValue).length === 0 ||
+			descriptionValue.length > TASK_DESCRIPTION_MAX_LENGTH,
 		[descriptionValue.length, titleValue]
 	);
+
+	const onClickCreateButton = useCallback<NonNullable<ButtonProps['onClick']>>(() => {
+		createTaskMutation({
+			variables: {
+				newTask: {
+					status: Status.Open,
+					description: trim(descriptionValue).length > 0 ? trim(descriptionValue) : undefined,
+					priority: selectedPriority,
+					title: titleValue,
+					reminderAt: enableReminder ? date?.getTime() : undefined,
+					reminderAllDay: enableReminder ? isAllDay : undefined
+				}
+			},
+			update(cache, { data }) {
+				if (data?.createTask) {
+					cache.modify({
+						fields: {
+							findTasks(existingTasksRefs) {
+								const newLinkRef = cache.writeFragment<TaskFragment>({
+									data: data.createTask,
+									fragment: TASK
+								});
+								return [newLinkRef, ...existingTasksRefs];
+							}
+						}
+					});
+				}
+			}
+		});
+		closeBoard();
+	}, [
+		closeBoard,
+		createTaskMutation,
+		date,
+		descriptionValue,
+		enableReminder,
+		isAllDay,
+		selectedPriority,
+		titleValue
+	]);
 
 	return (
 		<Container
@@ -190,41 +238,11 @@ const NewTaskBoard = (): JSX.Element => {
 				<Button
 					disabled={isCreateDisabled}
 					size="medium"
-					label={'CREATE'}
-					onClick={(): void => {
-						createTaskMutation({
-							variables: {
-								newTask: {
-									status: Status.Open,
-									description:
-										trim(descriptionValue).length > 0 ? trim(descriptionValue) : undefined,
-									priority: selectedPriority,
-									title: titleValue,
-									reminderAt: enableReminder ? date?.getTime() : undefined,
-									reminderAllDay: enableReminder ? isAllDay : undefined
-								}
-							},
-							update(cache, { data }) {
-								if (data?.createTask) {
-									cache.modify({
-										fields: {
-											findTasks(existingTasksRefs) {
-												const newLinkRef = cache.writeFragment<TaskFragment>({
-													data: data.createTask,
-													fragment: TASK
-												});
-												return [newLinkRef, ...existingTasksRefs];
-											}
-										}
-									});
-								}
-							}
-						});
-						closeBoard();
-					}}
+					label={t('board.create.confirmButton.create', 'create')}
+					onClick={onClickCreateButton}
 				/>
 			</Padding>
-			{tasks.length >= 199 && <NewTaskLimitBanner />}
+			{tasks.length >= INFO_BANNER_LIMIT && <NewTaskLimitBanner />}
 			<Container
 				background="gray6"
 				mainAlignment="flex-start"
@@ -233,7 +251,7 @@ const NewTaskBoard = (): JSX.Element => {
 				gap={'0.5rem'}
 			>
 				<Text weight={'bold'} overflow="ellipsis">
-					{'Details'}
+					{t('board.create.label.details', 'Details')}
 				</Text>
 				<Container
 					orientation={'horizontal'}
@@ -242,39 +260,52 @@ const NewTaskBoard = (): JSX.Element => {
 					crossAlignment={'flex-start'}
 				>
 					<Input
-						label="Title*"
+						label={t('board.create.input.title.label', 'Title*')}
 						backgroundColor="gray5"
 						borderColor="gray3"
 						value={titleValue}
 						onChange={onTitleChange}
-						hasError={titleValue.length > 1024}
+						hasError={titleValue.length > TASK_TITLE_MAX_LENGTH}
 						description={
-							titleValue.length > 1024 ? 'Maximum length allowed is 1024 characters' : undefined
+							titleValue.length > TASK_TITLE_MAX_LENGTH
+								? t(
+										'board.create.input.description.error.label',
+										'Maximum length allowed is 1024 characters'
+								  )
+								: undefined
 						}
 					/>
 					<Select
 						items={priorityItems}
 						background="gray5"
-						label="Priority"
+						label={t('board.create.select.priority.label', 'Priority')}
 						onChange={onPriorityChange}
 						selection={prioritySelection}
 						LabelFactory={CustomSelectLabelFactory}
 					/>
 				</Container>
-				<Switch value={enableReminder} onClick={onClickEnableReminder} label="Enable reminders" />
+				<Switch
+					value={enableReminder}
+					onClick={onClickEnableReminder}
+					label={t('board.create.switch.enableReminder.label', 'Enable reminders')}
+				/>
 
 				{enableReminder && (
 					<DateTimePicker
 						width="fill"
-						label="Reminder"
+						label={t('board.create.dateTimePicker.reminder.label', 'Reminder')}
 						defaultValue={date}
 						includeTime={!isAllDay}
 						onChange={handleChange}
-						dateFormat={isAllDay ? 'MMMM d, yyyy' : 'MMMM d, yyyy HH:mm'}
+						dateFormat={
+							isAllDay
+								? ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT
+								: TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT
+						}
 						customInput={
 							<Input
 								backgroundColor={'gray4'}
-								label="Reminder"
+								label={t('board.create.dateTimePicker.reminder.label', 'Reminder')}
 								CustomIcon={(): JSX.Element => (
 									<CustomIconButton
 										icon="CalendarOutline"
@@ -291,17 +322,25 @@ const NewTaskBoard = (): JSX.Element => {
 					<Checkbox
 						value={isAllDay}
 						onClick={onClickAllDayCheckbox}
-						label="Remind me at every login throughout the day"
+						label={t(
+							'board.create.checkbox.allDay.label',
+							'Remind me at every login throughout the day'
+						)}
 					/>
 				)}
-				<Text weight={'bold'}>{'Description'}</Text>
+				<Text weight={'bold'}>{t('board.create.label.description', 'Description')}</Text>
 				<TextArea
-					label={'Task Description'}
+					label={t('board.create.textArea.taskDescription.label', 'Task Description')}
 					value={descriptionValue}
 					onChange={onChangeDescription}
-					hasError={descriptionValue.length > 4096}
+					hasError={descriptionValue.length > TASK_DESCRIPTION_MAX_LENGTH}
 					description={
-						descriptionValue.length > 4096 ? 'Maximum length allowed is 4096 characters' : undefined
+						descriptionValue.length > TASK_DESCRIPTION_MAX_LENGTH
+							? t(
+									'board.create.textArea.description.error.label',
+									'Maximum length allowed is 4096 characters'
+							  )
+							: undefined
 					}
 				/>
 			</Container>

@@ -3,6 +3,62 @@
         "complete": "Complete",
         "edit": "Edit"
     },
+    "board": {
+        "create": {
+            "checkbox": {
+                "allDay": {
+                    "label": "Remind me at every login throughout the day"
+                }
+            },
+            "confirmButton": {
+                "create": "create"
+            },
+            "dateTimePicker": {
+                "reminder": {
+                    "label": "Reminder"
+                }
+            },
+            "input": {
+                "description": {
+                    "error": {
+                        "label": "Maximum length allowed is 1024 characters"
+                    }
+                },
+                "title": {
+                    "label": "Title*"
+                }
+            },
+            "label": {
+                "description": "Description",
+                "details": "Details"
+            },
+            "priority": {
+                "high": "High",
+                "low": "Low",
+                "medium": "Medium"
+            },
+            "select": {
+                "priority": {
+                    "label": "Priority"
+                }
+            },
+            "switch": {
+                "enableReminder": {
+                    "label": "Enable reminders"
+                }
+            },
+            "textArea": {
+                "description": {
+                    "error": {
+                        "label": "Maximum length allowed is 4096 characters"
+                    }
+                },
+                "taskDescription": {
+                    "label": "Task Description"
+                }
+            }
+        }
+    },
     "displayer": {
         "allTasks": [
             {

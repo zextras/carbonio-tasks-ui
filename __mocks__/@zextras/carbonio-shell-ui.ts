@@ -65,3 +65,5 @@ export const useBoardHooks = jest.fn(() => ({
 	getBoardContext: jest.fn(),
 	getBoard: jest.fn()
 }));
+
+export const t = (key: string, defaultValue: string): string => defaultValue;
