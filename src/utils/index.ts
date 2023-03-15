@@ -17,3 +17,7 @@ export function formatDateFromTimestamp(
 	}
 	return date.format(options?.includeTime ? DATE_TIME_FORMAT : DATE_FORMAT);
 }
+
+export function identity<Type>(arg: Type | null): arg is Type {
+	return arg !== null;
+}

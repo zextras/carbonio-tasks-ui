@@ -82,7 +82,7 @@ const App = (): React.ReactNode => {
 				label: t('label.new', 'New Task'),
 				icon: 'ListViewOutline',
 				click: (): void => {
-					addBoard({ url: TASKS_ROUTE, title: 'New Task' });
+					addBoard({ url: TASKS_ROUTE, title: t('board.newTask.title', 'New Task') });
 				},
 				disabled: false,
 				primary: true,

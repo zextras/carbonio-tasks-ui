@@ -16,14 +16,10 @@ import { DISPLAYER_WIDTH } from '../../constants';
 import { ListContext } from '../../contexts';
 import { FindTasksDocument, type FindTasksQuery } from '../../gql/types';
 import type { NonNullableList } from '../../types/utils';
-
-export function identity<Type>(arg: Type | null): arg is Type {
-	return arg !== null;
-}
+import { identity } from '../../utils';
 
 export const TasksView = (): JSX.Element => {
 	const { data: findTasksResult } = useQuery(FindTasksDocument, {
-		// fetchPolicy: 'cache-first',
 		// set next fetch policy to cache-first so that re-renders does not trigger new network queries
 		nextFetchPolicy: 'cache-first',
 		notifyOnNetworkStatusChange: true,

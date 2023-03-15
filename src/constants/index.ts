@@ -31,6 +31,6 @@ export const TASK_TITLE_MAX_LENGTH = 1024;
 
 export const TASK_DESCRIPTION_MAX_LENGTH = 4096;
 
-export const INFO_BANNER_LIMIT = 199;
+export const MAX_TASKS_LIMIT = 200;
 export const ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT = 'MMMM d, yyyy';
 export const TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT = 'MMMM d, yyyy HH:mm';

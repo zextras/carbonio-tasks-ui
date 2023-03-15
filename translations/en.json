@@ -57,6 +57,9 @@
                     "label": "Task Description"
                 }
             }
+        },
+        "newTask": {
+            "title": "New Task"
         }
     },
     "displayer": {
@@ -98,6 +101,13 @@
     "secondaryBar": {
         "allTasks": "All Tasks"
     },
+    "snackbar": {
+        "": "Upload occurred in Files' Home",
+        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks.",
+        "upload": {
+            "goToFolder": "Go to folder"
+        }
+    },
     "task": {
         "priority_high": "High",
         "priority_low": "Low",
@@ -107,6 +117,11 @@
         "reminder": {
             "doNotRemindMe": "Do not remind me",
             "remindMeOn": "Remind me on"
+        }
+    },
+    "uploads": {
+        "destination": {
+            "home": "Upload occurred in Files' Home"
         }
     }
 }

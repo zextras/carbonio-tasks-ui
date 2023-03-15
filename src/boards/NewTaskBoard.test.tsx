@@ -10,7 +10,7 @@ import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
 
 import NewTaskBoard from './NewTaskBoard';
-import { INFO_BANNER_LIMIT } from '../constants';
+import { MAX_TASKS_LIMIT } from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import {
 	FindTasksDocument,
@@ -142,7 +142,7 @@ describe('New task board', () => {
 	});
 
 	test('Info banner appears when the limit of 199 tasks is reached', async () => {
-		const tasks = populateTaskList(INFO_BANNER_LIMIT - 1);
+		const tasks = populateTaskList(MAX_TASKS_LIMIT - 2);
 		prepareCache(tasks);
 
 		const newTaskInput: NewTaskInput = {

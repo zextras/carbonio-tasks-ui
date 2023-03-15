@@ -5,7 +5,8 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { type Reference, useMutation, useQuery } from '@apollo/client';
+import { type Modifier } from '@apollo/client/cache';
 import {
 	Button,
 	type ButtonProps,
@@ -16,6 +17,7 @@ import {
 	type DateTimePickerProps,
 	Icon,
 	IconButton,
+	type IconProps,
 	Input,
 	type InputProps,
 	Padding,
@@ -25,7 +27,8 @@ import {
 	Switch,
 	type SwitchProps,
 	TextArea,
-	type TextAreaProps
+	type TextAreaProps,
+	useSnackbar
 } from '@zextras/carbonio-design-system';
 import { useBoardHooks, t } from '@zextras/carbonio-shell-ui';
 import { filter, find, noop, trim } from 'lodash';
@@ -36,59 +39,86 @@ import { NewTaskLimitBanner } from '../components/NewTaskLimitBanner';
 import { TextExtended as Text } from '../components/Text';
 import {
 	ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT,
-	INFO_BANNER_LIMIT,
+	MAX_TASKS_LIMIT,
 	TASK_DESCRIPTION_MAX_LENGTH,
 	TASK_TITLE_MAX_LENGTH,
 	TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT
 } from '../constants';
-import TASK from '../gql/fragments/task.graphql';
 import {
 	CreateTaskDocument,
 	FindTasksDocument,
 	type FindTasksQuery,
 	Priority,
 	Status,
-	type TaskFragment
+	type Task
 } from '../gql/types';
 import { type NonNullableList } from '../types/utils';
-import { identity } from '../views/app/TasksView';
+import { identity } from '../utils';
 
 const CustomIconButton = styled(IconButton)`
 	padding: 0.125rem;
 `;
+
+const PrioritySelectionItem = ({
+	icon,
+	iconColor,
+	label
+}: {
+	icon: IconProps['icon'];
+	iconColor: IconProps['color'];
+	label: string;
+}): JSX.Element => (
+	<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
+		<Icon icon={icon} color={iconColor} />
+		<Text>{label}</Text>
+	</Container>
+);
 
 const priorityItems: Array<SelectItem> = [
 	{
 		label: t('board.create.priority.high', 'High'),
 		value: Priority.High,
 		customComponent: (
-			<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
-				<Icon icon="ArrowheadUp" color="error" />
-				<Text>{t('board.create.priority.high', 'High')}</Text>
-			</Container>
+			<PrioritySelectionItem
+				icon={'ArrowheadUp'}
+				iconColor={'error'}
+				label={t('board.create.priority.high', 'High')}
+			/>
 		)
 	},
 	{
 		label: t('board.create.priority.medium', 'Medium'),
 		value: Priority.Medium,
 		customComponent: (
-			<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
-				<Icon icon="MinusOutline" color="gray1" />
-				<Text>{t('board.create.priority.medium', 'Medium')}</Text>
-			</Container>
+			<PrioritySelectionItem
+				icon={'MinusOutline'}
+				iconColor={'gray1'}
+				label={t('board.create.priority.medium', 'Medium')}
+			/>
 		)
 	},
 	{
 		label: t('board.create.priority.low', 'Low'),
 		value: Priority.Low,
 		customComponent: (
-			<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
-				<Icon icon="ArrowheadDown" color="info" />
-				<Text>{t('board.create.priority.low', 'Low')}</Text>
-			</Container>
+			<PrioritySelectionItem
+				icon={'ArrowheadDown'}
+				iconColor={'info'}
+				label={t('board.create.priority.low', 'Low')}
+			/>
 		)
 	}
 ];
+
+const addTaskToList: (task: Task) => Modifier<Reference[] | undefined> =
+	(task) =>
+	(existingTasksRefs, { toReference }) => {
+		const newTaskRef = toReference(task);
+		if (existingTasksRefs && newTaskRef) {
+			return [newTaskRef, ...existingTasksRefs];
+		}
+		return existingTasksRefs;
+	};
 
 function isPriorityValidValue(value: string): value is Priority {
 	return (Object.values(Priority) as string[]).includes(value);
@@ -96,32 +126,27 @@ function isPriorityValidValue(value: string): value is Priority {
 
 const NewTaskBoard = (): JSX.Element => {
 	const { closeBoard } = useBoardHooks();
+	const createSnackbar = useSnackbar();
 
 	const { data: findTasksResult } = useQuery(FindTasksDocument, {
-		fetchPolicy: 'cache-only',
-		// set next fetch policy to cache-first so that re-renders does not trigger new network queries
-		nextFetchPolicy: 'cache-first',
+		fetchPolicy: 'cache-first',
 		notifyOnNetworkStatusChange: true,
 		errorPolicy: 'all'
 	});
 
-	const tasks = useMemo((): NonNullableList<FindTasksQuery['findTasks']> => {
-		if (findTasksResult?.findTasks && findTasksResult.findTasks.length > 0) {
-			return filter(findTasksResult.findTasks, identity);
-		}
-		return [];
-	}, [findTasksResult]);
+	const tasks = useMemo(
+		(): NonNullableList<FindTasksQuery['findTasks']> =>
+			filter(findTasksResult?.findTasks, identity),
+		[findTasksResult]
+	);
 
 	const [createTaskMutation] = useMutation(CreateTaskDocument);
 
-	// title
 	const [titleValue, setTitleValue] = useState('');
 
 	const onTitleChange = useCallback<NonNullable<InputProps['onChange']>>((ev) => {
 		setTitleValue(ev.target.value);
 	}, []);
-
-	// priority
 
 	const [selectedPriority, setSelectedPriority] = useState(Priority.Medium);
 
@@ -132,14 +157,16 @@ const NewTaskBoard = (): JSX.Element => {
 	}, []);
 
 	const prioritySelection = useMemo(() => {
-		const selectItem = find(priorityItems, ['value', selectedPriority]);
+		const selectItem = find(
+			priorityItems,
+			(priorityItem) => priorityItem.value === selectedPriority
+		);
 		if (selectItem) {
 			return selectItem;
 		}
-		throw new Error('Invalid priority select item');
+		console.error('Invalid priority select item');
+		return priorityItems[1];
 	}, [selectedPriority]);
-
-	// reminder switch
 
 	const [enableReminder, setEnableReminder] = useState(false);
 
@@ -148,8 +175,6 @@ const NewTaskBoard = (): JSX.Element => {
 		[]
 	);
 
-	// all day checkbox
-
 	const [isAllDay, setIsAllDay] = useState(false);
 
 	const onClickAllDayCheckbox = useCallback<NonNullable<CheckboxProps['onClick']>>(
@@ -157,28 +182,17 @@ const NewTaskBoard = (): JSX.Element => {
 		[]
 	);
 
-	// date picker
-	const [date, setDate] = useState<Date | undefined>(new Date());
+	const [date, setDate] = useState<Date | null>(new Date());
 
-	const handleChange = useCallback<NonNullable<DateTimePickerProps['onChange']>>(
-		(d: Date | null) => {
-			if (d instanceof Date) {
-				setDate(d);
-			} else {
-				setDate(undefined);
-			}
-		},
-		[]
-	);
+	const handleChange = useCallback<NonNullable<DateTimePickerProps['onChange']>>((newDateValue) => {
+		setDate(newDateValue);
+	}, []);
 
-	// description textArea
 	const [descriptionValue, setDescriptionValue] = useState('');
 
 	const onChangeDescription = useCallback<NonNullable<TextAreaProps['onChange']>>((event) => {
 		setDescriptionValue(event.currentTarget.value);
 	}, []);
-
-	// create button disable check
 
 	const isCreateDisabled = useMemo(
 		() =>
@@ -189,42 +203,51 @@ const NewTaskBoard = (): JSX.Element => {
 	);
 
 	const onClickCreateButton = useCallback<NonNullable<ButtonProps['onClick']>>(() => {
-		createTaskMutation({
-			variables: {
-				newTask: {
-					status: Status.Open,
-					description: trim(descriptionValue).length > 0 ? trim(descriptionValue) : undefined,
-					priority: selectedPriority,
-					title: titleValue,
-					reminderAt: enableReminder ? date?.getTime() : undefined,
-					reminderAllDay: enableReminder ? isAllDay : undefined
-				}
-			},
-			update(cache, { data }) {
-				if (data?.createTask) {
-					cache.modify({
-						fields: {
-							findTasks(existingTasksRefs) {
-								const newLinkRef = cache.writeFragment<TaskFragment>({
-									data: data.createTask,
-									fragment: TASK
-								});
-								return [newLinkRef, ...existingTasksRefs];
+		if (tasks.length >= MAX_TASKS_LIMIT) {
+			createSnackbar({
+				key: new Date().toLocaleString(),
+				type: 'warning',
+				label: t(
+					'snackbar.tasksLimitReached',
+					'You have reached your 200 tasks. To create more complete your previous tasks.'
+				),
+				replace: false,
+				hideButton: true
+			});
+		} else {
+			createTaskMutation({
+				variables: {
+					newTask: {
+						status: Status.Open,
+						description: trim(descriptionValue).length > 0 ? trim(descriptionValue) : undefined,
+						priority: selectedPriority,
+						title: titleValue,
+						reminderAt: enableReminder ? date?.getTime() : undefined,
+						reminderAllDay: enableReminder ? isAllDay : undefined
+					}
+				},
+				update(cache, { data }) {
+					if (data?.createTask) {
+						cache.modify({
+							fields: {
+								findTasks: addTaskToList(data.createTask)
 							}
-						}
-					});
+						});
+					}
 				}
-			}
-		});
-		closeBoard();
+			});
+			closeBoard();
+		}
 	}, [
 		closeBoard,
+		createSnackbar,
 		createTaskMutation,
 		date,
 		descriptionValue,
 		enableReminder,
 		isAllDay,
 		selectedPriority,
+		tasks.length,
 		titleValue
 	]);
 
@@ -242,7 +265,7 @@ const NewTaskBoard = (): JSX.Element => {
 					onClick={onClickCreateButton}
 				/>
 			</Padding>
-			{tasks.length >= INFO_BANNER_LIMIT && <NewTaskLimitBanner />}
+			{tasks.length >= MAX_TASKS_LIMIT - 1 && <NewTaskLimitBanner />}
 			<Container
 				background="gray6"
 				mainAlignment="flex-start"
@@ -294,7 +317,7 @@ const NewTaskBoard = (): JSX.Element => {
 					<DateTimePicker
 						width="fill"
 						label={t('board.create.dateTimePicker.reminder.label', 'Reminder')}
-						defaultValue={date}
+						defaultValue={date || undefined}
 						includeTime={!isAllDay}
 						onChange={handleChange}
 						dateFormat={
@@ -302,6 +325,7 @@ const NewTaskBoard = (): JSX.Element => {
 								? ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT
 								: TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT
 						}
+						// TODO remove when CDS-140 is done
 						customInput={
 							<Input
 								backgroundColor={'gray4'}
