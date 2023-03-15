@@ -328,7 +328,7 @@ const NewTaskBoard = (): JSX.Element => {
 						// TODO remove when CDS-140 is done
 						customInput={
 							<Input
-								backgroundColor={'gray4'}
+								backgroundColor={'gray5'}
 								label={t('board.create.dateTimePicker.reminder.label', 'Reminder')}
 								CustomIcon={(): JSX.Element => (
 									<CustomIconButton
