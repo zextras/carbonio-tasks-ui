@@ -12,7 +12,8 @@ export const ICON_REGEXP = {
 	mediumPriority: /^icon: MinusOutline$/i,
 	reminderExpired: /^icon: AlertTriangle$/i,
 	switchOff: /^icon: ToggleLeftOutline$/i,
-	switchOn: /^icon: ToggleRight$/i
+	switchOn: /^icon: ToggleRight$/i,
+	inputCalendarIcon: /^icon: CalendarOutline$/i
 } as const;
 
 export const TEST_ID_SELECTOR = {

@@ -8,9 +8,14 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
+import format from 'date-fns/format';
 
 import NewTaskBoard from './NewTaskBoard';
-import { MAX_TASKS_LIMIT } from '../constants';
+import {
+	ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT,
+	MAX_TASKS_LIMIT,
+	TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT
+} from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import {
 	FindTasksDocument,
@@ -178,19 +183,114 @@ describe('New task board', () => {
 		expect(screen.getByText(infoBannerText)).toBeVisible();
 	});
 
-	test.todo(
-		'Reminder, when all day checkbox is checked the time is missing in the input and in the picker'
-	);
+	test('Reminder, when all day checkbox is checked the time is missing in the input and in the picker', async () => {
+		prepareCache();
 
-	test.todo(
-		'Reminder, when all day checkbox is not checked the time is shown in the input and in the picker'
-	);
+		const { user } = setup(<NewTaskBoard />, { mocks: [] });
 
-	test.todo('Reminder is optional, is not set the create button is not disabled');
+		const dateString = format(new Date(), ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT);
 
-	test.todo(
-		'Reminder is disabled by default, enabling the switch the related picker and checkbox appears'
-	);
+		const switchOffIcon = screen.getByTestId(ICON_REGEXP.switchOff);
+		expect(switchOffIcon).toBeVisible();
+		await user.click(switchOffIcon);
 
-	test.todo('Reminder, when is enabled it is set with current date as default');
+		const checkboxLabelText = /Remind me at every login throughout the day/i;
+		const allDayLabel = await screen.findByText(checkboxLabelText);
+		expect(allDayLabel).toBeVisible();
+
+		await user.click(allDayLabel);
+
+		const reminderInput = await screen.findByPlaceholderText<HTMLInputElement>('Reminder');
+		expect(reminderInput).toBeVisible();
+
+		expect(reminderInput).toHaveValue(dateString);
+
+		const inputCalendarIcon = screen.getByTestId(ICON_REGEXP.inputCalendarIcon);
+		expect(inputCalendarIcon).toBeVisible();
+		await user.click(inputCalendarIcon);
+
+		expect(screen.queryByText('Time')).not.toBeInTheDocument();
+	});
+
+	test('Reminder, when all day checkbox is not checked the time is shown in the input and in the picker', async () => {
+		prepareCache();
+
+		const { user } = setup(<NewTaskBoard />, { mocks: [] });
+
+		const dateString = format(new Date(), TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT);
+
+		const switchOffIcon = screen.getByTestId(ICON_REGEXP.switchOff);
+		expect(switchOffIcon).toBeVisible();
+		await user.click(switchOffIcon);
+
+		const reminderInput = await screen.findByPlaceholderText<HTMLInputElement>('Reminder');
+		expect(reminderInput).toBeVisible();
+
+		expect(reminderInput).toHaveValue(dateString);
+
+		const inputCalendarIcon = screen.getByTestId(ICON_REGEXP.inputCalendarIcon);
+		expect(inputCalendarIcon).toBeVisible();
+		await user.click(inputCalendarIcon);
+
+		const pickerTimeHeader = await screen.findByText('Time');
+		expect(pickerTimeHeader).toBeVisible();
+	});
+
+	test('Reminder is optional, is not set the create button is not disabled', async () => {
+		prepareCache();
+
+		const { user } = setup(<NewTaskBoard />, { mocks: [] });
+		const switchOffIcon = screen.getByTestId(ICON_REGEXP.switchOff);
+		expect(switchOffIcon).toBeVisible();
+		expect(screen.queryByTestId(ICON_REGEXP.switchOn)).not.toBeInTheDocument();
+
+		const checkboxLabelText = /Remind me at every login throughout the day/i;
+
+		expect(screen.queryByText(checkboxLabelText)).not.toBeInTheDocument();
+		expect(screen.queryByPlaceholderText<HTMLInputElement>('Reminder')).not.toBeInTheDocument();
+
+		const createButton = screen.getByRole('button', { name: /create/i });
+		expect(createButton).toBeDisabled();
+
+		const titleInput = screen.getByRole('textbox', { name: /title/i });
+		await user.type(titleInput, faker.random.alpha({ count: 10 }));
+		expect(createButton).toBeEnabled();
+	});
+
+	test('Reminder is disabled by default, enabling the switch the related picker and checkbox appears', async () => {
+		prepareCache();
+
+		const { user } = setup(<NewTaskBoard />, { mocks: [] });
+		const switchOffIcon = screen.getByTestId(ICON_REGEXP.switchOff);
+		expect(switchOffIcon).toBeVisible();
+		expect(screen.queryByTestId(ICON_REGEXP.switchOn)).not.toBeInTheDocument();
+
+		const checkboxLabelText = /Remind me at every login throughout the day/i;
+
+		expect(screen.queryByText(checkboxLabelText)).not.toBeInTheDocument();
+		expect(screen.queryByPlaceholderText<HTMLInputElement>('Reminder')).not.toBeInTheDocument();
+
+		await user.click(switchOffIcon);
+		expect(screen.getByTestId(ICON_REGEXP.switchOn)).toBeVisible();
+
+		expect(await screen.findByPlaceholderText<HTMLInputElement>('Reminder')).toBeVisible();
+		expect(await screen.findByText(checkboxLabelText)).toBeVisible();
+	});
+
+	test('Reminder, when is enabled it is set with current date as default', async () => {
+		prepareCache();
+
+		const { user } = setup(<NewTaskBoard />, { mocks: [] });
+
+		const dateString = format(new Date(), TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT);
+
+		const switchOffIcon = screen.getByTestId(ICON_REGEXP.switchOff);
+		expect(switchOffIcon).toBeVisible();
+		await user.click(switchOffIcon);
+
+		const reminderInput = await screen.findByPlaceholderText<HTMLInputElement>('Reminder');
+		expect(reminderInput).toBeVisible();
+
+		expect(reminderInput).toHaveValue(dateString);
+	});
 });
