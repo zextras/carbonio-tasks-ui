@@ -20,8 +20,6 @@ import { identity } from '../../utils';
 
 export const TasksView = (): JSX.Element => {
 	const { data: findTasksResult } = useQuery(FindTasksDocument, {
-		// set next fetch policy to cache-first so that re-renders does not trigger new network queries
-		nextFetchPolicy: 'cache-first',
 		notifyOnNetworkStatusChange: true,
 		errorPolicy: 'all'
 	});

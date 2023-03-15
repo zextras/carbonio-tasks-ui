@@ -34,16 +34,16 @@ import { useBoardHooks, t } from '@zextras/carbonio-shell-ui';
 import { filter, find, noop, trim } from 'lodash';
 import styled from 'styled-components';
 
-import { CustomSelectLabelFactory } from '../components/CustomSelectLabelFactory';
-import { NewTaskLimitBanner } from '../components/NewTaskLimitBanner';
-import { TextExtended as Text } from '../components/Text';
+import { CustomSelectLabelFactory } from '../../components/CustomSelectLabelFactory';
+import { NewTaskLimitBanner } from '../../components/NewTaskLimitBanner';
+import { TextExtended as Text } from '../../components/Text';
 import {
 	ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT,
 	MAX_TASKS_LIMIT,
 	TASK_DESCRIPTION_MAX_LENGTH,
 	TASK_TITLE_MAX_LENGTH,
 	TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT
-} from '../constants';
+} from '../../constants';
 import {
 	CreateTaskDocument,
 	FindTasksDocument,
@@ -51,9 +51,9 @@ import {
 	Priority,
 	Status,
 	type Task
-} from '../gql/types';
-import { type NonNullableList } from '../types/utils';
-import { identity } from '../utils';
+} from '../../gql/types';
+import { type NonNullableList } from '../../types/utils';
+import { identity } from '../../utils';
 
 const CustomIconButton = styled(IconButton)`
 	padding: 0.125rem;
@@ -76,35 +76,53 @@ const PrioritySelectionItem = ({
 
 const priorityItems: Array<SelectItem> = [
 	{
-		label: t('board.create.priority.high', 'High'),
+		label: t('task.priority', {
+			context: 'high',
+			defaultValue: 'High'
+		}),
 		value: Priority.High,
 		customComponent: (
 			<PrioritySelectionItem
 				icon={'ArrowheadUp'}
 				iconColor={'error'}
-				label={t('board.create.priority.high', 'High')}
+				label={t('task.priority', {
+					context: 'high',
+					defaultValue: 'High'
+				})}
 			/>
 		)
 	},
 	{
-		label: t('board.create.priority.medium', 'Medium'),
+		label: t('task.priority', {
+			context: 'medium',
+			defaultValue: 'Medium'
+		}),
 		value: Priority.Medium,
 		customComponent: (
 			<PrioritySelectionItem
 				icon={'MinusOutline'}
 				iconColor={'gray1'}
-				label={t('board.create.priority.medium', 'Medium')}
+				label={t('task.priority', {
+					context: 'medium',
+					defaultValue: 'Medium'
+				})}
 			/>
 		)
 	},
 	{
-		label: t('board.create.priority.low', 'Low'),
+		label: t('task.priority', {
+			context: 'low',
+			defaultValue: 'Low'
+		}),
 		value: Priority.Low,
 		customComponent: (
 			<PrioritySelectionItem
 				icon={'ArrowheadDown'}
 				iconColor={'info'}
-				label={t('board.create.priority.low', 'Low')}
+				label={t('task.priority', {
+					context: 'low',
+					defaultValue: 'Low'
+				})}
 			/>
 		)
 	}

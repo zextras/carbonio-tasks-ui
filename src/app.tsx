@@ -27,7 +27,7 @@ const LazySecondaryBarView = lazy(
 );
 
 const LazyBoardView = lazy(
-	() => import(/* webpackChunkName: "secondaryView" */ './boards/NewTaskBoard')
+	() => import(/* webpackChunkName: "secondaryView" */ './views/board/NewTaskBoard')
 );
 
 const AppView = (): JSX.Element => (

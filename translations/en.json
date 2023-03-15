@@ -32,11 +32,6 @@
                 "description": "Description",
                 "details": "Details"
             },
-            "priority": {
-                "high": "High",
-                "low": "Low",
-                "medium": "Medium"
-            },
             "select": {
                 "priority": {
                     "label": "Priority"
