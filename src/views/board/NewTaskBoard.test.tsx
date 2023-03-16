@@ -305,6 +305,7 @@ describe('New task board', () => {
 		const snackbarText =
 			'You have reached your 200 tasks. To create more complete your previous tasks.';
 		expect(screen.getByText(snackbarText)).toBeVisible();
+		expect(createTaskMock.result).not.toHaveBeenCalled();
 	});
 
 	describe('Reminder', () => {
