@@ -8,7 +8,11 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
+import { subMonths } from 'date-fns';
+import addMonths from 'date-fns/addMonths';
 import format from 'date-fns/format';
+import getDate from 'date-fns/getDate';
+import subDays from 'date-fns/subDays';
 
 import NewTaskBoard from './NewTaskBoard';
 import {
@@ -99,15 +103,99 @@ describe('New task board', () => {
 		});
 	});
 
-	test('Priority medium is the default one', () => {
-		prepareCache();
+	describe('Priority', () => {
+		test('Priority medium is the default one', () => {
+			prepareCache();
 
-		setup(<NewTaskBoard />, { mocks: [] });
+			setup(<NewTaskBoard />, { mocks: [] });
 
-		expect(screen.getByText(/medium/i)).toBeVisible();
-		expect(screen.getByTestId(ICON_REGEXP.mediumPriority)).toBeVisible();
-		expect(screen.queryByTestId(ICON_REGEXP.highPriority)).not.toBeInTheDocument();
-		expect(screen.queryByTestId(ICON_REGEXP.lowPriority)).not.toBeInTheDocument();
+			expect(screen.getByText(/medium/i)).toBeVisible();
+			expect(screen.getByTestId(ICON_REGEXP.mediumPriority)).toBeVisible();
+			expect(screen.queryByTestId(ICON_REGEXP.highPriority)).not.toBeInTheDocument();
+			expect(screen.queryByTestId(ICON_REGEXP.lowPriority)).not.toBeInTheDocument();
+		});
+
+		test('Create a task with high priority', async () => {
+			prepareCache();
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.High,
+				status: Status.Open,
+				title: 'Task with high priority'
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+
+			const prioritySelect = screen.getByText('Priority');
+			await user.click(prioritySelect);
+
+			const highPriority = screen.getByText('High');
+			await user.click(highPriority);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.priority).toBe(Priority.High);
+		});
+
+		test('Create a task with low priority', async () => {
+			prepareCache();
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Low,
+				status: Status.Open,
+				title: 'Task with low priority'
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+
+			const prioritySelect = screen.getByText('Priority');
+			await user.click(prioritySelect);
+
+			const lowPriority = screen.getByText('Low');
+			await user.click(lowPriority);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.priority).toBe(Priority.Low);
+		});
 	});
 
 	describe('Description', () => {
@@ -181,6 +269,42 @@ describe('New task board', () => {
 		await user.click(createButton);
 		await screen.findByText(infoBannerText);
 		expect(screen.getByText(infoBannerText)).toBeVisible();
+	});
+
+	test('Snackbar appears when max limit is reached and click create button', async () => {
+		const tasks = populateTaskList(MAX_TASKS_LIMIT);
+		prepareCache(tasks);
+
+		const newTaskInput: NewTaskInput = {
+			priority: Priority.Medium,
+			status: Status.Open,
+			title: 'task nr 201'
+		};
+
+		const newTaskResult: Required<Task> = {
+			__typename: 'Task',
+			createdAt: new Date().getTime(),
+			id: faker.datatype.uuid(),
+			description: null,
+			reminderAllDay: null,
+			reminderAt: null,
+			...newTaskInput,
+			priority: newTaskInput.priority || Priority.Medium,
+			status: newTaskInput.status || Status.Open
+		};
+
+		const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+		const mocks = [createTaskMock];
+		const { user } = setup(<NewTaskBoard />, { mocks });
+
+		const createButton = screen.getByRole('button', { name: /create/i });
+		await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+		await waitFor(() => expect(createButton).toBeEnabled());
+		await user.click(createButton);
+
+		const snackbarText =
+			'You have reached your 200 tasks. To create more complete your previous tasks.';
+		expect(screen.getByText(snackbarText)).toBeVisible();
 	});
 
 	describe('Reminder', () => {
@@ -261,6 +385,319 @@ describe('New task board', () => {
 			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 
 			expect(screen.getByText('Time')).toBeVisible();
+		});
+
+		test('Create task with future reminder at specific time', async () => {
+			prepareCache();
+
+			// chosen date is the 1st of next month
+			const nextM = addMonths(new Date().setMilliseconds(0), 1);
+			const chosenDate = subDays(nextM, getDate(nextM) - 1);
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'Task',
+				reminderAt: chosenDate.valueOf(),
+				reminderAllDay: false
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+
+			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			const nextMonthButton = await screen.findByRole('button', { name: /next month/i });
+			await user.click(nextMonthButton);
+
+			// always click on first 1 visible on the date picker
+			await user.click(screen.getAllByText('1')[0]);
+			expect(screen.getByRole('textbox', { name: /Reminder/i })).toHaveValue(
+				format(chosenDate, TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT)
+			);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
+			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
+		});
+
+		test('Create task with an all day future reminder', async () => {
+			prepareCache();
+
+			// chosen date is the 1st of next month
+			const nextM = addMonths(new Date().setMilliseconds(0), 1);
+			const chosenDate = subDays(nextM, getDate(nextM) - 1);
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'Task',
+				reminderAt: chosenDate.valueOf(),
+				reminderAllDay: true
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+
+			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			const nextMonthButton = await screen.findByRole('button', { name: /next month/i });
+			await user.click(nextMonthButton);
+
+			// always click on first 1 visible on the date picker
+			await user.click(screen.getAllByText('1')[0]);
+
+			const checkboxLabelText = /Remind me at every login throughout the day/i;
+			await user.click(screen.getByText(checkboxLabelText));
+
+			expect(screen.getByRole('textbox', { name: /Reminder/i })).toHaveValue(
+				format(chosenDate, ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT)
+			);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
+			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
+		});
+
+		test('Create task with now reminder', async () => {
+			prepareCache();
+
+			const chosenDate = new Date();
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'Task',
+				reminderAt: chosenDate.valueOf(),
+				reminderAllDay: false
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+
+			expect(screen.getByRole('textbox', { name: /Reminder/i })).toHaveValue(
+				format(chosenDate, TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT)
+			);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
+			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
+		});
+
+		test('Create task with today reminder', async () => {
+			prepareCache();
+
+			const chosenDate = new Date();
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'Task',
+				reminderAt: chosenDate.valueOf(),
+				reminderAllDay: true
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+
+			const checkboxLabelText = /Remind me at every login throughout the day/i;
+			await user.click(screen.getByText(checkboxLabelText));
+
+			expect(screen.getByRole('textbox', { name: /Reminder/i })).toHaveValue(
+				format(chosenDate, ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT)
+			);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
+			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
+		});
+
+		test('Create task with past reminder at specific time', async () => {
+			prepareCache();
+
+			// chosen date is the 1st of previous month
+			const previousM = subMonths(new Date().setMilliseconds(0), 1);
+			const chosenDate = subDays(previousM, getDate(previousM) - 1);
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'Task',
+				reminderAt: chosenDate.valueOf(),
+				reminderAllDay: false
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+
+			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			const previousMonthButton = await screen.findByRole('button', { name: /previous month/i });
+			await user.click(previousMonthButton);
+
+			// always click on first 1 visible on the date picker
+			await user.click(screen.getAllByText('1')[0]);
+			expect(screen.getByRole('textbox', { name: /Reminder/i })).toHaveValue(
+				format(chosenDate, TIME_SPECIFIC_DATE_TIME_PICKER_DATE_FORMAT)
+			);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
+			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
+		});
+
+		test('Create task with an all day past reminder', async () => {
+			prepareCache();
+
+			// chosen date is the 1st of next month
+			const previousM = subMonths(new Date().setMilliseconds(0), 1);
+			const chosenDate = subDays(previousM, getDate(previousM) - 1);
+
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'Task',
+				reminderAt: chosenDate.valueOf(),
+				reminderAllDay: true
+			};
+
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.datatype.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
+
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+
+			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			const previousMonthButton = await screen.findByRole('button', { name: /previous month/i });
+			await user.click(previousMonthButton);
+
+			// always click on first 1 visible on the date picker
+			await user.click(screen.getAllByText('1')[0]);
+
+			const checkboxLabelText = /Remind me at every login throughout the day/i;
+			await user.click(screen.getByText(checkboxLabelText));
+
+			expect(screen.getByRole('textbox', { name: /Reminder/i })).toHaveValue(
+				format(chosenDate, ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT)
+			);
+
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+				query: FindTasksDocument
+			});
+			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
+			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
 		});
 	});
 });
