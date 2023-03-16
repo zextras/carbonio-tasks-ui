@@ -57,3 +57,21 @@ export const usePushHistoryCallback = jest.fn(usePushHistoryMock);
 export const ACTION_TYPES = {
 	NEW: 'new'
 };
+
+export const useBoardHooks = jest.fn(() => ({
+	closeBoard: jest.fn(),
+	updateBoard: jest.fn(),
+	setCurrentBoard: jest.fn(),
+	getBoardContext: jest.fn(),
+	getBoard: jest.fn()
+}));
+
+export const t = (
+	key: string,
+	defaultValue: string | { context: string; defaultValue: string }
+): string => {
+	if (typeof defaultValue === 'string') {
+		return defaultValue;
+	}
+	return defaultValue.defaultValue;
+};

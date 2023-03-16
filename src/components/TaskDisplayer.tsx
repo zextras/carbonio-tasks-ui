@@ -19,9 +19,14 @@ interface TaskDisplayerProps {
 export const TaskDisplayer = ({ task }: TaskDisplayerProps): JSX.Element => {
 	const actions = useActions(task.id);
 	return (
-		<Container background={'gray5'} mainAlignment={'flex-start'}>
+		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
 			<DisplayerHeader title={task.title} />
-			<Container padding={{ horizontal: '1rem' }} mainAlignment={'flex-start'}>
+			<Container
+				padding={{ horizontal: '1rem' }}
+				mainAlignment={'flex-start'}
+				minHeight={0}
+				maxHeight={'100%'}
+			>
 				<ActionsHeader actions={actions} />
 				<TaskDetails
 					createdAt={task.createdAt}

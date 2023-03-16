@@ -13,12 +13,16 @@ import {
 	CompleteTaskDocument,
 	type CompleteTaskMutation,
 	type CompleteTaskMutationVariables,
+	CreateTaskDocument,
+	type CreateTaskMutation,
+	type CreateTaskMutationVariables,
 	FindTasksDocument,
 	type FindTasksQuery,
 	type FindTasksQueryVariables,
 	GetTaskDocument,
 	type GetTaskQuery,
 	type GetTaskQueryVariables,
+	type NewTaskInput,
 	Priority,
 	Status,
 	type Task
@@ -114,6 +118,34 @@ export function mockCompleteTask(
 						id: variables.id,
 						status: Status.Complete
 					}
+				}
+			})
+		)
+	};
+}
+
+export function mockCreateTask(
+	variables: NewTaskInput,
+	task: Task
+): Mock<CreateTaskMutation, CreateTaskMutationVariables> {
+	return {
+		request: {
+			query: CreateTaskDocument,
+			variables: {
+				newTask: {
+					description: variables.description,
+					reminderAt: variables.reminderAt,
+					reminderAllDay: variables.reminderAllDay,
+					status: variables.status,
+					priority: variables.priority,
+					title: variables.title
+				}
+			}
+		},
+		result: jest.fn(
+			(): FetchResult<CreateTaskMutation> => ({
+				data: {
+					createTask: task
 				}
 			})
 		)

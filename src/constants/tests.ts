@@ -10,7 +10,10 @@ export const ICON_REGEXP = {
 	highPriority: /^icon: ArrowheadUp$/i,
 	lowPriority: /^icon: ArrowheadDown$/i,
 	mediumPriority: /^icon: MinusOutline$/i,
-	reminderExpired: /^icon: AlertTriangle$/i
+	reminderExpired: /^icon: AlertTriangle$/i,
+	switchOff: /^icon: ToggleLeftOutline$/i,
+	switchOn: /^icon: ToggleRight$/i,
+	inputCalendarIcon: /^icon: CalendarOutline$/i
 } as const;
 
 export const TEST_ID_SELECTOR = {

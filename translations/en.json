@@ -3,6 +3,60 @@
         "complete": "Complete",
         "edit": "Edit"
     },
+    "board": {
+        "create": {
+            "checkbox": {
+                "allDay": {
+                    "label": "Remind me at every login throughout the day"
+                }
+            },
+            "confirmButton": {
+                "create": "create"
+            },
+            "dateTimePicker": {
+                "reminder": {
+                    "label": "Reminder"
+                }
+            },
+            "input": {
+                "description": {
+                    "error": {
+                        "label": "Maximum length allowed is 1024 characters"
+                    }
+                },
+                "title": {
+                    "label": "Title*"
+                }
+            },
+            "label": {
+                "description": "Description",
+                "details": "Details"
+            },
+            "select": {
+                "priority": {
+                    "label": "Priority"
+                }
+            },
+            "switch": {
+                "enableReminder": {
+                    "label": "Enable reminders"
+                }
+            },
+            "textArea": {
+                "description": {
+                    "error": {
+                        "label": "Maximum length allowed is 4096 characters"
+                    }
+                },
+                "taskDescription": {
+                    "label": "Task Description"
+                }
+            }
+        },
+        "newTask": {
+            "title": "New Task"
+        }
+    },
     "displayer": {
         "allTasks": [
             {
@@ -34,8 +88,20 @@
         "app_name": "Tasks",
         "new": "New Task"
     },
+    "newTaskBoard": {
+        "banner": {
+            "lastTask": "This is the last task you can create. To create more complete your previous tasks."
+        }
+    },
     "secondaryBar": {
         "allTasks": "All Tasks"
+    },
+    "snackbar": {
+        "": "Upload occurred in Files' Home",
+        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks.",
+        "upload": {
+            "goToFolder": "Go to folder"
+        }
     },
     "task": {
         "priority_high": "High",
@@ -46,6 +112,11 @@
         "reminder": {
             "doNotRemindMe": "Do not remind me",
             "remindMeOn": "Remind me on"
+        }
+    },
+    "uploads": {
+        "destination": {
+            "home": "Upload occurred in Files' Home"
         }
     }
 }

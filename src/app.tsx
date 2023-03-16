@@ -17,13 +17,17 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
-import { Placeholder } from './components/placeholder';
 import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
+import { ProvidersWrapper } from './providers/ProvidersWrapper';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "appView" */ './views/app/AppView'));
 
 const LazySecondaryBarView = lazy(
 	() => import(/* webpackChunkName: "secondaryView" */ './views/secondary-bar/SecondaryBarView')
+);
+
+const LazyBoardView = lazy(
+	() => import(/* webpackChunkName: "secondaryView" */ './views/board/NewTaskBoard')
 );
 
 const AppView = (): JSX.Element => (
@@ -35,6 +39,14 @@ const AppView = (): JSX.Element => (
 const SecondaryBarView = (props: SecondaryBarComponentProps): JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<LazySecondaryBarView {...props} />
+	</Suspense>
+);
+
+const BoardView = (): JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<ProvidersWrapper>
+			<LazyBoardView />
+		</ProvidersWrapper>
 	</Suspense>
 );
 
@@ -56,7 +68,7 @@ const App = (): React.ReactNode => {
 		// boards
 		addBoardView({
 			route: TASKS_ROUTE,
-			component: Placeholder
+			component: BoardView
 		});
 	}, [t]);
 
@@ -70,7 +82,7 @@ const App = (): React.ReactNode => {
 				label: t('label.new', 'New Task'),
 				icon: 'ListViewOutline',
 				click: (): void => {
-					addBoard({ url: TASKS_ROUTE, title: 'Main Board' });
+					addBoard({ url: TASKS_ROUTE, title: t('board.newTask.title', 'New Task') });
 				},
 				disabled: false,
 				primary: true,

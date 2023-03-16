@@ -95,13 +95,13 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 				<Text>{allTasksLabel}</Text>
 			</Row>
 			<Divider color="gray3" />
-			{(!isEmpty(items) && <ListV2 background={'gray6'}>{items}</ListV2>) || (
-				<Container>
+			<Container minHeight={0} maxHeight={'100%'}>
+				{(!isEmpty(items) && <ListV2 background={'gray6'}>{items}</ListV2>) || (
 					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
 						{emptyListPlaceholder}
 					</Text>
-				</Container>
-			)}
+				)}
+			</Container>
 		</Container>
 	);
 };
