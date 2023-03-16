@@ -7,13 +7,19 @@ directive @require(field: String!) on INPUT_FIELD_DEFINITION
 
 directive @stringLength(max: Int!) on INPUT_FIELD_DEFINITION
 
+type Config {
+	name: String!
+	value: String!
+}
+
 """
+A custom scalar representing a date in a timestamp format
 """
 scalar DateTime
 
 type Mutation {
-	createTask(newTask: NewTaskInput): Task!
-	updateTask(updateTask: UpdateTaskInput): Task!
+	createTask(newTask: NewTaskInput!): Task
+	updateTask(updateTask: UpdateTaskInput!): Task
 }
 
 input NewTaskInput {
@@ -52,6 +58,7 @@ type Query {
 }
 
 type ServiceInfo {
+	flavour: String!
 	name: String!
 	version: String!
 }
@@ -61,12 +68,6 @@ enum Status {
 	OPEN
 }
 
-"""
-type Config {
-    name: String!
-    value: String!
-}
-"""
 type Task {
 	createdAt: DateTime!
 
