@@ -22,18 +22,24 @@ export type Scalars = {
 	DateTime: number;
 };
 
+export type Config = {
+	__typename?: 'Config';
+	name: Scalars['String'];
+	value: Scalars['String'];
+};
+
 export type Mutation = {
 	__typename?: 'Mutation';
-	createTask: Task;
-	updateTask: Task;
+	createTask?: Maybe<Task>;
+	updateTask?: Maybe<Task>;
 };
 
 export type MutationCreateTaskArgs = {
-	newTask?: InputMaybe<NewTaskInput>;
+	newTask: NewTaskInput;
 };
 
 export type MutationUpdateTaskArgs = {
-	updateTask?: InputMaybe<UpdateTaskInput>;
+	updateTask: UpdateTaskInput;
 };
 
 export type NewTaskInput = {
@@ -76,6 +82,7 @@ export type QueryGetTaskArgs = {
 
 export type ServiceInfo = {
 	__typename?: 'ServiceInfo';
+	flavour: Scalars['String'];
 	name: Scalars['String'];
 	version: Scalars['String'];
 };
@@ -85,12 +92,6 @@ export enum Status {
 	Open = 'OPEN'
 }
 
-/**
- * type Config {
- *     name: String!
- *     value: String!
- * }
- */
 export type Task = {
 	__typename?: 'Task';
 	createdAt: Scalars['DateTime'];
@@ -126,14 +127,6 @@ export type UpdateTaskInput = {
 	title?: InputMaybe<Scalars['String']>;
 };
 
-export type CompleteTaskMutationVariables = Exact<{
-	id: Scalars['ID'];
-}>;
-
-export type CompleteTaskMutation = {
-	updateTask: { id: string; status: Status } & { __typename?: 'Task' };
-} & { __typename?: 'Mutation' };
-
 export type TaskFragment = {
 	id: string;
 	description?: string | null;
@@ -145,21 +138,31 @@ export type TaskFragment = {
 	createdAt: number;
 } & { __typename?: 'Task' };
 
+export type CompleteTaskMutationVariables = Exact<{
+	id: Scalars['ID'];
+}>;
+
+export type CompleteTaskMutation = {
+	updateTask?: ({ id: string; status: Status } & { __typename?: 'Task' }) | null;
+} & { __typename?: 'Mutation' };
+
 export type CreateTaskMutationVariables = Exact<{
-	newTask?: InputMaybe<NewTaskInput>;
+	newTask: NewTaskInput;
 }>;
 
 export type CreateTaskMutation = {
-	createTask: {
-		id: string;
-		description?: string | null;
-		priority: Priority;
-		reminderAllDay?: boolean | null;
-		status: Status;
-		reminderAt?: number | null;
-		title: string;
-		createdAt: number;
-	} & { __typename?: 'Task' };
+	createTask?:
+		| ({
+				id: string;
+				description?: string | null;
+				priority: Priority;
+				reminderAllDay?: boolean | null;
+				status: Status;
+				reminderAt?: number | null;
+				title: string;
+				createdAt: number;
+		  } & { __typename?: 'Task' })
+		| null;
 } & { __typename?: 'Mutation' };
 
 export type FindTasksQueryVariables = Exact<{
@@ -173,7 +176,6 @@ export type FindTasksQuery = {
 				id: string;
 				priority: Priority;
 				createdAt: number;
-				description?: string | null;
 				reminderAllDay?: boolean | null;
 				status: Status;
 				reminderAt?: number | null;
@@ -202,6 +204,29 @@ export type GetTaskQuery = {
 		| null;
 } & { __typename?: 'Query' };
 
+export const TaskFragmentDoc = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'FragmentDefinition',
+			name: { kind: 'Name', value: 'Task' },
+			typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Task' } },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'priority' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAllDay' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'status' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAt' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'title' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<TaskFragment, unknown>;
 export const CompleteTaskDocument = {
 	kind: 'Document',
 	definitions: [
@@ -259,29 +284,6 @@ export const CompleteTaskDocument = {
 		}
 	]
 } as unknown as DocumentNode<CompleteTaskMutation, CompleteTaskMutationVariables>;
-export const TaskFragmentDoc = {
-	kind: 'Document',
-	definitions: [
-		{
-			kind: 'FragmentDefinition',
-			name: { kind: 'Name', value: 'Task' },
-			typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Task' } },
-			selectionSet: {
-				kind: 'SelectionSet',
-				selections: [
-					{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
-					{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
-					{ kind: 'Field', name: { kind: 'Name', value: 'priority' } },
-					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAllDay' } },
-					{ kind: 'Field', name: { kind: 'Name', value: 'status' } },
-					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAt' } },
-					{ kind: 'Field', name: { kind: 'Name', value: 'title' } },
-					{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } }
-				]
-			}
-		}
-	]
-} as unknown as DocumentNode<TaskFragment, unknown>;
 export const CreateTaskDocument = {
 	kind: 'Document',
 	definitions: [
@@ -293,7 +295,10 @@ export const CreateTaskDocument = {
 				{
 					kind: 'VariableDefinition',
 					variable: { kind: 'Variable', name: { kind: 'Name', value: 'newTask' } },
-					type: { kind: 'NamedType', name: { kind: 'Name', value: 'NewTaskInput' } }
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'NewTaskInput' } }
+					}
 				}
 			],
 			selectionSet: {
@@ -317,7 +322,24 @@ export const CreateTaskDocument = {
 				]
 			}
 		},
-		...TaskFragmentDoc.definitions
+		{
+			kind: 'FragmentDefinition',
+			name: { kind: 'Name', value: 'Task' },
+			typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Task' } },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'priority' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAllDay' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'status' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAt' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'title' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } }
+				]
+			}
+		}
 	]
 } as unknown as DocumentNode<CreateTaskMutation, CreateTaskMutationVariables>;
 export const FindTasksDocument = {
@@ -363,7 +385,6 @@ export const FindTasksDocument = {
 								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'priority' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'reminderAllDay' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'status' } },
 								{ kind: 'Field', name: { kind: 'Name', value: 'reminderAt' } },

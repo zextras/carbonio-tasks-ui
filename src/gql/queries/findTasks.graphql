@@ -13,7 +13,6 @@ query findTasks(
         id
         priority
         createdAt
-        description
         reminderAllDay
         status
         reminderAt

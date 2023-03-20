@@ -11,3 +11,5 @@
 /.idea
 /LICENSES
 .env
+.graphqlconfig
+zextras-carbonio-*.tgz

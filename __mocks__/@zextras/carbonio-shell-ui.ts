@@ -6,8 +6,14 @@
 
 import { useCallback } from 'react';
 
-import { type Account, type AccountSettings, type HistoryParams } from '@zextras/carbonio-shell-ui';
-import { trimStart } from 'lodash';
+import {
+	type Account,
+	type AccountSettings,
+	type Board,
+	type HistoryParams
+} from '@zextras/carbonio-shell-ui';
+import { type BoardHooksContext } from '@zextras/carbonio-shell-ui/types/boards';
+import { noop, trimStart } from 'lodash';
 import { useHistory } from 'react-router-dom';
 
 import { LOGGED_USER, USER_SETTINGS } from '../../src/mocks/constants';
@@ -52,19 +58,25 @@ function usePushHistoryMock(): (params: HistoryParams) => void {
 
 export const useUserAccounts = (): Account[] => [LOGGED_USER];
 export const useUserSettings = (): AccountSettings => USER_SETTINGS;
-export const useReplaceHistoryCallback = jest.fn(useReplaceHistoryMock);
-export const usePushHistoryCallback = jest.fn(usePushHistoryMock);
+export const useReplaceHistoryCallback = useReplaceHistoryMock;
+export const usePushHistoryCallback = usePushHistoryMock;
 export const ACTION_TYPES = {
 	NEW: 'new'
 };
 
-export const useBoardHooks = jest.fn(() => ({
-	closeBoard: jest.fn(),
-	updateBoard: jest.fn(),
-	setCurrentBoard: jest.fn(),
-	getBoardContext: jest.fn(),
-	getBoard: jest.fn()
-}));
+export const useBoardHooks = (): BoardHooksContext => ({
+	closeBoard: noop,
+	updateBoard: noop,
+	setCurrentBoard: noop,
+	getBoardContext: <T>(): T => {
+		// implement the mock when required, for now leave it unimplemented
+		throw new Error('not implemented');
+	},
+	getBoard: <T>(): Board<T> => {
+		// implement the mock when required, for now leave it unimplemented
+		throw new Error('not implemented');
+	}
+});
 
 export const t = (
 	key: string,

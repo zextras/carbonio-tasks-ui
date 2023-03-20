@@ -9,6 +9,7 @@ import { act, configure } from '@testing-library/react';
 import dotenv from 'dotenv';
 import failOnConsole from 'jest-fail-on-console';
 import 'jest-styled-components';
+import { noop } from 'lodash';
 
 import buildClient from './apollo';
 import server from './mocks/server';
@@ -43,41 +44,23 @@ beforeEach(() => {
 	// reset apollo client cache
 	global.apolloClient.resetStore();
 
-	// define browser objects non available in jest
-	// https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-	Object.defineProperty(window, 'matchMedia', {
-		writable: true,
-		value: jest.fn().mockImplementation((query) => ({
-			matches: false,
-			media: query,
-			onchange: null,
-			addListener: jest.fn(), // Deprecated
-			removeListener: jest.fn(), // Deprecated
-			addEventListener: jest.fn(),
-			removeEventListener: jest.fn(),
-			dispatchEvent: jest.fn()
-		}))
-	});
-
 	// mock a simplified Intersection Observer
 	Object.defineProperty(window, 'IntersectionObserver', {
 		writable: true,
-		value: jest.fn().mockImplementation((callback, options) => ({
-			thresholds: options.threshold,
-			root: options.root,
-			rootMargin: options.rootMargin,
-			observe: jest.fn(),
-			unobserve: jest.fn(),
-			disconnect: jest.fn()
-		}))
+		value: jest.fn(function intersectionObserverMock(
+			callback: IntersectionObserverCallback,
+			options: IntersectionObserverInit
+		) {
+			return {
+				thresholds: options.threshold,
+				root: options.root,
+				rootMargin: options.rootMargin,
+				observe: noop,
+				unobserve: noop,
+				disconnect: noop
+			};
+		})
 	});
-
-	Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
-		writable: true,
-		value: jest.fn()
-	});
-
-	Element.prototype.scrollTo = jest.fn();
 });
 
 beforeAll(() => {
@@ -88,6 +71,32 @@ beforeAll(() => {
 
 	// initialize an apollo client instance for test and makes it available globally
 	global.apolloClient = buildClient();
+
+	// define browser objects not available in jest
+	// https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
+	// if it's necessary to use a jest mock, place the definition in the beforeEach, because the restoreMock
+	// config restore all mocks to the initial value (undefined if the object is not present at all)
+
+	Object.defineProperty(window, 'matchMedia', {
+		writable: true,
+		value: (query: string): MediaQueryList => ({
+			matches: false,
+			media: query,
+			onchange: null,
+			addListener: noop, // Deprecated
+			removeListener: noop, // Deprecated
+			addEventListener: noop,
+			removeEventListener: noop,
+			dispatchEvent: () => true
+		})
+	});
+
+	Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
+		writable: true,
+		value: noop
+	});
+
+	Element.prototype.scrollTo = noop;
 
 	window.resizeTo = function resizeTo(width, height): void {
 		Object.assign(this, {
