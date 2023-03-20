@@ -51,7 +51,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.55.0",
 		"@typescript-eslint/parser": "^5.55.0",
 		"@zextras/carbonio-ui-configs": "^0.1.11",
-		"@zextras/carbonio-ui-sdk": "^1.5.1",
+		"@zextras/carbonio-ui-sdk": "1.5.0",
 		"babel-jest": "^29.5.0",
 		"babel-plugin-i18next-extract": "^0.9.0",
 		"babel-plugin-styled-components": "^2.0.7",
