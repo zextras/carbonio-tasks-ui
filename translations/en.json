@@ -1,7 +1,8 @@
 {
     "action": {
         "complete": "Complete",
-        "edit": "Edit"
+        "edit": "Edit",
+        "undo": "Undo"
     },
     "board": {
         "create": {
@@ -88,6 +89,15 @@
         "app_name": "Tasks",
         "new": "New Task"
     },
+    "modal": {
+        "close": "Close",
+        "reminder": {
+            "completeAll": "Complete all",
+            "dismiss": "Dismiss",
+            "remindMeOn": "Remind me on",
+            "title": "Tasks reminders"
+        }
+    },
     "newTaskBoard": {
         "banner": {
             "lastTask": "This is the last task you can create. To create more complete your previous tasks."
@@ -106,7 +116,9 @@
     "task": {
         "priority_high": "High",
         "priority_low": "Low",
-        "priority_medium": "Medium"
+        "priority_medium": "Medium",
+        "status_complete": "Completed",
+        "status_open": "Open"
     },
     "tasksListItem": {
         "reminder": {

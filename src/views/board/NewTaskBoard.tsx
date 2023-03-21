@@ -5,8 +5,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { type Reference, useMutation, useQuery } from '@apollo/client';
-import { type Modifier } from '@apollo/client/cache';
+import { useMutation, useQuery } from '@apollo/client';
 import {
 	Button,
 	type ButtonProps,
@@ -30,13 +29,14 @@ import {
 	type TextAreaProps,
 	useSnackbar
 } from '@zextras/carbonio-design-system';
-import { useBoardHooks, t } from '@zextras/carbonio-shell-ui';
+import { t, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { filter, find, noop, trim } from 'lodash';
 import styled from 'styled-components';
 
+import { addTaskToList } from '../../apollo/cacheUtils';
 import { CustomSelectLabelFactory } from '../../components/CustomSelectLabelFactory';
 import { NewTaskLimitBanner } from '../../components/NewTaskLimitBanner';
-import { TextExtended as Text } from '../../components/Text';
+import { Text } from '../../components/Text';
 import {
 	ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT,
 	MAX_TASKS_LIMIT,
@@ -49,8 +49,7 @@ import {
 	FindTasksDocument,
 	type FindTasksQuery,
 	Priority,
-	Status,
-	type Task
+	Status
 } from '../../gql/types';
 import { type NonNullableList } from '../../types/utils';
 import { identity } from '../../utils';
@@ -127,16 +126,6 @@ const priorityItems: Array<SelectItem> = [
 		)
 	}
 ];
-
-const addTaskToList: (task: Task) => Modifier<Reference[] | undefined> =
-	(task) =>
-	(existingTasksRefs, { toReference }) => {
-		const newTaskRef = toReference(task);
-		if (existingTasksRefs && newTaskRef) {
-			return [newTaskRef, ...existingTasksRefs];
-		}
-		return existingTasksRefs;
-	};
 
 function isPriorityValidValue(value: string): value is Priority {
 	return (Object.values(Priority) as string[]).includes(value);

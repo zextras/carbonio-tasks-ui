@@ -6,7 +6,7 @@
 import React from 'react';
 
 import {
-	Text,
+	Text as DSText,
 	type TextProps,
 	TextWithTooltip,
 	type TextWithTooltipProps
@@ -47,7 +47,7 @@ const TextWithOptionalTooltip = ({
 	withTooltip ? (
 		<TextWithTooltip {...rest}>{children}</TextWithTooltip>
 	) : (
-		<Text {...rest}>{children}</Text>
+		<DSText {...rest}>{children}</DSText>
 	);
 
 const StyledText = styled(TextWithOptionalTooltip)<StyledTextProps>`
@@ -57,7 +57,7 @@ const StyledText = styled(TextWithOptionalTooltip)<StyledTextProps>`
 	text-align: ${({ $centered }): SimpleInterpolation => $centered && 'center'};
 	line-height: ${({ $lineHeight }): SimpleInterpolation => $lineHeight};
 `;
-export const TextExtended = ({
+export const Text = ({
 	width,
 	centered,
 	italic,

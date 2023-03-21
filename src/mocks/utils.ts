@@ -10,9 +10,9 @@ import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
 
 import {
-	CompleteTaskDocument,
-	type CompleteTaskMutation,
-	type CompleteTaskMutationVariables,
+	UpdateTaskStatusDocument,
+	type UpdateTaskStatusMutation,
+	type UpdateTaskStatusMutationVariables,
 	CreateTaskDocument,
 	type CreateTaskMutation,
 	type CreateTaskMutationVariables,
@@ -102,16 +102,16 @@ export function mockFindTasks(
 	};
 }
 
-export function mockCompleteTask(
-	variables: CompleteTaskMutationVariables
-): Mock<CompleteTaskMutation, CompleteTaskMutationVariables> {
+export function mockUpdateTaskStatus(
+	variables: UpdateTaskStatusMutationVariables
+): Mock<UpdateTaskStatusMutation, UpdateTaskStatusMutationVariables> {
 	return {
 		request: {
-			query: CompleteTaskDocument,
+			query: UpdateTaskStatusDocument,
 			variables
 		},
 		result: jest.fn(
-			(): FetchResult<CompleteTaskMutation> => ({
+			(): FetchResult<UpdateTaskStatusMutation> => ({
 				data: {
 					updateTask: {
 						__typename: 'Task',

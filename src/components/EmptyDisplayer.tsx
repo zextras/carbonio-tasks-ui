@@ -7,7 +7,7 @@ import React, { useContext } from 'react';
 
 import { Container, Padding } from '@zextras/carbonio-design-system';
 
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 import { ListContext } from '../contexts';
 import { useRandomPlaceholder } from '../hooks/useRandomPlaceholder';
 

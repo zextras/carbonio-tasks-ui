@@ -12,7 +12,7 @@ import styled from 'styled-components';
 
 import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 import { TimeZoneContext } from '../contexts';
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';

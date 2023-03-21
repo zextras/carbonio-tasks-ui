@@ -18,7 +18,13 @@ import {
 	ICON_REGEXP,
 	TEST_ID_SELECTOR
 } from '../../constants/tests';
-import { mockCompleteTask, mockFindTasks, mockGetTask, populateTaskList } from '../../mocks/utils';
+import { Status } from '../../gql/types';
+import {
+	mockFindTasks,
+	mockGetTask,
+	mockUpdateTaskStatus,
+	populateTaskList
+} from '../../mocks/utils';
 import { formatDateFromTimestamp } from '../../utils';
 import { makeListItemsVisible, setup } from '../../utils/testUtils';
 
@@ -149,7 +155,7 @@ describe('Task view', () => {
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
-				mockCompleteTask({ id: task.id })
+				mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 			];
 
 			const { user } = setup(
@@ -181,7 +187,7 @@ describe('Task view', () => {
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
-				mockCompleteTask({ id: task.id })
+				mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 			];
 
 			const { user } = setup(
@@ -213,7 +219,7 @@ describe('Task view', () => {
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
-				mockCompleteTask({ id: task.id })
+				mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 			];
 
 			const { user } = setup(

@@ -5,14 +5,14 @@
  */
 
 import {
-	type CompleteTaskMutation,
-	type CompleteTaskMutationVariables,
+	type UpdateTaskStatusMutation,
+	type UpdateTaskStatusMutationVariables,
 	Status
 } from '../../gql/types';
 import { type GraphQLResponseResolver } from '../../types/commons';
 
 const handler: jest.MockedFunction<
-	GraphQLResponseResolver<CompleteTaskMutation, CompleteTaskMutationVariables>
+	GraphQLResponseResolver<UpdateTaskStatusMutation, UpdateTaskStatusMutationVariables>
 > = jest.fn((req, res, context) => {
 	const { id } = req.variables;
 	return res(

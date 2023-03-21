@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import styled, { type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
 import { ListItemContent } from './ListItemContent';
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import type { FindTasksQuery } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';

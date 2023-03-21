@@ -10,6 +10,7 @@ import { trimEnd } from 'lodash';
 import { Route, useRouteMatch } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
+import { RemindersManager } from '../../components/RemindersManager';
 import { ROUTES } from '../../constants';
 import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
 
@@ -21,7 +22,12 @@ const AppView = (): JSX.Element => {
 		[path]
 	);
 
-	return <ProvidersWrapper>{routes}</ProvidersWrapper>;
+	return (
+		<ProvidersWrapper>
+			<RemindersManager />
+			{routes}
+		</ProvidersWrapper>
+	);
 };
 
 export default AppView;

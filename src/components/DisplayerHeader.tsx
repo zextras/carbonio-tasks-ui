@@ -7,7 +7,7 @@ import React, { useCallback } from 'react';
 
 import { Container, Divider, IconButton } from '@zextras/carbonio-design-system';
 
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 import { useActiveItem } from '../hooks/useActiveItem';
 
 interface DisplayerHeaderProps {

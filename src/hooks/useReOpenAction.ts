@@ -8,21 +8,18 @@ import { useCallback } from 'react';
 
 import { type FetchResult, useMutation } from '@apollo/client';
 
-import { useActiveItem } from './useActiveItem';
-import { removeTaskFromList } from '../apollo/cacheUtils';
+import { addTaskToList } from '../apollo/cacheUtils';
 import { Status, UpdateTaskStatusDocument, type UpdateTaskStatusMutation } from '../gql/types';
 
-type CompleteActionFn = () => Promise<FetchResult<UpdateTaskStatusMutation>>;
+type ReOpenActionFn = () => Promise<FetchResult<UpdateTaskStatusMutation>>;
 
-export const useCompleteAction = (taskId: string): CompleteActionFn => {
+export const useReOpenAction = (taskId: string): ReOpenActionFn => {
 	const [updateTaskStatus] = useMutation(UpdateTaskStatusDocument, {
 		variables: {
 			id: taskId,
 			status: Status.Complete
 		}
 	});
-
-	const { removeActive } = useActiveItem();
 
 	return useCallback(
 		() =>
@@ -31,19 +28,12 @@ export const useCompleteAction = (taskId: string): CompleteActionFn => {
 					if (data?.updateTask) {
 						cache.modify({
 							fields: {
-								findTasks: removeTaskFromList(data.updateTask)
+								findTasks: addTaskToList(data.updateTask)
 							}
 						});
 					}
 				}
-			}).then((result) => {
-				if (result.data?.updateTask) {
-					// replace history so that a back navigation does not re-open the displayer
-					// for a task which is no more visible
-					removeActive({ replace: true });
-				}
-				return result;
 			}),
-		[updateTaskStatus, removeActive]
+		[updateTaskStatus]
 	);
 };

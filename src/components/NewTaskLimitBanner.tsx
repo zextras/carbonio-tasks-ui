@@ -8,7 +8,7 @@ import React from 'react';
 import { Container, Divider, Icon } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 
 export const NewTaskLimitBanner = (): JSX.Element => {
 	const [t] = useTranslation();

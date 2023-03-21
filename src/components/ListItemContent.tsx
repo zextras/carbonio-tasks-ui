@@ -14,7 +14,7 @@ import { ListItemHoverBar } from './ListItemHoverBar';
 import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';
 import { HoverContainer, ListItemContainer } from './StyledComponents';
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import type { Task } from '../gql/types';
 import { useActions } from '../hooks/useActions';

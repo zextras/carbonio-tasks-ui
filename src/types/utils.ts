@@ -9,3 +9,7 @@ export type OneOrMany<T> = T | T[];
 export type Unwrap<T> = T extends Array<infer U> ? U : T;
 
 export type NonNullableList<T extends Array<unknown>> = Array<NonNullable<Unwrap<T>>>;
+
+export type NonNullableListItem<T extends Array<unknown>> = NonNullable<Unwrap<T>>;
+
+export type MakeRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
