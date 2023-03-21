@@ -4,8 +4,9 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
+import { ApolloProvider } from '@apollo/client';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -17,8 +18,10 @@ import {
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
+import buildClient from './apollo';
+import { RemindersManager } from './components/RemindersManager';
 import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
-import { ProvidersWrapper } from './providers/ProvidersWrapper';
+import { ContextsProvider, ProvidersWrapper } from './providers/ProvidersWrapper';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "appView" */ './views/app/AppView'));
 
@@ -52,6 +55,8 @@ const BoardView = (): JSX.Element => (
 
 const App = (): React.ReactNode => {
 	const [t] = useTranslation();
+	const apolloClient = useMemo(() => buildClient(), []);
+
 	useEffect(() => {
 		const appNameLabel = t('label.app_name', 'Tasks');
 
@@ -81,7 +86,7 @@ const App = (): React.ReactNode => {
 				id: 'new-task',
 				label: t('label.new', 'New Task'),
 				icon: 'ListViewOutline',
-				click: (): void => {
+				onClick: (): void => {
 					addBoard({ url: TASKS_ROUTE, title: t('board.newTask.title', 'New Task') });
 				},
 				disabled: false,
@@ -91,7 +96,13 @@ const App = (): React.ReactNode => {
 		});
 	}, [t]);
 
-	return null;
+	return (
+		<ApolloProvider client={apolloClient}>
+			<ContextsProvider>
+				<RemindersManager />
+			</ContextsProvider>
+		</ApolloProvider>
+	);
 };
 
 export default App;

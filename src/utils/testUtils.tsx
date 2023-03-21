@@ -27,6 +27,7 @@ import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
+import { RemindersManager } from '../components/RemindersManager';
 import { type Mock } from '../mocks/utils';
 import { ContextsProvider, ManagersProvider } from '../providers/ProvidersWrapper';
 import { StyledWrapper } from '../providers/StyledWrapper';
@@ -178,6 +179,7 @@ const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): JSX.E
 		>
 			<StyledWrapper>
 				<I18NextTestProvider>
+					<RemindersManager />
 					<ManagersProvider>
 						<ContextsProvider>{children}</ContextsProvider>
 					</ManagersProvider>
