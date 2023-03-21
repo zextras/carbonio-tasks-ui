@@ -7,6 +7,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Modal } from '@zextras/carbonio-design-system';
+import { getNotificationManager } from '@zextras/carbonio-shell-ui';
 import { isAfter, isBefore, isToday, startOfDay } from 'date-fns';
 import { chain, flatten, forEach, groupBy, map, remove, some } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -108,6 +109,7 @@ function isTaskWithReminder(task: Partial<Task> | null | undefined): task is Tas
 export const RemindersManager = (): JSX.Element => {
 	const [t] = useTranslation();
 	const timezone = useContext(TimeZoneContext);
+	const notificationManager = getNotificationManager();
 
 	// query used to register new task when the list changes
 	const { data: remindersData, previousData: remindersPreviousData } = useQuery(
@@ -287,6 +289,13 @@ export const RemindersManager = (): JSX.Element => {
 		remindersPreviousData?.findTasks,
 		unregisterReminder
 	]);
+
+	useEffect(() => {
+		if (isModalOpen) {
+			// notify with a sound the opening of the modal
+			notificationManager.notify({ showPopup: false, playSound: true });
+		}
+	}, [notificationManager, isModalOpen]);
 
 	const closeModalHandler = useCallback(() => {
 		setModalOpen(false);
