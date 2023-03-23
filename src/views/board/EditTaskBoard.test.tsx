@@ -17,6 +17,7 @@ import { mockGetTask, mockUpdateTask, populateTask } from '../../mocks/utils';
 import { setup } from '../../utils/testUtils';
 
 describe('Edit task board', () => {
+	const checkboxLabelText = /Remind me at every login throughout the day/i;
 	function spyUseBoard(taskId: string): void {
 		jest.spyOn(shell, 'useBoard').mockReturnValue({
 			context: { taskId },
@@ -164,6 +165,42 @@ describe('Edit task board', () => {
 			await user.type(descriptionInput, 'a');
 			await waitFor(() => expect(editButton).toBeDisabled());
 			expect(screen.getByText(/Maximum length allowed is 4096 characters/i)).toBeVisible();
+		});
+	});
+
+	describe('Reminder', () => {
+		test('If the task has not a reminder than the edit board appears without the reminder fields', async () => {
+			const task = populateTask({ reminderAt: null, reminderAllDay: null });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const mocks = [getTaskMock];
+			setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			const switchOffIcon = screen.getByTestId(ICON_REGEXP.switchOff);
+			expect(switchOffIcon).toBeVisible();
+			expect(screen.queryByTestId(ICON_REGEXP.switchOn)).not.toBeInTheDocument();
+
+			expect(screen.queryByText(checkboxLabelText)).not.toBeInTheDocument();
+			expect(screen.queryByRole('textbox', { name: /Reminder/i })).not.toBeInTheDocument();
+		});
+
+		test('If the task has a reminder than the edit board appears with the reminder fields', async () => {
+			const task = populateTask({ reminderAt: new Date().getTime(), reminderAllDay: true });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const mocks = [getTaskMock];
+			setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			const switchOnIcon = screen.getByTestId(ICON_REGEXP.switchOn);
+			expect(switchOnIcon).toBeVisible();
+			expect(screen.queryByTestId(ICON_REGEXP.switchOff)).not.toBeInTheDocument();
+
+			expect(screen.getByText(checkboxLabelText)).toBeVisible();
+			expect(screen.getByRole('textbox', { name: /Reminder/i })).toBeVisible();
 		});
 	});
 });
