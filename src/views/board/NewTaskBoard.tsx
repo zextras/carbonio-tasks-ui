@@ -105,6 +105,7 @@ const NewTaskBoard = (): JSX.Element => {
 			onConfirm={onConfirm}
 			confirmLabel={t('board.confirmButton.create', 'create')}
 			banner={tasks.length >= MAX_TASKS_LIMIT - 1 ? <NewTaskLimitBanner /> : undefined}
+			defaultBoardTabTitle={t('board.newTask.title', 'New Task')}
 		/>
 	);
 };

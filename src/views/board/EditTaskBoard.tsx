@@ -102,6 +102,7 @@ const EditTaskBoard = (): JSX.Element => {
 					initialDate={initialReminderAt ? new Date(initialReminderAt) : new Date()}
 					onConfirm={onConfirm}
 					confirmLabel={t('board.confirmButton.edit', 'edit')}
+					defaultBoardTabTitle={t('board.editTask.title', 'Edit Task')}
 				/>
 			)}
 		</>

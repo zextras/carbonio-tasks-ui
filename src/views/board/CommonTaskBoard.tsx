@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
 	Button,
@@ -27,8 +27,8 @@ import {
 	TextArea,
 	type TextAreaProps
 } from '@zextras/carbonio-design-system';
-import { t } from '@zextras/carbonio-shell-ui';
-import { find, noop, trim } from 'lodash';
+import { t, useBoardHooks } from '@zextras/carbonio-shell-ui';
+import { find, noop, size, trim } from 'lodash';
 import styled from 'styled-components';
 
 import { CustomSelectLabelFactory } from '../../components/CustomSelectLabelFactory';
@@ -145,6 +145,7 @@ export interface CommonTaskBoardProps {
 	onConfirm: (arg: OnConfirmArg) => void;
 	banner?: JSX.Element;
 	confirmLabel: string;
+	defaultBoardTabTitle: string;
 }
 
 export const CommonTaskBoard = ({
@@ -156,13 +157,29 @@ export const CommonTaskBoard = ({
 	initialDate,
 	onConfirm,
 	banner,
-	confirmLabel
+	confirmLabel,
+	defaultBoardTabTitle
 }: CommonTaskBoardProps): JSX.Element => {
+	const { updateBoard } = useBoardHooks();
+	useEffect(() => {
+		if (initialTitle) {
+			updateBoard({ title: initialTitle });
+		}
+	}, [initialTitle, updateBoard]);
+
 	const [titleValue, setTitleValue] = useState(initialTitle);
 
-	const onTitleChange = useCallback<NonNullable<InputProps['onChange']>>((ev) => {
-		setTitleValue(ev.target.value);
-	}, []);
+	const onTitleChange = useCallback<NonNullable<InputProps['onChange']>>(
+		(ev) => {
+			setTitleValue(ev.target.value);
+			if (size(ev.target.value) === 0) {
+				updateBoard({ title: defaultBoardTabTitle });
+			} else {
+				updateBoard({ title: ev.target.value });
+			}
+		},
+		[defaultBoardTabTitle, updateBoard]
+	);
 
 	const [selectedPriority, setSelectedPriority] = useState(initialPriority);
 
@@ -325,6 +342,7 @@ export const CommonTaskBoard = ({
 										onClick={noop}
 									/>
 								)}
+								borderColor={'gray3'}
 							/>
 						}
 					/>
@@ -338,6 +356,7 @@ export const CommonTaskBoard = ({
 				)}
 				<Text weight={'bold'}>{t('board.label.description', 'Description')}</Text>
 				<TextArea
+					borderColor={'gray3'}
 					label={t('board.textArea.taskDescription.label', 'Task Description')}
 					value={descriptionValue}
 					onChange={onChangeDescription}

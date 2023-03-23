@@ -16,50 +16,43 @@ import { mockGetTask, mockUpdateTask, populateTask } from '../../mocks/utils';
 import { setup } from '../../utils/testUtils';
 
 describe('Edit task board', () => {
-	test('Show fields for title, priority, reminder toggle and description and edit button', async () => {
-		const task = populateTask({ reminderAt: null, reminderAllDay: null });
+	function spyUseBoard(taskId: string): void {
 		jest.spyOn(shell, 'useBoard').mockReturnValue({
-			context: { taskId: task.id },
+			context: { taskId },
 			id: '',
 			url: '',
 			app: '',
 			icon: '',
 			title: ''
 		});
-
-		const getTaskMock = mockGetTask({ taskId: task.id }, task);
-
-		const mocks = [getTaskMock];
-
-		setup(<EditTaskBoard />, { mocks });
-		const detailsLabel = await screen.findByText(/details/i);
-		expect(detailsLabel).toBeVisible();
-		expect(screen.getByRole('textbox', { name: /title/i })).toBeVisible();
-		expect(screen.getByText(/priority/i)).toBeVisible();
-		expect(screen.getByText(/enable reminder/i)).toBeVisible();
-		expect(screen.getByTestId(ICON_REGEXP.switchOff)).toBeVisible();
-		expect(screen.getByText('Description')).toBeVisible();
-		expect(screen.getByRole('textbox', { name: /task description/i })).toBeVisible();
-		expect(screen.getByRole('button', { name: /edit/i })).toBeVisible();
-	});
+	}
+	async function awaitEditBoardRender(): Promise<HTMLElement> {
+		return screen.findByText(/details/i);
+	}
 
 	describe('Title', () => {
+		test('The previous title is shown', async () => {
+			const task = populateTask({ title: 'previous title' });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const mocks = [getTaskMock];
+			setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			expect(screen.getByRole('textbox', { name: /title/i })).toBeVisible();
+			expect(screen.getByRole('textbox', { name: /title/i })).toHaveValue(task.title);
+		});
+
 		test('When cleared the edit button is disabled', async () => {
-			const task = populateTask({ reminderAt: null, reminderAllDay: null });
-			jest.spyOn(shell, 'useBoard').mockReturnValue({
-				context: { taskId: task.id },
-				id: '',
-				url: '',
-				app: '',
-				icon: '',
-				title: ''
-			});
+			const task = populateTask();
+			spyUseBoard(task.id);
 
 			const getTaskMock = mockGetTask({ taskId: task.id }, task);
 			const mocks = [getTaskMock];
 			const { user } = setup(<EditTaskBoard />, { mocks });
-			await screen.findByText(/details/i);
-			expect(screen.getByRole('textbox', { name: /title/i })).toHaveValue(task.title);
+			await awaitEditBoardRender();
+
 			await user.clear(screen.getByRole('textbox', { name: /title/i }));
 			expect(screen.getByRole('button', { name: /edit/i })).toBeDisabled();
 		});
@@ -68,22 +61,12 @@ describe('Edit task board', () => {
 	describe('Priority', () => {
 		test('The previous priority is shown', async () => {
 			const task = populateTask({ priority: Priority.High });
-			jest.spyOn(shell, 'useBoard').mockReturnValue({
-				context: { taskId: task.id },
-				id: '',
-				url: '',
-				app: '',
-				icon: '',
-				title: ''
-			});
+			spyUseBoard(task.id);
 
 			const getTaskMock = mockGetTask({ taskId: task.id }, task);
-
 			const mocks = [getTaskMock];
-
 			setup(<EditTaskBoard />, { mocks });
-			const detailsLabel = await screen.findByText(/details/i);
-			expect(detailsLabel).toBeVisible();
+			await awaitEditBoardRender();
 
 			expect(screen.getByText(/priority/i)).toBeVisible();
 			expect(screen.getByText(/high/i)).toBeVisible();
@@ -94,33 +77,23 @@ describe('Edit task board', () => {
 
 		test('Edit a task to have low priority', async () => {
 			const task = populateTask({ priority: Priority.High, reminderAt: null });
-			jest.spyOn(shell, 'useBoard').mockReturnValue({
-				context: { taskId: task.id },
-				id: '',
-				url: '',
-				app: '',
-				icon: '',
-				title: ''
-			});
+			spyUseBoard(task.id);
 
 			const getTaskMock = mockGetTask({ taskId: task.id }, task);
-
 			const updateTaskInput: UpdateTaskInput = {
 				id: task.id,
 				priority: Priority.Low
 			};
-
 			const updateTaskResult: Task = {
 				__typename: 'Task',
 				...task,
 				priority: updateTaskInput.priority || Priority.Low
 			};
-
 			const updateTaskMock = mockUpdateTask(updateTaskInput, updateTaskResult);
 			const mocks = [getTaskMock, updateTaskMock];
 
 			const { user, rerender } = setup(<EditTaskBoard />, { mocks });
-			await screen.findByText(/details/i);
+			await awaitEditBoardRender();
 
 			const prioritySelect = screen.getByText('Priority');
 			await user.click(prioritySelect);
