@@ -9,13 +9,13 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Modal } from '@zextras/carbonio-design-system';
 import { getNotificationManager } from '@zextras/carbonio-shell-ui';
 import { isAfter, isBefore, isToday, startOfDay } from 'date-fns';
-import { chain, flatten, forEach, groupBy, map, remove, some } from 'lodash';
+import { chain, differenceBy, flatMap, flatten, forEach, groupBy, map, remove, some } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ReminderModalContent } from './ReminderModalContent';
 import { ReminderModalFooter } from './ReminderModalFooter';
 import { TimeZoneContext } from '../contexts';
-import { FindRemindersDocument, Status, type Task, UpdateTaskStatusDocument } from '../gql/types';
+import { FindTasksDocument, Status, type Task, UpdateTaskStatusDocument } from '../gql/types';
 import { debounceWithAllArgs, formatDateFromTimestamp } from '../utils';
 
 /*
@@ -55,7 +55,7 @@ type ReminderEntity = TaskWithReminder & {
 	/** Clear the timeout for the reminder */
 	clearTimout(): void;
 	/** Identify reminders which have already been shown from the ones which have not */
-	isAlreadyBeReminded(): boolean;
+	hasAlreadyBeenReminded(): boolean;
 };
 
 function buildReminderEntity(task: TaskWithReminder): ReminderEntity {
@@ -96,7 +96,7 @@ function buildReminderEntity(task: TaskWithReminder): ReminderEntity {
 				clearTimeout(this._reminderTimeout);
 			}
 		},
-		isAlreadyBeReminded(): boolean {
+		hasAlreadyBeenReminded(): boolean {
 			return this._reminderTimeout === null;
 		}
 	} satisfies ReminderEntity;
@@ -112,18 +112,15 @@ export const RemindersManager = (): JSX.Element => {
 	const notificationManager = getNotificationManager();
 
 	// query used to register new task when the list changes
-	const { data: remindersData, previousData: remindersPreviousData } = useQuery(
-		FindRemindersDocument,
-		{
-			variables: {
-				status: Status.Open
-			},
-			fetchPolicy: 'cache-only',
-			errorPolicy: 'all'
-		}
-	);
+	const { data: remindersData, previousData: remindersPreviousData } = useQuery(FindTasksDocument, {
+		variables: {
+			status: Status.Open
+		},
+		fetchPolicy: 'cache-only',
+		errorPolicy: 'all'
+	});
 	// lazy query used to load data at first load
-	const [findRemindersLazyQuery] = useLazyQuery(FindRemindersDocument, {
+	const [findRemindersLazyQuery] = useLazyQuery(FindTasksDocument, {
 		variables: { status: Status.Open }
 	});
 	const [updateTaskStatus] = useMutation(UpdateTaskStatusDocument);
@@ -148,12 +145,14 @@ export const RemindersManager = (): JSX.Element => {
 							// Pick only reminders which cannot trigger a notification anymore. In other words,
 							// filter out reminders with an active timout, which need to be shown in a different group
 							const remindersToShow = reminderGroup.filter((reminder) =>
-								reminder.isAlreadyBeReminded()
+								reminder.hasAlreadyBeenReminded()
 							);
-							accumulator.push({
-								date: dateKey,
-								reminders: remindersToShow
-							});
+							if (remindersToShow.length > 0) {
+								accumulator.push({
+									date: dateKey,
+									reminders: remindersToShow
+								});
+							}
 						}
 					}
 					return accumulator;
@@ -201,8 +200,9 @@ export const RemindersManager = (): JSX.Element => {
 			if (remindersByDate[dateKey] === undefined) {
 				remindersByDate[dateKey] = [];
 			}
-			// add reminder to the map only if it is not already registered
+			// add reminder to the map only if it is not completed, and it is not already registered
 			if (
+				reminder.status !== Status.Complete &&
 				!some(
 					remindersByDate[dateKey],
 					(registeredReminder) => registeredReminder.id === reminder.id
@@ -233,19 +233,28 @@ export const RemindersManager = (): JSX.Element => {
 		[timezone]
 	);
 
+	const registerRemindersFromTasks = useCallback(
+		(tasks: Array<Partial<Task> | null>) => {
+			forEach(tasks, (task) => {
+				if (isTaskWithReminder(task)) {
+					const reminder = buildReminderEntity(task);
+					if (reminder.isValid()) {
+						registerReminder(reminder);
+					}
+				}
+			});
+		},
+		[registerReminder]
+	);
+
 	useEffect(() => {
 		// init reminders manager by requesting all task with the lazy query
 		remindersByDateRef.current = {};
 		findRemindersLazyQuery()
 			.then((result) => {
-				forEach(result?.data?.findTasks, (task) => {
-					if (isTaskWithReminder(task)) {
-						const reminder = buildReminderEntity(task);
-						if (reminder.isValid()) {
-							registerReminder(reminder);
-						}
-					}
-				});
+				if (result?.data?.findTasks) {
+					registerRemindersFromTasks(result.data.findTasks);
+				}
 			})
 			.then(() => {
 				// show reminders on first load of the module
@@ -259,32 +268,31 @@ export const RemindersManager = (): JSX.Element => {
 				reminder.clearTimout();
 			});
 		};
-	}, [findRemindersLazyQuery, registerReminder, showReminderDebounced]);
+	}, [findRemindersLazyQuery, registerRemindersFromTasks, showReminderDebounced]);
 
 	useEffect(() => {
 		// listen for changes on the list:
 		// - remove those which have been removed (compare previous data with current one)
 		// - register those which have been added (compare current data with previous one)
-		chain(remindersPreviousData?.findTasks || [])
-			.differenceBy(remindersData?.findTasks || [], (task) => task?.id)
-			.forEach((task) => {
-				if (isTaskWithReminder(task)) {
-					const reminder = buildReminderEntity(task);
-					unregisterReminder(reminder);
-				}
-			})
-			.value();
-		chain(remindersData?.findTasks || [])
-			.differenceBy(remindersPreviousData?.findTasks || [], (task) => task?.id)
-			.forEach((task) => {
-				if (isTaskWithReminder(task)) {
-					const reminder = buildReminderEntity(task);
-					registerReminder(reminder);
-				}
-			})
-			.value();
+		const removedTasks = differenceBy(
+			remindersPreviousData?.findTasks || [],
+			remindersData?.findTasks || [],
+			(task) => task?.id
+		);
+		removedTasks.forEach((task) => {
+			if (isTaskWithReminder(task)) {
+				const reminder = buildReminderEntity(task);
+				unregisterReminder(reminder);
+			}
+		});
+		const addedTasks = differenceBy(
+			remindersData?.findTasks || [],
+			remindersPreviousData?.findTasks || [],
+			(task) => task?.id
+		);
+		registerRemindersFromTasks(addedTasks);
 	}, [
-		registerReminder,
+		registerRemindersFromTasks,
 		remindersData?.findTasks,
 		remindersPreviousData?.findTasks,
 		unregisterReminder
@@ -334,16 +342,56 @@ export const RemindersManager = (): JSX.Element => {
 		[updateTaskStatus]
 	);
 
+	const flatMapOfModalReminders = useMemo(
+		() => flatMap(modalReminders, ({ reminders }) => reminders),
+		[modalReminders]
+	);
+
 	const completeAllHandler = useCallback(() => {
-		const allModalReminders = flatten(
-			map(modalReminders, (reminderGroup) => reminderGroup.reminders)
-		);
-		forEach(allModalReminders, (reminder) => {
+		forEach(flatMapOfModalReminders, (reminder) => {
 			if (reminder.status === Status.Open) {
 				completeTaskHandler(reminder);
 			}
 		});
-	}, [completeTaskHandler, modalReminders]);
+	}, [completeTaskHandler, flatMapOfModalReminders]);
+
+	const undoAllHandler = useCallback(() => {
+		forEach(flatMapOfModalReminders, (reminder) => {
+			if (reminder.status === Status.Open) {
+				completeTaskHandler(reminder);
+			}
+		});
+	}, [completeTaskHandler, flatMapOfModalReminders]);
+
+	const isActionForAllAvailable = useMemo(
+		() => flatMapOfModalReminders.length > 1,
+		[flatMapOfModalReminders]
+	);
+
+	const showCompleteAll = useMemo(
+		() =>
+			isActionForAllAvailable &&
+			some(flatMapOfModalReminders, (reminder) => reminder.status !== Status.Complete),
+		[flatMapOfModalReminders, isActionForAllAvailable]
+	);
+
+	const secondaryActionLabel = useMemo(
+		() =>
+			showCompleteAll
+				? t('modal.reminder.completeAll', 'Complete all')
+				: t('modal.reminder.undoAll', 'Undo all'),
+		[showCompleteAll, t]
+	);
+
+	const secondaryActionHandler = useMemo(
+		() => (showCompleteAll ? completeAllHandler : undoAllHandler),
+		[completeAllHandler, showCompleteAll, undoAllHandler]
+	);
+
+	const secondaryActionIcon = useMemo(
+		() => (showCompleteAll ? 'CheckmarkCircleOutline' : 'UndoOutline'),
+		[showCompleteAll]
+	);
 
 	return (
 		<Modal
@@ -354,7 +402,10 @@ export const RemindersManager = (): JSX.Element => {
 			customFooter={
 				<ReminderModalFooter
 					closeAction={closeModalHandler}
-					completeAllAction={completeAllHandler}
+					showSecondaryAction={isActionForAllAvailable}
+					secondaryAction={secondaryActionHandler}
+					secondaryLabel={secondaryActionLabel}
+					secondaryIcon={secondaryActionIcon}
 				/>
 			}
 			maxHeight={'90vh'}

@@ -7,12 +7,14 @@
 import { useCallback } from 'react';
 
 import {
+	type BoardHooksContext,
 	type Account,
 	type AccountSettings,
 	type Board,
-	type HistoryParams
+	type HistoryParams,
+	type INotificationManager
 } from '@zextras/carbonio-shell-ui';
-import { type BoardHooksContext } from '@zextras/carbonio-shell-ui/types/boards';
+import { type TOptions } from 'i18next';
 import { noop, trimStart } from 'lodash';
 import { useHistory } from 'react-router-dom';
 
@@ -29,8 +31,6 @@ function useReplaceHistoryMock(): (params: HistoryParams) => void {
 		(location: string | HistoryParams) => {
 			if (typeof location === 'string') {
 				history.replace(parsePath(location));
-			} else if (typeof location.path === 'string') {
-				history.replace(parsePath(location.path));
 			} else {
 				history.replace(location.path);
 			}
@@ -46,8 +46,6 @@ function usePushHistoryMock(): (params: HistoryParams) => void {
 		(location: string | HistoryParams) => {
 			if (typeof location === 'string') {
 				history.push(parsePath(location));
-			} else if (typeof location.path === 'string') {
-				history.push(parsePath(location.path));
 			} else {
 				history.push(location.path);
 			}
@@ -78,12 +76,17 @@ export const useBoardHooks = (): BoardHooksContext => ({
 	}
 });
 
-export const t = (
-	key: string,
-	defaultValue: string | { context: string; defaultValue: string }
-): string => {
+export const t = (key: string, defaultValue?: string | TOptions): string => {
 	if (typeof defaultValue === 'string') {
 		return defaultValue;
 	}
-	return defaultValue.defaultValue;
+	return defaultValue?.defaultValue || key;
 };
+
+const notificationManagerInstance: INotificationManager = {
+	notify: noop,
+	playSound: noop,
+	showPopup: noop,
+	multipleNotify: noop
+};
+export const getNotificationManager = (): INotificationManager => notificationManagerInstance;

@@ -103,7 +103,8 @@ export function mockFindTasks(
 }
 
 export function mockUpdateTaskStatus(
-	variables: UpdateTaskStatusMutationVariables
+	variables: UpdateTaskStatusMutationVariables,
+	updateTask: UpdateTaskStatusMutation['updateTask'] = { __typename: 'Task', ...variables }
 ): Mock<UpdateTaskStatusMutation, UpdateTaskStatusMutationVariables> {
 	return {
 		request: {
@@ -113,11 +114,7 @@ export function mockUpdateTaskStatus(
 		result: jest.fn(
 			(): FetchResult<UpdateTaskStatusMutation> => ({
 				data: {
-					updateTask: {
-						__typename: 'Task',
-						id: variables.id,
-						status: Status.Complete
-					}
+					updateTask
 				}
 			})
 		)

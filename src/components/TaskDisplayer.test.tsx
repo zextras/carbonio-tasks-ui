@@ -46,8 +46,8 @@ describe('Task displayer', () => {
 		const task = populateTask();
 
 		const { getByRoleWithIcon } = setup(<TaskDisplayer task={task} />);
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeVisible();
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeEnabled();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeVisible();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeEnabled();
 	});
 
 	describe('Actions', () => {

@@ -10,23 +10,31 @@ import { useTranslation } from 'react-i18next';
 
 interface ReminderModalFooterProps {
 	closeAction: () => void;
-	completeAllAction: () => void;
+	secondaryAction: () => void;
+	showSecondaryAction: boolean;
+	secondaryLabel: string;
+	secondaryIcon: string;
 }
 
 export const ReminderModalFooter = ({
 	closeAction,
-	completeAllAction
+	secondaryAction,
+	showSecondaryAction,
+	secondaryLabel,
+	secondaryIcon
 }: ReminderModalFooterProps): JSX.Element => {
 	const [t] = useTranslation();
 
 	return (
 		<Row gap={'0.5rem'}>
-			<Button
-				type={'outlined'}
-				label={t('modal.reminder.completeAll', 'Complete all')}
-				icon={'CheckmarkCircleOutline'}
-				onClick={completeAllAction}
-			/>
+			{showSecondaryAction && (
+				<Button
+					type={'outlined'}
+					label={secondaryLabel}
+					icon={secondaryIcon}
+					onClick={secondaryAction}
+				/>
+			)}
 			<Button label={t('modal.reminder.dismiss', 'Dismiss')} onClick={closeAction} />
 		</Row>
 	);

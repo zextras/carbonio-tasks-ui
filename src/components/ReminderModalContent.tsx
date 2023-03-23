@@ -83,6 +83,7 @@ const ReminderGroup = ({
 		() =>
 			map(reminders, (reminder) => (
 				<ReminderItem
+					key={reminder.id}
 					reminder={reminder}
 					completeAction={completeAction(reminder)}
 					undoCompleteAction={undoCompleteAction(reminder)}
@@ -118,6 +119,7 @@ export const ReminderModalContent = ({
 		() =>
 			map(reminders, (reminder) => (
 				<ReminderGroup
+					key={reminder.date}
 					completeAction={completeAction}
 					undoCompleteAction={undoCompleteAction}
 					date={reminder.date}

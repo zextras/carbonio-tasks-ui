@@ -166,24 +166,6 @@ export type UpdateTaskStatusMutation = {
 	updateTask?: ({ id: string; status: Status } & { __typename?: 'Task' }) | null;
 } & { __typename?: 'Mutation' };
 
-export type FindRemindersQueryVariables = Exact<{
-	status?: InputMaybe<Status>;
-}>;
-
-export type FindRemindersQuery = {
-	findTasks: Array<
-		| ({
-				id: string;
-				priority: Priority;
-				reminderAllDay?: boolean | null;
-				status: Status;
-				reminderAt?: number | null;
-				title: string;
-		  } & { __typename?: 'Task' })
-		| null
-	>;
-} & { __typename?: 'Query' };
-
 export type FindTasksQueryVariables = Exact<{
 	priority?: InputMaybe<Priority>;
 	status?: InputMaybe<Status>;
@@ -369,50 +351,6 @@ export const UpdateTaskStatusDocument = {
 		}
 	]
 } as unknown as DocumentNode<UpdateTaskStatusMutation, UpdateTaskStatusMutationVariables>;
-export const FindRemindersDocument = {
-	kind: 'Document',
-	definitions: [
-		{
-			kind: 'OperationDefinition',
-			operation: 'query',
-			name: { kind: 'Name', value: 'findReminders' },
-			variableDefinitions: [
-				{
-					kind: 'VariableDefinition',
-					variable: { kind: 'Variable', name: { kind: 'Name', value: 'status' } },
-					type: { kind: 'NamedType', name: { kind: 'Name', value: 'Status' } }
-				}
-			],
-			selectionSet: {
-				kind: 'SelectionSet',
-				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'findTasks' },
-						arguments: [
-							{
-								kind: 'Argument',
-								name: { kind: 'Name', value: 'status' },
-								value: { kind: 'Variable', name: { kind: 'Name', value: 'status' } }
-							}
-						],
-						selectionSet: {
-							kind: 'SelectionSet',
-							selections: [
-								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'priority' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'reminderAllDay' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'status' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'reminderAt' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'title' } }
-							]
-						}
-					}
-				]
-			}
-		}
-	]
-} as unknown as DocumentNode<FindRemindersQuery, FindRemindersQueryVariables>;
 export const FindTasksDocument = {
 	kind: 'Document',
 	definitions: [

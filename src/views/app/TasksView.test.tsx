@@ -88,7 +88,7 @@ describe('Task view', () => {
 		await screen.findByText(task.title);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		await user.click(screen.getByText(task.title));
-		await findByRoleWithIcon('button', { icon: ICON_REGEXP.close });
+		await findByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
 		expect(screen.getAllByText(task.title)).toHaveLength(2);
 		expect(screen.getByText(/creation date/i)).toBeVisible();
 		expect(
@@ -135,14 +135,16 @@ describe('Task view', () => {
 		makeListItemsVisible();
 		await screen.findAllByText(task.title);
 		expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
-		const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.close });
+		const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer });
 		expect(closeButton).toBeVisible();
 		expect(closeButton).toBeEnabled();
 		await user.click(closeButton);
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		// title is shown only 1 time, inside the list
 		expect(screen.getByText(task.title)).toBeVisible();
-		expect(queryByRoleWithIcon('button', { icon: ICON_REGEXP.close })).not.toBeInTheDocument();
+		expect(
+			queryByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })
+		).not.toBeInTheDocument();
 	});
 
 	describe('Complete action', () => {

@@ -49,7 +49,9 @@ describe('Displayer', () => {
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(screen.queryByText(/creation date/i)).not.toBeInTheDocument();
-		expect(queryByRoleWithIcon('button', { icon: ICON_REGEXP.close })).not.toBeInTheDocument();
+		expect(
+			queryByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })
+		).not.toBeInTheDocument();
 	});
 
 	test('Show task details if a task is active', async () => {
@@ -66,7 +68,7 @@ describe('Displayer', () => {
 		);
 		await screen.findByText(task.title);
 		expect(screen.getByText(task.title)).toBeVisible();
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeVisible();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeVisible();
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(task.createdAt, { timezone: TIMEZONE_DEFAULT, includeTime: false })
