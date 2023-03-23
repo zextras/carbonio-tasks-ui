@@ -6,7 +6,8 @@
 
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { faker } from '@faker-js/faker';
+import { screen, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import EditTaskBoard from './EditTaskBoard';
@@ -101,14 +102,68 @@ describe('Edit task board', () => {
 			const lowPriority = screen.getByText('Low');
 			await user.click(lowPriority);
 
-			const createButton = screen.getByRole('button', { name: /edit/i });
-			await user.click(createButton);
+			const editButton = screen.getByRole('button', { name: /edit/i });
+			await user.click(editButton);
 			expect(updateTaskMock.result).toHaveBeenCalledWith();
 			rerender(<EditTaskBoard />);
 
 			const low = await screen.findByText(/low/i);
 			expect(low).toBeVisible();
 			expect(screen.queryByTestId(ICON_REGEXP.lowPriority)).toBeVisible();
+		});
+	});
+
+	describe('Description', () => {
+		test('The previous description is shown', async () => {
+			const task = populateTask({ description: 'previous description' });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const mocks = [getTaskMock];
+			setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			expect(screen.getByRole('textbox', { name: /description/i })).toBeVisible();
+			expect(screen.getByRole('textbox', { name: /description/i })).toHaveValue(task.description);
+		});
+
+		test('Is optional, if not set the edit button is enabled', async () => {
+			const task = populateTask({ description: 'previous description' });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const mocks = [getTaskMock];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			const editButton = screen.getByRole('button', { name: /edit/i });
+			const descriptionInput = screen.getByRole('textbox', { name: /description/i });
+			await user.clear(descriptionInput);
+			expect(editButton).toBeEnabled();
+		});
+
+		test('When the limit of 4096 characters is reached the edit button is disabled and the error description appears', async () => {
+			const task = populateTask({ description: null });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const mocks = [getTaskMock];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			const editButton = screen.getByRole('button', { name: /edit/i });
+			const descriptionInput = screen.getByRole('textbox', { name: /description/i });
+			const maxLengthDescription = faker.random.alpha({ count: 4096 });
+			await user.type(descriptionInput, maxLengthDescription);
+			expect(descriptionInput).toHaveValue(maxLengthDescription);
+			expect(editButton).toBeEnabled();
+			expect(
+				screen.queryByText(/Maximum length allowed is 4096 characters/i)
+			).not.toBeInTheDocument();
+			// type a character to exceed the limit
+			await user.type(descriptionInput, 'a');
+			await waitFor(() => expect(editButton).toBeDisabled());
+			expect(screen.getByText(/Maximum length allowed is 4096 characters/i)).toBeVisible();
 		});
 	});
 });
