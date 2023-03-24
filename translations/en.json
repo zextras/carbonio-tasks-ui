@@ -95,7 +95,8 @@
             "completeAll": "Complete all",
             "dismiss": "Dismiss",
             "remindMeOn": "Remind me on",
-            "title": "Tasks reminders"
+            "title": "Tasks reminders",
+            "undoAll": "Undo all"
         }
     },
     "newTaskBoard": {

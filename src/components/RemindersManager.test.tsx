@@ -877,4 +877,14 @@ describe('Reminders manager', () => {
 	test.todo(
 		'[Move up to the view] Does not open the modal when a reminders expires if it is set as completed'
 	);
+
+	test.todo(
+		'[Move up to the view] When the reminder of a task is edited to be in the future, the reminder modal is shown on the new datetime'
+	);
+	test.todo(
+		'[Move up to the view] When the reminder of a task is edited to be in the past, the reminder modal is not shown'
+	);
+	test.todo(
+		'[Move up to the view] When the reminder of a task is edited and disabled, the reminder modal is not shown'
+	);
 });
