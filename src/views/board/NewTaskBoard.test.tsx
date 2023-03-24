@@ -37,9 +37,20 @@ describe('New task board', () => {
 	function prepareCache(tasks: Task[] = []): void {
 		global.apolloClient.writeQuery<FindTasksQuery, FindTasksQueryVariables>({
 			query: FindTasksDocument,
-			variables: {},
+			variables: {
+				status: Status.Open
+			},
 			data: {
 				findTasks: tasks
+			}
+		});
+	}
+
+	function readQueryFindTasks(): FindTasksQuery | null {
+		return global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
+			query: FindTasksDocument,
+			variables: {
+				status: Status.Open
 			}
 		});
 	}
@@ -150,9 +161,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.priority).toBe(Priority.High);
 		});
 
@@ -191,9 +200,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.priority).toBe(Priority.Low);
 		});
 	});
@@ -434,9 +441,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
 			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
 		});
@@ -491,9 +496,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
 			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
 		});
@@ -536,9 +539,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
 			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
 		});
@@ -584,9 +585,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
 			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
 		});
@@ -637,9 +636,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
 			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
 		});
@@ -694,9 +691,7 @@ describe('New task board', () => {
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.click(createButton);
-			const result = global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-				query: FindTasksDocument
-			});
+			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
 			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
 		});

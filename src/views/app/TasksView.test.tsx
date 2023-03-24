@@ -30,7 +30,7 @@ import { makeListItemsVisible, setup } from '../../utils/testUtils';
 
 describe('Task view', () => {
 	test('Show the empty list and the empty displayer if there is no task', async () => {
-		const findTasksMock = mockFindTasks({}, []);
+		const findTasksMock = mockFindTasks({ status: Status.Open }, []);
 		const mocks = [findTasksMock];
 		setup(
 			<Route path={ROUTES.task}>
@@ -48,7 +48,7 @@ describe('Task view', () => {
 
 	test('Show the task list and the empty displayer', async () => {
 		const tasks = populateTaskList();
-		const findTasksMock = mockFindTasks({}, tasks);
+		const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
 		const mocks = [findTasksMock];
 		setup(
 			<Route path={ROUTES.task}>
@@ -72,7 +72,7 @@ describe('Task view', () => {
 		const task = tasks[0];
 		task.reminderAt = faker.datatype.datetime().getTime();
 		task.description = faker.lorem.sentences();
-		const findTasksMock = mockFindTasks({}, tasks);
+		const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
 		const mocks = [findTasksMock, mockGetTask({ taskId: task.id }, task)];
 
 		const { findByRoleWithIcon, user } = setup(
@@ -119,7 +119,7 @@ describe('Task view', () => {
 		const task = tasks[0];
 		task.reminderAt = faker.datatype.datetime().getTime();
 		task.description = faker.lorem.sentences();
-		const findTasksMock = mockFindTasks({}, tasks);
+		const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
 		const mocks = [findTasksMock, mockGetTask({ taskId: task.id }, task)];
 
 		const { getByRoleWithIcon, queryByRoleWithIcon, user } = setup(
@@ -153,7 +153,7 @@ describe('Task view', () => {
 			const task = tasks[0];
 			task.reminderAt = faker.datatype.datetime().getTime();
 			task.description = faker.lorem.sentences();
-			const findTasksMock = mockFindTasks({}, tasks);
+			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
@@ -185,7 +185,7 @@ describe('Task view', () => {
 			const task = tasks[0];
 			task.reminderAt = faker.datatype.datetime().getTime();
 			task.description = faker.lorem.sentences();
-			const findTasksMock = mockFindTasks({}, tasks);
+			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
@@ -217,7 +217,7 @@ describe('Task view', () => {
 			const task = tasks[0];
 			task.reminderAt = faker.datatype.datetime().getTime();
 			task.description = faker.lorem.sentences();
-			const findTasksMock = mockFindTasks({}, tasks);
+			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
