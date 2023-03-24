@@ -26,7 +26,12 @@ describe('App view', () => {
 
 	test('Show tasks view', async () => {
 		const tasks = populateTaskList();
-		findTasks.mockImplementationOnce((req, res, ctx) =>
+		tasks.forEach((task) => {
+			// reset reminder to avoid the opening of the reminders modal
+			// eslint-disable-next-line no-param-reassign
+			task.reminderAt = null;
+		});
+		findTasks.mockImplementation((req, res, ctx) =>
 			res(
 				ctx.data({
 					findTasks: tasks
@@ -47,8 +52,13 @@ describe('App view', () => {
 
 	test('Open displayer on click on an item', async () => {
 		const tasks = populateTaskList();
+		tasks.forEach((task) => {
+			// reset reminder to avoid the opening of the reminders modal
+			// eslint-disable-next-line no-param-reassign
+			task.reminderAt = null;
+		});
 		const task = tasks[tasks.length - 1];
-		findTasks.mockImplementationOnce((req, res, ctx) =>
+		findTasks.mockImplementation((req, res, ctx) =>
 			res(
 				ctx.data({
 					findTasks: tasks

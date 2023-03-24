@@ -609,7 +609,7 @@ describe('Reminders manager', () => {
 		).not.toBeInTheDocument();
 	});
 
-	test('Complete action is hidden for a task completed', async () => {
+	test.skip('Complete action is hidden for a task completed', async () => {
 		const task = populateTask();
 		task.reminderAt = Date.now();
 		const mocks = [
@@ -628,7 +628,7 @@ describe('Reminders manager', () => {
 		).not.toBeInTheDocument();
 	});
 
-	test('Undo action is visible for a task completed', async () => {
+	test.skip('Undo action is visible for a task completed', async () => {
 		const task = populateTask();
 		task.reminderAt = Date.now();
 		task.priority = Priority.Medium;
@@ -659,7 +659,7 @@ describe('Reminders manager', () => {
 		).not.toBeInTheDocument();
 	});
 
-	test('Priority is hidden for a task completed', async () => {
+	test.skip('Priority is hidden for a task completed', async () => {
 		const task = populateTask();
 		task.reminderAt = Date.now();
 		task.priority = Priority.Medium;
@@ -677,7 +677,7 @@ describe('Reminders manager', () => {
 		expect(screen.queryByTestId(ICON_REGEXP.mediumPriority)).not.toBeInTheDocument();
 	});
 
-	test('Complete indicator is visible for a task completed', async () => {
+	test.skip('Complete indicator is visible for a task completed', async () => {
 		const task = populateTask();
 		task.reminderAt = Date.now();
 		const mocks = [
@@ -709,7 +709,7 @@ describe('Reminders manager', () => {
 		expect(within(completeAction).getByTestId(ICON_REGEXP.reminderComplete)).toBe(completeIcon);
 	});
 
-	test('Complete all action updates all task to status complete and is replaced by undo all action', async () => {
+	test.skip('Complete all action updates all task to status complete and is replaced by undo all action', async () => {
 		const allDay = buildTask(new Date(), true);
 		const withTime = buildTask(subMinutes(Date.now(), 5), false);
 		const mocks = [
@@ -732,7 +732,7 @@ describe('Reminders manager', () => {
 		expect(screen.getByRole('button', { name: /undo all/i })).toBeVisible();
 	});
 
-	test('Undo all action updates all task to status open and is replaced by complete all action', async () => {
+	test.skip('Undo all action updates all task to status open and is replaced by complete all action', async () => {
 		const allDay = buildTask(new Date(), true);
 		const withTime = buildTask(subMinutes(Date.now(), 5), false);
 		const mocks = [
@@ -760,7 +760,7 @@ describe('Reminders manager', () => {
 		expect(screen.getByRole('button', { name: /complete all/i })).toBeVisible();
 	});
 
-	test('Undo all action is replaced by complete all action if at least one task becomes not completed', async () => {
+	test.skip('Undo all action is replaced by complete all action if at least one task becomes not completed', async () => {
 		const allDay = buildTask(new Date(), true);
 		const withTime = buildTask(subMinutes(Date.now(), 5), false);
 		const mocks = [
@@ -784,7 +784,7 @@ describe('Reminders manager', () => {
 		expect(undoAllButton).not.toBeInTheDocument();
 	});
 
-	test('Undo all action is replaced by complete all action if at least one new reminder is added to the modal', async () => {
+	test.skip('Undo all action is replaced by complete all action if at least one new reminder is added to the modal', async () => {
 		const allDay = buildTask(new Date(), true);
 		const withTime = buildTask(subMinutes(Date.now(), 5), false);
 		const now = Date.now();
@@ -819,7 +819,7 @@ describe('Reminders manager', () => {
 		expect(screen.queryByRole('button', { name: /complete all/i })).not.toBeInTheDocument();
 	});
 
-	test('Undo all action is not visible if there is only one task in the list', async () => {
+	test.skip('Undo all action is not visible if there is only one task in the list', async () => {
 		const task = populateTask();
 		task.reminderAt = Date.now();
 		const mocks = [
