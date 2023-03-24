@@ -174,6 +174,8 @@ export const RemindersManager = (): JSX.Element => {
 				if (alreadyOpen) {
 					// place new reminders on bottom of the existing list
 					setModalReminders((prevState) => [...prevState, ...taskReminderEntries]);
+					// notify with a sound the adding of a new reminder in the modal
+					notificationManager.notify({ showPopup: false, playSound: true });
 					// keep modal open
 					return true;
 				}
@@ -181,14 +183,19 @@ export const RemindersManager = (): JSX.Element => {
 				// re-build list entirely and place new reminders on top
 				setModalReminders([...taskReminderEntries, ...remindersByDateList]);
 				// open modal if there is something to show
-				return remindersByDateList.length + taskReminderEntries.length > 0;
+				const shouldOpenModal = remindersByDateList.length + taskReminderEntries.length > 0;
+				if (shouldOpenModal) {
+					// notify with a sound the opening of the modal
+					notificationManager.notify({ showPopup: false, playSound: true });
+				}
+				return shouldOpenModal;
 			});
 			// reset timout for reminders shown with this call so that they result as already seen in next modals
 			forEach(reminders, (reminder) => {
 				reminder.clearTimout();
 			});
 		},
-		[getVisibleReminders, timezone]
+		[getVisibleReminders, notificationManager, timezone]
 	);
 
 	const showReminderDebounced = useMemo(() => debounceWithAllArgs(_showReminder), [_showReminder]);
@@ -297,13 +304,6 @@ export const RemindersManager = (): JSX.Element => {
 		remindersPreviousData?.findTasks,
 		unregisterReminder
 	]);
-
-	useEffect(() => {
-		if (isModalOpen) {
-			// notify with a sound the opening of the modal
-			notificationManager.notify({ showPopup: false, playSound: true });
-		}
-	}, [notificationManager, isModalOpen]);
 
 	const closeModalHandler = useCallback(() => {
 		setModalOpen(false);

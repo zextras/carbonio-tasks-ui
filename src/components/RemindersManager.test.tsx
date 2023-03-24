@@ -836,42 +836,72 @@ describe('Reminders manager', () => {
 		expect(screen.queryByRole('button', { name: /undo all/i })).not.toBeInTheDocument();
 	});
 
-	test('A sound is played when the modal is shown on load', async () => {
-		const task = populateTask();
-		task.reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
-		task.reminderAllDay = false;
-		const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
-		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
-		await waitForModalToOpen();
-		expect(mockNotify).toHaveBeenCalled();
-		expect(mockNotify).toHaveBeenCalledTimes(1);
-		const notifyConfig: NotificationConfig = {
-			showPopup: false,
-			playSound: true
-		};
-		expect(mockNotify).toHaveBeenCalledWith(notifyConfig);
-	});
-
-	test('A sound is played when the modal is shown because a reminder expires', async () => {
-		const task = populateTask();
-		task.reminderAt = addMinutes(Date.now(), 1).getTime();
-		task.reminderAllDay = false;
-		const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
-		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
-		act(() => {
-			// advance timers by 1 minute to make reminder expires
-			jest.advanceTimersByTime(60000);
+	describe('Notification', () => {
+		test('A sound is played when the modal is shown on load', async () => {
+			const task = populateTask();
+			task.reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			task.reminderAllDay = false;
+			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
+			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
+			setup(<RemindersManager />, { mocks });
+			await waitForModalToOpen();
+			expect(mockNotify).toHaveBeenCalled();
+			expect(mockNotify).toHaveBeenCalledTimes(1);
+			const notifyConfig: NotificationConfig = {
+				showPopup: false,
+				playSound: true
+			};
+			expect(mockNotify).toHaveBeenCalledWith(notifyConfig);
 		});
-		await waitForModalToOpen();
-		expect(mockNotify).toHaveBeenCalled();
-		expect(mockNotify).toHaveBeenCalledTimes(1);
-		const notifyConfig: NotificationConfig = {
-			showPopup: false,
-			playSound: true
-		};
-		expect(mockNotify).toHaveBeenCalledWith(notifyConfig);
+
+		test('A sound is played when the modal is shown because a reminder expires', async () => {
+			const task = populateTask();
+			task.reminderAt = addMinutes(Date.now(), 1).getTime();
+			task.reminderAllDay = false;
+			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
+			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
+			setup(<RemindersManager />, { mocks });
+			act(() => {
+				// advance timers by 1 minute to make reminder expires
+				jest.advanceTimersByTime(60000);
+			});
+			await waitForModalToOpen();
+			expect(mockNotify).toHaveBeenCalled();
+			expect(mockNotify).toHaveBeenCalledTimes(1);
+			const notifyConfig: NotificationConfig = {
+				showPopup: false,
+				playSound: true
+			};
+			expect(mockNotify).toHaveBeenCalledWith(notifyConfig);
+		});
+
+		test('A sound is played when a new reminder is added to the already opened modal', async () => {
+			const task1 = buildTask(addMinutes(Date.now(), 1), false);
+			const task2 = buildTask(addMinutes(Date.now(), 5), false);
+			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
+			const mocks = [mockFindTasks({ status: Status.Open }, [task1, task2])];
+			setup(<RemindersManager />, { mocks });
+			act(() => {
+				// advance timers by 1 minute to make reminder expires
+				jest.advanceTimersByTime(60000);
+			});
+			await waitForModalToOpen();
+			expect(mockNotify).toHaveBeenCalled();
+			expect(mockNotify).toHaveBeenCalledTimes(1);
+			// clear mock calls
+			mockNotify.mockClear();
+			act(() => {
+				// advance timers by 1 minute to make reminder expires
+				jest.advanceTimersByTime(60000 * 5);
+			});
+			expect(mockNotify).toHaveBeenCalled();
+			expect(mockNotify).toHaveBeenCalledTimes(1);
+			const notifyConfig: NotificationConfig = {
+				showPopup: false,
+				playSound: true
+			};
+			expect(mockNotify).toHaveBeenCalledWith(notifyConfig);
+		});
 	});
 
 	test.todo(
