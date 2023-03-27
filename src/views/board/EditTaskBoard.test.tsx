@@ -202,5 +202,26 @@ describe('Edit task board', () => {
 			expect(screen.getByText(checkboxLabelText)).toBeVisible();
 			expect(screen.getByRole('textbox', { name: /Reminder/i })).toBeVisible();
 		});
+
+		test('If the date input is cleared, an error description appears and the confirm button becomes disabled', async () => {
+			const task = populateTask({ reminderAt: new Date().getTime(), reminderAllDay: true });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const mocks = [getTaskMock];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			const editButton = screen.getByRole('button', { name: /edit/i });
+			expect(editButton).toBeEnabled();
+
+			await user.clear(screen.getByRole('textbox', { name: /reminder/i }));
+			expect(editButton).toBeDisabled();
+			expect(
+				screen.getByText(
+					/The reminder option is enabled, set data and time for it or disable the reminder/i
+				)
+			).toBeVisible();
+		});
 	});
 });

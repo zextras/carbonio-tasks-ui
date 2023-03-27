@@ -223,8 +223,14 @@ export const CommonTaskBoard = ({
 	const [isAllDay, setIsAllDay] = useState(initialIsAllDay);
 
 	const onClickAllDayCheckbox = useCallback<NonNullable<CheckboxProps['onClick']>>(
-		() => setIsAllDay((prevState) => !prevState),
-		[]
+		() =>
+			setIsAllDay((prevState) => {
+				if (!prevState && date === null) {
+					setDate(initialDate);
+				}
+				return !prevState;
+			}),
+		[date, initialDate]
 	);
 
 	const [descriptionValue, setDescriptionValue] = useState(initialDescription);
