@@ -278,6 +278,43 @@ describe('New task board', () => {
 		expect(screen.getByText(infoBannerText)).toBeVisible();
 	});
 
+	test('Warning banner appears when the limit of 200 tasks is reached', async () => {
+		const tasks = populateTaskList(MAX_TASKS_LIMIT - 1);
+		prepareCache(tasks);
+
+		const newTaskInput: NewTaskInput = {
+			priority: Priority.Medium,
+			status: Status.Open,
+			title: 'task nr 200'
+		};
+
+		const newTaskResult: Required<Task> = {
+			__typename: 'Task',
+			createdAt: new Date().getTime(),
+			id: faker.datatype.uuid(),
+			description: null,
+			reminderAllDay: null,
+			reminderAt: null,
+			...newTaskInput,
+			priority: newTaskInput.priority || Priority.Medium,
+			status: newTaskInput.status || Status.Open
+		};
+
+		const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+		const mocks = [createTaskMock];
+		const { user } = setup(<NewTaskBoard />, { mocks });
+
+		const warningBannerText =
+			/You have reached your 200 tasks. To create more complete your previous tasks./i;
+		expect(screen.queryByText(warningBannerText)).not.toBeInTheDocument();
+		const createButton = screen.getByRole('button', { name: /create/i });
+		await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+		await waitFor(() => expect(createButton).toBeEnabled());
+		await user.click(createButton);
+		screen.getByText(warningBannerText);
+		expect(screen.getByText(warningBannerText)).toBeVisible();
+	});
+
 	test('Snackbar appears when max limit is reached and click create button', async () => {
 		const tasks = populateTaskList(MAX_TASKS_LIMIT);
 		prepareCache(tasks);
@@ -309,9 +346,10 @@ describe('New task board', () => {
 		await waitFor(() => expect(createButton).toBeEnabled());
 		await user.click(createButton);
 
+		// Snackbar and banner have the same text
 		const snackbarText =
 			'You have reached your 200 tasks. To create more complete your previous tasks.';
-		expect(screen.getByText(snackbarText)).toBeVisible();
+		expect(screen.getAllByText(snackbarText).length).toBe(2);
 		expect(createTaskMock.result).not.toHaveBeenCalled();
 	});
 

@@ -25,7 +25,11 @@ import {
 	type NewTaskInput,
 	Priority,
 	Status,
-	type Task
+	type Task,
+	UpdateTaskDocument,
+	type UpdateTaskInput,
+	type UpdateTaskMutation,
+	type UpdateTaskMutationVariables
 } from '../gql/types';
 
 export interface Mock<
@@ -38,7 +42,7 @@ export interface Mock<
 	};
 }
 
-export function populateTask(): Task {
+export function populateTask(partialTask?: Partial<Task>): Task {
 	return {
 		__typename: 'Task',
 		id: faker.datatype.uuid(),
@@ -48,7 +52,8 @@ export function populateTask(): Task {
 		priority: Priority.Medium,
 		status: Status.Open,
 		reminderAt: faker.helpers.arrayElement([faker.datatype.datetime().getTime(), null]),
-		reminderAllDay: faker.helpers.arrayElement([faker.datatype.boolean(), null])
+		reminderAllDay: faker.helpers.arrayElement([faker.datatype.boolean(), null]),
+		...partialTask
 	};
 }
 
@@ -143,6 +148,35 @@ export function mockCreateTask(
 			(): FetchResult<CreateTaskMutation> => ({
 				data: {
 					createTask: task
+				}
+			})
+		)
+	};
+}
+
+export function mockUpdateTask(
+	variables: UpdateTaskInput,
+	task: Task
+): Mock<UpdateTaskMutation, UpdateTaskMutationVariables> {
+	return {
+		request: {
+			query: UpdateTaskDocument,
+			variables: {
+				updateTask: {
+					id: variables.id,
+					description: variables.description,
+					reminderAt: variables.reminderAt,
+					reminderAllDay: variables.reminderAllDay,
+					status: variables.status,
+					priority: variables.priority,
+					title: variables.title
+				}
+			}
+		},
+		result: jest.fn(
+			(): FetchResult<UpdateTaskMutation> => ({
+				data: {
+					updateTask: task
 				}
 			})
 		)

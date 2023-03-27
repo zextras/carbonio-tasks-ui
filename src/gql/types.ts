@@ -157,6 +157,25 @@ export type CreateTaskMutation = {
 		| null;
 } & { __typename?: 'Mutation' };
 
+export type UpdateTaskMutationVariables = Exact<{
+	updateTask: UpdateTaskInput;
+}>;
+
+export type UpdateTaskMutation = {
+	updateTask?:
+		| ({
+				id: string;
+				description?: string | null;
+				priority: Priority;
+				reminderAllDay?: boolean | null;
+				status: Status;
+				reminderAt?: number | null;
+				title: string;
+				createdAt: number;
+		  } & { __typename?: 'Task' })
+		| null;
+} & { __typename?: 'Mutation' };
+
 export type UpdateTaskStatusMutationVariables = Exact<{
 	id: Scalars['ID'];
 	status: Status;
@@ -286,6 +305,64 @@ export const CreateTaskDocument = {
 		}
 	]
 } as unknown as DocumentNode<CreateTaskMutation, CreateTaskMutationVariables>;
+export const UpdateTaskDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'updateTask' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'updateTask' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'UpdateTaskInput' } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'updateTask' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'updateTask' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'updateTask' } }
+							}
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [{ kind: 'FragmentSpread', name: { kind: 'Name', value: 'Task' } }]
+						}
+					}
+				]
+			}
+		},
+		{
+			kind: 'FragmentDefinition',
+			name: { kind: 'Name', value: 'Task' },
+			typeCondition: { kind: 'NamedType', name: { kind: 'Name', value: 'Task' } },
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'description' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'priority' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAllDay' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'status' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'reminderAt' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'title' } },
+					{ kind: 'Field', name: { kind: 'Name', value: 'createdAt' } }
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UpdateTaskMutation, UpdateTaskMutationVariables>;
 export const UpdateTaskStatusDocument = {
 	kind: 'Document',
 	definitions: [

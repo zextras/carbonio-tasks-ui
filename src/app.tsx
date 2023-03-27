@@ -28,8 +28,12 @@ const LazySecondaryBarView = lazy(
 	() => import(/* webpackChunkName: "secondaryView" */ './views/secondary-bar/SecondaryBarView')
 );
 
-const LazyBoardView = lazy(
-	() => import(/* webpackChunkName: "secondaryView" */ './views/board/NewTaskBoard')
+const LazyNewTaskBoardView = lazy(
+	() => import(/* webpackChunkName: "newTaskView" */ './views/board/NewTaskBoard')
+);
+
+const LazyEditTaskBoardView = lazy(
+	() => import(/* webpackChunkName: "editTaskView" */ './views/board/EditTaskBoard')
 );
 
 const AppView = (): JSX.Element => (
@@ -44,10 +48,18 @@ const SecondaryBarView = (props: SecondaryBarComponentProps): JSX.Element => (
 	</Suspense>
 );
 
-const BoardView = (): JSX.Element => (
+const NewTaskBoardView = (): JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<ProvidersWrapper>
-			<LazyBoardView />
+			<LazyNewTaskBoardView />
+		</ProvidersWrapper>
+	</Suspense>
+);
+
+const EditTaskBoardView = (): JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<ProvidersWrapper>
+			<LazyEditTaskBoardView />
 		</ProvidersWrapper>
 	</Suspense>
 );
@@ -70,8 +82,12 @@ const App = (): React.ReactNode => {
 
 		// boards
 		addBoardView({
-			route: TASKS_ROUTE,
-			component: BoardView
+			route: `${TASKS_ROUTE}/new`,
+			component: NewTaskBoardView
+		});
+		addBoardView({
+			route: `${TASKS_ROUTE}/edit`,
+			component: EditTaskBoardView
 		});
 	}, [t]);
 
@@ -85,7 +101,7 @@ const App = (): React.ReactNode => {
 				label: t('label.new', 'New Task'),
 				icon: 'ListViewOutline',
 				onClick: (): void => {
-					addBoard({ url: TASKS_ROUTE, title: t('board.newTask.title', 'New Task') });
+					addBoard({ url: `${TASKS_ROUTE}/new`, title: t('board.newTask.title', 'New Task') });
 				},
 				disabled: false,
 				primary: true,

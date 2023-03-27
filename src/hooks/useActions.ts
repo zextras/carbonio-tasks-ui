@@ -6,9 +6,11 @@
 import { useCallback, useMemo } from 'react';
 
 import { type Action } from '@zextras/carbonio-design-system';
+import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { useCompleteAction } from './useCompleteAction';
+import { TASKS_ROUTE } from '../constants';
 import { type Task } from '../gql/types';
 
 export const useActions = (taskId: Task['id']): Action[] => {
@@ -16,9 +18,19 @@ export const useActions = (taskId: Task['id']): Action[] => {
 	const completeAction = useCompleteAction(taskId);
 
 	const editAction = useCallback<Action['onClick']>(() => {
-		console.log('edit', taskId);
-		// todo: open board to edit task
-	}, [taskId]);
+		const board = getBoardById(`edit-task-${taskId}`);
+		if (board) {
+			setCurrentBoard(board.id);
+			reopenBoards();
+		} else {
+			addBoard({
+				id: `edit-task-${taskId}`,
+				url: `${TASKS_ROUTE}/edit`,
+				title: t('board.editTask.title', 'Edit Task'),
+				context: { taskId }
+			});
+		}
+	}, [t, taskId]);
 
 	// actions ordered by importance (most important first)
 	return useMemo<Action[]>(
