@@ -9,7 +9,22 @@ import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Modal } from '@zextras/carbonio-design-system';
 import { getNotificationManager } from '@zextras/carbonio-shell-ui';
 import { isAfter, isBefore, isToday, startOfDay } from 'date-fns';
-import { chain, differenceBy, flatMap, flatten, forEach, groupBy, map, remove, some } from 'lodash';
+import {
+	chain,
+	differenceBy,
+	findIndex,
+	flatMap,
+	flatten,
+	forEach,
+	groupBy,
+	intersectionWith,
+	isEqual,
+	map,
+	pullAt,
+	reduce,
+	remove,
+	some
+} from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ReminderModalContent } from './ReminderModalContent';
@@ -87,13 +102,16 @@ function buildReminderEntity(task: TaskWithReminder): ReminderEntity {
 				: task.reminderAt;
 			const epochDiffFromNow = reminderTime - Date.now();
 			if (epochDiffFromNow >= 0) {
-				this._reminderTimeout = setTimeout(callback, epochDiffFromNow, this);
+				this._reminderTimeout = setTimeout(() => {
+					callback(this);
+				}, epochDiffFromNow);
 			}
 			return this._reminderTimeout;
 		},
 		clearTimout(): void {
 			if (this._reminderTimeout) {
 				clearTimeout(this._reminderTimeout);
+				this._reminderTimeout = null;
 			}
 		},
 		hasAlreadyBeenReminded(): boolean {
@@ -188,11 +206,11 @@ export const RemindersManager = (): JSX.Element => {
 					// notify with a sound the opening of the modal
 					notificationManager.notify({ showPopup: false, playSound: true });
 				}
+				// reset timout for reminders shown with this call so that they result as already seen in next modals
+				forEach(reminders, (reminder) => {
+					reminder.clearTimout();
+				});
 				return shouldOpenModal;
-			});
-			// reset timout for reminders shown with this call so that they result as already seen in next modals
-			forEach(reminders, (reminder) => {
-				reminder.clearTimout();
 			});
 		},
 		[getVisibleReminders, notificationManager, timezone]
@@ -240,6 +258,62 @@ export const RemindersManager = (): JSX.Element => {
 		[timezone]
 	);
 
+	const updateRegisteredReminder = useCallback(
+		(reminder: ReminderEntity): void => {
+			const remindersByDate = remindersByDateRef.current;
+			// find the previous position of the reminder by searching inside all the entries.
+			// Retrieve both the dateKey and the index with a "reduce" to make a single cycle.
+			// The two fields are both valued or both undefined, there cannot be a hybrid situation.
+			const { prevKey, prevIndex } = reduce<
+				typeof remindersByDate,
+				{ prevKey: string; prevIndex: number } | { prevKey: undefined; prevIndex: undefined }
+			>(
+				remindersByDate,
+				(result, reminders, key) => {
+					const reminderIndex = findIndex(reminders, (item) => item.id === reminder.id);
+					if (reminderIndex >= 0) {
+						return { prevKey: key, prevIndex: reminderIndex };
+					}
+					return result;
+				},
+				{ prevKey: undefined, prevIndex: undefined }
+			);
+
+			const newDateKey = reminder.getKey(timezone);
+			if (prevKey && remindersByDate[prevKey] !== undefined && prevIndex >= 0) {
+				// if the reminder was truly registered
+				// clear the timeout of the previous object
+				remindersByDate[prevKey][prevIndex].clearTimout();
+				if (reminder.status !== Status.Complete) {
+					// if the status is still not complete, start the new timer
+					reminder.startTimeout(showReminderDebounced);
+					if (prevKey === newDateKey) {
+						// update the reminder keeping the same position if the key is not changed (reminder date and allDay are not changed)
+						remindersByDate[prevKey][prevIndex] = reminder;
+					} else {
+						// otherwise clear the previous position and push the item to the new dateKey map
+						pullAt(remindersByDate[prevKey], prevIndex);
+						// delete the entry if there is no reminder left
+						if (remindersByDate[prevKey].length === 0) {
+							delete remindersByDate[prevKey];
+						}
+						if (remindersByDate[newDateKey] === undefined) {
+							remindersByDate[newDateKey] = [];
+						}
+						remindersByDate[newDateKey].push(reminder);
+					}
+				} else {
+					// if the status has changed and now the task is completed, just clear the previous position
+					pullAt(remindersByDate[prevKey], prevIndex);
+				}
+			} else {
+				// if the reminder was not truly registered, register it
+				registerReminder(reminder);
+			}
+		},
+		[registerReminder, showReminderDebounced, timezone]
+	);
+
 	const registerRemindersFromTasks = useCallback(
 		(tasks: Array<Partial<Task> | null>) => {
 			forEach(tasks, (task) => {
@@ -274,6 +348,7 @@ export const RemindersManager = (): JSX.Element => {
 			allReminders.forEach((reminder) => {
 				reminder.clearTimout();
 			});
+			showReminderDebounced.cancel();
 		};
 	}, [findRemindersLazyQuery, registerRemindersFromTasks, showReminderDebounced]);
 
@@ -281,6 +356,7 @@ export const RemindersManager = (): JSX.Element => {
 		// listen for changes on the list:
 		// - remove those which have been removed (compare previous data with current one)
 		// - register those which have been added (compare current data with previous one)
+		// - update registered reminders of those which reminder has been updated
 		const removedTasks = differenceBy(
 			remindersPreviousData?.findTasks || [],
 			remindersData?.findTasks || [],
@@ -298,11 +374,28 @@ export const RemindersManager = (): JSX.Element => {
 			(task) => task?.id
 		);
 		registerRemindersFromTasks(addedTasks);
+
+		const modifiedTasks = intersectionWith(
+			remindersData?.findTasks || [],
+			remindersPreviousData?.findTasks || [],
+			(newTask, prevTask) =>
+				newTask !== null &&
+				prevTask !== null &&
+				newTask.id === prevTask.id &&
+				!isEqual(newTask, prevTask)
+		);
+		modifiedTasks.forEach((task) => {
+			if (isTaskWithReminder(task)) {
+				const reminder = buildReminderEntity(task);
+				updateRegisteredReminder(reminder);
+			}
+		});
 	}, [
 		registerRemindersFromTasks,
 		remindersData?.findTasks,
 		remindersPreviousData?.findTasks,
-		unregisterReminder
+		unregisterReminder,
+		updateRegisteredReminder
 	]);
 
 	const closeModalHandler = useCallback(() => {
