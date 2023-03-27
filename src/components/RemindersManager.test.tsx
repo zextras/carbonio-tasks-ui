@@ -21,7 +21,7 @@ import {
 } from 'date-fns';
 
 import { RemindersManager } from './RemindersManager';
-import { TIMEZONE_DEFAULT } from '../constants';
+import { TASKS_ROUTE, TIMEZONE_DEFAULT } from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import { Priority, Status, type Task, TaskFragmentDoc, type UpdateTaskInput } from '../gql/types';
 import {
@@ -56,7 +56,7 @@ describe('Reminders manager', () => {
 		const task = populateTask({ reminderAt: todayBeforeNow, reminderAllDay: false });
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		expect(
 			screen.getByText(
@@ -69,12 +69,31 @@ describe('Reminders manager', () => {
 		expect(screen.getByText(task.title)).toBeVisible();
 	});
 
+	test('Modal is not rendered on load in other modules', async () => {
+		const todayBeforeNow = faker.date.between(startOfToday(), Date.now()).getTime();
+		const task = populateTask({ reminderAt: todayBeforeNow, reminderAllDay: false });
+
+		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
+		setup(<RemindersManager />, { mocks, initialRouterEntries: ['/aModule'] });
+		act(() => {
+			jest.runOnlyPendingTimers();
+		});
+		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
+		// wait for lazyQuery to run
+		await waitFor(
+			() =>
+				new Promise((resolve) => {
+					setTimeout(resolve, 0);
+				})
+		);
+	});
+
 	test('On load show reminder set for today, before now, all day', async () => {
 		const todayBeforeNow = faker.date.between(startOfToday(), Date.now()).getTime();
 		const task = populateTask({ reminderAt: todayBeforeNow, reminderAllDay: true });
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		expect(
 			screen.getByText(
@@ -92,7 +111,7 @@ describe('Reminders manager', () => {
 		const task = populateTask({ reminderAt: todayAfterNow, reminderAllDay: true });
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		expect(
 			screen.getByText(
@@ -112,7 +131,7 @@ describe('Reminders manager', () => {
 		const msDiffFromNow = todayAfterNow - now;
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		act(() => {
 			jest.advanceTimersByTime(msDiffFromNow - 1);
 		});
@@ -138,7 +157,7 @@ describe('Reminders manager', () => {
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
 		const mocks = [findTasksMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
 			jest.advanceTimersToNextTimer();
@@ -161,7 +180,7 @@ describe('Reminders manager', () => {
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
 		const mocks = [findTasksMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
 			jest.advanceTimersToNextTimer();
@@ -184,7 +203,7 @@ describe('Reminders manager', () => {
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
 		const mocks = [findTasksMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
 			jest.advanceTimersToNextTimer();
@@ -207,7 +226,7 @@ describe('Reminders manager', () => {
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
 		const mocks = [findTasksMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
 			jest.advanceTimersToNextTimer();
@@ -229,7 +248,7 @@ describe('Reminders manager', () => {
 		const task2 = populateTask({ reminderAt: null, reminderAllDay: true });
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task1, task2]);
 		const mocks = [findTasksMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
 			jest.advanceTimersToNextTimer();
@@ -247,7 +266,7 @@ describe('Reminders manager', () => {
 		});
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
 		const mocks = [findTasksMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		expect(screen.getByText(task.title)).toBeVisible();
 	});
@@ -260,7 +279,7 @@ describe('Reminders manager', () => {
 		});
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
 		const mocks = [findTasksMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
 			jest.advanceTimersToNextTimer();
@@ -280,7 +299,7 @@ describe('Reminders manager', () => {
 
 		const findTaskMock = mockFindTasks({ status: Status.Open }, [task]);
 		const mocks = [findTaskMock];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTaskMock.result).toHaveBeenCalled());
 		act(() => {
 			jest.advanceTimersByTime(todayAfterNow - now);
@@ -292,7 +311,10 @@ describe('Reminders manager', () => {
 	test('Dismiss action close the modal', async () => {
 		const reminder = populateTask({ reminderAt: Date.now(), reminderAllDay: true });
 		const mocks = [mockFindTasks({ status: Status.Open }, [reminder])];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const dismissButton = screen.getByRole('button', { name: /dismiss/i });
 		expect(dismissButton).toBeVisible();
@@ -305,7 +327,10 @@ describe('Reminders manager', () => {
 	test('Close icon action close the modal', async () => {
 		const reminder = populateTask({ reminderAt: Date.now(), reminderAllDay: true });
 		const mocks = [mockFindTasks({ status: Status.Open }, [reminder])];
-		const { getByRoleWithIcon, user } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.closeModal });
 		expect(closeButton).toBeVisible();
@@ -318,7 +343,10 @@ describe('Reminders manager', () => {
 	test('Close icon action has a tooltip', async () => {
 		const reminder = populateTask({ reminderAt: Date.now(), reminderAllDay: true });
 		const mocks = [mockFindTasks({ status: Status.Open }, [reminder])];
-		const { getByRoleWithIcon, user } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.closeModal });
 		await user.hover(closeButton);
@@ -358,7 +386,7 @@ describe('Reminders manager', () => {
 		const mocks = [
 			mockFindTasks({ status: Status.Open }, [allDay1, withTime1, allDay2, withTime2])
 		];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		const allDayDate = formatDateFromTimestamp(now, {
 			timezone: TIMEZONE_DEFAULT,
@@ -412,7 +440,10 @@ describe('Reminders manager', () => {
 		const mocks = [
 			mockFindTasks({ status: Status.Open }, [allDayReminder, withTimeExpired, expiringReminder])
 		];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
@@ -467,7 +498,10 @@ describe('Reminders manager', () => {
 				expiringReminder2
 			])
 		];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
@@ -514,7 +548,7 @@ describe('Reminders manager', () => {
 		const mocks = [
 			mockFindTasks({ status: Status.Open }, [allDayReminder, withTimeExpired, expiringReminder])
 		];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
@@ -567,7 +601,7 @@ describe('Reminders manager', () => {
 				expiringReminder2
 			])
 		];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
@@ -624,7 +658,10 @@ describe('Reminders manager', () => {
 				expiringReminder2
 			])
 		];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
@@ -669,7 +706,7 @@ describe('Reminders manager', () => {
 			task.reminderAt = Date.now();
 		});
 		const mocks = [mockFindTasks({ status: Status.Open }, tasks)];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		expect(screen.getAllByTestId(ICON_REGEXP.lowPriority)).toHaveLength(3);
 		expect(screen.getAllByTestId(ICON_REGEXP.mediumPriority)).toHaveLength(3);
@@ -679,7 +716,10 @@ describe('Reminders manager', () => {
 	test('Complete action is visible for a task not completed', async () => {
 		const task = populateTask({ reminderAt: Date.now() });
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		const { getByRoleWithIcon, queryByRoleWithIcon } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, queryByRoleWithIcon } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction })).toBeVisible();
 		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction })).toBeEnabled();
@@ -694,7 +734,10 @@ describe('Reminders manager', () => {
 			mockFindTasks({ status: Status.Open }, [task]),
 			mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 		];
-		const { getByRoleWithIcon, queryByRoleWithIcon, user } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, queryByRoleWithIcon, user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const completeAction = getByRoleWithIcon('button', {
 			icon: ICON_REGEXP.reminderCompleteAction
@@ -712,7 +755,10 @@ describe('Reminders manager', () => {
 			mockFindTasks({ status: Status.Open }, [task]),
 			mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 		];
-		const { getByRoleWithIcon, user } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const completeAction = getByRoleWithIcon('button', {
 			icon: ICON_REGEXP.reminderCompleteAction
@@ -726,7 +772,10 @@ describe('Reminders manager', () => {
 	test('Undo action is hidden for a task not completed', async () => {
 		const task = populateTask({ reminderAt: Date.now(), priority: Priority.Medium });
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		const { queryByRoleWithIcon } = setup(<RemindersManager />, { mocks });
+		const { queryByRoleWithIcon } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		expect(
 			queryByRoleWithIcon('button', { icon: ICON_REGEXP.reminderUndoAction })
@@ -739,7 +788,10 @@ describe('Reminders manager', () => {
 			mockFindTasks({ status: Status.Open }, [task]),
 			mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 		];
-		const { getByRoleWithIcon, user } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const completeAction = getByRoleWithIcon('button', {
 			icon: ICON_REGEXP.reminderCompleteAction
@@ -755,7 +807,10 @@ describe('Reminders manager', () => {
 			mockFindTasks({ status: Status.Open }, [task]),
 			mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 		];
-		const { getByRoleWithIcon, user } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const completeAction = getByRoleWithIcon('button', {
 			icon: ICON_REGEXP.reminderCompleteAction
@@ -768,7 +823,7 @@ describe('Reminders manager', () => {
 	test('Complete indicator is hidden for a task not completed', async () => {
 		const task = populateTask({ reminderAt: Date.now() });
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		expect(screen.queryByTestId(ICON_REGEXP.reminderComplete)).not.toBeInTheDocument();
 	});
@@ -785,7 +840,8 @@ describe('Reminders manager', () => {
 			mockUpdateTaskStatus({ id: withTime.id, status: Status.Complete })
 		];
 		const { getAllByRoleWithIcon, user } = setup(<RemindersManager />, {
-			mocks
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
 		const completeAllButton = screen.getByRole('button', { name: /complete all/i });
@@ -814,7 +870,8 @@ describe('Reminders manager', () => {
 			mockUpdateTaskStatus({ id: withTime.id, status: Status.Open })
 		];
 		const { getAllByRoleWithIcon, user } = setup(<RemindersManager />, {
-			mocks
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
 		const completeAllButton = screen.getByRole('button', { name: /complete all/i });
@@ -844,7 +901,8 @@ describe('Reminders manager', () => {
 			mockUpdateTaskStatus({ id: allDay.id, status: Status.Open })
 		];
 		const { getAllByRoleWithIcon, user } = setup(<RemindersManager />, {
-			mocks
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
 		const completeAllButton = screen.getByRole('button', { name: /complete all/i });
@@ -873,7 +931,8 @@ describe('Reminders manager', () => {
 			mockUpdateTaskStatus({ id: withTime.id, status: Status.Complete })
 		];
 		const { user } = setup(<RemindersManager />, {
-			mocks
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
 		const completeAllButton = screen.getByRole('button', { name: /complete all/i });
@@ -890,7 +949,7 @@ describe('Reminders manager', () => {
 	test('Complete all action is not visible if there is only one task in the list', async () => {
 		const task = populateTask({ reminderAt: Date.now() });
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		expect(screen.queryByRole('button', { name: /complete all/i })).not.toBeInTheDocument();
 	});
@@ -901,7 +960,10 @@ describe('Reminders manager', () => {
 			mockFindTasks({ status: Status.Open }, [task]),
 			mockUpdateTaskStatus({ id: task.id, status: Status.Complete })
 		];
-		const { getByRoleWithIcon, user } = setup(<RemindersManager />, { mocks });
+		const { getByRoleWithIcon, user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		await waitForModalToOpen();
 		const completeAction = getByRoleWithIcon('button', {
 			icon: ICON_REGEXP.reminderCompleteAction
@@ -919,7 +981,7 @@ describe('Reminders manager', () => {
 			});
 			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-			setup(<RemindersManager />, { mocks });
+			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 			await waitForModalToOpen();
 			expect(mockNotify).toHaveBeenCalled();
 			expect(mockNotify).toHaveBeenCalledTimes(1);
@@ -937,7 +999,7 @@ describe('Reminders manager', () => {
 			});
 			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-			setup(<RemindersManager />, { mocks });
+			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 			act(() => {
 				// advance timers by 1 minute to make reminder expires
 				jest.advanceTimersByTime(60000);
@@ -960,7 +1022,7 @@ describe('Reminders manager', () => {
 			const task2 = populateTask({ reminderAt: fiveMinutesFromNow, reminderAllDay: false });
 			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task1, task2])];
-			setup(<RemindersManager />, { mocks });
+			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 			act(() => {
 				jest.advanceTimersByTime(oneMinuteFromNow - now);
 			});
@@ -991,7 +1053,10 @@ describe('Reminders manager', () => {
 			reminderAllDay: false
 		});
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
@@ -1010,7 +1075,10 @@ describe('Reminders manager', () => {
 		const tenMinutesFromNow = addMinutes(now, 10).getTime();
 		const task = populateTask({ reminderAt: fiveMinutesFromNow, reminderAllDay: false });
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
@@ -1045,7 +1113,7 @@ describe('Reminders manager', () => {
 		const tenMinutesBeforeNow = subMinutes(now, 10).getTime();
 		const task = populateTask({ reminderAt: fiveMinutesFromNow, reminderAllDay: false });
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await editTask({ ...task, reminderAt: tenMinutesBeforeNow });
 		act(() => {
 			jest.runOnlyPendingTimers();
@@ -1058,7 +1126,7 @@ describe('Reminders manager', () => {
 		task.reminderAt = addMinutes(Date.now(), 5).getTime();
 		task.reminderAllDay = false;
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		setup(<RemindersManager />, { mocks });
+		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await editTask({ ...task, reminderAt: null });
 		act(() => {
 			jest.runOnlyPendingTimers();
@@ -1098,7 +1166,10 @@ describe('Reminders manager', () => {
 				anotherTaskToTriggerModal
 			])
 		];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		// modal opens on load because of the all day reminder
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
@@ -1171,7 +1242,10 @@ describe('Reminders manager', () => {
 		tasks[3].reminderAt = tenMinutesFromNow;
 		const taskToEdit = tasks[1];
 		const mocks = [mockFindTasks({ status: Status.Open }, tasks)];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
@@ -1202,7 +1276,10 @@ describe('Reminders manager', () => {
 			priority: Priority.Medium
 		});
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
-		const { user } = setup(<RemindersManager />, { mocks });
+		const { user } = setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});

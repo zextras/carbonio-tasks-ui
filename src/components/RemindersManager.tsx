@@ -29,10 +29,12 @@ import {
 	some
 } from 'lodash';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
 import { ReminderModalContent } from './ReminderModalContent';
 import { ReminderModalFooter } from './ReminderModalFooter';
 import { removeTaskFromList } from '../apollo/cacheUtils';
+import { TASKS_ROUTE } from '../constants';
 import { TimeZoneContext } from '../contexts';
 import { FindTasksDocument, Status, type Task, UpdateTaskStatusDocument } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
@@ -136,6 +138,8 @@ export const RemindersManager = (): JSX.Element => {
 	>([]);
 	// map of tasks keyed by reminder date (formatted)
 	const remindersByDateRef = useRef<Record<string, ReminderEntity[]>>({});
+	const location = useLocation();
+	const isTasksView = useMemo(() => location.pathname.includes(TASKS_ROUTE), [location]);
 
 	const getVisibleReminders = useCallback(
 		() =>
@@ -451,7 +455,7 @@ export const RemindersManager = (): JSX.Element => {
 	}, [apolloClient.cache, flatMapOfModalReminders, isActive, removeActive]);
 
 	const completeTaskHandler = useCallback(
-		(task: Pick<Task, 'id'>) => () => {
+		(task: Pick<Task, 'id'>) => () =>
 			updateTaskStatus({
 				variables: {
 					id: task.id,
@@ -463,13 +467,12 @@ export const RemindersManager = (): JSX.Element => {
 						status: Status.Complete
 					}
 				}
-			});
-		},
+			}),
 		[updateTaskStatus]
 	);
 
 	const updateTaskToOpen = useCallback(
-		(task: Pick<Task, 'id'>) => () => {
+		(task: Pick<Task, 'id'>) => () =>
 			updateTaskStatus({
 				variables: {
 					id: task.id,
@@ -481,8 +484,7 @@ export const RemindersManager = (): JSX.Element => {
 						status: Status.Open
 					}
 				}
-			});
-		},
+			}),
 		[updateTaskStatus]
 	);
 
@@ -535,7 +537,7 @@ export const RemindersManager = (): JSX.Element => {
 	return (
 		<Modal
 			title={t('modal.reminder.title', 'Tasks reminders')}
-			open={isModalOpen}
+			open={isModalOpen && isTasksView}
 			onClose={closeModalHandler}
 			closeIconTooltip={t('modal.close', 'Close')}
 			customFooter={

@@ -16,7 +16,9 @@ import {
 	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
+import { Route } from 'react-router-dom';
 
+import { RemindersManager } from './components/RemindersManager';
 import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { ProvidersWrapper } from './providers/ProvidersWrapper';
 
@@ -92,7 +94,13 @@ const App = (): React.ReactNode => {
 		});
 	}, [t]);
 
-	return null;
+	return (
+		<Route path={`/:module/:taskId?`}>
+			<ProvidersWrapper>
+				<RemindersManager />
+			</ProvidersWrapper>
+		</Route>
+	);
 };
 
 export default App;

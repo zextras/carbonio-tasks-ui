@@ -10,7 +10,6 @@ import { trimEnd } from 'lodash';
 import { Route, useRouteMatch } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
-import { RemindersManager } from '../../components/RemindersManager';
 import { ROUTES } from '../../constants';
 import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
 
@@ -19,10 +18,11 @@ const AppView = (): JSX.Element => {
 
 	const routes = useMemo(
 		() => [
-			<Route path={`${trimEnd(path, '/')}${ROUTES.task}`} key={'task-view-route'}>
-				<RemindersManager />
-				<TasksView />
-			</Route>
+			<Route
+				path={`${trimEnd(path, '/')}${ROUTES.task}`}
+				component={TasksView}
+				key={'task-view-route'}
+			/>
 		],
 		[path]
 	);

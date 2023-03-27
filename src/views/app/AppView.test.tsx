@@ -9,13 +9,16 @@ import { faker } from '@faker-js/faker';
 import { act, screen, waitFor, waitForElementToBeRemoved, within } from '@testing-library/react';
 import { startOfToday } from 'date-fns';
 import { graphql } from 'msw';
+import { Route } from 'react-router-dom';
 
 import AppView from './AppView';
-import { RANDOM_PLACEHOLDER_TIMEOUT } from '../../constants';
+import { RemindersManager } from '../../components/RemindersManager';
+import { RANDOM_PLACEHOLDER_TIMEOUT, ROUTES, TASKS_ROUTE } from '../../constants';
 import { EMPTY_DISPLAYER_HINT, ICON_REGEXP, TEST_ID_SELECTOR } from '../../constants/tests';
 import {
 	type FindTasksQuery,
 	type FindTasksQueryVariables,
+	GetTaskDocument,
 	type GetTaskQuery,
 	type GetTaskQueryVariables
 } from '../../gql/types';
@@ -125,6 +128,16 @@ describe('App view', () => {
 	});
 
 	describe('Reminders', () => {
+		const AppViewWithRemindersManager = (): JSX.Element => (
+			<>
+				<Route path={`/${TASKS_ROUTE}${ROUTES.task}`}>
+					<RemindersManager />
+				</Route>
+				<Route path={`/:module?`}>
+					<AppView />
+				</Route>
+			</>
+		);
 		test('Show modal of reminders on load if there is at least one reminder to show', async () => {
 			const tasks = populateTaskList();
 			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
@@ -140,7 +153,15 @@ describe('App view', () => {
 				})
 			);
 
-			setup(<AppView />);
+			setup(
+				<Route path={`/${TASKS_ROUTE}`}>
+					<RemindersManager />
+					<AppView />
+				</Route>,
+				{
+					initialRouterEntries: [`/${TASKS_ROUTE}`]
+				}
+			);
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -168,7 +189,15 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppView />);
+			const { getByRoleWithIcon, user } = setup(
+				<Route path={`/${TASKS_ROUTE}`}>
+					<RemindersManager />
+					<AppView />
+				</Route>,
+				{
+					initialRouterEntries: [`/${TASKS_ROUTE}`]
+				}
+			);
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -201,7 +230,9 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppView />);
+			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
+				initialRouterEntries: [`/${TASKS_ROUTE}`]
+			});
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -236,11 +267,14 @@ describe('App view', () => {
 							findTasks: tasks
 						})
 					);
-				})
+				}),
+				graphql.query<GetTaskQuery, GetTaskQueryVariables>(GetTaskDocument, (req, res, ctx) =>
+					res(ctx.data({ getTask: tasks[0] }))
+				)
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppView />, {
-				initialRouterEntries: [`/${tasks[0].id}`]
+			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
+				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
 			});
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
@@ -277,8 +311,8 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppView />, {
-				initialRouterEntries: [`/${tasks[1].id}`]
+			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
+				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[1].id}`]
 			});
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
@@ -317,8 +351,8 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppView />, {
-				initialRouterEntries: [`/${tasks[0].id}`]
+			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
+				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
 			});
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());

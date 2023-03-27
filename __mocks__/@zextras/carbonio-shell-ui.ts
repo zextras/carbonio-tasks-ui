@@ -31,6 +31,8 @@ function useReplaceHistoryMock(): (params: HistoryParams) => void {
 		(location: string | HistoryParams) => {
 			if (typeof location === 'string') {
 				history.replace(parsePath(location));
+			} else if (typeof location.path === 'string') {
+				history.replace(parsePath(location.path));
 			} else {
 				history.replace(location.path);
 			}
@@ -46,6 +48,8 @@ function usePushHistoryMock(): (params: HistoryParams) => void {
 		(location: string | HistoryParams) => {
 			if (typeof location === 'string') {
 				history.push(parsePath(location));
+			} else if (typeof location.path === 'string') {
+				history.push(parsePath(location.path));
 			} else {
 				history.push(location.path);
 			}
