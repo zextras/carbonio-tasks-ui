@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PriorityIcon } from './PriorityIcon';
 import { Text } from './Text';
-import { Status, type Task } from '../gql/types';
+import { type Priority, Status, type Task } from '../gql/types';
 
 type ReminderItemType = Pick<Task, 'id' | 'title' | 'priority' | 'status'>;
 
@@ -24,7 +24,9 @@ interface ReminderGroupProps extends ReminderGroupType {
 }
 
 interface ReminderItemProps {
-	reminder: ReminderItemType;
+	title: string;
+	status: Status;
+	priority: Priority;
 	completeAction: () => void;
 	undoCompleteAction: () => void;
 }
@@ -35,7 +37,9 @@ interface ReminderModalContentProps {
 }
 
 const ReminderItem = ({
-	reminder,
+	title,
+	status,
+	priority,
 	completeAction,
 	undoCompleteAction
 }: ReminderItemProps): JSX.Element => {
@@ -43,25 +47,32 @@ const ReminderItem = ({
 
 	return (
 		<Row wrap={'nowrap'} mainAlignment={'space-between'} gap={'0.25rem'} width={'fill'}>
-			<Row flexShrink={0} minWidth={'fit'}>
-				{reminder.status !== Status.Complete && <PriorityIcon priority={reminder.priority} />}
-				{reminder.status === Status.Complete && <Icon icon={'Checkmark'} color={'success'} />}
+			<Row flexShrink={1} flexBasis={'fit-content'} gap={'0.25rem'} wrap={'nowrap'} minWidth={'0'}>
+				<Row flexShrink={0} minWidth={'fit'}>
+					{status !== Status.Complete && <PriorityIcon priority={priority} />}
+					{status === Status.Complete && <Icon icon={'Checkmark'} color={'success'} />}
+				</Row>
+				<Row wrap={'nowrap'} flexShrink={1} minWidth={0} flexGrow={1} mainAlignment={'flex-start'}>
+					<Text size={'small'}>{title}</Text>
+				</Row>
+				<Row flexShrink={1} flexBasis={'fit-content'}>
+					{status === Status.Complete && (
+						<Text size={'small'} weight={'bold'}>
+							{t('task.status', {
+								context: status.toLowerCase(),
+								defaultValue: 'Completed'
+							})}
+						</Text>
+					)}
+				</Row>
 			</Row>
-			<Row wrap={'nowrap'} flexShrink={1} minWidth={0} flexGrow={1} mainAlignment={'flex-start'}>
-				<Text size={'small'}>{reminder.title}</Text>
-			</Row>
 			<Row flexShrink={0} minWidth={'fit'}>
-				{reminder.status === Status.Complete && (
-					<Text size={'small'} weight={'bold'}>
-						{t('task.status', { context: reminder.status.toLowerCase() })}
-					</Text>
-				)}
-				{reminder.status === Status.Complete && (
+				{status === Status.Complete && (
 					<Tooltip label={t('action.undo')}>
 						<IconButton onClick={undoCompleteAction} icon={'UndoOutline'} />
 					</Tooltip>
 				)}
-				{reminder.status !== Status.Complete && (
+				{status !== Status.Complete && (
 					<Tooltip label={t('action.complete')}>
 						<IconButton onClick={completeAction} icon={'CheckmarkCircleOutline'} />
 					</Tooltip>
@@ -84,7 +95,9 @@ const ReminderGroup = ({
 			map(reminders, (reminder) => (
 				<ReminderItem
 					key={reminder.id}
-					reminder={reminder}
+					title={reminder.title}
+					status={reminder.status}
+					priority={reminder.priority}
 					completeAction={completeAction(reminder)}
 					undoCompleteAction={undoCompleteAction(reminder)}
 				/>

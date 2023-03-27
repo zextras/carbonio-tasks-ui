@@ -13,7 +13,7 @@ export const ICON_REGEXP = {
 	lowPriority: /^icon: ArrowheadDown$/i,
 	mediumPriority: /^icon: MinusOutline$/i,
 	reminderExpired: /^icon: AlertTriangle$/i,
-	reminderComplete: /^icon: CheckmarkCircleOutline$/i,
+	reminderComplete: /^icon: Checkmark$/i,
 	reminderCompleteAction: /^icon: CheckmarkCircleOutline$/i,
 	reminderUndoAction: /^icon: UndoOutline$/i,
 	switchOff: /^icon: ToggleLeftOutline$/i,
@@ -24,6 +24,7 @@ export const TEST_ID_SELECTOR = {
 	tooltip: 'tooltip',
 	hoverBar: 'hover-bar',
 	listItem: 'list-item',
+	listItemContent: 'list-item-content',
 	dropdown: 'dropdown-popper-list'
 };
 

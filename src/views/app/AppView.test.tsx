@@ -6,14 +6,13 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor, waitForElementToBeRemoved, within } from '@testing-library/react';
 import { startOfToday } from 'date-fns';
 import { graphql } from 'msw';
-import { BrowserRouter } from 'react-router-dom';
 
 import AppView from './AppView';
 import { RANDOM_PLACEHOLDER_TIMEOUT } from '../../constants';
-import { EMPTY_DISPLAYER_HINT } from '../../constants/tests';
+import { EMPTY_DISPLAYER_HINT, ICON_REGEXP, TEST_ID_SELECTOR } from '../../constants/tests';
 import {
 	type FindTasksQuery,
 	type FindTasksQueryVariables,
@@ -21,18 +20,10 @@ import {
 	type GetTaskQueryVariables
 } from '../../gql/types';
 import server from '../../mocks/server';
-import { populateTaskList } from '../../mocks/utils';
-import { I18NextTestProvider, makeListItemsVisible, setup } from '../../utils/testUtils';
+import { populateTask, populateTaskList } from '../../mocks/utils';
+import { makeListItemsVisible, setup } from '../../utils/testUtils';
 
 describe('App view', () => {
-	// wrapper used to override wrapper of the setup, so that the real providers are used,
-	// plus the router which is missing because it is provided by the shell
-	const AppWrapper = ({ children }: { children: React.ReactNode }): JSX.Element => (
-		<BrowserRouter>
-			<I18NextTestProvider>{children}</I18NextTestProvider>
-		</BrowserRouter>
-	);
-
 	function showDisplayerPlaceholder(): void {
 		act(() => {
 			jest.advanceTimersByTime(RANDOM_PLACEHOLDER_TIMEOUT);
@@ -58,7 +49,7 @@ describe('App view', () => {
 			})
 		);
 
-		setup(<AppView />, { renderOptions: { wrapper: AppWrapper } });
+		setup(<AppView />);
 		await screen.findByText(/all tasks/i);
 		await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 		showDisplayerPlaceholder();
@@ -100,8 +91,7 @@ describe('App view', () => {
 				return res(ctx.data({ getTask: taskResult || null }));
 			})
 		);
-		// remove wrapper so that the appView wrapper are used
-		const { user } = setup(<AppView />, { renderOptions: { wrapper: AppWrapper } });
+		const { user } = setup(<AppView />);
 		await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 		showDisplayerPlaceholder();
 		makeListItemsVisible();
@@ -112,6 +102,26 @@ describe('App view', () => {
 		await screen.findByText(/creation date/i);
 		expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
 		expect(screen.getAllByText(task.title)).toHaveLength(2);
+	});
+
+	test('List item is highlighted when and only when it is opened in the displayer', async () => {
+		const task = populateTask({ reminderAt: null });
+		const findTasksRequest = jest.fn();
+		server.use(
+			graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
+				findTasksRequest();
+				return res(ctx.data({ findTasks: [task] }));
+			})
+		);
+		const { getByRoleWithIcon, user } = setup(<AppView />, {
+			initialRouterEntries: [`/${task.id}`]
+		});
+		await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
+		makeListItemsVisible();
+		await waitFor(() => expect(screen.getAllByText(task.title)).toHaveLength(2));
+		expect(screen.getByTestId(TEST_ID_SELECTOR.listItem)).toHaveStyleRule('background', '#d5e3f6');
+		await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer }));
+		expect(screen.getByTestId(TEST_ID_SELECTOR.listItem)).toHaveStyleRule('background', '#ffffff');
 	});
 
 	describe('Reminders', () => {
@@ -130,33 +140,201 @@ describe('App view', () => {
 				})
 			);
 
-			setup(<AppView />, {
-				renderOptions: { wrapper: AppWrapper }
-			});
+			setup(<AppView />);
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
 			expect(screen.getByText(tasks[0].title)).toBeVisible();
 		});
 
-		test.todo(
-			'When a reminder is completed from the reminders modal, remove the item from the list'
-		);
+		test('When a reminder is completed from the reminders modal, remove the item from the list when the modal is closed with dismiss button', async () => {
+			const tasks = populateTaskList();
+			tasks.forEach((task) => {
+				// disable reminder for all tasks
+				// eslint-disable-next-line no-param-reassign
+				task.reminderAt = null;
+			});
+			// set reminder only for one item
+			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			const findTasksRequest = jest.fn();
+			server.use(
+				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
+					findTasksRequest();
+					return res(
+						ctx.data({
+							findTasks: tasks
+						})
+					);
+				})
+			);
 
-		test.todo(
-			'When a reminder is completed and restored from the reminders modal, leave the item in the list in the same position'
-		);
+			const { getByRoleWithIcon, user } = setup(<AppView />);
 
-		test.todo(
-			'When a reminder is completed from the reminders modal, close the displayer if opened on the item'
-		);
+			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
+			await screen.findByText(/tasks reminders/i);
+			makeListItemsVisible();
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
+			await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			await user.click(screen.getByRole('button', { name: /dismiss/i }));
+			expect(screen.queryByText(tasks[0].title)).not.toBeInTheDocument();
+		});
 
-		test.todo(
-			'When a reminder is completed from the reminders modal, does not close the displayer if opened on another item'
-		);
+		test('When a reminder is completed and restored from the reminders modal, leave the item in the list in the same position', async () => {
+			const tasks = populateTaskList();
+			tasks.forEach((task) => {
+				// disable reminder for all tasks
+				// eslint-disable-next-line no-param-reassign
+				task.reminderAt = null;
+			});
+			// set reminder only for one item
+			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			const findTasksRequest = jest.fn();
+			server.use(
+				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
+					findTasksRequest();
+					return res(
+						ctx.data({
+							findTasks: tasks
+						})
+					);
+				})
+			);
 
-		test.todo(
-			'When a reminder is completed and restored from the reminders modal, leave the displayer open if opened on the item'
-		);
+			const { getByRoleWithIcon, user } = setup(<AppView />);
+
+			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
+			await screen.findByText(/tasks reminders/i);
+			makeListItemsVisible();
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
+			await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderUndoAction }));
+			await waitForElementToBeRemoved(screen.queryByTestId(ICON_REGEXP.reminderComplete));
+			await user.click(screen.getByRole('button', { name: /dismiss/i }));
+			expect(screen.getByText(tasks[0].title)).toBeVisible();
+			expect(
+				within(screen.getAllByTestId(TEST_ID_SELECTOR.listItemContent)[0]).getByText(tasks[0].title)
+			).toBeVisible();
+		});
+
+		test('When a reminder is completed from the reminders modal, close the displayer if opened on the item', async () => {
+			const tasks = populateTaskList();
+			tasks.forEach((task) => {
+				// disable reminder for all tasks
+				// eslint-disable-next-line no-param-reassign
+				task.reminderAt = null;
+			});
+			// set reminder only for one item
+			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			const findTasksRequest = jest.fn();
+			server.use(
+				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
+					findTasksRequest();
+					return res(
+						ctx.data({
+							findTasks: tasks
+						})
+					);
+				})
+			);
+
+			const { getByRoleWithIcon, user } = setup(<AppView />, {
+				initialRouterEntries: [`/${tasks[0].id}`]
+			});
+
+			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
+			await screen.findByText(/tasks reminders/i);
+			makeListItemsVisible();
+			await screen.findByText(/creation date/i);
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(3);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
+			await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			await user.click(screen.getByRole('button', { name: /dismiss/i }));
+			showDisplayerPlaceholder();
+			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
+			expect(screen.queryByText(tasks[0].title)).not.toBeInTheDocument();
+		});
+
+		test('When a reminder is completed from the reminders modal, does not close the displayer if opened on another item', async () => {
+			const tasks = populateTaskList();
+			tasks.forEach((task) => {
+				// disable reminder for all tasks
+				// eslint-disable-next-line no-param-reassign
+				task.reminderAt = null;
+			});
+			// set reminder only for one item
+			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			const findTasksRequest = jest.fn();
+			server.use(
+				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
+					findTasksRequest();
+					return res(
+						ctx.data({
+							findTasks: tasks
+						})
+					);
+				})
+			);
+
+			const { getByRoleWithIcon, user } = setup(<AppView />, {
+				initialRouterEntries: [`/${tasks[1].id}`]
+			});
+
+			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
+			await screen.findByText(/tasks reminders/i);
+			makeListItemsVisible();
+			await screen.findByText(/creation date/i);
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
+			expect(screen.getAllByText(tasks[1].title)).toHaveLength(2);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
+			await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			await user.click(screen.getByRole('button', { name: /dismiss/i }));
+			showDisplayerPlaceholder();
+			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
+			expect(screen.getByText(/creation date/i)).toBeVisible();
+			expect(screen.getAllByText(tasks[1].title)).toHaveLength(2);
+		});
+
+		test('When a reminder is completed and restored from the reminders modal, leave the displayer open if opened on the item', async () => {
+			const tasks = populateTaskList();
+			tasks.forEach((task) => {
+				// disable reminder for all tasks
+				// eslint-disable-next-line no-param-reassign
+				task.reminderAt = null;
+			});
+			// set reminder only for one item
+			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			const findTasksRequest = jest.fn();
+			server.use(
+				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
+					findTasksRequest();
+					return res(
+						ctx.data({
+							findTasks: tasks
+						})
+					);
+				})
+			);
+
+			const { getByRoleWithIcon, user } = setup(<AppView />, {
+				initialRouterEntries: [`/${tasks[0].id}`]
+			});
+
+			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
+			await screen.findByText(/tasks reminders/i);
+			makeListItemsVisible();
+			await screen.findByText(/creation date/i);
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(3);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
+			await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderUndoAction }));
+			await waitForElementToBeRemoved(screen.queryByTestId(ICON_REGEXP.reminderComplete));
+			await user.click(screen.getByRole('button', { name: /dismiss/i }));
+			showDisplayerPlaceholder();
+			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
+			expect(screen.getByText(/creation date/i)).toBeVisible();
+		});
 	});
 });

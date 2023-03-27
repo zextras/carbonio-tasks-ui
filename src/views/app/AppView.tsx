@@ -18,16 +18,16 @@ const AppView = (): JSX.Element => {
 	const { path } = useRouteMatch();
 
 	const routes = useMemo(
-		() => <Route path={`${trimEnd(path, '/')}${ROUTES.task}`} component={TasksView} />,
+		() => [
+			<Route path={`${trimEnd(path, '/')}${ROUTES.task}`} key={'task-view-route'}>
+				<RemindersManager />
+				<TasksView />
+			</Route>
+		],
 		[path]
 	);
 
-	return (
-		<ProvidersWrapper>
-			<RemindersManager />
-			{routes}
-		</ProvidersWrapper>
-	);
+	return <ProvidersWrapper>{routes}</ProvidersWrapper>;
 };
 
 export default AppView;

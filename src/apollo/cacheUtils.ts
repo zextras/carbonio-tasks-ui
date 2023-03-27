@@ -6,18 +6,18 @@
 
 import { type Reference } from '@apollo/client';
 import { type Modifier } from '@apollo/client/cache';
-import { filter } from 'lodash';
+import { filter, map } from 'lodash';
 
 import { type Task } from '../gql/types';
 
 export const removeTaskFromList: (
-	task: Pick<Task, '__typename' | 'id'>
+	...tasks: Pick<Task, '__typename' | 'id'>[]
 ) => Modifier<Reference[] | undefined> =
-	(task) =>
+	(...tasks) =>
 	(existing, { toReference }) => {
 		if (existing) {
-			const taskRef = toReference(task);
-			return filter(existing, (itemRef) => taskRef?.__ref !== itemRef.__ref);
+			const taskRefs = map(tasks, (task) => toReference(task)?.__ref);
+			return filter(existing, (itemRef) => !taskRefs.includes(itemRef.__ref));
 		}
 		return existing;
 	};

@@ -45,7 +45,7 @@ const StyledListItem = styled(ListItem).attrs<
 export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 	const [t] = useTranslation();
 	const allTasksLabel = useMemo(() => t('secondaryBar.allTasks', 'All Tasks'), [t]);
-	const { isActive, setActive } = useActiveItem();
+	const { activeItem, setActive } = useActiveItem();
 	const [emptyListPlaceholder] = useRandomPlaceholder('list.empty', {
 		defaultValue: "It looks like there's nothing here."
 	});
@@ -53,7 +53,7 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 	const items = useMemo(
 		() =>
 			map(tasks, (task) => (
-				<StyledListItem key={task.id} active={isActive(task.id)}>
+				<StyledListItem key={task.id} active={task.id === activeItem} data-testid={'list-item'}>
 					{(visible): JSX.Element => (
 						<ListItemContent
 							visible={visible}
@@ -67,7 +67,7 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 					)}
 				</StyledListItem>
 			)),
-		[isActive, setActive, tasks]
+		[activeItem, setActive, tasks]
 	);
 
 	return (

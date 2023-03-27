@@ -237,7 +237,7 @@ describe('Task view', () => {
 			makeListItemsVisible();
 			await screen.findAllByText(task.title);
 			const listItem = find(
-				screen.getAllByTestId(TEST_ID_SELECTOR.listItem),
+				screen.getAllByTestId(TEST_ID_SELECTOR.listItemContent),
 				(item) => within(item).queryByText(task.title) !== null
 			);
 			expect(listItem).toBeDefined();

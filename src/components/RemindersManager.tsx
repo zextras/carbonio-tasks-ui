@@ -5,13 +5,16 @@
  */
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useApolloClient, useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Modal } from '@zextras/carbonio-design-system';
 import { getNotificationManager } from '@zextras/carbonio-shell-ui';
 import { isAfter, isBefore, isToday, startOfDay } from 'date-fns';
 import {
 	chain,
+	cloneDeep,
 	differenceBy,
+	filter,
+	find,
 	findIndex,
 	flatMap,
 	flatten,
@@ -29,30 +32,11 @@ import { useTranslation } from 'react-i18next';
 
 import { ReminderModalContent } from './ReminderModalContent';
 import { ReminderModalFooter } from './ReminderModalFooter';
+import { removeTaskFromList } from '../apollo/cacheUtils';
 import { TimeZoneContext } from '../contexts';
 import { FindTasksDocument, Status, type Task, UpdateTaskStatusDocument } from '../gql/types';
+import { useActiveItem } from '../hooks/useActiveItem';
 import { debounceWithAllArgs, formatDateFromTimestamp } from '../utils';
-
-/*
- * TODO manage reminders
- * opzione 1:
- * (OK) quando viene registrato un nuovo task o modificato un task esistente, se il reminder non e' passato,
- * registra il task in una lista di reminders.
- * (OK) Su questi task viene registrato un timer uguale alla differenza tra ora e il momento del reminder.
- * (OK) Allo scadere del timer, viene lanciata una funzione showReminder che aggiungere il reminder alla lista di quelli da mostrare.
- * I reminder da mostrare sono filtrati ad ogni apertura, per escludere i reminder passati non piu' validi (quelli del giorno precedente).
- * (OK) Ogni volta che la funzione showReminder viene chiamata, aggiorna la lista. Se il modale e' chiuso, apre il modale.
- * (OK) Se il modale era gia' aperto, la lista viene aggiornata (da confermare con Eugenia).
- *
- */
-
-/*
- * Carico i task dalla cache, questo mi permette di rimanere in ascolto sulle modifiche che vengono fatte alla lista, quindi inserimenti e rimozioni.
- * Devo trovare pero' il modo di essere aggiornato anche sulle modifiche ai singoli task, in quanto l'edit non aggiorna i riferimenti della lista,
- * ma aggiorna l'oggetto task all'interno della cache stessa.
- *
- *
- */
 
 type TaskWithReminder = Pick<Task, 'id' | 'title' | 'priority' | 'reminderAllDay' | 'status'> & {
 	reminderAt: NonNullable<Task['reminderAt']>;
@@ -128,6 +112,8 @@ export const RemindersManager = (): JSX.Element => {
 	const [t] = useTranslation();
 	const timezone = useContext(TimeZoneContext);
 	const notificationManager = getNotificationManager();
+	const apolloClient = useApolloClient();
+	const { isActive, removeActive } = useActiveItem();
 
 	// query used to register new task when the list changes
 	const { data: remindersData, previousData: remindersPreviousData } = useQuery(FindTasksDocument, {
@@ -184,24 +170,53 @@ export const RemindersManager = (): JSX.Element => {
 	const _showReminder = useCallback(
 		(...reminders: ReminderEntity[]): void => {
 			setModalOpen((alreadyOpen) => {
-				const remindersByDate = groupBy(reminders, (reminder) => reminder.getKey(timezone));
-				const taskReminderEntries = map(remindersByDate, (reminderGroup, dateKey) => ({
-					date: dateKey,
-					reminders: reminderGroup
-				}));
 				if (alreadyOpen) {
-					// place new reminders on bottom of the existing list
-					setModalReminders((prevState) => [...prevState, ...taskReminderEntries]);
-					// notify with a sound the adding of a new reminder in the modal
-					notificationManager.notify({ showPopup: false, playSound: true });
+					// Distinguish between new reminders and already existing reminders:
+					// place new reminders on bottom of the existing list,
+					// and keep already existing reminders at same position. For these, update only the status
+					// (for now), in order to avoid having updated titles under a wrong reminder date.
+					setModalReminders((prevState) => {
+						const newState = cloneDeep(prevState);
+						const newReminders: ReminderEntity[] = [];
+						const prevRemindersFlat = flatMap(
+							newState,
+							(prevStateEntry) => prevStateEntry.reminders
+						);
+						forEach(reminders, (reminder) => {
+							const existingReminder = find(
+								prevRemindersFlat,
+								(prevReminder) => prevReminder.id === reminder.id
+							);
+							if (existingReminder) {
+								existingReminder.status = reminder.status;
+							} else {
+								newReminders.push(reminder);
+							}
+						});
+						const remindersByDate = groupBy(newReminders, (reminder) => reminder.getKey(timezone));
+						const newReminderEntries = map(remindersByDate, (reminderGroup, dateKey) => ({
+							date: dateKey,
+							reminders: reminderGroup
+						}));
+						if (newReminders.length > 0) {
+							// notify with a sound the adding of a new reminder in the modal
+							notificationManager.notify({ showPopup: false, playSound: true });
+						}
+						return [...newState, ...newReminderEntries];
+					});
 					// keep modal open
 					return true;
 				}
+				const remindersByDate = groupBy(reminders, (reminder) => reminder.getKey(timezone));
+				const reminderEntries = map(remindersByDate, (reminderGroup, dateKey) => ({
+					date: dateKey,
+					reminders: reminderGroup
+				}));
 				const remindersByDateList = getVisibleReminders();
 				// re-build list entirely and place new reminders on top
-				setModalReminders([...taskReminderEntries, ...remindersByDateList]);
+				setModalReminders([...reminderEntries, ...remindersByDateList]);
 				// open modal if there is something to show
-				const shouldOpenModal = remindersByDateList.length + taskReminderEntries.length > 0;
+				const shouldOpenModal = remindersByDateList.length + reminderEntries.length > 0;
 				if (shouldOpenModal) {
 					// notify with a sound the opening of the modal
 					notificationManager.notify({ showPopup: false, playSound: true });
@@ -288,12 +303,12 @@ export const RemindersManager = (): JSX.Element => {
 					// if the status is still not complete, start the new timer
 					reminder.startTimeout(showReminderDebounced);
 					if (prevKey === newDateKey) {
-						// update the reminder keeping the same position if the key is not changed (reminder date and allDay are not changed)
+						// update the reminder keeping the same position if the key is not changed (reminderAt and reminderAllDay are not changed)
 						remindersByDate[prevKey][prevIndex] = reminder;
 					} else {
 						// otherwise clear the previous position and push the item to the new dateKey map
 						pullAt(remindersByDate[prevKey], prevIndex);
-						// delete the entry if there is no reminder left
+						// delete the entry from the map if there is no reminder left for it
 						if (remindersByDate[prevKey].length === 0) {
 							delete remindersByDate[prevKey];
 						}
@@ -353,10 +368,9 @@ export const RemindersManager = (): JSX.Element => {
 	}, [findRemindersLazyQuery, registerRemindersFromTasks, showReminderDebounced]);
 
 	useEffect(() => {
-		// listen for changes on the list:
+		// listen for changes to the list which don't trigger an update of the modal:
 		// - remove those which have been removed (compare previous data with current one)
 		// - register those which have been added (compare current data with previous one)
-		// - update registered reminders of those which reminder has been updated
 		const removedTasks = differenceBy(
 			remindersPreviousData?.findTasks || [],
 			remindersData?.findTasks || [],
@@ -374,7 +388,17 @@ export const RemindersManager = (): JSX.Element => {
 			(task) => task?.id
 		);
 		registerRemindersFromTasks(addedTasks);
+	}, [
+		registerRemindersFromTasks,
+		remindersData?.findTasks,
+		remindersPreviousData?.findTasks,
+		unregisterReminder,
+		updateRegisteredReminder
+	]);
 
+	useEffect(() => {
+		// listen for changes to the list which need to trigger an update of the modal:
+		// - update registered reminders of those which reminder has been updated
 		const modifiedTasks = intersectionWith(
 			remindersData?.findTasks || [],
 			remindersPreviousData?.findTasks || [],
@@ -384,39 +408,60 @@ export const RemindersManager = (): JSX.Element => {
 				newTask.id === prevTask.id &&
 				!isEqual(newTask, prevTask)
 		);
-		modifiedTasks.forEach((task) => {
+		const updatedReminders = modifiedTasks.reduce<ReminderEntity[]>((accumulator, task) => {
 			if (isTaskWithReminder(task)) {
 				const reminder = buildReminderEntity(task);
 				updateRegisteredReminder(reminder);
+				accumulator.push(reminder);
 			}
-		});
+			return accumulator;
+		}, []);
+		if (modifiedTasks.length > 0 && isModalOpen) {
+			showReminderDebounced(...updatedReminders);
+		}
 	}, [
-		registerRemindersFromTasks,
+		isModalOpen,
 		remindersData?.findTasks,
 		remindersPreviousData?.findTasks,
-		unregisterReminder,
+		showReminderDebounced,
 		updateRegisteredReminder
 	]);
 
+	const flatMapOfModalReminders = useMemo(
+		() => flatMap(modalReminders, ({ reminders }) => reminders),
+		[modalReminders]
+	);
+
 	const closeModalHandler = useCallback(() => {
 		setModalOpen(false);
-		// TODO: close displayer if needed
-	}, []);
+		const completedReminders = filter(
+			flatMapOfModalReminders,
+			(reminder) => reminder.status === Status.Complete
+		);
+		apolloClient.cache.modify({
+			fields: {
+				findTasks: removeTaskFromList(...completedReminders)
+			}
+		});
+		if (some(completedReminders, (reminder) => isActive(reminder.id))) {
+			removeActive({
+				replace: true
+			});
+		}
+	}, [apolloClient.cache, flatMapOfModalReminders, isActive, removeActive]);
 
 	const completeTaskHandler = useCallback(
 		(task: Pick<Task, 'id'>) => () => {
-			// TODO: when completing a task, the task should disappear from the list and the displayer should be close
-			//   Check how to accomplish it when:
-			//    - the modal is opened in another module
-			//    - the modal is opened in tasks module and displayer is opened in one of the tasks
-			//    - the modal is opened in tasks module and displayer is opened in another task
-			//    - the modal is opened in tasks module and displayer is closed
-			//   Consider also the possibility of doing undo. The displayer should be closed only if
-			//   the task is really completed when the modal is closed
 			updateTaskStatus({
 				variables: {
 					id: task.id,
 					status: Status.Complete
+				},
+				optimisticResponse: {
+					updateTask: {
+						id: task.id,
+						status: Status.Complete
+					}
 				}
 			});
 		},
@@ -429,32 +474,33 @@ export const RemindersManager = (): JSX.Element => {
 				variables: {
 					id: task.id,
 					status: Status.Open
+				},
+				optimisticResponse: {
+					updateTask: {
+						id: task.id,
+						status: Status.Open
+					}
 				}
 			});
 		},
 		[updateTaskStatus]
 	);
 
-	const flatMapOfModalReminders = useMemo(
-		() => flatMap(modalReminders, ({ reminders }) => reminders),
-		[modalReminders]
-	);
-
 	const completeAllHandler = useCallback(() => {
 		forEach(flatMapOfModalReminders, (reminder) => {
-			if (reminder.status === Status.Open) {
-				completeTaskHandler(reminder);
+			if (reminder.status !== Status.Complete) {
+				completeTaskHandler(reminder)();
 			}
 		});
 	}, [completeTaskHandler, flatMapOfModalReminders]);
 
 	const undoAllHandler = useCallback(() => {
 		forEach(flatMapOfModalReminders, (reminder) => {
-			if (reminder.status === Status.Open) {
-				completeTaskHandler(reminder);
+			if (reminder.status === Status.Complete) {
+				updateTaskToOpen(reminder)();
 			}
 		});
-	}, [completeTaskHandler, flatMapOfModalReminders]);
+	}, [flatMapOfModalReminders, updateTaskToOpen]);
 
 	const isActionForAllAvailable = useMemo(
 		() => flatMapOfModalReminders.length > 1,
