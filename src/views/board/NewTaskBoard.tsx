@@ -104,7 +104,29 @@ const NewTaskBoard = (): JSX.Element => {
 			initialDate={new Date()}
 			onConfirm={onConfirm}
 			confirmLabel={t('board.confirmButton.create', 'create')}
-			banner={tasks.length >= MAX_TASKS_LIMIT - 1 ? <NewTaskLimitBanner /> : undefined}
+			banner={
+				(tasks.length === MAX_TASKS_LIMIT - 1 && (
+					<NewTaskLimitBanner
+						bannerLabel={t(
+							'newTaskBoard.banner.lastTask',
+							'This is the last task you can create. To create more complete your previous tasks.'
+						)}
+						bannerIcon={'InfoOutline'}
+						bannerColor={'info'}
+					/>
+				)) ||
+				(tasks.length >= MAX_TASKS_LIMIT && (
+					<NewTaskLimitBanner
+						bannerLabel={t(
+							'newTaskBoard.banner.limitReached',
+							'You have reached your 200 tasks. To create more complete your previous tasks.'
+						)}
+						bannerIcon={'AlertTriangleOutline'}
+						bannerColor={'warning'}
+					/>
+				)) ||
+				undefined
+			}
 			defaultBoardTabTitle={t('board.newTask.title', 'New Task')}
 		/>
 	);

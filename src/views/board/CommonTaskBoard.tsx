@@ -361,7 +361,7 @@ export const CommonTaskBoard = ({
 									date === null
 										? t(
 												'board.dateTimePicker.description.error.label',
-												'The reminder option is enabled, set data and time for it or disable the reminder'
+												'The reminder option is enabled, set date and time for it or disable the reminder'
 										  )
 										: undefined
 								}

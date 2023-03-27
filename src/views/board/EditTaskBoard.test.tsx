@@ -219,7 +219,7 @@ describe('Edit task board', () => {
 			expect(editButton).toBeDisabled();
 			expect(
 				screen.getByText(
-					/The reminder option is enabled, set data and time for it or disable the reminder/i
+					/The reminder option is enabled, set date and time for it or disable the reminder/i
 				)
 			).toBeVisible();
 		});

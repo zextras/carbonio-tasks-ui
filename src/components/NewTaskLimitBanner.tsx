@@ -6,33 +6,33 @@
 import React from 'react';
 
 import { Container, Divider, Icon } from '@zextras/carbonio-design-system';
-import { useTranslation } from 'react-i18next';
 
 import { TextExtended as Text } from './Text';
 
-export const NewTaskLimitBanner = (): JSX.Element => {
-	const [t] = useTranslation();
+export interface NewTaskLimitBannerProps {
+	bannerLabel: string;
+	bannerColor: string;
+	bannerIcon: string;
+}
 
-	return (
-		<>
-			<Container
-				background="gray6"
-				mainAlignment="flex-start"
-				crossAlignment="center"
-				padding={{ horizontal: 'large', vertical: 'small' }}
-				orientation={'horizontal'}
-				height={'fit'}
-				gap={'1rem'}
-			>
-				<Icon icon="InfoOutline" color="info" size={'large'} />
-				<Text size={'extrasmall'}>
-					{t(
-						'newTaskBoard.banner.lastTask',
-						'This is the last task you can create. To create more complete your previous tasks.'
-					)}
-				</Text>
-			</Container>
-			<Divider color={'info'} />
-		</>
-	);
-};
+export const NewTaskLimitBanner = ({
+	bannerLabel,
+	bannerColor,
+	bannerIcon
+}: NewTaskLimitBannerProps): JSX.Element => (
+	<>
+		<Container
+			background={'gray6'}
+			mainAlignment={'flex-start'}
+			crossAlignment={'center'}
+			padding={{ horizontal: 'large', vertical: 'small' }}
+			orientation={'horizontal'}
+			height={'fit'}
+			gap={'1rem'}
+		>
+			<Icon icon={bannerIcon} color={bannerColor} size={'large'} />
+			<Text size={'extrasmall'}>{bannerLabel}</Text>
+		</Container>
+		<Divider color={bannerColor} />
+	</>
+);

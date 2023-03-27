@@ -16,7 +16,7 @@
         "dateTimePicker": {
             "description": {
                 "error": {
-                    "label": "The reminder option is enabled, set data and time for it or disable the reminder"
+                    "label": "The reminder option is enabled, set date and time for it or disable the reminder"
                 }
             },
             "reminder": {
@@ -97,7 +97,8 @@
     },
     "newTaskBoard": {
         "banner": {
-            "lastTask": "This is the last task you can create. To create more complete your previous tasks."
+            "lastTask": "This is the last task you can create. To create more complete your previous tasks.",
+            "limitReached": "You have reached your 200 tasks. To create more complete your previous tasks."
         }
     },
     "secondaryBar": {
@@ -119,11 +120,6 @@
         "reminder": {
             "doNotRemindMe": "Do not remind me",
             "remindMeOn": "Remind me on"
-        }
-    },
-    "uploads": {
-        "destination": {
-            "home": "Upload occurred in Files' Home"
         }
     }
 }
