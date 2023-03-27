@@ -203,9 +203,21 @@ export const CommonTaskBoard = ({
 
 	const [enableReminder, setEnableReminder] = useState(initialEnableReminder);
 
+	const [date, setDate] = useState<Date | null>(initialDate);
+
+	const handleChange = useCallback<NonNullable<DateTimePickerProps['onChange']>>((newDateValue) => {
+		setDate(newDateValue);
+	}, []);
+
 	const onClickEnableReminder = useCallback<NonNullable<SwitchProps['onClick']>>(
-		() => setEnableReminder((prevState) => !prevState),
-		[]
+		() =>
+			setEnableReminder((prevState) => {
+				if (prevState) {
+					setDate(initialDate);
+				}
+				return !prevState;
+			}),
+		[initialDate]
 	);
 
 	const [isAllDay, setIsAllDay] = useState(initialIsAllDay);
@@ -215,12 +227,6 @@ export const CommonTaskBoard = ({
 		[]
 	);
 
-	const [date, setDate] = useState<Date | null>(initialDate);
-
-	const handleChange = useCallback<NonNullable<DateTimePickerProps['onChange']>>((newDateValue) => {
-		setDate(newDateValue);
-	}, []);
-
 	const [descriptionValue, setDescriptionValue] = useState(initialDescription);
 
 	const onChangeDescription = useCallback<NonNullable<TextAreaProps['onChange']>>((event) => {
@@ -229,10 +235,11 @@ export const CommonTaskBoard = ({
 
 	const isConfirmDisabled = useMemo(
 		() =>
+			date === null ||
 			titleValue.length > TASK_TITLE_MAX_LENGTH ||
 			trim(titleValue).length === 0 ||
 			descriptionValue.length > TASK_DESCRIPTION_MAX_LENGTH,
-		[descriptionValue.length, titleValue]
+		[date, descriptionValue.length, titleValue]
 	);
 
 	const onClickConfirmButton = useCallback<NonNullable<ButtonProps['onClick']>>(() => {
@@ -258,26 +265,26 @@ export const CommonTaskBoard = ({
 	return (
 		<Container
 			crossAlignment={'flex-end'}
-			background="gray5"
+			background={'gray5'}
 			padding={{ horizontal: 'large', bottom: '2.625rem' }}
 		>
 			<Padding vertical={'small'}>
 				<Button
 					disabled={isConfirmDisabled}
-					size="medium"
+					size={'medium'}
 					label={confirmLabel}
 					onClick={onClickConfirmButton}
 				/>
 			</Padding>
 			{banner}
 			<Container
-				background="gray6"
-				mainAlignment="flex-start"
-				crossAlignment="flex-start"
+				background={'gray6'}
+				mainAlignment={'flex-start'}
+				crossAlignment={'flex-start'}
 				padding={{ horizontal: 'small', top: 'small' }}
 				gap={'0.5rem'}
 			>
-				<Text weight={'bold'} overflow="ellipsis">
+				<Text weight={'bold'} overflow={'ellipsis'}>
 					{t('board.label.details', 'Details')}
 				</Text>
 				<Container
@@ -288,8 +295,8 @@ export const CommonTaskBoard = ({
 				>
 					<Input
 						label={t('board.input.title.label', 'Title*')}
-						backgroundColor="gray5"
-						borderColor="gray3"
+						backgroundColor={'gray5'}
+						borderColor={'gray3'}
 						value={titleValue}
 						onChange={onTitleChange}
 						hasError={titleValue.length > TASK_TITLE_MAX_LENGTH}
@@ -304,7 +311,7 @@ export const CommonTaskBoard = ({
 					/>
 					<Select
 						items={priorityItems}
-						background="gray5"
+						background={'gray5'}
 						label={t('board.select.priority.label', 'Priority')}
 						onChange={onPriorityChange}
 						selection={prioritySelection}
@@ -319,7 +326,7 @@ export const CommonTaskBoard = ({
 
 				{enableReminder && (
 					<DateTimePicker
-						width="fill"
+						width={'fill'}
 						label={t('board.dateTimePicker.reminder.label', 'Reminder')}
 						defaultValue={date || undefined}
 						includeTime={!isAllDay}
@@ -336,13 +343,22 @@ export const CommonTaskBoard = ({
 								label={t('board.dateTimePicker.reminder.label', 'Reminder')}
 								CustomIcon={(): JSX.Element => (
 									<CustomIconButton
-										icon="CalendarOutline"
-										size="large"
-										backgroundColor="transparent"
+										icon={'CalendarOutline'}
+										size={'large'}
+										backgroundColor={'transparent'}
 										onClick={noop}
 									/>
 								)}
 								borderColor={'gray3'}
+								hasError={date === null}
+								description={
+									date === null
+										? t(
+												'board.dateTimePicker.description.error.label',
+												'The reminder option is enabled, set data and time for it or disable the reminder'
+										  )
+										: undefined
+								}
 							/>
 						}
 					/>

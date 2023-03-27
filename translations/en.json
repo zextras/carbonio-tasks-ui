@@ -14,6 +14,11 @@
             "edit": "edit"
         },
         "dateTimePicker": {
+            "description": {
+                "error": {
+                    "label": "The reminder option is enabled, set data and time for it or disable the reminder"
+                }
+            },
             "reminder": {
                 "label": "Reminder"
             }
