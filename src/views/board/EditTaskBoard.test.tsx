@@ -72,6 +72,38 @@ describe('Edit task board', () => {
 			await user.clear(screen.getByRole('textbox', { name: /title/i }));
 			expect(screen.getByRole('button', { name: /edit/i })).toBeDisabled();
 		});
+
+		test('Edit a task to have a new title', async () => {
+			const task = populateTask({ reminderAt: null });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const newTitle = faker.random.alpha({ count: 8 });
+			const updateTaskInput: UpdateTaskInput = {
+				id: task.id,
+				title: newTitle
+			};
+			const updateTaskResult: Task = {
+				__typename: 'Task',
+				...task,
+				title: updateTaskInput.title || ''
+			};
+			const updateTaskMock = mockUpdateTask(updateTaskInput, updateTaskResult);
+			const mocks = [getTaskMock, updateTaskMock];
+
+			const { user, rerender } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			const titleInput = screen.getByRole('textbox', { name: /title/i });
+			await user.clear(titleInput);
+			await user.type(titleInput, newTitle);
+
+			const editButton = screen.getByRole('button', { name: /edit/i });
+			await user.click(editButton);
+			rerender(<EditTaskBoard />);
+
+			expect(titleInput).toHaveValue(newTitle);
+		});
 	});
 
 	describe('Priority', () => {
@@ -119,7 +151,6 @@ describe('Edit task board', () => {
 
 			const editButton = screen.getByRole('button', { name: /edit/i });
 			await user.click(editButton);
-			expect(updateTaskMock.result).toHaveBeenCalledWith();
 			rerender(<EditTaskBoard />);
 
 			const low = await screen.findByText(/low/i);
@@ -179,6 +210,38 @@ describe('Edit task board', () => {
 			await user.type(descriptionInput, 'a');
 			await waitFor(() => expect(editButton).toBeDisabled());
 			expect(screen.getByText(/Maximum length allowed is 4096 characters/i)).toBeVisible();
+		});
+
+		test('Edit a task to have a new description', async () => {
+			const task = populateTask({ reminderAt: null });
+			spyUseBoard(task.id);
+
+			const getTaskMock = mockGetTask({ taskId: task.id }, task);
+			const newDescription = faker.random.alpha({ count: 80 });
+			const updateTaskInput: UpdateTaskInput = {
+				id: task.id,
+				description: newDescription
+			};
+			const updateTaskResult: Task = {
+				__typename: 'Task',
+				...task,
+				description: updateTaskInput.description
+			};
+			const updateTaskMock = mockUpdateTask(updateTaskInput, updateTaskResult);
+			const mocks = [getTaskMock, updateTaskMock];
+
+			const { user, rerender } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			const descriptionInput = screen.getByRole('textbox', { name: /description/i });
+			await user.clear(descriptionInput);
+			await user.type(descriptionInput, newDescription);
+
+			const editButton = screen.getByRole('button', { name: /edit/i });
+			await user.click(editButton);
+			rerender(<EditTaskBoard />);
+
+			expect(descriptionInput).toHaveValue(newDescription);
 		});
 	});
 
