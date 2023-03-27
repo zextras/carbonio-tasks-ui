@@ -273,6 +273,9 @@ export const RemindersManager = (): JSX.Element => {
 					remindersByDate[dateKey],
 					(registeredReminder) => registeredReminder.id === reminder.id
 				);
+				if (remindersByDate[dateKey].length === 0) {
+					delete remindersByDate[dateKey];
+				}
 				forEach(removedItems, (item) => {
 					// clear timout for the removed reminders
 					item.clearTimout();
