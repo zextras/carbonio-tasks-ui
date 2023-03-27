@@ -9,11 +9,25 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
+import addMonths from 'date-fns/addMonths';
+import getDate from 'date-fns/getDate';
+import subDays from 'date-fns/subDays';
+import { graphql } from 'msw';
 
 import EditTaskBoard from './EditTaskBoard';
 import { ICON_REGEXP } from '../../constants/tests';
-import { Priority, type Task, type UpdateTaskInput } from '../../gql/types';
+import {
+	Priority,
+	type Task,
+	UpdateTaskDocument,
+	type UpdateTaskInput,
+	type UpdateTaskMutation,
+	type UpdateTaskMutationVariables
+} from '../../gql/types';
+import getTask from '../../mocks/handlers/getTask';
+import server from '../../mocks/server';
 import { mockGetTask, mockUpdateTask, populateTask } from '../../mocks/utils';
+import { type GraphQLResponseResolver } from '../../types/commons';
 import { setup } from '../../utils/testUtils';
 
 describe('Edit task board', () => {
@@ -222,6 +236,198 @@ describe('Edit task board', () => {
 					/The reminder option is enabled, set date and time for it or disable the reminder/i
 				)
 			).toBeVisible();
+		});
+
+		describe('If one of reminderAt and reminderAllDay is updated, the API is called with both the variables', () => {
+			test('When the reminder is removed, the mutation is called with reminderAt equals to 0 and reminderAllDay equals to false', async () => {
+				const task = populateTask({
+					reminderAt: new Date().getTime(),
+					reminderAllDay: true
+				});
+				getTask.mockImplementation((req, res, ctx) =>
+					res(
+						ctx.data({
+							getTask: task
+						})
+					)
+				);
+
+				const updateTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVariables>
+				> = jest.fn((req, res, context) => {
+					const { updateTask } = req.variables;
+					return res(
+						context.data({
+							updateTask: {
+								id: updateTask.id,
+								status: updateTask.status || task.status,
+								title: updateTask.title || task.title,
+								reminderAt: updateTask.reminderAt || task.reminderAt,
+								reminderAllDay: updateTask.reminderAllDay || task.reminderAllDay,
+								description: updateTask.description || task.description,
+								priority: updateTask.priority || task.priority,
+								createdAt: task.createdAt,
+								__typename: 'Task'
+							}
+						})
+					);
+				});
+
+				server.use(graphql.mutation(UpdateTaskDocument, updateTaskHandler));
+				spyUseBoard(task.id);
+				const { user } = setup(<EditTaskBoard />);
+
+				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await awaitEditBoardRender();
+
+				const switchOnIcon = screen.getByTestId(ICON_REGEXP.switchOn);
+				await user.click(switchOnIcon);
+
+				const editButton = screen.getByRole('button', { name: /edit/i });
+				await user.click(editButton);
+				const expected: Partial<Task> = { id: task.id, reminderAt: 0, reminderAllDay: false };
+				expect(updateTaskHandler).toHaveBeenCalledWith(
+					expect.objectContaining({
+						variables: {
+							updateTask: expected
+						}
+					}),
+					expect.anything(),
+					expect.anything()
+				);
+			});
+			test('When the reminder is updated modifying the reminderAt, the mutation is called with reminderAt equals to the new value and reminderAllDay equals to previous value', async () => {
+				// chosen date is the 1st of next month
+				const nextM = addMonths(new Date().setMilliseconds(0), 1);
+				const chosenDate = subDays(nextM, getDate(nextM) - 1);
+
+				const previousReminderAllDayValue = faker.datatype.boolean();
+
+				const task = populateTask({
+					reminderAt: new Date().getTime(),
+					reminderAllDay: previousReminderAllDayValue
+				});
+				getTask.mockImplementation((req, res, ctx) =>
+					res(
+						ctx.data({
+							getTask: task
+						})
+					)
+				);
+
+				const updateTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVariables>
+				> = jest.fn((req, res, context) => {
+					const { updateTask } = req.variables;
+					return res(
+						context.data({
+							updateTask: {
+								id: updateTask.id,
+								status: updateTask.status || task.status,
+								title: updateTask.title || task.title,
+								reminderAt: updateTask.reminderAt || task.reminderAt,
+								reminderAllDay: updateTask.reminderAllDay || task.reminderAllDay,
+								description: updateTask.description || task.description,
+								priority: updateTask.priority || task.priority,
+								createdAt: task.createdAt,
+								__typename: 'Task'
+							}
+						})
+					);
+				});
+
+				server.use(graphql.mutation(UpdateTaskDocument, updateTaskHandler));
+				spyUseBoard(task.id);
+				const { user } = setup(<EditTaskBoard />);
+
+				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await awaitEditBoardRender();
+
+				await user.click(screen.getByTestId('icon: CalendarOutline'));
+				const nextMonthButton = await screen.findByRole('button', { name: /next month/i });
+				await user.click(nextMonthButton);
+				await user.click(screen.getAllByText('1')[0]);
+
+				const editButton = screen.getByRole('button', { name: /edit/i });
+				await user.click(editButton);
+				const expected: Partial<Task> = {
+					id: task.id,
+					reminderAt: chosenDate.valueOf(),
+					reminderAllDay: previousReminderAllDayValue
+				};
+				expect(updateTaskHandler).toHaveBeenCalledWith(
+					expect.objectContaining({
+						variables: {
+							updateTask: expected
+						}
+					}),
+					expect.anything(),
+					expect.anything()
+				);
+			});
+			test('When the reminder is updated modifying the reminderAllDay, the mutation is called with reminderAllDay equals to the new value and reminderAt equals to previous value', async () => {
+				const previousReminderAtValue = faker.datatype.datetime({ min: new Date().valueOf() });
+
+				const task = populateTask({
+					reminderAt: previousReminderAtValue.getTime(),
+					reminderAllDay: false
+				});
+				getTask.mockImplementation((req, res, ctx) =>
+					res(
+						ctx.data({
+							getTask: task
+						})
+					)
+				);
+
+				const updateTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVariables>
+				> = jest.fn((req, res, context) => {
+					const { updateTask } = req.variables;
+					return res(
+						context.data({
+							updateTask: {
+								id: updateTask.id,
+								status: updateTask.status || task.status,
+								title: updateTask.title || task.title,
+								reminderAt: updateTask.reminderAt || task.reminderAt,
+								reminderAllDay: updateTask.reminderAllDay || task.reminderAllDay,
+								description: updateTask.description || task.description,
+								priority: updateTask.priority || task.priority,
+								createdAt: task.createdAt,
+								__typename: 'Task'
+							}
+						})
+					);
+				});
+
+				server.use(graphql.mutation(UpdateTaskDocument, updateTaskHandler));
+				spyUseBoard(task.id);
+				const { user } = setup(<EditTaskBoard />);
+
+				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await awaitEditBoardRender();
+
+				const allDayCheckbox = await screen.findByText(checkboxLabelText);
+				await user.click(allDayCheckbox);
+
+				const editButton = screen.getByRole('button', { name: /edit/i });
+				await user.click(editButton);
+				const expected: Partial<Task> = {
+					id: task.id,
+					reminderAt: previousReminderAtValue.getTime(),
+					reminderAllDay: true
+				};
+				expect(updateTaskHandler).toHaveBeenCalledWith(
+					expect.objectContaining({
+						variables: {
+							updateTask: expected
+						}
+					}),
+					expect.anything(),
+					expect.anything()
+				);
+			});
 		});
 	});
 });
