@@ -8,7 +8,12 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { act, screen, waitFor, waitForElementToBeRemoved } from '@testing-library/react';
-import { getNotificationManager, type NotificationConfig } from '@zextras/carbonio-shell-ui';
+import * as carbonioShellUi from '@zextras/carbonio-shell-ui';
+import {
+	type AppSetters,
+	getNotificationManager,
+	type NotificationConfig
+} from '@zextras/carbonio-shell-ui';
 import {
 	addMinutes,
 	endOfToday,
@@ -19,6 +24,7 @@ import {
 	startOfYesterday,
 	subMinutes
 } from 'date-fns';
+import { Link } from 'react-router-dom';
 
 import { RemindersManager } from './RemindersManager';
 import { TASKS_ROUTE, TIMEZONE_DEFAULT } from '../constants';
@@ -1041,6 +1047,62 @@ describe('Reminders manager', () => {
 				playSound: true
 			};
 			expect(mockNotify).toHaveBeenCalledWith(notifyConfig);
+		});
+
+		test('Show the badge when there is a new reminder on load but the modal is not visible', async () => {
+			const task = populateTask({
+				reminderAt: faker.date.between(startOfToday(), Date.now()).getTime(),
+				reminderAllDay: false
+			});
+			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
+			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/differentModule`] });
+			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
+			expect(mockShowBadge).toHaveBeenCalledTimes(1);
+			const args: Parameters<AppSetters['updatePrimaryBadge']> = [{ show: true }, TASKS_ROUTE];
+			expect(mockShowBadge).toHaveBeenCalledWith(...args);
+		});
+
+		test('Show the badge when a reminders expires but the modal is not visible', async () => {
+			const task = populateTask({
+				reminderAt: faker.date.between(Date.now(), endOfToday()).getTime(),
+				reminderAllDay: false
+			});
+			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const findTaskRequest = mockFindTasks({ status: Status.Open }, [task]);
+			const mocks = [findTaskRequest];
+			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/differentModule`] });
+			await waitFor(() => expect(findTaskRequest.result).toHaveBeenCalled());
+			act(() => {
+				jest.runOnlyPendingTimers();
+			});
+			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
+			expect(mockShowBadge).toHaveBeenCalledTimes(1);
+			const args: Parameters<AppSetters['updatePrimaryBadge']> = [{ show: true }, TASKS_ROUTE];
+			expect(mockShowBadge).toHaveBeenCalledWith(...args);
+		});
+
+		test('Hide the badge when the modal becomes visible', async () => {
+			const task = populateTask({
+				reminderAt: faker.date.between(startOfToday(), Date.now()).getTime(),
+				reminderAllDay: false
+			});
+			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
+			const { user } = setup(
+				<>
+					<RemindersManager />
+					<Link to={`/${TASKS_ROUTE}`}>Go to Tasks</Link>
+				</>,
+				{ mocks, initialRouterEntries: [`/differentModule`] }
+			);
+			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
+			mockShowBadge.mockClear();
+			await user.click(screen.getByRole('link', { name: 'Go to Tasks' }));
+			await waitForModalToOpen();
+			const args: Parameters<AppSetters['updatePrimaryBadge']> = [{ show: false }, TASKS_ROUTE];
+			expect(mockShowBadge).toHaveBeenCalled();
+			expect(mockShowBadge).toHaveBeenCalledWith(...args);
 		});
 	});
 

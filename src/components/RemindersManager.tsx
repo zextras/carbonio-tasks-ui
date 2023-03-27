@@ -7,7 +7,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 
 import { useApolloClient, useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Modal } from '@zextras/carbonio-design-system';
-import { getNotificationManager } from '@zextras/carbonio-shell-ui';
+import { getNotificationManager, updatePrimaryBadge } from '@zextras/carbonio-shell-ui';
 import { isAfter, isBefore, isToday, startOfDay } from 'date-fns';
 import {
 	chain,
@@ -171,6 +171,11 @@ export const RemindersManager = (): JSX.Element => {
 		[]
 	);
 
+	const notifyReminders = useCallback(() => {
+		notificationManager.notify({ showPopup: false, playSound: true });
+		updatePrimaryBadge({ show: true }, TASKS_ROUTE);
+	}, [notificationManager]);
+
 	const _showReminder = useCallback(
 		(...reminders: ReminderEntity[]): void => {
 			setModalOpen((alreadyOpen) => {
@@ -204,7 +209,7 @@ export const RemindersManager = (): JSX.Element => {
 						}));
 						if (newReminders.length > 0) {
 							// notify with a sound the adding of a new reminder in the modal
-							notificationManager.notify({ showPopup: false, playSound: true });
+							notifyReminders();
 						}
 						return [...newState, ...newReminderEntries];
 					});
@@ -223,7 +228,7 @@ export const RemindersManager = (): JSX.Element => {
 				const shouldOpenModal = remindersByDateList.length + reminderEntries.length > 0;
 				if (shouldOpenModal) {
 					// notify with a sound the opening of the modal
-					notificationManager.notify({ showPopup: false, playSound: true });
+					notifyReminders();
 				}
 				// reset timout for reminders shown with this call so that they result as already seen in next modals
 				forEach(reminders, (reminder) => {
@@ -232,7 +237,7 @@ export const RemindersManager = (): JSX.Element => {
 				return shouldOpenModal;
 			});
 		},
-		[getVisibleReminders, notificationManager, timezone]
+		[getVisibleReminders, notifyReminders, timezone]
 	);
 
 	const showReminderDebounced = useMemo(() => debounceWithAllArgs(_showReminder), [_showReminder]);
@@ -533,6 +538,12 @@ export const RemindersManager = (): JSX.Element => {
 		() => (showCompleteAll ? 'CheckmarkCircleOutline' : 'UndoOutline'),
 		[showCompleteAll]
 	);
+
+	useEffect(() => {
+		if (isModalOpen && isTasksView) {
+			updatePrimaryBadge({ show: false }, TASKS_ROUTE);
+		}
+	}, [isModalOpen, isTasksView]);
 
 	return (
 		<Modal

@@ -12,7 +12,8 @@ import {
 	type AccountSettings,
 	type Board,
 	type HistoryParams,
-	type INotificationManager
+	type INotificationManager,
+	type AppSetters
 } from '@zextras/carbonio-shell-ui';
 import { type TOptions } from 'i18next';
 import { noop, trimStart } from 'lodash';
@@ -94,3 +95,5 @@ const notificationManagerInstance: INotificationManager = {
 	multipleNotify: noop
 };
 export const getNotificationManager = (): INotificationManager => notificationManagerInstance;
+
+export const updatePrimaryBadge: AppSetters['updatePrimaryBadge'] = noop;
