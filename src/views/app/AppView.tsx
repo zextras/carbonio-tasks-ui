@@ -17,13 +17,7 @@ const AppView = (): JSX.Element => {
 	const { path } = useRouteMatch();
 
 	const routes = useMemo(
-		() => [
-			<Route
-				path={`${trimEnd(path, '/')}${ROUTES.task}`}
-				component={TasksView}
-				key={'task-view-route'}
-			/>
-		],
+		() => <Route path={`${trimEnd(path, '/')}${ROUTES.task}`} component={TasksView} />,
 		[path]
 	);
 
