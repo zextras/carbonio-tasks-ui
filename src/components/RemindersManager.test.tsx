@@ -697,14 +697,11 @@ describe('Reminders manager', () => {
 
 	test('Priority is shown for each task', async () => {
 		// 9 tasks, 3 with low, 3 medium, 3 high
-		const tasks = populateTaskList(9);
 		const priorities = [Priority.Low, Priority.Medium, Priority.High];
-		tasks.forEach((task, index) => {
-			// eslint-disable-next-line no-param-reassign
-			task.priority = priorities[index % 3];
-			// eslint-disable-next-line no-param-reassign
-			task.reminderAt = Date.now();
-		});
+		const tasks = populateTaskList(9, (index: number) => ({
+			priority: priorities[index % 3],
+			reminderAt: Date.now()
+		}));
 		const mocks = [mockFindTasks({ status: Status.Open }, tasks)];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
@@ -1282,15 +1279,11 @@ describe('Reminders manager', () => {
 		const now = Date.now();
 		const fiveMinutesFromNow = addMinutes(now, 5).getTime();
 		const tenMinutesFromNow = addMinutes(now, 10).getTime();
-		const tasks = populateTaskList(4);
-		tasks.forEach((task, index) => {
-			// eslint-disable-next-line no-param-reassign
-			task.reminderAt = fiveMinutesFromNow;
-			// eslint-disable-next-line no-param-reassign
-			task.reminderAllDay = false;
-			// eslint-disable-next-line no-param-reassign
-			task.title = `Task 5 minutes index ${index}`;
-		});
+		const tasks = populateTaskList(4, (index) => ({
+			reminderAt: fiveMinutesFromNow,
+			reminderAllDay: false,
+			title: `Task 5 minutes index ${index}`
+		}));
 		tasks[3].title = 'Task 10 minutes';
 		tasks[3].reminderAt = tenMinutesFromNow;
 		const taskToEdit = tasks[1];

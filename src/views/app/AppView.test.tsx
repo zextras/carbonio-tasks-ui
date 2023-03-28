@@ -34,12 +34,7 @@ describe('App view', () => {
 	}
 
 	test('Show tasks view', async () => {
-		const tasks = populateTaskList();
-		tasks.forEach((task) => {
-			// reset reminder to avoid the opening of the reminders modal
-			// eslint-disable-next-line no-param-reassign
-			task.reminderAt = null;
-		});
+		const tasks = populateTaskList(10);
 		const findTasksRequest = jest.fn();
 		server.use(
 			graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
@@ -72,11 +67,6 @@ describe('App view', () => {
 
 	test('Open displayer on click on an item', async () => {
 		const tasks = populateTaskList();
-		tasks.forEach((task) => {
-			// reset reminder to avoid the opening of the reminders modal
-			// eslint-disable-next-line no-param-reassign
-			task.reminderAt = null;
-		});
 		const task = tasks[tasks.length - 1];
 		const findTasksRequest = jest.fn();
 		server.use(
@@ -108,7 +98,7 @@ describe('App view', () => {
 	});
 
 	test('List item is highlighted when and only when it is opened in the displayer', async () => {
-		const task = populateTask({ reminderAt: null });
+		const task = populateTask();
 		const findTasksRequest = jest.fn();
 		server.use(
 			graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
@@ -169,12 +159,7 @@ describe('App view', () => {
 		});
 
 		test('When a reminder is completed from the reminders modal, remove the item from the list when the modal is closed with dismiss button', async () => {
-			const tasks = populateTaskList();
-			tasks.forEach((task) => {
-				// disable reminder for all tasks
-				// eslint-disable-next-line no-param-reassign
-				task.reminderAt = null;
-			});
+			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
 			const findTasksRequest = jest.fn();
@@ -210,12 +195,7 @@ describe('App view', () => {
 		});
 
 		test('When a reminder is completed and restored from the reminders modal, leave the item in the list in the same position', async () => {
-			const tasks = populateTaskList();
-			tasks.forEach((task) => {
-				// disable reminder for all tasks
-				// eslint-disable-next-line no-param-reassign
-				task.reminderAt = null;
-			});
+			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
 			const findTasksRequest = jest.fn();
@@ -250,12 +230,7 @@ describe('App view', () => {
 		});
 
 		test('When a reminder is completed from the reminders modal, close the displayer if opened on the item', async () => {
-			const tasks = populateTaskList();
-			tasks.forEach((task) => {
-				// disable reminder for all tasks
-				// eslint-disable-next-line no-param-reassign
-				task.reminderAt = null;
-			});
+			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
 			const findTasksRequest = jest.fn();
@@ -291,12 +266,7 @@ describe('App view', () => {
 		});
 
 		test('When a reminder is completed from the reminders modal, does not close the displayer if opened on another item', async () => {
-			const tasks = populateTaskList();
-			tasks.forEach((task) => {
-				// disable reminder for all tasks
-				// eslint-disable-next-line no-param-reassign
-				task.reminderAt = null;
-			});
+			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
 			const findTasksRequest = jest.fn();
@@ -331,12 +301,7 @@ describe('App view', () => {
 		});
 
 		test('When a reminder is completed and restored from the reminders modal, leave the displayer open if opened on the item', async () => {
-			const tasks = populateTaskList();
-			tasks.forEach((task) => {
-				// disable reminder for all tasks
-				// eslint-disable-next-line no-param-reassign
-				task.reminderAt = null;
-			});
+			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
 			const findTasksRequest = jest.fn();

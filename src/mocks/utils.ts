@@ -57,10 +57,15 @@ export function populateTask(partialTask?: Partial<Task>): Task {
 	};
 }
 
-export function populateTaskList(limit = 10): Task[] {
+export function populateTaskList(
+	limit?: number,
+	defaultValue?: Partial<Task> | ((index: number) => Partial<Task>)
+): Task[] {
 	const list: Task[] = [];
-	for (let i = 0; i < limit; i += 1) {
-		list.push(populateTask());
+	const _limit = limit || 10;
+	for (let i = 0; i < _limit; i += 1) {
+		const defaultTask = typeof defaultValue === 'function' ? defaultValue(i) : defaultValue;
+		list.push(populateTask(defaultTask));
 	}
 	return list;
 }
