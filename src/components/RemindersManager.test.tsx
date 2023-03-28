@@ -1095,6 +1095,39 @@ describe('Reminders manager', () => {
 			expect(mockShowBadge).toHaveBeenCalled();
 			expect(mockShowBadge).toHaveBeenCalledWith(...args);
 		});
+
+		test('Does not show the badge when the modal is shown within tasks module', async () => {
+			const now = Date.now();
+			const fiveMinutesFromNow = addMinutes(now, 5).getTime();
+			const tenMinutesFromNow = addMinutes(now, 10).getTime();
+			const task1 = populateTask({
+				reminderAt: fiveMinutesFromNow,
+				reminderAllDay: false
+			});
+			const task2 = populateTask({ reminderAt: now, reminderAllDay: true });
+			const task3 = populateTask({ reminderAt: tenMinutesFromNow, reminderAllDay: false });
+			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const findTaskRequest = mockFindTasks({ status: Status.Open }, [task1, task2, task3]);
+			const mocks = [findTaskRequest];
+			const { user } = setup(<RemindersManager />, {
+				mocks,
+				initialRouterEntries: [`/${TASKS_ROUTE}`]
+			});
+			await waitFor(() => expect(findTaskRequest.result).toHaveBeenCalled());
+			await waitForModalToOpen();
+			expect(mockShowBadge).not.toHaveBeenCalled();
+			act(() => {
+				jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			});
+			await waitForModalToOpen();
+			expect(mockShowBadge).not.toHaveBeenCalled();
+			await user.click(screen.getByRole('button', { name: /dismiss/i }));
+			act(() => {
+				jest.advanceTimersByTime(tenMinutesFromNow - now);
+			});
+			await waitForModalToOpen();
+			expect(mockShowBadge).not.toHaveBeenCalled();
+		});
 	});
 
 	test('Does not open the modal when a reminders expires if it is set as completed', async () => {

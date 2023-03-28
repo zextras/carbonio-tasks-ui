@@ -136,7 +136,14 @@ export const RemindersManager = (): JSX.Element => {
 	// map of tasks keyed by reminder date (formatted)
 	const remindersByDateRef = useRef<Record<string, ReminderEntity[]>>({});
 	const location = useLocation();
-	const isTasksView = useMemo(() => location.pathname.includes(TASKS_ROUTE), [location]);
+	// both memo and ref to have a var which trigger rerender on update and one which does not
+	const isTasksView = useMemo(() => location.pathname.includes(TASKS_ROUTE), [location.pathname]);
+	const isTasksViewRef = useRef<boolean>(isTasksView);
+	const isBadgeVisibleRef = useRef<boolean>(false);
+
+	useEffect(() => {
+		isTasksViewRef.current = isTasksView;
+	}, [isTasksView]);
 
 	const getVisibleReminders = useCallback(
 		() =>
@@ -170,7 +177,11 @@ export const RemindersManager = (): JSX.Element => {
 
 	const notifyReminders = useCallback(() => {
 		notificationManager.notify({ showPopup: false, playSound: true });
-		updatePrimaryBadge({ show: true }, TASKS_ROUTE);
+		// show badge only if view is not within tasks module
+		if (!isTasksViewRef.current) {
+			updatePrimaryBadge({ show: true }, TASKS_ROUTE);
+			isBadgeVisibleRef.current = true;
+		}
 	}, [notificationManager]);
 
 	const _showReminder = useCallback(
@@ -537,10 +548,11 @@ export const RemindersManager = (): JSX.Element => {
 	);
 
 	useEffect(() => {
-		if (isModalOpen && isTasksView) {
+		if (isTasksView && isBadgeVisibleRef.current) {
+			// hide badge when entering tasks view if it is visible
 			updatePrimaryBadge({ show: false }, TASKS_ROUTE);
 		}
-	}, [isModalOpen, isTasksView]);
+	}, [isTasksView]);
 
 	return (
 		<Modal
