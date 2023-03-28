@@ -11,7 +11,7 @@ import { find } from 'lodash';
 import { Route } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
-import { ROUTES, TIMEZONE_DEFAULT } from '../../constants';
+import { ROUTES } from '../../constants';
 import {
 	EMPTY_DISPLAYER_HINT,
 	EMPTY_LIST_HINT,
@@ -94,8 +94,7 @@ describe('Task view', () => {
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(task.createdAt, {
-					includeTime: false,
-					timezone: TIMEZONE_DEFAULT
+					includeTime: false
 				})
 			)
 		).toBeVisible();
@@ -107,8 +106,7 @@ describe('Task view', () => {
 		expect(
 			screen.getAllByText(
 				formatDateFromTimestamp(task.reminderAt, {
-					includeTime: task.reminderAllDay !== true,
-					timezone: TIMEZONE_DEFAULT
+					includeTime: task.reminderAllDay !== true
 				})
 			)
 		).toHaveLength(2);

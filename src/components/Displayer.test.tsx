@@ -11,7 +11,7 @@ import gql from 'graphql-tag';
 import { Route } from 'react-router-dom';
 
 import { Displayer } from './Displayer';
-import { ROUTES, TIMEZONE_DEFAULT } from '../constants';
+import { ROUTES } from '../constants';
 import { EMPTY_DISPLAYER_HINT, ICON_REGEXP } from '../constants/tests';
 import { type Task } from '../gql/types';
 import { mockGetTask, populateTask } from '../mocks/utils';
@@ -70,9 +70,7 @@ describe('Displayer', () => {
 		expect(screen.getByText(task.title)).toBeVisible();
 		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeVisible();
 		expect(
-			screen.getByText(
-				formatDateFromTimestamp(task.createdAt, { timezone: TIMEZONE_DEFAULT, includeTime: false })
-			)
+			screen.getByText(formatDateFromTimestamp(task.createdAt, { includeTime: false }))
 		).toBeVisible();
 		expect(screen.getByText(RegExp(task.priority, 'i'))).toBeVisible();
 		expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();

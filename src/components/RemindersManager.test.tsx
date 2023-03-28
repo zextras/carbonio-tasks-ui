@@ -29,7 +29,7 @@ import { Link } from 'react-router-dom';
 
 import { RemindersManager } from './RemindersManager';
 import { removeTaskFromList } from '../apollo/cacheUtils';
-import { TASKS_ROUTE, TIMEZONE_DEFAULT } from '../constants';
+import { TASKS_ROUTE } from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import { Priority, Status, type Task, TaskFragmentDoc, type UpdateTaskInput } from '../gql/types';
 import {
@@ -76,7 +76,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayBeforeNow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: true
 				})
 			)
@@ -113,7 +112,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayBeforeNow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: false
 				})
 			)
@@ -131,7 +129,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayAfterNow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: false
 				})
 			)
@@ -158,7 +155,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayAfterNow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: true
 				})
 			)
@@ -181,7 +177,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.queryByText(
 				formatDateFromTimestamp(yesterday, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: true
 				})
 			)
@@ -204,7 +199,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.queryByText(
 				formatDateFromTimestamp(yesterday, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: false
 				})
 			)
@@ -227,7 +221,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.queryByText(
 				formatDateFromTimestamp(tomorrow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: true
 				})
 			)
@@ -250,7 +243,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.queryByText(
 				formatDateFromTimestamp(tomorrow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: false
 				})
 			)
@@ -404,20 +396,16 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		const allDayDate = formatDateFromTimestamp(now, {
-			timezone: TIMEZONE_DEFAULT,
 			includeTime: false
 		});
 		const aMinuteAgoDate = formatDateFromTimestamp(oneMinuteAgo, {
-			timezone: TIMEZONE_DEFAULT,
 			includeTime: true
 		});
 		const fiveMinutesAgoDate = formatDateFromTimestamp(fiveMinutesAgo, {
-			timezone: TIMEZONE_DEFAULT,
 			includeTime: true
 		});
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: false
 			}),
 			{ exact: false }
@@ -475,14 +463,12 @@ describe('Reminders manager', () => {
 		await waitForModalToOpen();
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: false
 			}),
 			{ exact: false }
 		);
 		expect(visibleDates[0]).toHaveTextContent(
 			formatDateFromTimestamp(fiveMinutesFromNow, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: true
 			})
 		);
@@ -533,13 +519,11 @@ describe('Reminders manager', () => {
 		await waitForModalToOpen();
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: false
 			}),
 			{ exact: false }
 		);
 		const expiringRemindersDate = formatDateFromTimestamp(fiveMinutesFromNow, {
-			timezone: TIMEZONE_DEFAULT,
 			includeTime: true
 		});
 		expect(visibleDates[0]).toHaveTextContent(expiringRemindersDate);
@@ -578,14 +562,12 @@ describe('Reminders manager', () => {
 		});
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: false
 			}),
 			{ exact: false }
 		);
 		expect(visibleDates[visibleDates.length - 1]).toHaveTextContent(
 			formatDateFromTimestamp(fiveMinutesFromNow, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: true
 			})
 		);
@@ -632,16 +614,14 @@ describe('Reminders manager', () => {
 		await waitForModalToOpen();
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: false
 			}),
 			{ exact: false }
 		);
 		const expiringRemindersDate = formatDateFromTimestamp(fiveMinutesFromNow, {
-			timezone: TIMEZONE_DEFAULT,
 			includeTime: true
 		});
-		expect(visibleDates[2]).toHaveTextContent(expiringRemindersDate);
+		expect(visibleDates[visibleDates.length - 1]).toHaveTextContent(expiringRemindersDate);
 		// the date is shown only 1 time
 		expect(screen.getByText(expiringRemindersDate)).toBeVisible();
 		const taskTitles = screen.getAllByText(/task item/i);
@@ -698,17 +678,14 @@ describe('Reminders manager', () => {
 		});
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
-				timezone: TIMEZONE_DEFAULT,
 				includeTime: false
 			}),
 			{ exact: false }
 		);
 		const fiveMinutesFromNowDate = formatDateFromTimestamp(fiveMinutesFromNow, {
-			timezone: TIMEZONE_DEFAULT,
 			includeTime: true
 		});
 		const tenMinutesFromNowDate = formatDateFromTimestamp(tenMinutesFromNow, {
-			timezone: TIMEZONE_DEFAULT,
 			includeTime: true
 		});
 		expect(visibleDates[0]).toHaveTextContent(fiveMinutesFromNowDate);
@@ -1170,7 +1147,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(tenMinutesFromNow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: true
 				})
 			)
@@ -1178,7 +1154,6 @@ describe('Reminders manager', () => {
 		expect(
 			screen.queryByText(
 				formatDateFromTimestamp(fiveMinutesFromNow, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: true
 				})
 			)

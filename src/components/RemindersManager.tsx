@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useApolloClient, useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Modal } from '@zextras/carbonio-design-system';
@@ -35,7 +35,6 @@ import { ReminderModalContent } from './ReminderModalContent';
 import { ReminderModalFooter } from './ReminderModalFooter';
 import { removeTaskFromList } from '../apollo/cacheUtils';
 import { TASKS_ROUTE } from '../constants';
-import { TimeZoneContext } from '../contexts';
 import { FindTasksDocument, Status, type Task, UpdateTaskStatusDocument } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
 import { debounceWithAllArgs, formatDateFromTimestamp } from '../utils';
@@ -46,7 +45,7 @@ type TaskWithReminder = Pick<Task, 'id' | 'title' | 'priority' | 'reminderAllDay
 
 type ReminderEntity = TaskWithReminder & {
 	_reminderTimeout: NodeJS.Timeout | null;
-	getKey(timezone: string): string;
+	getKey(): string;
 	/** Whether the reminder is within the range of time inside which it has to be shown to the user */
 	isVisible(): boolean;
 	/** Whether the reminder is valid to trigger a notification */
@@ -63,10 +62,9 @@ function buildReminderEntity(task: TaskWithReminder): ReminderEntity {
 	return {
 		...task,
 		_reminderTimeout: null,
-		getKey(timezone: string): string {
+		getKey(): string {
 			return formatDateFromTimestamp(task.reminderAt, {
-				includeTime: task.reminderAllDay !== true,
-				timezone
+				includeTime: task.reminderAllDay !== true
 			});
 		},
 		isVisible(): boolean {
@@ -112,7 +110,6 @@ function isTaskWithReminder(task: Partial<Task> | null | undefined): task is Tas
 
 export const RemindersManager = (): JSX.Element => {
 	const [t] = useTranslation();
-	const timezone = useContext(TimeZoneContext);
 	const notificationManager = getNotificationManager();
 	const apolloClient = useApolloClient();
 	const { isActive, removeActive } = useActiveItem();
@@ -202,7 +199,7 @@ export const RemindersManager = (): JSX.Element => {
 								newReminders.push(reminder);
 							}
 						});
-						const remindersByDate = groupBy(newReminders, (reminder) => reminder.getKey(timezone));
+						const remindersByDate = groupBy(newReminders, (reminder) => reminder.getKey());
 						const newReminderEntries = map(remindersByDate, (reminderGroup, dateKey) => ({
 							date: dateKey,
 							reminders: reminderGroup
@@ -216,7 +213,7 @@ export const RemindersManager = (): JSX.Element => {
 					// keep modal open
 					return true;
 				}
-				const remindersByDate = groupBy(reminders, (reminder) => reminder.getKey(timezone));
+				const remindersByDate = groupBy(reminders, (reminder) => reminder.getKey());
 				const reminderEntries = map(remindersByDate, (reminderGroup, dateKey) => ({
 					date: dateKey,
 					reminders: reminderGroup
@@ -237,7 +234,7 @@ export const RemindersManager = (): JSX.Element => {
 				return shouldOpenModal;
 			});
 		},
-		[getVisibleReminders, notifyReminders, timezone]
+		[getVisibleReminders, notifyReminders]
 	);
 
 	const showReminderDebounced = useMemo(() => debounceWithAllArgs(_showReminder), [_showReminder]);
@@ -245,7 +242,7 @@ export const RemindersManager = (): JSX.Element => {
 	const registerReminder = useCallback(
 		(reminder: ReminderEntity): void => {
 			const remindersByDate = remindersByDateRef.current;
-			const dateKey = reminder.getKey(timezone);
+			const dateKey = reminder.getKey();
 			if (remindersByDate[dateKey] === undefined) {
 				remindersByDate[dateKey] = [];
 			}
@@ -261,29 +258,26 @@ export const RemindersManager = (): JSX.Element => {
 				remindersByDate[dateKey].push(reminder);
 			}
 		},
-		[showReminderDebounced, timezone]
+		[showReminderDebounced]
 	);
 
-	const unregisterReminder = useCallback(
-		(reminder: ReminderEntity): void => {
-			const remindersByDate = remindersByDateRef.current;
-			const dateKey = reminder.getKey(timezone);
-			if (remindersByDate[dateKey] !== undefined) {
-				const removedItems = remove(
-					remindersByDate[dateKey],
-					(registeredReminder) => registeredReminder.id === reminder.id
-				);
-				if (remindersByDate[dateKey].length === 0) {
-					delete remindersByDate[dateKey];
-				}
-				forEach(removedItems, (item) => {
-					// clear timout for the removed reminders
-					item.clearTimout();
-				});
+	const unregisterReminder = useCallback((reminder: ReminderEntity): void => {
+		const remindersByDate = remindersByDateRef.current;
+		const dateKey = reminder.getKey();
+		if (remindersByDate[dateKey] !== undefined) {
+			const removedItems = remove(
+				remindersByDate[dateKey],
+				(registeredReminder) => registeredReminder.id === reminder.id
+			);
+			if (remindersByDate[dateKey].length === 0) {
+				delete remindersByDate[dateKey];
 			}
-		},
-		[timezone]
-	);
+			forEach(removedItems, (item) => {
+				// clear timout for the removed reminders
+				item.clearTimout();
+			});
+		}
+	}, []);
 
 	const updateRegisteredReminder = useCallback(
 		(reminder: ReminderEntity): void => {
@@ -306,7 +300,7 @@ export const RemindersManager = (): JSX.Element => {
 				{ prevKey: undefined, prevIndex: undefined }
 			);
 
-			const newDateKey = reminder.getKey(timezone);
+			const newDateKey = reminder.getKey();
 			if (prevKey && remindersByDate[prevKey] !== undefined && prevIndex >= 0) {
 				// if the reminder was truly registered
 				// clear the timeout of the previous object
@@ -338,7 +332,7 @@ export const RemindersManager = (): JSX.Element => {
 				registerReminder(reminder);
 			}
 		},
-		[registerReminder, showReminderDebounced, timezone]
+		[registerReminder, showReminderDebounced]
 	);
 
 	const registerRemindersFromTasks = useCallback(

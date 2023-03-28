@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { Container, Icon, Row } from '@zextras/carbonio-design-system';
 import { capitalize } from 'lodash';
@@ -13,7 +13,6 @@ import styled from 'styled-components';
 import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';
 import { Text } from './Text';
-import { TimeZoneContext } from '../contexts';
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';
 import type { OneOrMany } from '../types/utils';
@@ -64,12 +63,11 @@ export const TaskDetails = ({
 	description
 }: TaskDetailsProps): JSX.Element => {
 	const [t] = useTranslation();
-	const timeZoneId = useContext(TimeZoneContext);
 	const { isExpired } = useReminder(reminderAt, reminderAllDay);
 
 	const creationDate = useMemo(
-		() => formatDateFromTimestamp(createdAt, { timezone: timeZoneId, includeTime: false }),
-		[createdAt, timeZoneId]
+		() => formatDateFromTimestamp(createdAt, { includeTime: false }),
+		[createdAt]
 	);
 
 	return (

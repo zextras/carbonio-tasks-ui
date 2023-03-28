@@ -3,11 +3,10 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import moment from 'moment-timezone';
+import moment from 'moment';
 
-import { TimeZoneContext } from '../contexts';
 import { formatDateFromTimestamp } from '../utils';
 
 type UseReminderReturnType = {
@@ -19,11 +18,9 @@ export const useReminder = (
 	reminderAt: number | null | undefined,
 	reminderAllDay: boolean | null | undefined
 ): UseReminderReturnType => {
-	const timeZoneId = useContext(TimeZoneContext);
-
 	const isExpired = useMemo(() => {
 		if (reminderAt) {
-			const now = moment().tz(timeZoneId);
+			const now = moment();
 			if (reminderAllDay) {
 				return moment(reminderAt).isBefore(now, 'day');
 			}
@@ -31,17 +28,16 @@ export const useReminder = (
 			return moment(reminderAt).isBefore(now);
 		}
 		return false;
-	}, [reminderAllDay, reminderAt, timeZoneId]);
+	}, [reminderAllDay, reminderAt]);
 
 	const formattedDate = useMemo(() => {
 		if (reminderAt) {
 			return formatDateFromTimestamp(reminderAt, {
-				timezone: timeZoneId,
 				includeTime: reminderAllDay !== true
 			});
 		}
 		return '';
-	}, [reminderAllDay, reminderAt, timeZoneId]);
+	}, [reminderAllDay, reminderAt]);
 
 	return { isExpired, formattedDate };
 };
