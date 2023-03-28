@@ -53,7 +53,7 @@ const ReminderItem = ({
 					{status === Status.Complete && <Icon icon={'Checkmark'} color={'success'} />}
 				</Row>
 				<Row wrap={'nowrap'} flexShrink={1} minWidth={0} flexGrow={1} mainAlignment={'flex-start'}>
-					<Text size={'small'}>{title}</Text>
+					<Text size={'medium'}>{title}</Text>
 				</Row>
 				<Row flexShrink={1} flexBasis={'fit-content'}>
 					{status === Status.Complete && (
@@ -69,12 +69,12 @@ const ReminderItem = ({
 			<Row flexShrink={0} minWidth={'fit'}>
 				{status === Status.Complete && (
 					<Tooltip label={t('action.undo')}>
-						<IconButton onClick={undoCompleteAction} icon={'UndoOutline'} />
+						<IconButton onClick={undoCompleteAction} icon={'UndoOutline'} size={'large'} />
 					</Tooltip>
 				)}
 				{status !== Status.Complete && (
 					<Tooltip label={t('action.complete')}>
-						<IconButton onClick={completeAction} icon={'CheckmarkCircleOutline'} />
+						<IconButton onClick={completeAction} icon={'CheckmarkCircleOutline'} size={'large'} />
 					</Tooltip>
 				)}
 			</Row>
@@ -109,12 +109,12 @@ const ReminderGroup = ({
 		return null;
 	}
 	return (
-		<Container gap={'1rem'} height={'fit'} crossAlignment={'flex-start'}>
+		<Container gap={'0.5rem'} height={'fit'} crossAlignment={'flex-start'}>
 			<Row gap={'0.5rem'} wrap={'nowrap'}>
-				<Text color={'secondary'} size={'small'}>
+				<Text color={'secondary'} size={'medium'}>
 					{t('modal.reminder.remindMeOn', 'Remind me on')}
 				</Text>
-				<Text color={'primary'} size={'small'}>
+				<Text color={'primary'} size={'medium'}>
 					{date}
 				</Text>
 			</Row>
