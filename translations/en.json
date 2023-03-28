@@ -51,7 +51,7 @@
         },
         "switch": {
             "enableReminder": {
-                "label": "Enable reminders"
+                "label": "Enable reminder"
             }
         },
         "textArea": {

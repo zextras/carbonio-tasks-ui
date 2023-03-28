@@ -327,7 +327,7 @@ export const CommonTaskBoard = ({
 				<Switch
 					value={enableReminder}
 					onClick={onClickEnableReminder}
-					label={t('board.switch.enableReminder.label', 'Enable reminders')}
+					label={t('board.switch.enableReminder.label', 'Enable reminder')}
 				/>
 
 				{enableReminder && (
