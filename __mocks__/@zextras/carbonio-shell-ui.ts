@@ -91,6 +91,7 @@ export const useBoard: <T>() => Board<T> = () => {
 		icon: ''
 	};
 };
+
 export const t = (key: string, defaultValue?: string | TOptions): string => {
 	if (typeof defaultValue === 'string') {
 		return defaultValue;

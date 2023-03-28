@@ -18,6 +18,8 @@ import EditTaskBoard from './EditTaskBoard';
 import { ICON_REGEXP } from '../../constants/tests';
 import {
 	GetTaskDocument,
+	type GetTaskQuery,
+	type GetTaskQueryVariables,
 	Priority,
 	type Task,
 	UpdateTaskDocument,
@@ -308,6 +310,16 @@ describe('Edit task board', () => {
 					reminderAllDay: true
 				});
 
+				const getTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>
+				> = jest.fn((req, res, ctx) =>
+					res(
+						ctx.data({
+							getTask: task
+						})
+					)
+				);
+
 				const updateTaskHandler: jest.MockedFunction<
 					GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVariables>
 				> = jest.fn((req, res, context) => {
@@ -329,22 +341,14 @@ describe('Edit task board', () => {
 					);
 				});
 
-				const getTask = jest.fn();
 				server.use(
-					graphql.mutation(UpdateTaskDocument, updateTaskHandler),
-					graphql.query(GetTaskDocument, (req, res, ctx) => {
-						getTask();
-						return res(
-							ctx.data({
-								getTask: task
-							})
-						);
-					})
+					graphql.query(GetTaskDocument, getTaskHandler),
+					graphql.mutation(UpdateTaskDocument, updateTaskHandler)
 				);
 				spyUseBoard(task.id);
 				const { user } = setup(<EditTaskBoard />);
 
-				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
 
 				const switchOnIcon = screen.getByTestId(ICON_REGEXP.switchOn);
@@ -375,6 +379,16 @@ describe('Edit task board', () => {
 					reminderAllDay: previousReminderAllDayValue
 				});
 
+				const getTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>
+				> = jest.fn((req, res, ctx) =>
+					res(
+						ctx.data({
+							getTask: task
+						})
+					)
+				);
+
 				const updateTaskHandler: jest.MockedFunction<
 					GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVariables>
 				> = jest.fn((req, res, context) => {
@@ -396,22 +410,14 @@ describe('Edit task board', () => {
 					);
 				});
 
-				const getTask = jest.fn();
 				server.use(
-					graphql.mutation(UpdateTaskDocument, updateTaskHandler),
-					graphql.query(GetTaskDocument, (req, res, ctx) => {
-						getTask();
-						return res(
-							ctx.data({
-								getTask: task
-							})
-						);
-					})
+					graphql.query(GetTaskDocument, getTaskHandler),
+					graphql.mutation(UpdateTaskDocument, updateTaskHandler)
 				);
 				spyUseBoard(task.id);
 				const { user } = setup(<EditTaskBoard />);
 
-				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
 
 				await user.click(screen.getByTestId('icon: CalendarOutline'));
@@ -444,6 +450,16 @@ describe('Edit task board', () => {
 					reminderAllDay: false
 				});
 
+				const getTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>
+				> = jest.fn((req, res, ctx) =>
+					res(
+						ctx.data({
+							getTask: task
+						})
+					)
+				);
+
 				const updateTaskHandler: jest.MockedFunction<
 					GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVariables>
 				> = jest.fn((req, res, context) => {
@@ -465,22 +481,14 @@ describe('Edit task board', () => {
 					);
 				});
 
-				const getTask = jest.fn();
 				server.use(
-					graphql.mutation(UpdateTaskDocument, updateTaskHandler),
-					graphql.query(GetTaskDocument, (req, res, ctx) => {
-						getTask();
-						return res(
-							ctx.data({
-								getTask: task
-							})
-						);
-					})
+					graphql.query(GetTaskDocument, getTaskHandler),
+					graphql.mutation(UpdateTaskDocument, updateTaskHandler)
 				);
 				spyUseBoard(task.id);
 				const { user } = setup(<EditTaskBoard />);
 
-				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
 
 				const allDayCheckbox = await screen.findByText(checkboxLabelText);
