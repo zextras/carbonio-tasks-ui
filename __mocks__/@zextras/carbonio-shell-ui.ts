@@ -78,6 +78,16 @@ export const useBoardHooks = (): BoardHooksContext => ({
 	}
 });
 
+// eslint-disable-next-line arrow-body-style
+export const useBoard: <T>() => Board<T> = () => {
+	return {
+		id: '',
+		title: '',
+		app: '',
+		url: '',
+		icon: ''
+	};
+};
 export const t = (
 	key: string,
 	defaultValue: string | { context: string; defaultValue: string }
