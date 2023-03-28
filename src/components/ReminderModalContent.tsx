@@ -57,7 +57,7 @@ const ReminderItem = ({
 				</Row>
 				<Row flexShrink={1} flexBasis={'fit-content'}>
 					{status === Status.Complete && (
-						<Text size={'small'} weight={'bold'}>
+						<Text size={'medium'} weight={'bold'}>
 							{t('task.status', {
 								context: status.toLowerCase(),
 								defaultValue: 'Completed'
