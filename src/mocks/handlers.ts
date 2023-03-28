@@ -9,13 +9,16 @@ import { graphql, type RequestHandler } from 'msw';
 import completeTask from './handlers/completeTask';
 import findTasks from './handlers/findTasks';
 import getTask from './handlers/getTask';
+import updateTask from './handlers/updateTask';
 import {
 	type CompleteTaskMutation,
 	type CompleteTaskMutationVariables,
 	type FindTasksQuery,
 	type FindTasksQueryVariables,
 	type GetTaskQuery,
-	type GetTaskQueryVariables
+	type GetTaskQueryVariables,
+	type UpdateTaskMutation,
+	type UpdateTaskMutationVariables
 } from '../gql/types';
 
 const handlers: RequestHandler[] = [
@@ -24,7 +27,8 @@ const handlers: RequestHandler[] = [
 	graphql.mutation<CompleteTaskMutation, CompleteTaskMutationVariables>(
 		'completeTask',
 		completeTask
-	)
+	),
+	graphql.mutation<UpdateTaskMutation, UpdateTaskMutationVariables>('updateTask', updateTask)
 ];
 
 export default handlers;

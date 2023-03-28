@@ -17,6 +17,9 @@ import { graphql } from 'msw';
 import EditTaskBoard from './EditTaskBoard';
 import { ICON_REGEXP } from '../../constants/tests';
 import {
+	GetTaskDocument,
+	type GetTaskQuery,
+	type GetTaskQueryVariables,
 	Priority,
 	type Task,
 	UpdateTaskDocument,
@@ -24,7 +27,6 @@ import {
 	type UpdateTaskMutation,
 	type UpdateTaskMutationVariables
 } from '../../gql/types';
-import getTask from '../../mocks/handlers/getTask';
 import server from '../../mocks/server';
 import { mockGetTask, mockUpdateTask, populateTask } from '../../mocks/utils';
 import { type GraphQLResponseResolver } from '../../types/commons';
@@ -307,7 +309,10 @@ describe('Edit task board', () => {
 					reminderAt: new Date().getTime(),
 					reminderAllDay: true
 				});
-				getTask.mockImplementation((req, res, ctx) =>
+
+				const getTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>
+				> = jest.fn((req, res, ctx) =>
 					res(
 						ctx.data({
 							getTask: task
@@ -336,11 +341,14 @@ describe('Edit task board', () => {
 					);
 				});
 
-				server.use(graphql.mutation(UpdateTaskDocument, updateTaskHandler));
+				server.use(
+					graphql.query(GetTaskDocument, getTaskHandler),
+					graphql.mutation(UpdateTaskDocument, updateTaskHandler)
+				);
 				spyUseBoard(task.id);
 				const { user } = setup(<EditTaskBoard />);
 
-				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
 
 				const switchOnIcon = screen.getByTestId(ICON_REGEXP.switchOn);
@@ -370,7 +378,10 @@ describe('Edit task board', () => {
 					reminderAt: new Date().getTime(),
 					reminderAllDay: previousReminderAllDayValue
 				});
-				getTask.mockImplementation((req, res, ctx) =>
+
+				const getTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>
+				> = jest.fn((req, res, ctx) =>
 					res(
 						ctx.data({
 							getTask: task
@@ -399,11 +410,14 @@ describe('Edit task board', () => {
 					);
 				});
 
-				server.use(graphql.mutation(UpdateTaskDocument, updateTaskHandler));
+				server.use(
+					graphql.query(GetTaskDocument, getTaskHandler),
+					graphql.mutation(UpdateTaskDocument, updateTaskHandler)
+				);
 				spyUseBoard(task.id);
 				const { user } = setup(<EditTaskBoard />);
 
-				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
 
 				await user.click(screen.getByTestId('icon: CalendarOutline'));
@@ -435,7 +449,10 @@ describe('Edit task board', () => {
 					reminderAt: previousReminderAtValue.getTime(),
 					reminderAllDay: false
 				});
-				getTask.mockImplementation((req, res, ctx) =>
+
+				const getTaskHandler: jest.MockedFunction<
+					GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>
+				> = jest.fn((req, res, ctx) =>
 					res(
 						ctx.data({
 							getTask: task
@@ -464,11 +481,14 @@ describe('Edit task board', () => {
 					);
 				});
 
-				server.use(graphql.mutation(UpdateTaskDocument, updateTaskHandler));
+				server.use(
+					graphql.query(GetTaskDocument, getTaskHandler),
+					graphql.mutation(UpdateTaskDocument, updateTaskHandler)
+				);
 				spyUseBoard(task.id);
 				const { user } = setup(<EditTaskBoard />);
 
-				await waitFor(() => expect(getTask).toHaveBeenCalled());
+				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
 
 				const allDayCheckbox = await screen.findByText(checkboxLabelText);
