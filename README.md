@@ -7,8 +7,6 @@ SPDX-License-Identifier: AGPL-3.0-only
   <h1>Carbonio Tasks UI </h1>
 </div>
 
-Tasks module for Zextras Carbonio
-
 <div align="center">
 
 Tasks module for Zextras Carbonio
