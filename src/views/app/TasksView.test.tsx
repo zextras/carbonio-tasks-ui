@@ -268,7 +268,55 @@ describe('Task view', () => {
 			await screen.findByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
-			expect(screen.getByText(RegExp(`Task "${task.title}" completed`, 'i'))).toBeVisible();
+			expect(screen.getByText(/Task ".+" completed/i)).toBeVisible();
+			expect(screen.getByRole('button', { name: /undo/i })).toBeVisible();
+		});
+
+		test('Show the title cropped inside the snackbar if longer than 50 chars', async () => {
+			const tasks = populateTaskList();
+			const task = tasks[0];
+			task.title = faker.datatype.string(60);
+			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
+
+			const { user } = setup(
+				<Route path={ROUTES.task}>
+					<TasksView />
+				</Route>,
+				{
+					mocks
+				}
+			);
+			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+			makeListItemsVisible();
+			await screen.findByText(task.title);
+			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
+			await user.click(action);
+			expect(screen.getByText(`Task "${task.title.substring(0, 50)}..." completed`)).toBeVisible();
+			expect(screen.getByRole('button', { name: /undo/i })).toBeVisible();
+		});
+
+		test('Show the entire title inside the snackbar if shorter than 50 chars', async () => {
+			const tasks = populateTaskList();
+			const task = tasks[0];
+			task.title = faker.datatype.string(50);
+			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
+
+			const { user } = setup(
+				<Route path={ROUTES.task}>
+					<TasksView />
+				</Route>,
+				{
+					mocks
+				}
+			);
+			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+			makeListItemsVisible();
+			await screen.findByText(task.title);
+			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
+			await user.click(action);
+			expect(screen.getByText(`Task "${task.title}" completed`)).toBeVisible();
 			expect(screen.getByRole('button', { name: /undo/i })).toBeVisible();
 		});
 

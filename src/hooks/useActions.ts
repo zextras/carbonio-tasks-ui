@@ -37,7 +37,11 @@ export const useActions = (task: Pick<Task, 'id' | 'title'>): Action[] => {
 				type: 'success',
 				key: `snackbar-${Date.now()}`,
 				label: t('snackbar.completeTask', 'Task "{{taskTitle}}" completed', {
-					replace: { taskTitle: task.title }
+					replace: {
+						taskTitle: `${
+							task.title.length > 50 ? task.title.substring(0, 50).concat('...') : task.title
+						}`
+					}
 				}),
 				actionLabel: t('action.undo', 'Undo'),
 				onActionClick: restoreActionHandler
