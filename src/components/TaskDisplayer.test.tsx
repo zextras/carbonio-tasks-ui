@@ -9,7 +9,6 @@ import { faker } from '@faker-js/faker';
 import { screen } from '@testing-library/react';
 
 import { TaskDisplayer } from './TaskDisplayer';
-import { TIMEZONE_DEFAULT } from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import { populateTask } from '../mocks/utils';
 import { formatDateFromTimestamp } from '../utils';
@@ -25,15 +24,12 @@ describe('Task displayer', () => {
 		expect(screen.getByText(task.title)).toBeVisible();
 		expect(screen.getByText(/creation date/i)).toBeVisible();
 		expect(
-			screen.getByText(
-				formatDateFromTimestamp(task.createdAt, { timezone: TIMEZONE_DEFAULT, includeTime: false })
-			)
+			screen.getByText(formatDateFromTimestamp(task.createdAt, { includeTime: false }))
 		).toBeVisible();
 		expect(screen.getByText(/reminder/i)).toBeVisible();
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(task.reminderAt, {
-					timezone: TIMEZONE_DEFAULT,
 					includeTime: task.reminderAllDay !== true
 				})
 			)
@@ -46,8 +42,8 @@ describe('Task displayer', () => {
 		const task = populateTask();
 
 		const { getByRoleWithIcon } = setup(<TaskDisplayer task={task} />);
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeVisible();
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeEnabled();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeVisible();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeEnabled();
 	});
 
 	describe('Actions', () => {

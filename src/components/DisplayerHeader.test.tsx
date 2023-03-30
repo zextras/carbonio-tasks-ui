@@ -38,7 +38,7 @@ describe('Displayer header', () => {
 
 	test('Show close action to close displayer', () => {
 		const { getByRoleWithIcon } = setup(<DisplayerHeader title={faker.lorem.words()} />);
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeVisible();
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeEnabled();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeVisible();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeEnabled();
 	});
 });

@@ -6,39 +6,19 @@
 
 import { useCallback } from 'react';
 
-import {
-	type ApolloCache,
-	type NormalizedCacheObject,
-	type Reference,
-	useMutation
-} from '@apollo/client';
-import { filter } from 'lodash';
+import { type FetchResult, useMutation } from '@apollo/client';
 
 import { useActiveItem } from './useActiveItem';
-import { CompleteTaskDocument, type Task } from '../gql/types';
+import { removeTaskFromList } from '../apollo/cacheUtils';
+import { Status, UpdateTaskStatusDocument, type UpdateTaskStatusMutation } from '../gql/types';
 
-type CompleteActionFn = () => Promise<void>;
+type CompleteActionFn = () => Promise<FetchResult<UpdateTaskStatusMutation>>;
 
-function removeTaskFromList(
-	task: Pick<Task, 'id' | '__typename'>,
-	cache: ApolloCache<NormalizedCacheObject>
-): void {
-	cache.modify({
-		fields: {
-			findTasks(existing: Reference[] | undefined, { toReference }): Reference[] | undefined {
-				if (existing) {
-					const taskRef = toReference(task);
-					return filter(existing, (itemRef) => taskRef?.__ref !== itemRef.__ref);
-				}
-				return existing;
-			}
-		}
-	});
-}
 export const useCompleteAction = (taskId: string): CompleteActionFn => {
-	const [completeTask] = useMutation(CompleteTaskDocument, {
+	const [updateTaskStatus] = useMutation(UpdateTaskStatusDocument, {
 		variables: {
-			id: taskId
+			id: taskId,
+			status: Status.Complete
 		}
 	});
 
@@ -46,10 +26,14 @@ export const useCompleteAction = (taskId: string): CompleteActionFn => {
 
 	return useCallback(
 		() =>
-			completeTask({
+			updateTaskStatus({
 				update: (cache, { data }) => {
 					if (data?.updateTask) {
-						removeTaskFromList(data.updateTask, cache);
+						cache.modify({
+							fields: {
+								findTasks: removeTaskFromList(data.updateTask)
+							}
+						});
 					}
 				}
 			}).then((result) => {
@@ -58,7 +42,8 @@ export const useCompleteAction = (taskId: string): CompleteActionFn => {
 					// for a task which is no more visible
 					removeActive({ replace: true });
 				}
+				return result;
 			}),
-		[completeTask, removeActive]
+		[updateTaskStatus, removeActive]
 	);
 };

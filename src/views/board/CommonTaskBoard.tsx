@@ -32,7 +32,7 @@ import { find, noop, size, trim } from 'lodash';
 import styled from 'styled-components';
 
 import { CustomSelectLabelFactory } from '../../components/CustomSelectLabelFactory';
-import { TextExtended as Text } from '../../components/Text';
+import { Text } from '../../components/Text';
 import {
 	ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT,
 	TASK_DESCRIPTION_MAX_LENGTH,
@@ -327,7 +327,7 @@ export const CommonTaskBoard = ({
 				<Switch
 					value={enableReminder}
 					onClick={onClickEnableReminder}
-					label={t('board.switch.enableReminder.label', 'Enable reminders')}
+					label={t('board.switch.enableReminder.label', 'Enable reminder')}
 				/>
 
 				{enableReminder && (

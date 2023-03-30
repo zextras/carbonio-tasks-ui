@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-import moment from 'moment-timezone';
+import subDays from 'date-fns/subDays';
 
 import { ListItemContent } from './ListItemContent';
 import { ICON_REGEXP } from '../constants/tests';
@@ -53,7 +53,7 @@ describe('List item content', () => {
 
 	describe('Expired icon', () => {
 		test('When the task reminder is expired then reminder expired icon is shown', async () => {
-			const sevenDaysAgo = moment().tz('UTC').subtract(7, 'days');
+			const sevenDaysAgo = subDays(Date.now(), 7);
 
 			setup(
 				<ListItemContent
@@ -81,7 +81,7 @@ describe('List item content', () => {
 		});
 
 		test('When there is a reminder then the string "Remind me on" is shown', async () => {
-			const sevenDaysAgo = moment().tz('UTC').subtract(7, 'days');
+			const sevenDaysAgo = subDays(Date.now(), 7);
 
 			setup(
 				<ListItemContent
@@ -99,7 +99,9 @@ describe('List item content', () => {
 		});
 
 		test('When there is a reminder not flagged as all-day then hours and minutes are shown', async () => {
-			const pastDate = moment.tz('08 08 1988 09:15:00', 'DD MM YYYY hh:mm:ss', 'UTC');
+			// '08 08 1988 09:15:00', 'DD MM YYYY hh:mm:ss'
+			const AUGUST = 7;
+			const pastDate = new Date(1988, AUGUST, 8, 9, 15);
 			setup(
 				<ListItemContent
 					id={'id1'}
@@ -116,7 +118,8 @@ describe('List item content', () => {
 		});
 
 		test('When there is a reminder flagged as all-day then hours and minutes are not shown', async () => {
-			const pastDate = moment.tz('12 06 1995 09:15:00', 'DD MM YYYY hh:mm:ss', 'UTC');
+			const JUNE = 5;
+			const pastDate = new Date(1995, JUNE, 12, 9, 15);
 
 			setup(
 				<ListItemContent
@@ -139,7 +142,15 @@ describe('List item content', () => {
 
 	describe('Expiration', () => {
 		test('An all day reminder is considered expired the day after', async () => {
-			const yesterdayAtNoon = moment.tz('UTC').hour(12).minute(0).subtract(1, 'days');
+			const now = new Date();
+			const yesterdayAtNoon = new Date(
+				now.getFullYear(),
+				now.getMonth(),
+				now.getDate() - 1,
+				12,
+				0,
+				0
+			);
 
 			setup(
 				<ListItemContent
@@ -158,7 +169,7 @@ describe('List item content', () => {
 		});
 
 		test('An all day reminder is not considered expired the same day', async () => {
-			const todayAtNoon = moment.tz('UTC').hour(12).minute(0);
+			const todayAtNoon = new Date().setHours(12);
 
 			setup(
 				<ListItemContent
@@ -166,7 +177,7 @@ describe('List item content', () => {
 					title={'Task title'}
 					priority={Priority.Medium}
 					visible
-					reminderAt={todayAtNoon.valueOf()}
+					reminderAt={todayAtNoon}
 					reminderAllDay
 				/>
 			);
@@ -174,7 +185,7 @@ describe('List item content', () => {
 		});
 
 		test('A time specific reminder is considered expired the millisecond after', async () => {
-			const oneSecondAgo = moment.tz('UTC').subtract(1, 'milliseconds');
+			const oneMilliSecondAgo = Date.now() - 1;
 
 			setup(
 				<ListItemContent
@@ -182,7 +193,7 @@ describe('List item content', () => {
 					title={'Task title'}
 					priority={Priority.Medium}
 					visible
-					reminderAt={oneSecondAgo.valueOf()}
+					reminderAt={oneMilliSecondAgo}
 				/>
 			);
 			const reminderExpiredIcon = await screen.findByTestId(ICON_REGEXP.reminderExpired);
@@ -192,7 +203,7 @@ describe('List item content', () => {
 		});
 
 		test('A time specific reminder is not considered expired the same millisecond', async () => {
-			const now = moment.tz('UTC');
+			const now = Date.now();
 
 			setup(
 				<ListItemContent
@@ -200,7 +211,7 @@ describe('List item content', () => {
 					title={'Task title'}
 					priority={Priority.Medium}
 					visible
-					reminderAt={now.valueOf()}
+					reminderAt={now}
 				/>
 			);
 			expect(screen.queryByTestId(ICON_REGEXP.reminderExpired)).not.toBeInTheDocument();

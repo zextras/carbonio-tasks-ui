@@ -5,8 +5,6 @@
  */
 import { createContext } from 'react';
 
-import { TIMEZONE_DEFAULT } from '../constants';
-
 export const ListContext = createContext<{
 	isFull: boolean;
 	setIsFull?: (full: boolean) => void;
@@ -16,5 +14,3 @@ export const ListContext = createContext<{
 		// not implemented
 	}
 });
-
-export const TimeZoneContext = createContext<string>(TIMEZONE_DEFAULT);

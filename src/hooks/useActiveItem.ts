@@ -3,7 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { useParams } from 'react-router-dom';
 
@@ -20,10 +20,20 @@ type UseActiveItemReturnType = {
 export const useActiveItem = (): UseActiveItemReturnType => {
 	const { navigateTo } = useNavigation();
 	const { taskId } = useParams<TasksPathParams>();
+	const activeTaskIdRef = useRef<string>();
 
+	useEffect(() => {
+		activeTaskIdRef.current = taskId;
+	}, [taskId]);
+
+	/**
+	 * Check if the given id matches the active id.
+	 * The callback is memoized and is not recreated when the active item changes.
+	 * Use activeItem field if you need the dependency to update.
+	 */
 	const isActive = useCallback<UseActiveItemReturnType['isActive']>(
-		(id) => taskId === id,
-		[taskId]
+		(id) => activeTaskIdRef.current === id,
+		[]
 	);
 
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(

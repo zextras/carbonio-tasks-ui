@@ -7,7 +7,7 @@ import React from 'react';
 
 import { Container, Divider, Icon } from '@zextras/carbonio-design-system';
 
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 
 export interface NewTaskLimitBannerProps {
 	bannerLabel: string;

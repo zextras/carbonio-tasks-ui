@@ -7,28 +7,28 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen } from '@testing-library/react';
-import moment from 'moment-timezone';
+import moment from 'moment';
 
 import { Reminder } from './Reminder';
-import { DATE_FORMAT, DATE_TIME_FORMAT, TIMEZONE_DEFAULT } from '../constants';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from '../constants';
 import { setup } from '../utils/testUtils';
 
 describe('Reminder', () => {
 	test('Show time when not set as all day', () => {
-		const date = moment(faker.datatype.datetime()).tz(TIMEZONE_DEFAULT);
+		const date = moment(faker.datatype.datetime());
 		setup(<Reminder reminderAt={date.valueOf()} reminderAllDay={false} />);
 		expect(screen.getByText(date.format(DATE_TIME_FORMAT))).toBeVisible();
 	});
 
 	test('Show only date when set as all day', () => {
-		const date = moment(faker.datatype.datetime()).tz(TIMEZONE_DEFAULT);
+		const date = moment(faker.datatype.datetime());
 		setup(<Reminder reminderAt={date.valueOf()} reminderAllDay />);
 		expect(screen.getByText(date.format(DATE_FORMAT))).toBeVisible();
 		expect(screen.queryByText(date.format(DATE_TIME_FORMAT))).not.toBeInTheDocument();
 	});
 
 	test('When expired show date as error', () => {
-		const date = moment(faker.date.past()).tz(TIMEZONE_DEFAULT);
+		const date = moment(faker.date.past());
 		setup(<Reminder reminderAt={date.valueOf()} />);
 		expect(screen.getByText(date.format(DATE_TIME_FORMAT))).toBeVisible();
 		expect(screen.getByText(date.format(DATE_TIME_FORMAT))).toHaveStyle({
@@ -38,7 +38,7 @@ describe('Reminder', () => {
 	});
 
 	test('When not expired does not show date as error', () => {
-		const date = moment(faker.date.soon()).tz(TIMEZONE_DEFAULT);
+		const date = moment(faker.date.soon());
 		setup(<Reminder reminderAt={date.valueOf()} />);
 		expect(screen.getByText(date.format(DATE_TIME_FORMAT))).toBeVisible();
 		expect(screen.getByText(date.format(DATE_TIME_FORMAT))).toHaveStyle({

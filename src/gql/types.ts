@@ -138,14 +138,6 @@ export type TaskFragment = {
 	createdAt: number;
 } & { __typename?: 'Task' };
 
-export type CompleteTaskMutationVariables = Exact<{
-	id: Scalars['ID'];
-}>;
-
-export type CompleteTaskMutation = {
-	updateTask?: ({ id: string; status: Status } & { __typename?: 'Task' }) | null;
-} & { __typename?: 'Mutation' };
-
 export type CreateTaskMutationVariables = Exact<{
 	newTask: NewTaskInput;
 }>;
@@ -182,6 +174,15 @@ export type UpdateTaskMutation = {
 				createdAt: number;
 		  } & { __typename?: 'Task' })
 		| null;
+} & { __typename?: 'Mutation' };
+
+export type UpdateTaskStatusMutationVariables = Exact<{
+	id: Scalars['ID'];
+	status: Status;
+}>;
+
+export type UpdateTaskStatusMutation = {
+	updateTask?: ({ id: string; status: Status } & { __typename?: 'Task' }) | null;
 } & { __typename?: 'Mutation' };
 
 export type FindTasksQueryVariables = Exact<{
@@ -246,63 +247,6 @@ export const TaskFragmentDoc = {
 		}
 	]
 } as unknown as DocumentNode<TaskFragment, unknown>;
-export const CompleteTaskDocument = {
-	kind: 'Document',
-	definitions: [
-		{
-			kind: 'OperationDefinition',
-			operation: 'mutation',
-			name: { kind: 'Name', value: 'completeTask' },
-			variableDefinitions: [
-				{
-					kind: 'VariableDefinition',
-					variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
-					type: {
-						kind: 'NonNullType',
-						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } }
-					}
-				}
-			],
-			selectionSet: {
-				kind: 'SelectionSet',
-				selections: [
-					{
-						kind: 'Field',
-						name: { kind: 'Name', value: 'updateTask' },
-						arguments: [
-							{
-								kind: 'Argument',
-								name: { kind: 'Name', value: 'updateTask' },
-								value: {
-									kind: 'ObjectValue',
-									fields: [
-										{
-											kind: 'ObjectField',
-											name: { kind: 'Name', value: 'id' },
-											value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } }
-										},
-										{
-											kind: 'ObjectField',
-											name: { kind: 'Name', value: 'status' },
-											value: { kind: 'EnumValue', value: 'COMPLETE' }
-										}
-									]
-								}
-							}
-						],
-						selectionSet: {
-							kind: 'SelectionSet',
-							selections: [
-								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
-								{ kind: 'Field', name: { kind: 'Name', value: 'status' } }
-							]
-						}
-					}
-				]
-			}
-		}
-	]
-} as unknown as DocumentNode<CompleteTaskMutation, CompleteTaskMutationVariables>;
 export const CreateTaskDocument = {
 	kind: 'Document',
 	definitions: [
@@ -419,6 +363,71 @@ export const UpdateTaskDocument = {
 		}
 	]
 } as unknown as DocumentNode<UpdateTaskMutation, UpdateTaskMutationVariables>;
+export const UpdateTaskStatusDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'updateTaskStatus' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'id' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } }
+					}
+				},
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'status' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'Status' } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'updateTask' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'updateTask' },
+								value: {
+									kind: 'ObjectValue',
+									fields: [
+										{
+											kind: 'ObjectField',
+											name: { kind: 'Name', value: 'id' },
+											value: { kind: 'Variable', name: { kind: 'Name', value: 'id' } }
+										},
+										{
+											kind: 'ObjectField',
+											name: { kind: 'Name', value: 'status' },
+											value: { kind: 'Variable', name: { kind: 'Name', value: 'status' } }
+										}
+									]
+								}
+							}
+						],
+						selectionSet: {
+							kind: 'SelectionSet',
+							selections: [
+								{ kind: 'Field', name: { kind: 'Name', value: 'id' } },
+								{ kind: 'Field', name: { kind: 'Name', value: 'status' } }
+							]
+						}
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<UpdateTaskStatusMutation, UpdateTaskStatusMutationVariables>;
 export const FindTasksDocument = {
 	kind: 'Document',
 	definitions: [

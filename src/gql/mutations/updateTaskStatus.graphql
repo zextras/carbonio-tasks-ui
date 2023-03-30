@@ -2,10 +2,10 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-only
 
-mutation completeTask($id: ID!) {
+mutation updateTaskStatus($id: ID!, $status: Status!) {
     updateTask(updateTask: {
         id: $id,
-        status: COMPLETE
+        status: $status
     }) {
         id
         status

@@ -6,13 +6,13 @@
 
 import { graphql, type RequestHandler } from 'msw';
 
-import completeTask from './handlers/completeTask';
 import findTasks from './handlers/findTasks';
 import getTask from './handlers/getTask';
 import updateTask from './handlers/updateTask';
+import updateTaskStatus from './handlers/updateTaskStatus';
 import {
-	type CompleteTaskMutation,
-	type CompleteTaskMutationVariables,
+	type UpdateTaskStatusMutation,
+	type UpdateTaskStatusMutationVariables,
 	type FindTasksQuery,
 	type FindTasksQueryVariables,
 	type GetTaskQuery,
@@ -24,9 +24,9 @@ import {
 const handlers: RequestHandler[] = [
 	graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', findTasks),
 	graphql.query<GetTaskQuery, GetTaskQueryVariables>('getTask', getTask),
-	graphql.mutation<CompleteTaskMutation, CompleteTaskMutationVariables>(
-		'completeTask',
-		completeTask
+	graphql.mutation<UpdateTaskStatusMutation, UpdateTaskStatusMutationVariables>(
+		'updateTaskStatus',
+		updateTaskStatus
 	),
 	graphql.mutation<UpdateTaskMutation, UpdateTaskMutationVariables>('updateTask', updateTask)
 ];

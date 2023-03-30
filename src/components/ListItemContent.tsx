@@ -14,7 +14,7 @@ import { ListItemHoverBar } from './ListItemHoverBar';
 import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';
 import { HoverContainer, ListItemContainer } from './StyledComponents';
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import type { Task } from '../gql/types';
 import { useActions } from '../hooks/useActions';
@@ -25,7 +25,6 @@ type ListItemContentProps = Pick<
 	'id' | 'priority' | 'reminderAt' | 'reminderAllDay' | 'title'
 > & {
 	visible?: boolean;
-	active?: boolean;
 	onClick?: (id: string) => void;
 };
 
@@ -76,7 +75,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 							crossAlignment={'flex-end'}
 							onMouseDown={preventTextSelection}
 							onClick={clickHandler}
-							data-testid={'list-item'}
+							data-testid={'list-item-content'}
 						>
 							<HoverContainer
 								height={LIST_ITEM_HEIGHT}

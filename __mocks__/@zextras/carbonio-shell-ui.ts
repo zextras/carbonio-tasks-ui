@@ -7,12 +7,15 @@
 import { useCallback } from 'react';
 
 import {
+	type BoardHooksContext,
 	type Account,
 	type AccountSettings,
 	type Board,
-	type HistoryParams
+	type HistoryParams,
+	type INotificationManager,
+	type AppSetters
 } from '@zextras/carbonio-shell-ui';
-import { type BoardHooksContext } from '@zextras/carbonio-shell-ui/types/boards';
+import { type TOptions } from 'i18next';
 import { noop, trimStart } from 'lodash';
 import { useHistory } from 'react-router-dom';
 
@@ -88,12 +91,20 @@ export const useBoard: <T>() => Board<T> = () => {
 		icon: ''
 	};
 };
-export const t = (
-	key: string,
-	defaultValue: string | { context: string; defaultValue: string }
-): string => {
+
+export const t = (key: string, defaultValue?: string | TOptions): string => {
 	if (typeof defaultValue === 'string') {
 		return defaultValue;
 	}
-	return defaultValue.defaultValue;
+	return defaultValue?.defaultValue || key;
 };
+
+const notificationManagerInstance: INotificationManager = {
+	notify: noop,
+	playSound: noop,
+	showPopup: noop,
+	multipleNotify: noop
+};
+export const getNotificationManager = (): INotificationManager => notificationManagerInstance;
+
+export const updatePrimaryBadge: AppSetters['updatePrimaryBadge'] = noop;

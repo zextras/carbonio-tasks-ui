@@ -7,7 +7,7 @@ import React from 'react';
 
 import { type TextProps } from '@zextras/carbonio-design-system';
 
-import { TextExtended as Text } from './Text';
+import { Text } from './Text';
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';
 

@@ -11,7 +11,7 @@ import gql from 'graphql-tag';
 import { Route } from 'react-router-dom';
 
 import { Displayer } from './Displayer';
-import { ROUTES, TIMEZONE_DEFAULT } from '../constants';
+import { ROUTES } from '../constants';
 import { EMPTY_DISPLAYER_HINT, ICON_REGEXP } from '../constants/tests';
 import { type Task } from '../gql/types';
 import { mockGetTask, populateTask } from '../mocks/utils';
@@ -49,7 +49,9 @@ describe('Displayer', () => {
 		await screen.findByText(EMPTY_DISPLAYER_HINT);
 		expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
 		expect(screen.queryByText(/creation date/i)).not.toBeInTheDocument();
-		expect(queryByRoleWithIcon('button', { icon: ICON_REGEXP.close })).not.toBeInTheDocument();
+		expect(
+			queryByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })
+		).not.toBeInTheDocument();
 	});
 
 	test('Show task details if a task is active', async () => {
@@ -66,11 +68,9 @@ describe('Displayer', () => {
 		);
 		await screen.findByText(task.title);
 		expect(screen.getByText(task.title)).toBeVisible();
-		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.close })).toBeVisible();
+		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.closeDisplayer })).toBeVisible();
 		expect(
-			screen.getByText(
-				formatDateFromTimestamp(task.createdAt, { timezone: TIMEZONE_DEFAULT, includeTime: false })
-			)
+			screen.getByText(formatDateFromTimestamp(task.createdAt, { includeTime: false }))
 		).toBeVisible();
 		expect(screen.getByText(RegExp(task.priority, 'i'))).toBeVisible();
 		expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();

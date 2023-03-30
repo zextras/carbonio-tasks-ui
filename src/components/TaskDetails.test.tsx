@@ -7,10 +7,10 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen } from '@testing-library/react';
-import moment from 'moment-timezone';
+import moment from 'moment';
 
 import { TaskDetails } from './TaskDetails';
-import { DATE_FORMAT, DATE_TIME_FORMAT, TIMEZONE_DEFAULT } from '../constants';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import { Priority } from '../gql/types';
 import { populateTask } from '../mocks/utils';
@@ -21,11 +21,9 @@ describe('Task details', () => {
 		const task = populateTask();
 		setup(<TaskDetails createdAt={task.createdAt} priority={task.priority} />);
 		expect(screen.getByText(/creation date/i)).toBeVisible();
+		expect(screen.getByText(moment(task.createdAt).format(DATE_FORMAT))).toBeVisible();
 		expect(
-			screen.getByText(moment(task.createdAt).tz(TIMEZONE_DEFAULT).format(DATE_FORMAT))
-		).toBeVisible();
-		expect(
-			screen.queryByText(moment(task.createdAt).tz(TIMEZONE_DEFAULT).format(DATE_TIME_FORMAT))
+			screen.queryByText(moment(task.createdAt).format(DATE_TIME_FORMAT))
 		).not.toBeInTheDocument();
 	});
 
@@ -52,11 +50,9 @@ describe('Task details', () => {
 				/>
 			);
 			expect(screen.getByText(/reminder/i)).toBeVisible();
+			expect(screen.getByText(moment(task.reminderAt).format(DATE_FORMAT))).toBeVisible();
 			expect(
-				screen.getByText(moment(task.reminderAt).tz(TIMEZONE_DEFAULT).format(DATE_FORMAT))
-			).toBeVisible();
-			expect(
-				screen.queryByText(moment(task.reminderAt).tz(TIMEZONE_DEFAULT).format(DATE_TIME_FORMAT))
+				screen.queryByText(moment(task.reminderAt).format(DATE_TIME_FORMAT))
 			).not.toBeInTheDocument();
 		});
 
@@ -73,9 +69,7 @@ describe('Task details', () => {
 				/>
 			);
 			expect(screen.getByText(/reminder/i)).toBeVisible();
-			expect(
-				screen.getByText(moment(task.reminderAt).tz(TIMEZONE_DEFAULT).format(DATE_TIME_FORMAT))
-			).toBeVisible();
+			expect(screen.getByText(moment(task.reminderAt).format(DATE_TIME_FORMAT))).toBeVisible();
 		});
 
 		test('Hide field if not set', () => {
@@ -91,7 +85,7 @@ describe('Task details', () => {
 			);
 			expect(screen.queryByText(/reminder/i)).not.toBeInTheDocument();
 			expect(
-				screen.queryByText(moment(task.reminderAt).tz(TIMEZONE_DEFAULT).format(DATE_FORMAT))
+				screen.queryByText(moment(task.reminderAt).format(DATE_FORMAT))
 			).not.toBeInTheDocument();
 		});
 
@@ -108,7 +102,7 @@ describe('Task details', () => {
 			);
 			expect(screen.getByText(/reminder/i)).toBeVisible();
 			expect(
-				screen.getByText(moment(task.reminderAt).tz(TIMEZONE_DEFAULT).format(DATE_FORMAT), {
+				screen.getByText(moment(task.reminderAt).format(DATE_FORMAT), {
 					exact: false
 				})
 			).toBeVisible();
