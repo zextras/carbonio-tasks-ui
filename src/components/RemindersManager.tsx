@@ -175,14 +175,20 @@ export const RemindersManager = (): JSX.Element => {
 		[]
 	);
 
-	const notifyReminders = useCallback(() => {
-		notificationManager.notify({ showPopup: false, playSound: true });
-		// show badge only if view is not within tasks module
-		if (!isTasksViewRef.current) {
-			updatePrimaryBadge({ show: true }, TASKS_ROUTE);
-			isBadgeVisibleRef.current = true;
-		}
-	}, [notificationManager]);
+	const notifyReminders = useCallback(
+		(badgeCount: number | undefined) => {
+			notificationManager.notify({ showPopup: false, playSound: true });
+			// show badge only if view is not within tasks module
+			if (!isTasksViewRef.current) {
+				updatePrimaryBadge(
+					{ show: true, count: badgeCount, showCount: badgeCount !== undefined },
+					TASKS_ROUTE
+				);
+				isBadgeVisibleRef.current = true;
+			}
+		},
+		[notificationManager]
+	);
 
 	const _showReminder = useCallback(
 		(...reminders: ReminderEntity[]): void => {
@@ -215,11 +221,12 @@ export const RemindersManager = (): JSX.Element => {
 							date: dateKey,
 							reminders: reminderGroup
 						}));
+						newState.push(...newReminderEntries);
 						if (newReminders.length > 0) {
 							// notify with a sound the adding of a new reminder in the modal
-							notifyReminders();
+							notifyReminders(flatMap(newState, (reminderGroup) => reminderGroup.reminders).length);
 						}
-						return [...newState, ...newReminderEntries];
+						return newState;
 					});
 					// keep modal open
 					return true;
@@ -231,12 +238,15 @@ export const RemindersManager = (): JSX.Element => {
 				}));
 				const remindersByDateList = getVisibleReminders();
 				// re-build list entirely and place new reminders on top
-				setModalReminders([...reminderEntries, ...remindersByDateList]);
+				const newModalReminders = [...reminderEntries, ...remindersByDateList];
+				setModalReminders(newModalReminders);
 				// open modal if there is something to show
-				const shouldOpenModal = remindersByDateList.length + reminderEntries.length > 0;
+				const shouldOpenModal = newModalReminders.length > 0;
 				if (shouldOpenModal) {
 					// notify with a sound the opening of the modal
-					notifyReminders();
+					notifyReminders(
+						flatMap(newModalReminders, (reminderGroup) => reminderGroup.reminders).length
+					);
 				}
 				// reset timout for reminders shown with this call so that they result as already seen in next modals
 				forEach(reminders, (reminder) => {
