@@ -7,7 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen, waitFor, within } from '@testing-library/react';
-import { find } from 'lodash';
+import { find, findIndex } from 'lodash';
 import { Route } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
@@ -248,5 +248,74 @@ describe('Task view', () => {
 			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
 			expect(screen.getByText(tasks[1].title)).toBeVisible();
 		});
+
+		test('Show a snackbar with the possibility to undo the action', async () => {
+			const tasks = populateTaskList();
+			const task = tasks[0];
+			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
+
+			const { user } = setup(
+				<Route path={ROUTES.task}>
+					<TasksView />
+				</Route>,
+				{
+					mocks
+				}
+			);
+			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+			makeListItemsVisible();
+			await screen.findByText(task.title);
+			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
+			await user.click(action);
+			expect(screen.getByText(RegExp(`Task "${task.title}" completed`, 'i'))).toBeVisible();
+			expect(screen.getByRole('button', { name: /undo/i })).toBeVisible();
+		});
+
+		test.each([
+			[0, 10, 0],
+			[5, 10, 5],
+			[9, 10, 9]
+		])(
+			'Undo action within the snackbar show the task again in the same position (%i/%i) inside the list and show a snackbar of success',
+			async (taskIndex, listLength, expectedIndex) => {
+				const tasks = populateTaskList(listLength);
+				const task = tasks[taskIndex];
+				const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+				const mocks = [
+					findTasksMock,
+					mockUpdateTaskStatus({ id: task.id, status: Status.Complete }),
+					mockUpdateTaskStatus({ id: task.id, status: Status.Open })
+				];
+
+				const { user } = setup(
+					<Route path={ROUTES.task}>
+						<TasksView />
+					</Route>,
+					{
+						mocks
+					}
+				);
+				await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+				makeListItemsVisible();
+				await screen.findByText(task.title);
+				const listItems = screen.getAllByTestId(TEST_ID_SELECTOR.listItem);
+				expect(listItems).toHaveLength(listLength);
+				expect(findIndex(listItems, (item) => within(item).queryByText(task.title) !== null)).toBe(
+					taskIndex
+				);
+				const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
+				await user.click(action);
+				expect(screen.getAllByTestId(TEST_ID_SELECTOR.listItem)).toHaveLength(listLength - 1);
+				await user.click(screen.getByRole('button', { name: /undo/i }));
+				expect(
+					screen.queryByText(RegExp(`Task "${task.title}" completed`, 'i'))
+				).not.toBeInTheDocument();
+				expect(screen.getByText(/task restored in all tasks folder/i)).toBeVisible();
+				expect(findIndex(listItems, (item) => within(item).queryByText(task.title) !== null)).toBe(
+					expectedIndex
+				);
+			}
+		);
 	});
 });
