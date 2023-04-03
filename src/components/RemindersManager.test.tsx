@@ -1050,7 +1050,10 @@ describe('Reminders manager', () => {
 			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/differentModule`] });
 			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
 			expect(mockShowBadge).toHaveBeenCalledTimes(1);
-			const args: Parameters<AppSetters['updatePrimaryBadge']> = [{ show: true }, TASKS_ROUTE];
+			const args: Parameters<AppSetters['updatePrimaryBadge']> = [
+				expect.objectContaining<Parameters<AppSetters['updatePrimaryBadge']>[0]>({ show: true }),
+				TASKS_ROUTE
+			];
 			expect(mockShowBadge).toHaveBeenCalledWith(...args);
 		});
 
@@ -1069,8 +1072,38 @@ describe('Reminders manager', () => {
 			});
 			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
 			expect(mockShowBadge).toHaveBeenCalledTimes(1);
-			const args: Parameters<AppSetters['updatePrimaryBadge']> = [{ show: true }, TASKS_ROUTE];
+			const args: Parameters<AppSetters['updatePrimaryBadge']> = [
+				expect.objectContaining<Parameters<AppSetters['updatePrimaryBadge']>[0]>({ show: true }),
+				TASKS_ROUTE
+			];
 			expect(mockShowBadge).toHaveBeenCalledWith(...args);
+		});
+
+		test('Show the number of reminders which will be shown in the modal as counter for the badge', async () => {
+			// 6 tasks are past, 3 all day, 3 with time, and 3 expires today after now
+			const tasks = populateTaskList(9, (index) => ({
+				reminderAt: index % 3 === 0 ? addMinutes(Date.now(), 5).getTime() : Date.now(),
+				reminderAllDay: index % 3 === 1
+			}));
+			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mocks = [mockFindTasks({ status: Status.Open }, tasks)];
+			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/differentModule`] });
+			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
+			const args1: Parameters<AppSetters['updatePrimaryBadge']> = [
+				{ show: true, count: 6, showCount: true },
+				TASKS_ROUTE
+			];
+			expect(mockShowBadge).toHaveBeenCalledWith(...args1);
+			mockShowBadge.mockClear();
+			act(() => {
+				jest.runOnlyPendingTimers();
+			});
+			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
+			const args2: Parameters<AppSetters['updatePrimaryBadge']> = [
+				{ show: true, count: 9, showCount: true },
+				TASKS_ROUTE
+			];
+			expect(mockShowBadge).toHaveBeenCalledWith(...args2);
 		});
 
 		test('Hide the badge when the modal becomes visible', async () => {
