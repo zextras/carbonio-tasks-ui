@@ -14,7 +14,7 @@ import { useMemoCompare } from './useMemoCompare';
 import { RANDOM_PLACEHOLDER_TIMEOUT } from '../constants';
 import { type OneOrMany } from '../types/utils';
 
-export const useRandomPlaceholder = <TReturnType>(
+export const useRandomPlaceholder = <TReturnType extends string | object>(
 	translationKey: string,
 	tOptions: TOptions
 ): [randomPlaceholder: TReturnType | undefined, updateRandomPlaceholder: () => void] => {
@@ -27,8 +27,8 @@ export const useRandomPlaceholder = <TReturnType>(
 		() =>
 			/* i18next-extract-disable-next-line */
 			t(translationKey, {
-				returnObjects: true,
-				...tOptionsMemoized
+				...tOptionsMemoized,
+				returnObjects: true
 			}),
 		[t, tOptionsMemoized, translationKey]
 	);
