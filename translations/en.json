@@ -116,11 +116,9 @@
         "allTasks": "All Tasks"
     },
     "snackbar": {
-        "": "Upload occurred in Files' Home",
-        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks.",
-        "upload": {
-            "goToFolder": "Go to folder"
-        }
+        "completeTask": "Task \"{{taskTitle}}\" completed",
+        "restoreTask": "Task restored in All tasks folder",
+        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks."
     },
     "task": {
         "priority_high": "High",

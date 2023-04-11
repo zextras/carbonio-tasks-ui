@@ -49,7 +49,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 	}) => {
 		const [t] = useTranslation();
 		const { isExpired: isReminderExpired } = useReminder(reminderAt, reminderAllDay);
-		const actions = useActions(id);
+		const actions = useActions({ id, title });
 
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);

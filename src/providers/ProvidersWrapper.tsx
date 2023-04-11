@@ -7,10 +7,11 @@
 import React, { useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
-import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
+import { ModalManager } from '@zextras/carbonio-design-system';
 
 import { StyledWrapper } from './StyledWrapper';
 import buildClient from '../apollo';
+import { SnackbarStackManager } from '../components/SnackbarStackManager';
 import { type OneOrMany } from '../types/utils';
 
 interface ProvidersWrapperProps {
@@ -18,9 +19,9 @@ interface ProvidersWrapperProps {
 }
 
 export const ManagersProvider = ({ children }: ProvidersWrapperProps): JSX.Element => (
-	<SnackbarManager>
+	<SnackbarStackManager>
 		<ModalManager>{children}</ModalManager>
-	</SnackbarManager>
+	</SnackbarStackManager>
 );
 
 export const ProvidersWrapper = ({ children }: ProvidersWrapperProps): JSX.Element => {

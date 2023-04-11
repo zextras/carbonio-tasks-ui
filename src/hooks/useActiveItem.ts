@@ -13,7 +13,7 @@ import type { TasksPathParams } from '../types/commons';
 type UseActiveItemReturnType = {
 	activeItem: string;
 	isActive: (id: string) => boolean;
-	setActive: (id: string) => void;
+	setActive: (id: string, options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
 	removeActive: (options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
 };
 
@@ -37,8 +37,8 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 	);
 
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(
-		(id) => {
-			navigateTo(id);
+		(id, options) => {
+			navigateTo(id, options);
 		},
 		[navigateTo]
 	);
