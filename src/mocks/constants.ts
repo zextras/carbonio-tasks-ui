@@ -19,7 +19,5 @@ export const LOGGED_USER: Account = {
 export const USER_SETTINGS: AccountSettings = {
 	attrs: {},
 	props: [],
-	prefs: {
-		zimbraPrefTimeZoneId: 'UTC'
-	}
+	prefs: {}
 };

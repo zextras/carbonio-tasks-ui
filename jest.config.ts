@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { ApolloClient } from '@apollo/client';
+
 export default {
 	// All imported modules in your tests should be mocked automatically
 	// automock: false,
@@ -23,8 +25,8 @@ export default {
 	// An array of glob patterns indicating a set of files for which coverage information should be collected
 	collectCoverageFrom: [
 		'src/**/*.{js,ts}(x)?',
-		'!src/**/mocks/*', // exclude msw handlers
-		'!src/mocks/*', // exclude msw handlers
+		'!src/**/mocks/**/*', // exclude msw handlers
+		'!src/mocks/**/*', // exclude msw handlers
 		'!**/(test|mock)*.ts(x)?', // exclude file which name starts with test or mock
 		'!src/**/types/*' // exclude types
 	],
@@ -44,14 +46,14 @@ export default {
 	coverageReporters: ['text', 'cobertura'],
 
 	// An object that configures minimum threshold enforcement for coverage results
-	// coverageThreshold: {
-	// 	global: {
-	// 		branches: 75,
-	// 		functions: 75,
-	// 		lines: 75,
-	// 		statements: 75
-	// 	}
-	// },
+	coverageThreshold: {
+		global: {
+			branches: 75,
+			functions: 75,
+			lines: 75,
+			statements: 75
+		}
+	},
 
 	// A path to a custom dependency extractor
 	// dependencyExtractor: undefined,
@@ -75,7 +77,7 @@ export default {
 
 	// A set of global variables that need to be available in all test environments
 	globals: {
-		IS_SERVER: false
+		apolloClient: ApolloClient
 	},
 
 	// The maximum amount of workers used to run your tests. Can be specified as % or a number. E.g. maxWorkers: 10% will use 10% of your CPU amount + 1 as the maximum worker number. maxWorkers: 2 will use a maximum of 2 workers.
@@ -146,7 +148,7 @@ export default {
 	setupFiles: ['<rootDir>/src/jest-polyfills.ts'],
 
 	// A list of paths to modules that run some code to configure or set up the testing framework before each test
-	setupFilesAfterEnv: ['<rootDir>/src/jest-env-setup.ts', '<rootDir>/src/jest-mocks.ts'],
+	setupFilesAfterEnv: ['<rootDir>/src/jest-env-setup.ts'],
 
 	// The number of seconds after which a test is considered as slow and reported as such in the results.
 	// slowTestThreshold: 5,

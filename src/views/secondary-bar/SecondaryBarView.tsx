@@ -5,11 +5,38 @@
  */
 
 import React, { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Accordion, AccordionItemType, Container } from '@zextras/carbonio-design-system';
-import { useUserAccount } from '@zextras/carbonio-shell-ui';
 
-const SecondaryBarView = (props: { expanded: boolean }): JSX.Element => {
+import {
+	Accordion,
+	type AccordionItemType,
+	Container,
+	IconButton,
+	Tooltip
+} from '@zextras/carbonio-design-system';
+import { useUserAccount } from '@zextras/carbonio-shell-ui';
+import { flatMap, map, noop } from 'lodash';
+import { useTranslation } from 'react-i18next';
+
+function buildCollapsedItem(item: AccordionItemType): JSX.Element[] {
+	const element = (
+		<Tooltip label={item.label}>
+			<IconButton
+				customSize={{ iconSize: 'large', paddingSize: 'small' }}
+				icon={item.icon || ''}
+				onClick={item.onClick || noop}
+				backgroundColor={(item.active && 'highlight') || undefined}
+				iconColor={item.iconCustomColor || item.iconColor}
+			/>
+		</Tooltip>
+	);
+	const list: JSX.Element[] = [element];
+	if (item.items && item.items.length > 0) {
+		list.push(...flatMap(item.items, (subItem) => buildCollapsedItem(subItem)));
+	}
+	return list;
+}
+
+const SecondaryBarView = ({ expanded }: { expanded: boolean }): JSX.Element => {
 	const [t] = useTranslation();
 	const { name } = useUserAccount();
 
@@ -39,6 +66,8 @@ const SecondaryBarView = (props: { expanded: boolean }): JSX.Element => {
 		[name, t]
 	);
 
+	const collapsedItems = useMemo(() => map(items, (item) => buildCollapsedItem(item)), [items]);
+
 	return (
 		<Container
 			height="auto"
@@ -46,7 +75,9 @@ const SecondaryBarView = (props: { expanded: boolean }): JSX.Element => {
 			mainAlignment="flex-start"
 			crossAlignment="flex-start"
 		>
-			<Accordion role="menuitem" items={items} />
+			{(expanded && <Accordion role="menuitem" items={items} />) || (
+				<Container mainAlignment={'flex-start'}>{collapsedItems}</Container>
+			)}
 		</Container>
 	);
 };

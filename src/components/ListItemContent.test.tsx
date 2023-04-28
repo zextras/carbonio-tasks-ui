@@ -7,70 +7,43 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-import moment from 'moment-timezone';
-import { setup } from '../utils/testUtils';
-import { ListItemContent } from './ListItemContent';
-import { Priority } from '../gql/types';
-import { ICON_REGEXP } from '../contexts/tests';
+import subDays from 'date-fns/subDays';
 
-describe('Task list item', () => {
+import { ListItemContent } from './ListItemContent';
+import { ICON_REGEXP } from '../constants/tests';
+import { Priority } from '../gql/types';
+import { populateTask } from '../mocks/utils';
+import { setup } from '../utils/testUtils';
+
+describe('List item content', () => {
 	describe('Title', () => {
 		test('The title is always shown', () => {
-			setup(
-				<ListItemContent
-					id={'id1'}
-					title={'Task title'}
-					priority={Priority.Medium}
-					timeZoneId={'UTC'}
-					visible
-				/>
-			);
+			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Medium} visible />);
 			const title = screen.getByText('Task title');
 			expect(title).toBeInTheDocument();
 			expect(title).toBeVisible();
 		});
 	});
+
 	describe('Priority', () => {
 		test('When priority is high then high priority icon is shown', async () => {
-			setup(
-				<ListItemContent
-					id={'id1'}
-					title={'Task title'}
-					priority={Priority.High}
-					timeZoneId={'UTC'}
-					visible
-				/>
-			);
+			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.High} visible />);
 			const highPriorityIcon = await screen.findByTestId(ICON_REGEXP.highPriority);
 
 			expect(highPriorityIcon).toBeInTheDocument();
 			expect(highPriorityIcon).toBeVisible();
 		});
+
 		test('When priority is low then low priority icon is shown', async () => {
-			setup(
-				<ListItemContent
-					id={'id1'}
-					title={'Task title'}
-					priority={Priority.Low}
-					timeZoneId={'UTC'}
-					visible
-				/>
-			);
+			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Low} visible />);
 			const lowPriorityIcon = await screen.findByTestId(ICON_REGEXP.lowPriority);
 
 			expect(lowPriorityIcon).toBeInTheDocument();
 			expect(lowPriorityIcon).toBeVisible();
 		});
+
 		test('When priority is medium then medium priority icon is shown', async () => {
-			setup(
-				<ListItemContent
-					id={'id1'}
-					title={'Task title'}
-					priority={Priority.Medium}
-					timeZoneId={'UTC'}
-					visible
-				/>
-			);
+			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Medium} visible />);
 			const mediumPriorityIcon = await screen.findByTestId(ICON_REGEXP.mediumPriority);
 
 			expect(mediumPriorityIcon).toBeInTheDocument();
@@ -80,14 +53,13 @@ describe('Task list item', () => {
 
 	describe('Expired icon', () => {
 		test('When the task reminder is expired then reminder expired icon is shown', async () => {
-			const sevenDaysAgo = moment().tz('UTC').subtract(7, 'days');
+			const sevenDaysAgo = subDays(Date.now(), 7);
 
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
 					reminderAt={sevenDaysAgo.valueOf()}
 				/>
@@ -101,29 +73,21 @@ describe('Task list item', () => {
 
 	describe('Reminder info', () => {
 		test('When there is not a reminder then the string "Do not remind me" is shown', async () => {
-			setup(
-				<ListItemContent
-					id={'id1'}
-					title={'Task title'}
-					priority={Priority.Medium}
-					timeZoneId={'UTC'}
-					visible
-				/>
-			);
+			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Medium} visible />);
 			const reminderText = await screen.findByText('Do not remind me');
 
 			expect(reminderText).toBeInTheDocument();
 			expect(reminderText).toBeVisible();
 		});
+
 		test('When there is a reminder then the string "Remind me on" is shown', async () => {
-			const sevenDaysAgo = moment().tz('UTC').subtract(7, 'days');
+			const sevenDaysAgo = subDays(Date.now(), 7);
 
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
 					reminderAt={sevenDaysAgo.valueOf()}
 				/>
@@ -133,14 +97,16 @@ describe('Task list item', () => {
 			expect(reminderText).toBeInTheDocument();
 			expect(reminderText).toBeVisible();
 		});
+
 		test('When there is a reminder not flagged as all-day then hours and minutes are shown', async () => {
-			const pastDate = moment.tz('08 08 1988 09:15:00', 'DD MM YYYY hh:mm:ss', 'UTC');
+			// '08 08 1988 09:15:00', 'DD MM YYYY hh:mm:ss'
+			const AUGUST = 7;
+			const pastDate = new Date(1988, AUGUST, 8, 9, 15);
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
 					reminderAt={pastDate.valueOf()}
 				/>
@@ -150,15 +116,16 @@ describe('Task list item', () => {
 			expect(reminderDate).toBeInTheDocument();
 			expect(reminderDate).toBeVisible();
 		});
+
 		test('When there is a reminder flagged as all-day then hours and minutes are not shown', async () => {
-			const pastDate = moment.tz('12 06 1995 09:15:00', 'DD MM YYYY hh:mm:ss', 'UTC');
+			const JUNE = 5;
+			const pastDate = new Date(1995, JUNE, 12, 9, 15);
 
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
 					reminderAt={pastDate.valueOf()}
 					reminderAllDay
@@ -175,14 +142,21 @@ describe('Task list item', () => {
 
 	describe('Expiration', () => {
 		test('An all day reminder is considered expired the day after', async () => {
-			const yesterdayAtNoon = moment.tz('UTC').hour(12).minute(0).subtract(1, 'days');
+			const now = new Date();
+			const yesterdayAtNoon = new Date(
+				now.getFullYear(),
+				now.getMonth(),
+				now.getDate() - 1,
+				12,
+				0,
+				0
+			);
 
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
 					reminderAt={yesterdayAtNoon.valueOf()}
 					reminderAllDay
@@ -195,16 +169,15 @@ describe('Task list item', () => {
 		});
 
 		test('An all day reminder is not considered expired the same day', async () => {
-			const todayAtNoon = moment.tz('UTC').hour(12).minute(0);
+			const todayAtNoon = new Date().setHours(12);
 
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
-					reminderAt={todayAtNoon.valueOf()}
+					reminderAt={todayAtNoon}
 					reminderAllDay
 				/>
 			);
@@ -212,16 +185,15 @@ describe('Task list item', () => {
 		});
 
 		test('A time specific reminder is considered expired the millisecond after', async () => {
-			const oneSecondAgo = moment.tz('UTC').subtract(1, 'milliseconds');
+			const oneMilliSecondAgo = Date.now() - 1;
 
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
-					reminderAt={oneSecondAgo.valueOf()}
+					reminderAt={oneMilliSecondAgo}
 				/>
 			);
 			const reminderExpiredIcon = await screen.findByTestId(ICON_REGEXP.reminderExpired);
@@ -231,19 +203,44 @@ describe('Task list item', () => {
 		});
 
 		test('A time specific reminder is not considered expired the same millisecond', async () => {
-			const now = moment.tz('UTC');
+			const now = Date.now();
 
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
-					timeZoneId={'UTC'}
 					visible
-					reminderAt={now.valueOf()}
+					reminderAt={now}
 				/>
 			);
 			expect(screen.queryByTestId(ICON_REGEXP.reminderExpired)).not.toBeInTheDocument();
 		});
+	});
+
+	test('Click on item calls callback', async () => {
+		const task = populateTask();
+		const clickFn = jest.fn();
+		const { user } = setup(
+			<ListItemContent
+				id={task.id}
+				priority={task.priority}
+				title={task.title}
+				onClick={clickFn}
+				visible
+			/>
+		);
+		await user.click(screen.getByText(task.title));
+		expect(clickFn).toHaveBeenCalled();
+		expect(clickFn).toHaveBeenCalledTimes(1);
+	});
+
+	test('When not visible, no data is shown', () => {
+		const task = populateTask();
+		setup(
+			<ListItemContent id={task.id} priority={Priority.High} title={task.title} visible={false} />
+		);
+		expect(screen.queryByText(task.title)).not.toBeInTheDocument();
+		expect(screen.queryByTestId(ICON_REGEXP.highPriority)).not.toBeInTheDocument();
 	});
 });

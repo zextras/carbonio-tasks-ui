@@ -1,6 +1,6 @@
 {
   "extends": "@zextras/carbonio-ui-configs/rules/typescript.json",
-	"compilerOptions": { 
+	"compilerOptions": {
 		"skipLibCheck": true
 	},
   "include": ["src/**/*.ts", "src/**/*.tsx"],

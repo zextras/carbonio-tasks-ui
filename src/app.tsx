@@ -5,23 +5,35 @@
  */
 
 import React, { lazy, Suspense, useEffect } from 'react';
+
 import {
 	ACTION_TYPES,
 	addBoard,
 	addBoardView,
 	addRoute,
 	registerActions,
-	SecondaryBarComponentProps,
+	type SecondaryBarComponentProps,
 	Spinner
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
+import { Route } from 'react-router-dom';
+
+import { RemindersManager } from './components/RemindersManager';
 import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
-import { Placeholder } from './components/placeholder';
+import { ProvidersWrapper } from './providers/ProvidersWrapper';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "appView" */ './views/app/AppView'));
 
 const LazySecondaryBarView = lazy(
 	() => import(/* webpackChunkName: "secondaryView" */ './views/secondary-bar/SecondaryBarView')
+);
+
+const LazyNewTaskBoardView = lazy(
+	() => import(/* webpackChunkName: "newTaskView" */ './views/board/NewTaskBoard')
+);
+
+const LazyEditTaskBoardView = lazy(
+	() => import(/* webpackChunkName: "editTaskView" */ './views/board/EditTaskBoard')
 );
 
 const AppView = (): JSX.Element => (
@@ -36,8 +48,25 @@ const SecondaryBarView = (props: SecondaryBarComponentProps): JSX.Element => (
 	</Suspense>
 );
 
+const NewTaskBoardView = (): JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<ProvidersWrapper>
+			<LazyNewTaskBoardView />
+		</ProvidersWrapper>
+	</Suspense>
+);
+
+const EditTaskBoardView = (): JSX.Element => (
+	<Suspense fallback={<Spinner />}>
+		<ProvidersWrapper>
+			<LazyEditTaskBoardView />
+		</ProvidersWrapper>
+	</Suspense>
+);
+
 const App = (): React.ReactNode => {
 	const [t] = useTranslation();
+
 	useEffect(() => {
 		const appNameLabel = t('label.app_name', 'Tasks');
 
@@ -53,8 +82,12 @@ const App = (): React.ReactNode => {
 
 		// boards
 		addBoardView({
-			route: TASKS_ROUTE,
-			component: Placeholder
+			route: `${TASKS_ROUTE}/new`,
+			component: NewTaskBoardView
+		});
+		addBoardView({
+			route: `${TASKS_ROUTE}/edit`,
+			component: EditTaskBoardView
 		});
 	}, [t]);
 
@@ -67,20 +100,23 @@ const App = (): React.ReactNode => {
 				id: 'new-task',
 				label: t('label.new', 'New Task'),
 				icon: 'ListViewOutline',
-				click: (): void => {
-					addBoard({ url: TASKS_ROUTE, title: 'Main Board' });
+				onClick: (): void => {
+					addBoard({ url: `${TASKS_ROUTE}/new`, title: t('board.newTask.title', 'New Task') });
 				},
 				disabled: false,
 				primary: true,
-				group: TASKS_APP_ID,
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				type: ACTION_TYPES.NEW
+				group: TASKS_APP_ID
 			})
 		});
 	}, [t]);
 
-	return null;
+	return (
+		<Route path={`/:module/:taskId?`}>
+			<ProvidersWrapper>
+				<RemindersManager />
+			</ProvidersWrapper>
+		</Route>
+	);
 };
 
 export default App;

@@ -5,25 +5,24 @@
  */
 
 import React, { useMemo } from 'react';
-import { Container, Responsive } from '@zextras/carbonio-design-system';
-import { useQuery } from '@apollo/client';
-import { filter } from 'lodash';
-import { DISPLAYER_WIDTH } from '../../constants';
-import { Displayer } from '../../components/Displayer';
-import { FindTasksDocument, FindTasksQuery } from '../../gql/types';
-import { ListContext } from '../../contexts';
-import { NonNullableList } from '../../types/utils';
-import { TaskList } from '../../components/TaskList';
 
-function identity<Type>(arg: Type | null): arg is Type {
-	return arg !== null;
-}
+import { useQuery } from '@apollo/client';
+import { Container, Responsive } from '@zextras/carbonio-design-system';
+import { filter } from 'lodash';
+
+import { Displayer } from '../../components/Displayer';
+import { TaskList } from '../../components/TaskList';
+import { DISPLAYER_WIDTH } from '../../constants';
+import { ListContext } from '../../contexts';
+import { FindTasksDocument, type FindTasksQuery, Status } from '../../gql/types';
+import type { NonNullableList } from '../../types/utils';
+import { identity } from '../../utils';
 
 export const TasksView = (): JSX.Element => {
 	const { data: findTasksResult } = useQuery(FindTasksDocument, {
-		fetchPolicy: 'network-only',
-		// set next fetch policy to cache-first so that re-renders does not trigger new network queries
-		nextFetchPolicy: 'cache-first',
+		variables: {
+			status: Status.Open
+		},
 		notifyOnNetworkStatusChange: true,
 		errorPolicy: 'all'
 	});

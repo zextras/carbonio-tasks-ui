@@ -4,35 +4,36 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { ReactElement, useMemo } from 'react';
+import React, { type ReactElement, useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import {
-	ByRoleMatcher,
-	ByRoleOptions,
-	GetAllBy,
+	act,
+	type ByRoleMatcher,
+	type ByRoleOptions,
+	type GetAllBy,
 	queries,
 	queryHelpers,
 	render,
-	RenderOptions,
-	RenderResult,
+	type RenderOptions,
+	type RenderResult,
 	screen,
 	within
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
-import { PreviewManager } from '@zextras/carbonio-ui-preview';
-import { GraphQLError } from 'graphql';
+import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
-import i18next, { i18n } from 'i18next';
-import { Mock } from './mockUtils';
+import { type Mock } from '../mocks/utils';
+import { ManagersProvider } from '../providers/ProvidersWrapper';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
-export type UserEvent = ReturnType<(typeof userEvent)['setup']>;
+export type UserEvent = ReturnType<(typeof userEvent)['setup']> & {
+	readonly rightClick: (target: Element) => Promise<void>;
+};
 
 /**
  * Matcher function to search a string in more html elements and not just in a single element.
@@ -124,18 +125,6 @@ const customQueries = {
 	findByRoleWithIcon
 };
 
-function escapeRegExp(string: string): string {
-	return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-/**
- * Utility to generate an error for mocks that can be decoded with {@link decodeError}
- * @param message
- */
-export function generateError(message: string): GraphQLError {
-	return new GraphQLError(`Controlled error: ${message}`);
-}
-
 const getAppI18n = (): i18n => {
 	const newI18n = i18next.createInstance();
 	newI18n
@@ -160,37 +149,41 @@ interface WrapperProps {
 	mocks?: Mock[];
 }
 
-const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): JSX.Element => {
+const ApolloProviderWrapper = ({
+	children,
+	mocks
+}: {
+	children: React.ReactNode;
+	mocks: Mock[] | undefined;
+}): JSX.Element =>
+	mocks ? (
+		<MockedProvider mocks={mocks} cache={global.apolloClient.cache}>
+			{children}
+		</MockedProvider>
+	) : (
+		<ApolloProvider client={global.apolloClient}>{children}</ApolloProvider>
+	);
+
+export const I18NextTestProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
 	const i18nInstance = useMemo(() => getAppI18n(), []);
 
-	const ApolloProviderWrapper: React.FC = ({ children: apolloChildren }) =>
-		mocks ? (
-			<MockedProvider mocks={mocks} cache={global.apolloClient.cache}>
-				{apolloChildren}
-			</MockedProvider>
-		) : (
-			<ApolloProvider client={global.apolloClient}>{apolloChildren}</ApolloProvider>
-		);
-
-	return (
-		<ApolloProviderWrapper>
-			<MemoryRouter
-				initialEntries={initialRouterEntries}
-				initialIndex={(initialRouterEntries?.length || 1) - 1}
-			>
-				<StyledWrapper>
-					<I18nextProvider i18n={i18nInstance}>
-						<SnackbarManager>
-							<ModalManager>
-								<PreviewManager>{children}</PreviewManager>
-							</ModalManager>
-						</SnackbarManager>
-					</I18nextProvider>
-				</StyledWrapper>
-			</MemoryRouter>
-		</ApolloProviderWrapper>
-	);
+	return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
 };
+
+const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): JSX.Element => (
+	<ApolloProviderWrapper mocks={mocks}>
+		<MemoryRouter
+			initialEntries={initialRouterEntries}
+			initialIndex={(initialRouterEntries?.length || 1) - 1}
+		>
+			<StyledWrapper>
+				<I18NextTestProvider>
+					<ManagersProvider>{children}</ManagersProvider>
+				</I18NextTestProvider>
+			</StyledWrapper>
+		</MemoryRouter>
+	</ApolloProviderWrapper>
+);
 
 function customRender(
 	ui: React.ReactElement,
@@ -214,18 +207,53 @@ function customRender(
 }
 
 type SetupOptions = Pick<WrapperProps, 'initialRouterEntries' | 'mocks'> & {
-	renderOptions?: Omit<RenderOptions, 'queries' | 'wrapper'>;
+	renderOptions?: Omit<RenderOptions, 'queries'>;
 	setupOptions?: Parameters<(typeof userEvent)['setup']>[0];
+};
+
+const setupUserEvent = (options: SetupOptions['setupOptions']): UserEvent => {
+	const user = userEvent.setup(options);
+	const rightClick = (target: Element): Promise<void> =>
+		user.pointer({ target, keys: '[MouseRight]' });
+
+	return {
+		...user,
+		rightClick
+	};
 };
 
 export const setup = (
 	ui: ReactElement,
 	options?: SetupOptions
 ): { user: UserEvent } & ReturnType<typeof customRender> => ({
-	user: userEvent.setup({ advanceTimers: jest.advanceTimersByTime, ...options?.setupOptions }),
+	user: setupUserEvent({ advanceTimers: jest.advanceTimersByTime, ...options?.setupOptions }),
 	...customRender(ui, {
 		initialRouterEntries: options?.initialRouterEntries,
 		mocks: options?.mocks,
 		...options?.renderOptions
 	})
 });
+
+export function makeListItemsVisible(): void {
+	const { calls, instances } = (
+		window.IntersectionObserver as jest.Mock<
+			IntersectionObserver,
+			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit]
+		>
+	).mock;
+	calls.forEach((call, index) => {
+		const [onChange] = call;
+		// trigger the intersection on the observed element
+		act(() => {
+			onChange(
+				[
+					{
+						intersectionRatio: 0,
+						isIntersecting: true
+					} as IntersectionObserverEntry
+				],
+				instances[index]
+			);
+		});
+	});
+}

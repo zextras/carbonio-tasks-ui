@@ -6,14 +6,15 @@
 
 import '@testing-library/jest-dom/extend-expect';
 import { act, configure } from '@testing-library/react';
+import dotenv from 'dotenv';
 import failOnConsole from 'jest-fail-on-console';
+import 'jest-styled-components';
+import { noop } from 'lodash';
 
-import server from './mocks/server';
 import buildClient from './apollo';
+import server from './mocks/server';
 
-type FileSystemDirectoryEntryMock = Omit<FileSystemDirectoryEntry, 'filesystem'> & {
-	filesystem: Partial<FileSystemDirectoryEntry['filesystem']>;
-};
+dotenv.config();
 
 configure({
 	asyncUtilTimeout: 2000
@@ -42,66 +43,60 @@ beforeEach(() => {
 
 	// reset apollo client cache
 	global.apolloClient.resetStore();
+
+	// mock a simplified Intersection Observer
+	Object.defineProperty(window, 'IntersectionObserver', {
+		writable: true,
+		value: jest.fn(function intersectionObserverMock(
+			callback: IntersectionObserverCallback,
+			options: IntersectionObserverInit
+		) {
+			return {
+				thresholds: options.threshold,
+				root: options.root,
+				rootMargin: options.rootMargin,
+				observe: noop,
+				unobserve: noop,
+				disconnect: noop
+			};
+		})
+	});
 });
 
 beforeAll(() => {
 	server.listen({ onUnhandledRequest: 'warn' });
 
-	jest.retryTimes(2, { logErrorsBeforeRetry: true });
+	const retryTimes = process.env.JEST_RETRY_TIMES ? parseInt(process.env.JEST_RETRY_TIMES, 10) : 2;
+	jest.retryTimes(retryTimes, { logErrorsBeforeRetry: true });
 
 	// initialize an apollo client instance for test and makes it available globally
 	global.apolloClient = buildClient();
 
-	// define browser objects non available in jest
+	// define browser objects not available in jest
 	// https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
+	// if it's necessary to use a jest mock, place the definition in the beforeEach, because the restoreMock
+	// config restore all mocks to the initial value (undefined if the object is not present at all)
+
 	Object.defineProperty(window, 'matchMedia', {
 		writable: true,
-		value: jest.fn().mockImplementation((query) => ({
+		value: (query: string): MediaQueryList => ({
 			matches: false,
 			media: query,
 			onchange: null,
-			addListener: jest.fn(), // Deprecated
-			removeListener: jest.fn(), // Deprecated
-			addEventListener: jest.fn(),
-			removeEventListener: jest.fn(),
-			dispatchEvent: jest.fn()
-		}))
-	});
-
-	// mock a simplified Intersection Observer
-	Object.defineProperty(window, 'IntersectionObserver', {
-		writable: true,
-		value: jest.fn().mockImplementation((callback, options) => ({
-			thresholds: options.threshold,
-			root: options.root,
-			rootMargin: options.rootMargin,
-			observe: jest.fn(),
-			unobserve: jest.fn(),
-			disconnect: jest.fn()
-		}))
+			addListener: noop, // Deprecated
+			removeListener: noop, // Deprecated
+			addEventListener: noop,
+			removeEventListener: noop,
+			dispatchEvent: () => true
+		})
 	});
 
 	Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
 		writable: true,
-		value: jest.fn()
+		value: noop
 	});
 
-	let mockedStore: Record<string, unknown> = {};
-	Object.defineProperty(window, 'localStorage', {
-		writable: true,
-		value: {
-			getItem: jest.fn().mockImplementation((key) => mockedStore[key] || null),
-			setItem: jest.fn().mockImplementation((key, value) => {
-				mockedStore[key] = value.toString();
-			}),
-			removeItem: jest.fn().mockImplementation((key) => {
-				delete mockedStore[key];
-			}),
-			clear() {
-				mockedStore = {};
-			}
-		}
-	});
+	Element.prototype.scrollTo = noop;
 
 	window.resizeTo = function resizeTo(width, height): void {
 		Object.assign(this, {
@@ -111,29 +106,6 @@ beforeAll(() => {
 			outerHeight: height
 		}).dispatchEvent(new this.Event('resize'));
 	};
-
-	Element.prototype.scrollTo = jest.fn();
-
-	Object.defineProperty(window, 'FileSystemDirectoryEntry', {
-		writable: true,
-		// define it as a standard function and not arrow function because arrow functions can't be called with new
-		// eslint-disable-next-line no-shadow
-		value: function FileSystemDirectoryEntryMock(): FileSystemDirectoryEntryMock {
-			return {
-				createReader: jest.fn(),
-				fullPath: '',
-				getDirectory: jest.fn(),
-				getFile: jest.fn,
-				getParent: jest.fn,
-				isDirectory: true,
-				isFile: false,
-				name: '',
-				filesystem: {
-					name: ''
-				}
-			};
-		}
-	});
 });
 
 afterAll(() => server.close());
