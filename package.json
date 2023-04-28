@@ -97,7 +97,7 @@
 		"not dead"
 	],
 	"carbonio": {
-		"translations_repository": "<Insert Repo Here>",
+		"translations_repository": "git@github.com:Zextras/carbonio-tasks-ui-i18n.git",
 		"name": "carbonio-tasks-ui",
 		"priority": 10,
 		"type": "carbonio",
