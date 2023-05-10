@@ -1,0 +1,136 @@
+{
+    "action": {
+        "complete": "Complete",
+        "edit": "Edit",
+        "undo": "Undo"
+    },
+    "board": {
+        "checkbox": {
+            "allDay": {
+                "label": "Remind me at every login throughout the day"
+            }
+        },
+        "confirmButton": {
+            "create": "create",
+            "edit": "edit"
+        },
+        "dateTimePicker": {
+            "description": {
+                "error": {
+                    "label": "The reminder option is enabled, set date and time for it or disable the reminder"
+                }
+            },
+            "reminder": {
+                "label": "Reminder"
+            }
+        },
+        "editTask": {
+            "title": "Edit Task"
+        },
+        "input": {
+            "description": {
+                "error": {
+                    "label": "Maximum length allowed is 1024 characters"
+                }
+            },
+            "title": {
+                "label": "Title*"
+            }
+        },
+        "label": {
+            "description": "Description",
+            "details": "Details"
+        },
+        "newTask": {
+            "title": "New Task"
+        },
+        "select": {
+            "priority": {
+                "label": "Priority"
+            }
+        },
+        "switch": {
+            "enableReminder": {
+                "label": "Enable reminder"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "Maximum length allowed is 4096 characters"
+                }
+            },
+            "taskDescription": {
+                "label": "Task Description"
+            }
+        }
+    },
+    "displayer": {
+        "allTasks": [
+            {
+                "message": "Click the \"NEW\" button to create a Task.",
+                "title": "Start organizing your day."
+            },
+            {
+                "message": "You can create up to 200 tasks.",
+                "title": "Click the \"NEW\" button to create a Task."
+            },
+            {
+                "title": "Click the \"NEW\" button to create a Task and start organizing your activities."
+            }
+        ],
+        "allTasks_limitReached": [
+            {
+                "message": "To create a new one, complete some existing tasks.",
+                "title": "You have reached the maximum number of tasks."
+            }
+        ],
+        "details": {
+            "creationDate": "Creation date",
+            "description": "Description",
+            "priority": "Priority",
+            "reminder": "Reminder"
+        }
+    },
+    "label": {
+        "app_name": "Tasks",
+        "new": "New Task"
+    },
+    "modal": {
+        "close": "Close",
+        "reminder": {
+            "completeAll": "Complete all",
+            "dismiss": "Dismiss",
+            "remindMeOn": "Remind me on",
+            "title": "Tasks reminders",
+            "undoAll": "Undo all"
+        }
+    },
+    "newTaskBoard": {
+        "banner": {
+            "lastTask": "This is the last task you can create. To create more complete your previous tasks.",
+            "limitReached": "You have reached your 200 tasks. To create more complete your previous tasks."
+        }
+    },
+    "secondaryBar": {
+        "allTasks": "All Tasks"
+    },
+    "snackbar": {
+        "completeTask": "Task \"{{taskTitle}}\" completed",
+        "restoreTask": "Task restored in All tasks folder",
+        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks."
+    },
+    "task": {
+        "priority_high": "High",
+        "priority_low": "Low",
+        "priority_medium": "Medium",
+        "status_complete": "Completed",
+        "status_open": "Open"
+    },
+    "tasksListItem": {
+        "reminder": {
+            "doNotRemindMe": "Do not remind me",
+            "remindMeOn": "Remind me on"
+        }
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "action": {
+        "edit": "編集",
+        "undo": "元に戻す"
+    },
+    "board": {
+        "confirmButton": {
+            "edit": "編集する"
+        },
+        "label": {
+            "description": "説明",
+            "details": "詳細"
+        },
+        "select": {
+            "priority": {
+                "label": "優先順位"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "最大文字数は4096文字です"
+                }
+            }
+        },
+        "dateTimePicker": {
+            "reminder": {
+                "label": "リマインダー"
+            }
+        }
+    },
+    "displayer": {
+        "details": {
+            "description": "説明",
+            "priority": "優先順位",
+            "reminder": "リマインダー"
+        }
+    },
+    "label": {
+        "app_name": "タスク"
+    },
+    "modal": {
+        "close": "閉じる",
+        "reminder": {
+            "dismiss": "すべて却下する"
+        }
+    },
+    "task": {
+        "priority_high": "高",
+        "priority_low": "低",
+        "priority_medium": "中間",
+        "status_complete": "完了しました",
+        "status_open": "開く"
+    }
+}
