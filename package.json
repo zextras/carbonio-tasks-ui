@@ -13,7 +13,9 @@
 		"type-check": "tsc --noEmit",
 		"type-check:watch": "npm run type-check -- --watch",
 		"codegen": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config codegen.ts",
-		"codegen:watch": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config codegen.ts --watch"
+		"codegen:watch": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config codegen.ts --watch",
+		"translations:push": "git subtree push --prefix translations $npm_package_config_translations_repository translations-updater/$(date \",+%Y-%m-%d\")",
+		"translations:pull": "git subtree pull --squash --prefix translations $npm_package_config_translations_repository main"
 	},
 	"keywords": [],
 	"author": "",
@@ -103,5 +105,8 @@
 		"type": "carbonio",
 		"display": "Tasks",
 		"icon": "ListViewOutline"
+	},
+	"config": {
+		"translations_repository": "git@bitbucket.org:zextras/com_zextras_zapp_tasks_ui.git"
 	}
 }
