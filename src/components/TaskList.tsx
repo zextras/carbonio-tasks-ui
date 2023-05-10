@@ -9,6 +9,7 @@ import React, { useMemo } from 'react';
 import {
 	Container,
 	Divider,
+	getColor,
 	ListItem,
 	type ListItemProps,
 	ListV2,
@@ -17,9 +18,10 @@ import {
 } from '@zextras/carbonio-design-system';
 import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled, { type DefaultTheme, type SimpleInterpolation } from 'styled-components';
+import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
 
 import { ListItemContent } from './ListItemContent';
+import { HoverBarContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import type { FindTasksQuery } from '../gql/types';
@@ -40,6 +42,37 @@ const StyledListItem = styled(ListItem).attrs<
 	${({ backgroundColor, theme }): SimpleInterpolation =>
 		backgroundColor && pseudoClasses(theme, backgroundColor, 'color')}
 	transition: none;
+
+	${({ backgroundColor, theme }): SimpleInterpolation =>
+		backgroundColor &&
+		css`
+			${HoverBarContainer} {
+				background: linear-gradient(to right, transparent, ${getColor(backgroundColor, theme)});
+			}
+			&:focus ${HoverBarContainer} {
+				background: linear-gradient(
+					to right,
+					transparent,
+					${getColor(`${backgroundColor}.focus`, theme)}
+				);
+			}
+
+			&:hover ${HoverBarContainer} {
+				background: linear-gradient(
+					to right,
+					transparent,
+					${getColor(`${backgroundColor}.hover`, theme)}
+				);
+			}
+
+			&:active ${HoverBarContainer} {
+				background: linear-gradient(
+					to right,
+					transparent,
+					${getColor(`${backgroundColor}.active`, theme)}
+				);
+			}
+		`}
 `;
 
 export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
