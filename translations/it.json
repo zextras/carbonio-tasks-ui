@@ -1,0 +1,55 @@
+{
+    "board": {
+        "label": {
+            "description": "Descrizione",
+            "details": "Dettagli"
+        },
+        "confirmButton": {
+            "edit": "modifica"
+        },
+        "dateTimePicker": {
+            "reminder": {
+                "label": "Promemoria"
+            }
+        },
+        "select": {
+            "priority": {
+                "label": "Priorità"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "Il numero massimo di caratteri consentiti è 4096"
+                }
+            }
+        }
+    },
+    "modal": {
+        "reminder": {
+            "dismiss": "Rifiuta"
+        },
+        "close": "Chiudi"
+    },
+    "task": {
+        "priority_high": "Alta",
+        "priority_low": "Bassa",
+        "priority_medium": "Medio",
+        "status_complete": "Completato",
+        "status_open": "Apri"
+    },
+    "action": {
+        "edit": "Modifica",
+        "undo": "Annulla"
+    },
+    "displayer": {
+        "details": {
+            "description": "Descrizione",
+            "priority": "Priorità",
+            "reminder": "Promemoria"
+        }
+    },
+    "label": {
+        "app_name": "Impegni"
+    }
+}
