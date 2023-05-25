@@ -1,0 +1,55 @@
+{
+    "board": {
+        "label": {
+            "description": "Description",
+            "details": "Détails"
+        },
+        "select": {
+            "priority": {
+                "label": "Priorité"
+            }
+        },
+        "confirmButton": {
+            "edit": "édition"
+        },
+        "dateTimePicker": {
+            "reminder": {
+                "label": "Rappel"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "La longueur maximale autorisée est de 4096 caractères"
+                }
+            }
+        }
+    },
+    "displayer": {
+        "details": {
+            "description": "Description",
+            "priority": "Priorité",
+            "reminder": "Rappel"
+        }
+    },
+    "task": {
+        "priority_medium": "Moyenne",
+        "status_complete": "Complété",
+        "status_open": "Ouvrir",
+        "priority_high": "Haut",
+        "priority_low": "Bas"
+    },
+    "action": {
+        "edit": "Modifier",
+        "undo": "Revenir en arrière"
+    },
+    "label": {
+        "app_name": "Tâches"
+    },
+    "modal": {
+        "close": "Fermer",
+        "reminder": {
+            "dismiss": "Rejeter"
+        }
+    }
+}

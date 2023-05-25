@@ -295,6 +295,7 @@ describe('Edit task board', () => {
 			expect(editButton).toBeEnabled();
 
 			await user.clear(screen.getByRole('textbox', { name: /reminder/i }));
+			await user.keyboard('{Enter}');
 			expect(editButton).toBeDisabled();
 			expect(
 				screen.getByText(
