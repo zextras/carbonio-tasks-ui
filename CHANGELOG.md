@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.2...v0.0.3) (2023-05-25)
+
+
+### Bug Fixes
+
+* fix background of hover bar in dark mode ([bb9ec8c](https://github.com/zextras/carbonio-tasks-ui/commit/bb9ec8c2a200245e1bc786718110cb5a73958fa3)), closes [#19](https://github.com/zextras/carbonio-tasks-ui/issues/19)
+* remove subtree ([9e697a0](https://github.com/zextras/carbonio-tasks-ui/commit/9e697a0c2a8a144806a27f21890526b9bc9c448c))
+
 ### [0.0.2](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.1...v0.0.2) (2023-04-28)
 
 ### 0.0.1 (2023-04-28)
