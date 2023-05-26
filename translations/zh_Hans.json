@@ -1,0 +1,55 @@
+{
+    "modal": {
+        "close": "关闭",
+        "reminder": {
+            "dismiss": "收起"
+        }
+    },
+    "task": {
+        "priority_high": "高",
+        "status_complete": "已完成",
+        "status_open": "打开",
+        "priority_low": "低",
+        "priority_medium": "中等"
+    },
+    "action": {
+        "edit": "编辑",
+        "undo": "撤消"
+    },
+    "board": {
+        "confirmButton": {
+            "edit": "编辑"
+        },
+        "dateTimePicker": {
+            "reminder": {
+                "label": "提醒"
+            }
+        },
+        "label": {
+            "description": "描述",
+            "details": "详细资料"
+        },
+        "select": {
+            "priority": {
+                "label": "优先级"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "最大允许长度4096个字符"
+                }
+            }
+        }
+    },
+    "displayer": {
+        "details": {
+            "description": "描述",
+            "priority": "优先级",
+            "reminder": "提醒"
+        }
+    },
+    "label": {
+        "app_name": "任务"
+    }
+}

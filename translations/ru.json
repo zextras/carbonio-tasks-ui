@@ -1,0 +1,55 @@
+{
+    "action": {
+        "edit": "Редактировать",
+        "undo": "Отменить"
+    },
+    "displayer": {
+        "details": {
+            "reminder": "Напоминание",
+            "description": "Описание",
+            "priority": "Приоритет"
+        }
+    },
+    "task": {
+        "status_complete": "Завершено",
+        "status_open": "Открыть",
+        "priority_high": "Высокий",
+        "priority_low": "Низкий",
+        "priority_medium": "Средний"
+    },
+    "board": {
+        "confirmButton": {
+            "edit": "редактировать"
+        },
+        "dateTimePicker": {
+            "reminder": {
+                "label": "Напоминание"
+            }
+        },
+        "label": {
+            "description": "Описание",
+            "details": "Детали"
+        },
+        "select": {
+            "priority": {
+                "label": "Приоритет"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "Максимальная допустимая длина - 4096 символов"
+                }
+            }
+        }
+    },
+    "label": {
+        "app_name": "Задачи"
+    },
+    "modal": {
+        "close": "Закрыть",
+        "reminder": {
+            "dismiss": "Отклонить"
+        }
+    }
+}
