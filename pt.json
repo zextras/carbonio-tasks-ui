@@ -1,0 +1,55 @@
+{
+    "action": {
+        "edit": "Editar",
+        "undo": "Desfazer"
+    },
+    "board": {
+        "confirmButton": {
+            "edit": "Editar"
+        },
+        "dateTimePicker": {
+            "reminder": {
+                "label": "Lembrete"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "O tamanho máximo permitido é de 4096 caracteres"
+                }
+            }
+        },
+        "label": {
+            "description": "Descrição",
+            "details": "Detalhes"
+        },
+        "select": {
+            "priority": {
+                "label": "Prioridade"
+            }
+        }
+    },
+    "task": {
+        "priority_high": "Alta",
+        "priority_low": "Baixa",
+        "priority_medium": "Médio",
+        "status_complete": "Completada",
+        "status_open": "Abrir"
+    },
+    "displayer": {
+        "details": {
+            "description": "Descrição",
+            "priority": "Prioridade",
+            "reminder": "Lembrete"
+        }
+    },
+    "label": {
+        "app_name": "Tarefas"
+    },
+    "modal": {
+        "close": "Fechar",
+        "reminder": {
+            "dismiss": "Dispensar"
+        }
+    }
+}

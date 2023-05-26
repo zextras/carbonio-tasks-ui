@@ -1,0 +1,55 @@
+{
+    "action": {
+        "edit": "बदलाव करें",
+        "undo": "अनडू करें"
+    },
+    "board": {
+        "dateTimePicker": {
+            "reminder": {
+                "label": "याद दिलाने वाला"
+            }
+        },
+        "label": {
+            "description": "विवरण",
+            "details": "विवरण"
+        },
+        "confirmButton": {
+            "edit": "बदलाव करें"
+        },
+        "select": {
+            "priority": {
+                "label": "प्राथमिकता"
+            }
+        },
+        "textArea": {
+            "description": {
+                "error": {
+                    "label": "अधिकतम 4096 कैरक्टर की अनुमति है"
+                }
+            }
+        }
+    },
+    "displayer": {
+        "details": {
+            "description": "विवरण",
+            "priority": "प्राथमिकता",
+            "reminder": "याद दिलाने वाला"
+        }
+    },
+    "label": {
+        "app_name": "काम"
+    },
+    "modal": {
+        "close": "बंद करें",
+        "reminder": {
+            "dismiss": "छोड़ें"
+        }
+    },
+    "task": {
+        "priority_high": "हाई",
+        "priority_low": "कम",
+        "priority_medium": "मीडियम",
+        "status_complete": "सम्पन्न",
+        "status_open": "खोलें"
+    }
+}
