@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-tasks-ui",
-	"version": "0.0.3",
+	"version": "0.0.4",
 	"description": "Tasks module for Zextras Carbonio",
 	"main": "src/app.tsx",
 	"scripts": {
@@ -14,8 +14,8 @@
 		"type-check:watch": "npm run type-check -- --watch",
 		"codegen": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config codegen.ts",
 		"codegen:watch": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config codegen.ts --watch",
-		"translations:push": "git subtree push --prefix translations $npm_package_config_translations_repository translations-updater/$(date \",+%Y-%m-%d\")",
-		"translations:pull": "git subtree pull --squash --prefix translations $npm_package_config_translations_repository main"
+		"translations:push": "git subtree push --prefix translations $npm_package_config_translations_repository translations-updater/$(date '+%Y-%m-%d')",
+		"translations:pull": "git subtree pull --squash --prefix translations $npm_package_config_translations_repository master"
 	},
 	"keywords": [],
 	"author": "",
@@ -99,7 +99,7 @@
 		"not dead"
 	],
 	"carbonio": {
-		"translations_repository": "<Insert Repo Here>",
+		"translations_repository": "git@github.com:Zextras/carbonio-tasks-ui-i18n.git",
 		"name": "carbonio-tasks-ui",
 		"priority": 10,
 		"type": "carbonio",
@@ -107,6 +107,6 @@
 		"icon": "ListViewOutline"
 	},
 	"config": {
-		"translations_repository": "git@bitbucket.org:zextras/com_zextras_zapp_tasks_ui.git"
+		"translations_repository": "git@github.com:Zextras/carbonio-tasks-ui-i18n.git"
 	}
 }
