@@ -5,11 +5,17 @@
             "details": "Dettagli"
         },
         "confirmButton": {
-            "edit": "modifica"
+            "edit": "modifica",
+            "create": "crea"
         },
         "dateTimePicker": {
             "reminder": {
                 "label": "Promemoria"
+            },
+            "description": {
+                "error": {
+                    "label": "L'opzione promemoria è abilitata, imposta data e ora per il promemoria o disabilitalo"
+                }
             }
         },
         "select": {
@@ -22,12 +28,45 @@
                 "error": {
                     "label": "Il numero massimo di caratteri consentiti è 4096"
                 }
+            },
+            "taskDescription": {
+                "label": "Descrizione Attività"
+            }
+        },
+        "editTask": {
+            "title": "Modifica Attività"
+        },
+        "newTask": {
+            "title": "Nuova Attività"
+        },
+        "input": {
+            "description": {
+                "error": {
+                    "label": "La lunghezza massima è di 1024 caratteri"
+                }
+            },
+            "title": {
+                "label": "Titolo*"
+            }
+        },
+        "checkbox": {
+            "allDay": {
+                "label": "Ricordamelo ad oggi accesso effettuato durante la giornata"
+            }
+        },
+        "switch": {
+            "enableReminder": {
+                "label": "Abilita promemoria"
             }
         }
     },
     "modal": {
         "reminder": {
-            "dismiss": "Rifiuta"
+            "dismiss": "Rifiuta",
+            "completeAll": "Completa tutto",
+            "undoAll": "Annulla tutto",
+            "remindMeOn": "Ricordamelo il",
+            "title": "Promemoria delle attività"
         },
         "close": "Chiudi"
     },
@@ -40,16 +79,58 @@
     },
     "action": {
         "edit": "Modifica",
-        "undo": "Annulla"
+        "undo": "Annulla",
+        "complete": "Completa"
     },
     "displayer": {
         "details": {
             "description": "Descrizione",
             "priority": "Priorità",
-            "reminder": "Promemoria"
-        }
+            "reminder": "Promemoria",
+            "creationDate": "Data di creazione"
+        },
+        "allTasks": [
+            {
+                "message": "Clicca il pulsante \"NUOVO\" per creare un' attività.",
+                "title": "Inizia ad organizzare la tua giornata."
+            },
+            {
+                "message": "Puoi creare fino a 200 attività.",
+                "title": "Clicca il pulsante \"NUOVO\" per creare un' attività."
+            },
+            {
+                "title": "Clicca il pulsante \"NEW\" per creare un'attività e inizia ad organizzare i tuoi impegni."
+            }
+        ],
+        "allTasks_limitReached": [
+            {
+                "message": "Per creare una nuova attività, completane alcune di già esistenti.",
+                "title": "Hai raggiunto il numero massimo di attività."
+            }
+        ]
     },
     "label": {
-        "app_name": "Impegni"
+        "app_name": "Impegni",
+        "new": "Nuova attività"
+    },
+    "secondaryBar": {
+        "allTasks": "Tutte le attività"
+    },
+    "newTaskBoard": {
+        "banner": {
+            "lastTask": "Questa è l'ultima attività che puoi creare. Per crearne altre, completane alcune già esistenti.",
+            "limitReached": "Hai raggiunto le 200 attività consentite. Per crearne altre, completane alcune tra quelle esistenti."
+        }
+    },
+    "snackbar": {
+        "completeTask": "Attività \"{{taskTitle}}\" completata",
+        "restoreTask": "Attività ripristinata nella cartella Tutte le attività",
+        "tasksLimitReached": "Hai raggiunto le 200 attività consentite. Per crearne altre, completane alcune tra quelle esistenti."
+    },
+    "tasksListItem": {
+        "reminder": {
+            "doNotRemindMe": "Non ricordarmelo",
+            "remindMeOn": "Ricordamelo il"
+        }
     }
 }
