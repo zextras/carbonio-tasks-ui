@@ -1,60 +1,36 @@
 {
-    "notification": {
-        "copy": "نسخ"
-    },
     "core": {
         "subscription": {
             "status": "الحالة"
         }
     },
     "cos": {
-        "enabled": "قيد التمكين",
         "disabled": "معطل",
-        "status": "الحالة",
         "chats": "دردشات"
-    },
-    "dashboard": {
-        "description": "الوصف"
     },
     "hsm": {
         "name": "الاسم",
-        "delete": "حذف",
-        "edit": "تحرير",
-        "message": "رسالة"
+        "edit": "تحرير"
     },
     "label": {
         "add": "إضافة",
-        "cancel": "إلغاء",
         "delete": "حذف",
-        "done": "تم",
         "email": "البريد الإلكتروني",
-        "account": "الحساب",
         "description": "الوصف",
-        "disabled": "معطل",
         "edit": "تحرير",
-        "enabled": "قيد التمكين",
         "message": "رسالة",
-        "name": "الاسم",
         "bucket_done_button": "تم",
-        "notifications": "إعلامات",
         "search": "البحث",
-        "status_lbl": "الحالة",
         "chats": "دردشات"
     },
     "account_details": {
-        "Chats": "دردشات",
-        "status": "الحالة",
-        "general": "عام"
+        "status": "الحالة"
     },
     "volume": {
         "volume_config_header": {
-            "name": "الاسم",
-            "status": "الحالة"
-        },
-        "volume_header": {
             "name": "الاسم"
         },
-        "volume_indexer_header": {
+        "volume_header": {
             "name": "الاسم"
         },
         "server_list_header": {
@@ -62,16 +38,24 @@
         }
     },
     "operations": {
-        "done": "تم",
         "label": {
-            "notifications": "إعلامات",
-            "status": "الحالة"
+            "notifications": "إعلامات"
         },
         "operations_list_header": {
             "status": "الحالة"
         }
     },
-    "backup": {
-        "general": "عام"
+    "action": {
+        "edit": "تحرير"
+    },
+    "board": {
+        "label": {
+            "description": "الوصف"
+        }
+    },
+    "displayer": {
+        "details": {
+            "description": "الوصف"
+        }
     }
 }
