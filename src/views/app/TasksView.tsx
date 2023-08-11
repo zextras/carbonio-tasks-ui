@@ -18,7 +18,7 @@ import { FindTasksDocument, type FindTasksQuery, Status } from '../../gql/types'
 import type { NonNullableList } from '../../types/utils';
 import { identity } from '../../utils';
 
-export const TasksView = (): JSX.Element => {
+export const TasksView = (): React.JSX.Element => {
 	const { data: findTasksResult } = useQuery(FindTasksDocument, {
 		variables: {
 			status: Status.Open

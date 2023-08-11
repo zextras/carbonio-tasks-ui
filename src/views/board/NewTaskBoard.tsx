@@ -35,7 +35,7 @@ const addTaskToList: (task: Task) => Modifier<Reference[] | undefined> =
 		return existingTasksRefs;
 	};
 
-const NewTaskBoard = (): JSX.Element => {
+const NewTaskBoard = (): React.JSX.Element => {
 	const { closeBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
 

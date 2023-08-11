@@ -15,7 +15,10 @@ interface ListItemHoverBarProps extends React.ComponentPropsWithoutRef<typeof Ho
 	actions?: DSAction[];
 }
 
-export const ListItemHoverBar = ({ actions, ...rest }: ListItemHoverBarProps): JSX.Element => {
+export const ListItemHoverBar = ({
+	actions,
+	...rest
+}: ListItemHoverBarProps): React.JSX.Element => {
 	const actionsMapped = useMemo(
 		(): DSAction[] =>
 			map(actions, (action) => ({

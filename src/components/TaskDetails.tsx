@@ -33,7 +33,7 @@ const DetailItem = ({
 }: {
 	label: string;
 	children: OneOrMany<React.ReactNode>;
-}): JSX.Element | null =>
+}): React.JSX.Element | null =>
 	children ? (
 		<Container
 			height={'auto'}
@@ -61,7 +61,7 @@ export const TaskDetails = ({
 	reminderAt,
 	reminderAllDay,
 	description
-}: TaskDetailsProps): JSX.Element => {
+}: TaskDetailsProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { isExpired } = useReminder(reminderAt, reminderAllDay);
 

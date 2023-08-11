@@ -13,7 +13,7 @@ import { TasksView } from './TasksView';
 import { ROUTES } from '../../constants';
 import { ProvidersWrapper } from '../../providers/ProvidersWrapper';
 
-const AppView = (): JSX.Element => {
+const AppView = (): React.JSX.Element => {
 	const { path } = useRouteMatch();
 
 	const routes = useMemo(

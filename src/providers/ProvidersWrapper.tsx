@@ -18,13 +18,13 @@ interface ProvidersWrapperProps {
 	children?: OneOrMany<React.ReactNode>;
 }
 
-export const ManagersProvider = ({ children }: ProvidersWrapperProps): JSX.Element => (
+export const ManagersProvider = ({ children }: ProvidersWrapperProps): React.JSX.Element => (
 	<SnackbarStackManager>
 		<ModalManager>{children}</ModalManager>
 	</SnackbarStackManager>
 );
 
-export const ProvidersWrapper = ({ children }: ProvidersWrapperProps): JSX.Element => {
+export const ProvidersWrapper = ({ children }: ProvidersWrapperProps): React.JSX.Element => {
 	const apolloClient = useMemo(() => buildClient(), []);
 
 	return (
