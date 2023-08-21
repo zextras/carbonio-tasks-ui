@@ -17,7 +17,7 @@ import { setup } from '../utils/testUtils';
 describe('Task displayer', () => {
 	test('Show all task information', () => {
 		const task = populateTask();
-		task.reminderAt = faker.datatype.datetime().getTime();
+		task.reminderAt = faker.date.anytime().getTime();
 		task.description = faker.lorem.sentences();
 
 		setup(<TaskDisplayer task={task} />);
