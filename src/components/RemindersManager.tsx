@@ -151,20 +151,18 @@ export const RemindersManager = (): React.JSX.Element => {
 			// Exclude from this list the ones which have an active timer
 			chain(remindersByDateRef.current)
 				.reduce<typeof modalReminders>((accumulator, reminderGroup, dateKey) => {
-					if (reminderGroup.length > 0) {
-						// show reminders which are visible (check only first one since they are grouped by datetime)
-						if (reminderGroup[0].isVisible()) {
-							// Pick only reminders which cannot trigger a notification anymore. In other words,
-							// filter out reminders with an active timout, which need to be shown in a different group
-							const remindersToShow = reminderGroup.filter((reminder) =>
-								reminder.hasAlreadyBeenReminded()
-							);
-							if (remindersToShow.length > 0) {
-								accumulator.push({
-									date: dateKey,
-									reminders: remindersToShow
-								});
-							}
+					// show reminders which are visible (check only first one since they are grouped by datetime)
+					if (reminderGroup.length > 0 && reminderGroup[0].isVisible()) {
+						// Pick only reminders which cannot trigger a notification anymore. In other words,
+						// filter out reminders with an active timout, which need to be shown in a different group
+						const remindersToShow = reminderGroup.filter((reminder) =>
+							reminder.hasAlreadyBeenReminded()
+						);
+						if (remindersToShow.length > 0) {
+							accumulator.push({
+								date: dateKey,
+								reminders: remindersToShow
+							});
 						}
 					}
 					return accumulator;

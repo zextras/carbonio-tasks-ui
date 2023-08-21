@@ -15,13 +15,13 @@ import { setup } from '../utils/testUtils';
 
 describe('Reminder', () => {
 	test('Show time when not set as all day', () => {
-		const date = moment(faker.datatype.datetime());
+		const date = moment(faker.date.anytime());
 		setup(<Reminder reminderAt={date.valueOf()} reminderAllDay={false} />);
 		expect(screen.getByText(date.format(DATE_TIME_FORMAT))).toBeVisible();
 	});
 
 	test('Show only date when set as all day', () => {
-		const date = moment(faker.datatype.datetime());
+		const date = moment(faker.date.anytime());
 		setup(<Reminder reminderAt={date.valueOf()} reminderAllDay />);
 		expect(screen.getByText(date.format(DATE_FORMAT))).toBeVisible();
 		expect(screen.queryByText(date.format(DATE_TIME_FORMAT))).not.toBeInTheDocument();
