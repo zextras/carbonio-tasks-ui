@@ -42,7 +42,7 @@ const ReminderItem = ({
 	priority,
 	completeAction,
 	undoCompleteAction
-}: ReminderItemProps): JSX.Element => {
+}: ReminderItemProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	return (
@@ -87,7 +87,7 @@ const ReminderGroup = ({
 	reminders,
 	completeAction,
 	undoCompleteAction
-}: ReminderGroupProps): JSX.Element | null => {
+}: ReminderGroupProps): React.JSX.Element | null => {
 	const [t] = useTranslation();
 
 	const items = useMemo(
@@ -127,7 +127,7 @@ export const ReminderModalContent = ({
 	reminders,
 	completeAction,
 	undoCompleteAction
-}: ReminderModalContentProps): JSX.Element => {
+}: ReminderModalContentProps): React.JSX.Element => {
 	const groups = useMemo(
 		() =>
 			map(reminders, (reminder) => (

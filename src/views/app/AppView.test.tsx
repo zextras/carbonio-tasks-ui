@@ -118,7 +118,7 @@ describe('App view', () => {
 	});
 
 	describe('Reminders', () => {
-		const AppViewWithRemindersManager = (): JSX.Element => (
+		const AppViewWithRemindersManager = (): React.JSX.Element => (
 			<>
 				<Route path={`/${TASKS_ROUTE}${ROUTES.task}`}>
 					<RemindersManager />

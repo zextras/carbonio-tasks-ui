@@ -108,7 +108,7 @@ function isTaskWithReminder(task: Partial<Task> | null | undefined): task is Tas
 	return typeof task?.reminderAt === 'number';
 }
 
-export const RemindersManager = (): JSX.Element => {
+export const RemindersManager = (): React.JSX.Element => {
 	const [t] = useTranslation();
 	const notificationManager = getNotificationManager();
 	const apolloClient = useApolloClient();

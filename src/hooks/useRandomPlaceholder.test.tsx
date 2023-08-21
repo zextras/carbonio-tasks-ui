@@ -13,7 +13,7 @@ import { useRandomPlaceholder } from './useRandomPlaceholder';
 import { setup } from '../utils/testUtils';
 
 describe('Use random placeholder', () => {
-	const TestRandomPlaceholder = <TValue,>({ value }: { value: TValue }): JSX.Element => {
+	const TestRandomPlaceholder = <TValue,>({ value }: { value: TValue }): React.JSX.Element => {
 		// use a state to force rerender
 		const [randomPlaceholder, updateRandomPlaceholder] = useRandomPlaceholder('translation.key', {
 			defaultValue: value

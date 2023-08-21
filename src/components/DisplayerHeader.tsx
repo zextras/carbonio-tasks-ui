@@ -14,7 +14,7 @@ interface DisplayerHeaderProps {
 	title: string;
 }
 
-export const DisplayerHeader = ({ title }: DisplayerHeaderProps): JSX.Element => {
+export const DisplayerHeader = ({ title }: DisplayerHeaderProps): React.JSX.Element => {
 	const { removeActive } = useActiveItem();
 
 	const closeDisplayer = useCallback(() => {

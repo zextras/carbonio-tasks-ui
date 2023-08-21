@@ -75,7 +75,7 @@ const StyledListItem = styled(ListItem).attrs<
 		`}
 `;
 
-export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
+export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const allTasksLabel = useMemo(() => t('secondaryBar.allTasks', 'All Tasks'), [t]);
 	const { activeItem, setActive } = useActiveItem();
@@ -87,7 +87,7 @@ export const TaskList = ({ tasks }: TaskListProps): JSX.Element => {
 		() =>
 			map(tasks, (task) => (
 				<StyledListItem key={task.id} active={task.id === activeItem} data-testid={'list-item'}>
-					{(visible): JSX.Element => (
+					{(visible): React.JSX.Element => (
 						<ListItemContent
 							visible={visible}
 							title={task.title}

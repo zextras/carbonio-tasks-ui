@@ -10,8 +10,8 @@ import { type Action, Button, Container } from '@zextras/carbonio-design-system'
 interface ActionsHeaderProps {
 	actions: Action[];
 }
-export const ActionsHeader = ({ actions }: ActionsHeaderProps): JSX.Element => {
-	const actionButtons = useMemo<JSX.Element[]>(
+export const ActionsHeader = ({ actions }: ActionsHeaderProps): React.JSX.Element => {
+	const actionButtons = useMemo<React.JSX.Element[]>(
 		() =>
 			actions.map((action) => (
 				<Button
