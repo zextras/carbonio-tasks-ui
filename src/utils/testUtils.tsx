@@ -155,7 +155,7 @@ const ApolloProviderWrapper = ({
 }: {
 	children: React.ReactNode;
 	mocks: Mock[] | undefined;
-}): JSX.Element =>
+}): React.JSX.Element =>
 	mocks ? (
 		<MockedProvider mocks={mocks} cache={global.apolloClient.cache}>
 			{children}
@@ -164,13 +164,17 @@ const ApolloProviderWrapper = ({
 		<ApolloProvider client={global.apolloClient}>{children}</ApolloProvider>
 	);
 
-export const I18NextTestProvider = ({ children }: { children: React.ReactNode }): JSX.Element => {
+export const I18NextTestProvider = ({
+	children
+}: {
+	children: React.ReactNode;
+}): React.JSX.Element => {
 	const i18nInstance = useMemo(() => getAppI18n(), []);
 
 	return <I18nextProvider i18n={i18nInstance}>{children}</I18nextProvider>;
 };
 
-const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): JSX.Element => (
+const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): React.JSX.Element => (
 	<ApolloProviderWrapper mocks={mocks}>
 		<MemoryRouter
 			initialEntries={initialRouterEntries}

@@ -12,6 +12,6 @@ type StyledWrapperProps = {
 	children?: React.ReactNode;
 };
 
-export const StyledWrapper = ({ children }: StyledWrapperProps): JSX.Element => (
+export const StyledWrapper = ({ children }: StyledWrapperProps): React.JSX.Element => (
 	<ThemeProvider loadDefaultFont={false}>{children}</ThemeProvider>
 );

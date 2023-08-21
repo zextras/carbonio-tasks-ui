@@ -36,19 +36,19 @@ const LazyEditTaskBoardView = lazy(
 	() => import(/* webpackChunkName: "editTaskView" */ './views/board/EditTaskBoard')
 );
 
-const AppView = (): JSX.Element => (
+const AppView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<LazyAppView />
 	</Suspense>
 );
 
-const SecondaryBarView = (props: SecondaryBarComponentProps): JSX.Element => (
+const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<LazySecondaryBarView {...props} />
 	</Suspense>
 );
 
-const NewTaskBoardView = (): JSX.Element => (
+const NewTaskBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<ProvidersWrapper>
 			<LazyNewTaskBoardView />
@@ -56,7 +56,7 @@ const NewTaskBoardView = (): JSX.Element => (
 	</Suspense>
 );
 
-const EditTaskBoardView = (): JSX.Element => (
+const EditTaskBoardView = (): React.JSX.Element => (
 	<Suspense fallback={<Spinner />}>
 		<ProvidersWrapper>
 			<LazyEditTaskBoardView />

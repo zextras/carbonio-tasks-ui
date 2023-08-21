@@ -19,7 +19,7 @@ export const NewTaskLimitBanner = ({
 	bannerLabel,
 	bannerColor,
 	bannerIcon
-}: NewTaskLimitBannerProps): JSX.Element => (
+}: NewTaskLimitBannerProps): React.JSX.Element => (
 	<>
 		<Container
 			background={'gray6'}

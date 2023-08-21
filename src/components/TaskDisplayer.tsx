@@ -16,7 +16,7 @@ import { useActions } from '../hooks/useActions';
 interface TaskDisplayerProps {
 	task: Task;
 }
-export const TaskDisplayer = ({ task }: TaskDisplayerProps): JSX.Element => {
+export const TaskDisplayer = ({ task }: TaskDisplayerProps): React.JSX.Element => {
 	const actions = useActions(task);
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>

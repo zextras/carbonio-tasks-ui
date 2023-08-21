@@ -80,7 +80,7 @@ describe('Edit task board', () => {
 			spyUseBoard(task.id);
 
 			const getTaskMock = mockGetTask({ taskId: task.id }, task);
-			const newTitle = faker.random.alpha({ count: 8 });
+			const newTitle = faker.string.alpha({ length: 8 });
 			const updateTaskInput: UpdateTaskInput = {
 				id: task.id,
 				title: newTitle
@@ -201,7 +201,7 @@ describe('Edit task board', () => {
 
 			const editButton = screen.getByRole('button', { name: /edit/i });
 			const descriptionInput = screen.getByRole('textbox', { name: /description/i });
-			const maxLengthDescription = faker.random.alpha({ count: 4096 });
+			const maxLengthDescription = faker.string.alpha({ length: 4096 });
 			await user.type(descriptionInput, maxLengthDescription);
 			expect(descriptionInput).toHaveValue(maxLengthDescription);
 			expect(editButton).toBeEnabled();
@@ -219,7 +219,7 @@ describe('Edit task board', () => {
 			spyUseBoard(task.id);
 
 			const getTaskMock = mockGetTask({ taskId: task.id }, task);
-			const newDescription = faker.random.alpha({ count: 80 });
+			const newDescription = faker.string.alpha({ length: 80 });
 			const updateTaskInput: UpdateTaskInput = {
 				id: task.id,
 				description: newDescription
@@ -247,6 +247,7 @@ describe('Edit task board', () => {
 		});
 	});
 
+	// eslint-disable-next-line sonarjs/cognitive-complexity
 	describe('Reminder', () => {
 		test('If the task has not a reminder than the edit board appears without the reminder fields', async () => {
 			const task = populateTask({ reminderAt: null, reminderAllDay: null });
@@ -444,7 +445,7 @@ describe('Edit task board', () => {
 				);
 			});
 			test('When the reminder is updated modifying the reminderAllDay, the mutation is called with reminderAllDay equals to the new value and reminderAt equals to previous value', async () => {
-				const previousReminderAtValue = faker.datatype.datetime({ min: new Date().valueOf() });
+				const previousReminderAtValue = faker.date.soon();
 
 				const task = populateTask({
 					reminderAt: previousReminderAtValue.getTime(),

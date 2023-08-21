@@ -118,7 +118,7 @@ describe('App view', () => {
 	});
 
 	describe('Reminders', () => {
-		const AppViewWithRemindersManager = (): JSX.Element => (
+		const AppViewWithRemindersManager = (): React.JSX.Element => (
 			<>
 				<Route path={`/${TASKS_ROUTE}${ROUTES.task}`}>
 					<RemindersManager />
@@ -130,7 +130,7 @@ describe('App view', () => {
 		);
 		test('Show modal of reminders on load if there is at least one reminder to show', async () => {
 			const tasks = populateTaskList();
-			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 			const findTasksRequest = jest.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
@@ -161,7 +161,7 @@ describe('App view', () => {
 		test('When a reminder is completed from the reminders modal, remove the item from the list when the modal is closed with dismiss button', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
-			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 			const findTasksRequest = jest.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
@@ -197,7 +197,7 @@ describe('App view', () => {
 		test('When a reminder is completed and restored from the reminders modal, leave the item in the list in the same position', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
-			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 			const findTasksRequest = jest.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
@@ -232,7 +232,7 @@ describe('App view', () => {
 		test('When a reminder is completed from the reminders modal, close the displayer if opened on the item', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
-			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 			const findTasksRequest = jest.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
@@ -268,7 +268,7 @@ describe('App view', () => {
 		test('When a reminder is completed from the reminders modal, does not close the displayer if opened on another item', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
-			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 			const findTasksRequest = jest.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
@@ -303,7 +303,7 @@ describe('App view', () => {
 		test('When a reminder is completed and restored from the reminders modal, leave the displayer open if opened on the item', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
-			tasks[0].reminderAt = faker.date.between(startOfToday(), Date.now()).getTime();
+			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 			const findTasksRequest = jest.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {

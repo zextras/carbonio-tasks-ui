@@ -12,7 +12,7 @@ import { Priority } from '../gql/types';
 interface PriorityIconProps {
 	priority: Priority;
 }
-export const PriorityIcon = ({ priority }: PriorityIconProps): JSX.Element => (
+export const PriorityIcon = ({ priority }: PriorityIconProps): React.JSX.Element => (
 	<>
 		{priority === Priority.High && <Icon icon="ArrowheadUp" color="error" />}
 		{priority === Priority.Low && <Icon icon="ArrowheadDown" color="info" />}

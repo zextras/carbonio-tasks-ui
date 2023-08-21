@@ -18,7 +18,7 @@ export interface DisplayerProps {
 	translationKey: string;
 }
 
-export const Displayer = ({ translationKey }: DisplayerProps): JSX.Element => {
+export const Displayer = ({ translationKey }: DisplayerProps): React.JSX.Element => {
 	const { activeItem } = useActiveItem();
 	const { data } = useQuery(GetTaskDocument, {
 		variables: {
