@@ -22,7 +22,7 @@ export const ReminderModalFooter = ({
 	showSecondaryAction,
 	secondaryLabel,
 	secondaryIcon
-}: ReminderModalFooterProps): JSX.Element => {
+}: ReminderModalFooterProps): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	return (

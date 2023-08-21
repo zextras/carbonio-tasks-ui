@@ -24,7 +24,7 @@ import {
 import { type NonNullableList } from '../../types/utils';
 import { identity } from '../../utils';
 
-const NewTaskBoard = (): JSX.Element => {
+const NewTaskBoard = (): React.JSX.Element => {
 	const { closeBoard } = useBoardHooks();
 	const createSnackbar = useSnackbar();
 

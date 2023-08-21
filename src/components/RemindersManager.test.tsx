@@ -67,7 +67,7 @@ describe('Reminders manager', () => {
 	}
 
 	test('On load show reminder which is set for today, before now, with a specific time', async () => {
-		const todayBeforeNow = faker.date.between(startOfToday(), Date.now()).getTime();
+		const todayBeforeNow = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 		const task = populateTask({ reminderAt: todayBeforeNow, reminderAllDay: false });
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
@@ -84,7 +84,7 @@ describe('Reminders manager', () => {
 	});
 
 	test('Modal is not rendered on load in other modules', async () => {
-		const todayBeforeNow = faker.date.between(startOfToday(), Date.now()).getTime();
+		const todayBeforeNow = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 		const task = populateTask({ reminderAt: todayBeforeNow, reminderAllDay: false });
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
@@ -103,7 +103,7 @@ describe('Reminders manager', () => {
 	});
 
 	test('On load show reminder set for today, before now, all day', async () => {
-		const todayBeforeNow = faker.date.between(startOfToday(), Date.now()).getTime();
+		const todayBeforeNow = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
 		const task = populateTask({ reminderAt: todayBeforeNow, reminderAllDay: true });
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
@@ -120,7 +120,7 @@ describe('Reminders manager', () => {
 	});
 
 	test('On load show reminder set for today, after now, all day', async () => {
-		const todayAfterNow = faker.date.between(Date.now(), endOfToday()).getTime();
+		const todayAfterNow = faker.date.between({ from: Date.now(), to: endOfToday() }).getTime();
 		const task = populateTask({ reminderAt: todayAfterNow, reminderAllDay: true });
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
@@ -138,7 +138,7 @@ describe('Reminders manager', () => {
 
 	test('Show reminder set for today, after now, with specific time, only when it expires', async () => {
 		const now = Date.now();
-		const todayAfterNow = faker.date.between(now, endOfToday()).getTime();
+		const todayAfterNow = faker.date.between({ from: now, to: endOfToday() }).getTime();
 		const task = populateTask({ reminderAt: todayAfterNow, reminderAllDay: false });
 		const msDiffFromNow = todayAfterNow - now;
 
@@ -163,7 +163,9 @@ describe('Reminders manager', () => {
 	});
 
 	test('Does not show reminder set for yesterday, with specific time', async () => {
-		const yesterday = faker.date.between(startOfYesterday(), endOfYesterday()).getTime();
+		const yesterday = faker.date
+			.between({ from: startOfYesterday(), to: endOfYesterday() })
+			.getTime();
 		const task = populateTask({ reminderAt: yesterday, reminderAllDay: false });
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
@@ -185,7 +187,9 @@ describe('Reminders manager', () => {
 	});
 
 	test('Does not show reminder set for yesterday, all day', async () => {
-		const yesterday = faker.date.between(startOfYesterday(), endOfYesterday()).getTime();
+		const yesterday = faker.date
+			.between({ from: startOfYesterday(), to: endOfYesterday() })
+			.getTime();
 		const task = populateTask({ reminderAt: yesterday, reminderAllDay: true });
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
@@ -207,7 +211,7 @@ describe('Reminders manager', () => {
 	});
 
 	test('Does not show reminder set for tomorrow, with specific time', async () => {
-		const tomorrow = faker.date.between(startOfTomorrow(), endOfTomorrow()).getTime();
+		const tomorrow = faker.date.between({ from: startOfTomorrow(), to: endOfTomorrow() }).getTime();
 		const task = populateTask({ reminderAt: tomorrow, reminderAllDay: false });
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
@@ -229,7 +233,7 @@ describe('Reminders manager', () => {
 	});
 
 	test('Does not show reminder set for tomorrow, all day', async () => {
-		const tomorrow = faker.date.between(startOfTomorrow(), endOfTomorrow()).getTime();
+		const tomorrow = faker.date.between({ from: startOfTomorrow(), to: endOfTomorrow() }).getTime();
 		const task = populateTask({ reminderAt: tomorrow, reminderAllDay: true });
 
 		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
@@ -297,7 +301,7 @@ describe('Reminders manager', () => {
 
 	test('Does not open the modal when a reminder set as completed expires', async () => {
 		const now = Date.now();
-		const todayAfterNow = faker.date.between(now, endOfToday()).getTime();
+		const todayAfterNow = faker.date.between({ from: now, to: endOfToday() }).getTime();
 		const task = populateTask({
 			reminderAt: todayAfterNow,
 			reminderAllDay: false,
@@ -366,12 +370,12 @@ describe('Reminders manager', () => {
 		// expected final order: allDay1, allDay2, withTime2, withTime1
 		const now = Date.now();
 		const allDay1 = populateTask({
-			reminderAt: faker.date.between(now, endOfToday()).getTime(),
+			reminderAt: faker.date.between({ from: now, to: endOfToday() }).getTime(),
 			reminderAllDay: true,
 			title: 'Task item all day 1'
 		});
 		const allDay2 = populateTask({
-			reminderAt: faker.date.between(startOfToday(), now).getTime(),
+			reminderAt: faker.date.between({ from: startOfToday(), to: now }).getTime(),
 			reminderAllDay: true,
 			title: 'Task item all day 2'
 		});
@@ -973,7 +977,7 @@ describe('Reminders manager', () => {
 	describe('Notification', () => {
 		test('A sound is played when the modal is shown on load', async () => {
 			const task = populateTask({
-				reminderAt: faker.date.between(startOfToday(), Date.now()).getTime(),
+				reminderAt: faker.date.between({ from: startOfToday(), to: Date.now() }).getTime(),
 				reminderAllDay: false
 			});
 			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
@@ -1042,7 +1046,7 @@ describe('Reminders manager', () => {
 
 		test('Show the badge when there is a new reminder on load but the modal is not visible', async () => {
 			const task = populateTask({
-				reminderAt: faker.date.between(startOfToday(), Date.now()).getTime(),
+				reminderAt: faker.date.between({ from: startOfToday(), to: Date.now() }).getTime(),
 				reminderAllDay: false
 			});
 			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
@@ -1059,7 +1063,7 @@ describe('Reminders manager', () => {
 
 		test('Show the badge when a reminders expires but the modal is not visible', async () => {
 			const task = populateTask({
-				reminderAt: faker.date.between(Date.now(), endOfToday()).getTime(),
+				reminderAt: faker.date.between({ from: Date.now(), to: endOfToday() }).getTime(),
 				reminderAllDay: false
 			});
 			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
@@ -1108,7 +1112,7 @@ describe('Reminders manager', () => {
 
 		test('Hide the badge when the modal becomes visible', async () => {
 			const task = populateTask({
-				reminderAt: faker.date.between(startOfToday(), Date.now()).getTime(),
+				reminderAt: faker.date.between({ from: startOfToday(), to: Date.now() }).getTime(),
 				reminderAllDay: false
 			});
 			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');

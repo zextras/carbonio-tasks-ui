@@ -53,7 +53,7 @@ const PrioritySelectionItem = ({
 	icon: IconProps['icon'];
 	iconColor: IconProps['color'];
 	label: string;
-}): JSX.Element => (
+}): React.JSX.Element => (
 	<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
 		<Icon icon={icon} color={iconColor} />
 		<Text>{label}</Text>
@@ -143,7 +143,7 @@ export interface CommonTaskBoardProps {
 	initialIsAllDay: boolean;
 	initialDate: Date;
 	onConfirm: (arg: OnConfirmArg) => void;
-	banner?: JSX.Element;
+	banner?: React.JSX.Element;
 	confirmLabel: string;
 	defaultBoardTabTitle: string;
 }
@@ -159,7 +159,7 @@ export const CommonTaskBoard = ({
 	banner,
 	confirmLabel,
 	defaultBoardTabTitle
-}: CommonTaskBoardProps): JSX.Element => {
+}: CommonTaskBoardProps): React.JSX.Element => {
 	const { updateBoard } = useBoardHooks();
 	useEffect(() => {
 		if (initialTitle) {
@@ -347,7 +347,7 @@ export const CommonTaskBoard = ({
 							<Input
 								backgroundColor={'gray5'}
 								label={t('board.dateTimePicker.reminder.label', 'Reminder')}
-								CustomIcon={(): JSX.Element => (
+								CustomIcon={(): React.JSX.Element => (
 									<CustomIconButton
 										icon={'CalendarOutline'}
 										size={'large'}

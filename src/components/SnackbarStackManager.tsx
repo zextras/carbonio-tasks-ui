@@ -18,8 +18,8 @@ import { STACK_ACTION, useStack } from '../hooks/useStack';
 export const SnackbarStackManager = ({
 	autoHideDefaultTimeout,
 	children
-}: SnackbarManagerProps): JSX.Element => {
-	const [stack, updateStack] = useStack<JSX.Element>();
+}: SnackbarManagerProps): React.JSX.Element => {
+	const [stack, updateStack] = useStack<React.JSX.Element>();
 
 	const createSnackbar = useCallback<CreateSnackbarFn>(
 		({ key, onActionClick, onClose, replace, ...rest }) => {
