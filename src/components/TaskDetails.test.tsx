@@ -40,7 +40,7 @@ describe('Task details', () => {
 		test('Show date only if set for all day', () => {
 			const task = populateTask();
 			task.reminderAllDay = true;
-			task.reminderAt = faker.datatype.datetime().getTime();
+			task.reminderAt = faker.date.anytime().getTime();
 			setup(
 				<TaskDetails
 					createdAt={task.createdAt}
@@ -59,7 +59,7 @@ describe('Task details', () => {
 		test('Show time if not set for all day', () => {
 			const task = populateTask();
 			task.reminderAllDay = false;
-			task.reminderAt = faker.datatype.datetime().getTime();
+			task.reminderAt = faker.date.anytime().getTime();
 			setup(
 				<TaskDetails
 					createdAt={task.createdAt}
