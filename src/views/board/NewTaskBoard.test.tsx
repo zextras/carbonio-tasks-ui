@@ -465,7 +465,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const nextMonthButton = await screen.findByRole('button', { name: /next month/i });
 			await user.click(nextMonthButton);
 
@@ -516,7 +516,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const nextMonthButton = await screen.findByRole('button', { name: /next month/i });
 			await user.click(nextMonthButton);
 
@@ -660,7 +660,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const previousMonthButton = await screen.findByRole('button', { name: /previous month/i });
 			await user.click(previousMonthButton);
 
@@ -711,7 +711,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const previousMonthButton = await screen.findByRole('button', { name: /previous month/i });
 			await user.click(previousMonthButton);
 

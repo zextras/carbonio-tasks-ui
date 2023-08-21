@@ -247,6 +247,7 @@ describe('Edit task board', () => {
 		});
 	});
 
+	// eslint-disable-next-line sonarjs/cognitive-complexity
 	describe('Reminder', () => {
 		test('If the task has not a reminder than the edit board appears without the reminder fields', async () => {
 			const task = populateTask({ reminderAt: null, reminderAllDay: null });
