@@ -99,7 +99,7 @@ describe('New task board', () => {
 
 			const titleInput = screen.getByRole('textbox', { name: /title/i });
 			const createButton = screen.getByRole('button', { name: /create/i });
-			const maxLengthString = faker.random.alpha({ count: 1024 });
+			const maxLengthString = faker.string.alpha({ length: 1024 });
 			await user.type(titleInput, maxLengthString);
 			expect(titleInput).toHaveValue(maxLengthString);
 			expect(createButton).toBeEnabled();
@@ -138,7 +138,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -177,7 +177,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -225,7 +225,7 @@ describe('New task board', () => {
 
 			const createButton = screen.getByRole('button', { name: /create/i });
 			const descriptionInput = screen.getByRole('textbox', { name: /description/i });
-			const maxLengthDescription = faker.random.alpha({ count: 4096 });
+			const maxLengthDescription = faker.string.alpha({ length: 4096 });
 			await user.type(screen.getByRole('textbox', { name: /title/i }), 'something');
 			await waitFor(() => expect(createButton).toBeEnabled());
 			await user.type(descriptionInput, maxLengthDescription);
@@ -254,7 +254,7 @@ describe('New task board', () => {
 		const newTaskResult: Required<Task> = {
 			__typename: 'Task',
 			createdAt: new Date().getTime(),
-			id: faker.datatype.uuid(),
+			id: faker.string.uuid(),
 			description: null,
 			reminderAllDay: null,
 			reminderAt: null,
@@ -291,7 +291,7 @@ describe('New task board', () => {
 		const newTaskResult: Required<Task> = {
 			__typename: 'Task',
 			createdAt: new Date().getTime(),
-			id: faker.datatype.uuid(),
+			id: faker.string.uuid(),
 			description: null,
 			reminderAllDay: null,
 			reminderAt: null,
@@ -328,7 +328,7 @@ describe('New task board', () => {
 		const newTaskResult: Required<Task> = {
 			__typename: 'Task',
 			createdAt: new Date().getTime(),
-			id: faker.datatype.uuid(),
+			id: faker.string.uuid(),
 			description: null,
 			reminderAllDay: null,
 			reminderAt: null,
@@ -398,7 +398,7 @@ describe('New task board', () => {
 			expect(createButton).toBeDisabled();
 
 			const titleInput = screen.getByRole('textbox', { name: /title/i });
-			await user.type(titleInput, faker.random.alpha({ count: 10 }));
+			await user.type(titleInput, faker.string.alpha({ length: 10 }));
 			expect(createButton).toBeEnabled();
 		});
 
@@ -451,7 +451,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -465,7 +465,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const nextMonthButton = await screen.findByRole('button', { name: /next month/i });
 			await user.click(nextMonthButton);
 
@@ -502,7 +502,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -516,7 +516,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const nextMonthButton = await screen.findByRole('button', { name: /next month/i });
 			await user.click(nextMonthButton);
 
@@ -555,7 +555,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -598,7 +598,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -646,7 +646,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -660,7 +660,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const previousMonthButton = await screen.findByRole('button', { name: /previous month/i });
 			await user.click(previousMonthButton);
 
@@ -697,7 +697,7 @@ describe('New task board', () => {
 			const newTaskResult: Required<Task> = {
 				__typename: 'Task',
 				createdAt: new Date().getTime(),
-				id: faker.datatype.uuid(),
+				id: faker.string.uuid(),
 				description: null,
 				reminderAllDay: null,
 				reminderAt: null,
@@ -711,7 +711,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
 
-			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(screen.getByTestId(ICON_REGEXP.inputCalendarIcon));
 			const previousMonthButton = await screen.findByRole('button', { name: /previous month/i });
 			await user.click(previousMonthButton);
 
