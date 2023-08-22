@@ -5,13 +5,13 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { type Reference, useMutation, useQuery } from '@apollo/client';
-import { type Modifier } from '@apollo/client/cache';
+import { useMutation, useQuery } from '@apollo/client';
 import { useSnackbar } from '@zextras/carbonio-design-system';
 import { t, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { filter, trim } from 'lodash';
 
 import { CommonTaskBoard, type CommonTaskBoardProps } from './CommonTaskBoard';
+import { addTaskToList } from '../../apollo/cacheUtils';
 import { NewTaskLimitBanner } from '../../components/NewTaskLimitBanner';
 import { MAX_TASKS_LIMIT } from '../../constants';
 import {
@@ -19,21 +19,10 @@ import {
 	FindTasksDocument,
 	type FindTasksQuery,
 	Priority,
-	Status,
-	type Task
+	Status
 } from '../../gql/types';
 import { type NonNullableList } from '../../types/utils';
 import { identity } from '../../utils';
-
-const addTaskToList: (task: Task) => Modifier<Reference[] | undefined> =
-	(task) =>
-	(existingTasksRefs, { toReference }) => {
-		const newTaskRef = toReference(task);
-		if (existingTasksRefs && newTaskRef) {
-			return [newTaskRef, ...existingTasksRefs];
-		}
-		return existingTasksRefs;
-	};
 
 const NewTaskBoard = (): React.JSX.Element => {
 	const { closeBoard } = useBoardHooks();
