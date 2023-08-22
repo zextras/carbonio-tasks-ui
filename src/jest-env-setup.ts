@@ -110,7 +110,9 @@ beforeAll(() => {
 
 afterAll(() => server.close());
 afterEach(() => {
-	jest.runOnlyPendingTimers();
+	act(() => {
+		jest.runOnlyPendingTimers();
+	});
 	server.resetHandlers();
 	act(() => {
 		window.resizeTo(1024, 768);
