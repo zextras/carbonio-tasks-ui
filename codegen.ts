@@ -5,6 +5,9 @@
  */
 
 import type { CodegenConfig } from '@graphql-codegen/cli';
+import type { TypeScriptTypedDocumentNodesConfig } from '@graphql-codegen/typed-document-node';
+import type { TypeScriptPluginConfig } from '@graphql-codegen/typescript';
+import type { TypeScriptDocumentsPluginConfig } from '@graphql-codegen/typescript-operations';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -65,8 +68,11 @@ const config: CodegenConfig = {
 				scalars: {
 					DateTime: 'number'
 				},
-				strictScalars: true
-			}
+				strictScalars: true,
+				useTypeImports: true
+			} satisfies TypeScriptPluginConfig &
+				TypeScriptTypedDocumentNodesConfig &
+				TypeScriptDocumentsPluginConfig
 		},
 		'src/gql/possible-types.ts': {
 			documents: ['src/**/*.graphql'],
