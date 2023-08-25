@@ -482,17 +482,18 @@ describe('Reminders manager', () => {
 
 	test('When multiple reminders expire together, show the reminders at first positions inside the modal', async () => {
 		const now = Date.now();
+		const twoMinutesBeforeNow = subMinutes(now, 2).getTime();
+		const fiveMinutesFromNow = addMinutes(now, 5).getTime();
 		const allDayReminder = populateTask({
 			reminderAt: now,
 			reminderAllDay: true,
 			title: 'Task item all day'
 		});
 		const withTimeExpired = populateTask({
-			reminderAt: subMinutes(now, 1).getTime(),
+			reminderAt: twoMinutesBeforeNow,
 			reminderAllDay: false,
 			title: 'Task item with time expired'
 		});
-		const fiveMinutesFromNow = addMinutes(now, 5).getTime();
 		const expiringReminder1 = populateTask({
 			reminderAt: fiveMinutesFromNow,
 			reminderAllDay: false,
@@ -680,12 +681,10 @@ describe('Reminders manager', () => {
 		act(() => {
 			jest.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
 		});
-		const visibleDates = screen.getAllByText(
-			formatDateFromTimestamp(now, {
-				includeTime: false
-			}),
-			{ exact: false }
-		);
+		const dateString = formatDateFromTimestamp(now, {
+			includeTime: false
+		});
+		const visibleDates = screen.getAllByText(dateString, { exact: false });
 		const fiveMinutesFromNowDate = formatDateFromTimestamp(fiveMinutesFromNow, {
 			includeTime: true
 		});
@@ -1258,6 +1257,7 @@ describe('Reminders manager', () => {
 		const now = Date.now();
 		const fiveMinutesFromNow = addMinutes(now, 5).getTime();
 		const tenMinutesFromNow = addMinutes(now, 10).getTime();
+		const sevenMinutesFromNow = addMinutes(fiveMinutesFromNow, 2).getTime();
 		const fromAllDayToTime = populateTask({
 			reminderAt: fiveMinutesFromNow,
 			reminderAllDay: true,
@@ -1274,7 +1274,7 @@ describe('Reminders manager', () => {
 			title: 'Task item from time to time'
 		});
 		const anotherTaskToTriggerModal = populateTask({
-			reminderAt: addMinutes(fiveMinutesFromNow, 2).getTime(),
+			reminderAt: sevenMinutesFromNow,
 			reminderAllDay: false,
 			title: 'Different title not considered in getAllByText selector'
 		});
@@ -1416,5 +1416,43 @@ describe('Reminders manager', () => {
 		expect(screen.queryByText(task.title)).not.toBeInTheDocument();
 		expect(screen.getByTestId(ICON_REGEXP.highPriority)).toBeVisible();
 		expect(screen.queryByTestId(ICON_REGEXP.mediumPriority)).not.toBeInTheDocument();
+	});
+
+	test('On load does not show a reminder set in the future, with a diff from now greater than the setTimeout limit', async () => {
+		const now = Date.now();
+		const timeoutLimit = 2147483647;
+		const timeoutLimitFromNow = now + timeoutLimit + 1;
+		const task = populateTask({
+			reminderAt: timeoutLimitFromNow
+		});
+		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
+		const mocks = [findTasksMock];
+		setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
+		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
+	});
+
+	test('Show the reminder set in the future, with a diff from now greater than the setTimeout limit, when it expires', async () => {
+		const now = Date.now();
+		const timeoutLimit = 2147483647;
+		const timeoutLimitFromNow = now + timeoutLimit + 1;
+		const task = populateTask({
+			reminderAt: timeoutLimitFromNow
+		});
+		const findTasksMock = mockFindTasks({ status: Status.Open }, [task]);
+		const mocks = [findTasksMock];
+		setup(<RemindersManager />, {
+			mocks,
+			initialRouterEntries: [`/${TASKS_ROUTE}`]
+		});
+		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+		act(() => {
+			jest.advanceTimersByTime(timeoutLimitFromNow);
+		});
+		await waitForModalToOpen();
+		expect(screen.getByText(task.title)).toBeVisible();
 	});
 });
