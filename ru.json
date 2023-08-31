@@ -2,7 +2,7 @@
     "action": {
         "edit": "Редактировать",
         "undo": "Отменить",
-        "complete": "Выполнить"
+        "complete": "Выполнено"
     },
     "displayer": {
         "details": {
