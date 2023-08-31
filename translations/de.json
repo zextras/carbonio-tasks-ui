@@ -1,13 +1,13 @@
 {
     "action": {
-        "edit": "Bewerken",
+        "edit": "Bearbeiten",
         "undo": "Rückgängig machen",
         "complete": "Abgeschlossen"
     },
     "board": {
         "confirmButton": {
             "edit": "bearbeiten",
-            "create": "Erstellen"
+            "create": "erstellen"
         },
         "label": {
             "description": "Beschreibung",
@@ -40,7 +40,7 @@
         },
         "checkbox": {
             "allDay": {
-                "label": "Erinnere mich den ganzen Tag an jedes Login"
+                "label": "Erinnern Sie mich den ganzen Tag über bei jedem Login"
             }
         },
         "editTask": {
@@ -61,7 +61,7 @@
         },
         "switch": {
             "enableReminder": {
-                "label": "Erinnerung Aktivieren"
+                "label": "Erinnerung aktivieren"
             }
         }
     },
@@ -74,15 +74,15 @@
         },
         "allTasks": [
             {
-                "message": "Klicken Sie auf die Schaltfläche \"Neu\" um eine Aufgabe zu erstellen.",
+                "message": "Klicken Sie auf \"NEU\" um eine Aufgabe zu erstellen.",
                 "title": "Beginnen Sie mit der Organisation Ihres Tages."
             },
             {
                 "message": "Sie können bis zu 200 Aufgaben erstellen.",
-                "title": "Klicken Sie auf die Schaltfläche \"Neu\" um eine Aufgabe zu erstellen."
+                "title": "Klicken Sie auf \"NEU\" um eine Aufgabe zu erstellen."
             },
             {
-                "title": "Klicken Sie auf die Schaltfläche \"NEU\", um eine Aufgabe zu erstellen und mit der Organisation Ihrer Aktivitäten zu beginnen."
+                "title": "Klicken Sie auf \"NEU\", um eine Aufgabe zu erstellen und mit der Organisation Ihrer Aktivitäten zu beginnen."
             }
         ],
         "allTasks_limitReached": [
@@ -99,9 +99,9 @@
     "modal": {
         "close": "Schließen",
         "reminder": {
-            "dismiss": "ABLEHNEN",
+            "dismiss": "Ablehnen",
             "completeAll": "Alle abschließen",
-            "remindMeOn": "Erinnere mich am",
+            "remindMeOn": "Erinnern Sie mich an",
             "title": "Aufgabenerinnerungen",
             "undoAll": "Alles rückgängig"
         }
@@ -111,7 +111,7 @@
         "priority_low": "Niedrig",
         "priority_medium": "Medium",
         "status_complete": "Abgeschlossen",
-        "status_open": "Öffnen"
+        "status_open": "Offen"
     },
     "newTaskBoard": {
         "banner": {
@@ -129,8 +129,8 @@
     },
     "tasksListItem": {
         "reminder": {
-            "doNotRemindMe": "Erinnere mich nicht daran",
-            "remindMeOn": "Erinnere mich am"
+            "doNotRemindMe": "Erinnern Sie mich nicht",
+            "remindMeOn": "Erinnern Sie mich am"
         }
     }
 }
