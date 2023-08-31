@@ -5,7 +5,7 @@
  */
 module.exports = {
 	extends: ['./node_modules/@zextras/carbonio-ui-configs/rules/eslint.js'],
-	plugins: ['notice', 'unused-imports'],
+	plugins: ['notice'],
 	rules: {
 		'notice/notice': [
 			'error',
@@ -13,35 +13,6 @@ module.exports = {
 				templateFile: './notice.template.js'
 			}
 		],
-		'import/no-extraneous-dependencies': 'off',
-		'import/order': [
-			'error',
-			{
-				groups: [['builtin', 'external']],
-				pathGroups: [
-					{
-						pattern: 'react',
-						group: 'external',
-						position: 'before'
-					}
-				],
-				pathGroupsExcludedImportTypes: ['react'],
-				'newlines-between': 'always',
-				alphabetize: {
-					order: 'asc',
-					caseInsensitive: true
-				}
-			}
-		],
-		'@typescript-eslint/no-unused-vars': 'off',
-		'unused-imports/no-unused-imports': 'error',
-		'unused-imports/no-unused-vars': [
-			'warn',
-			{ vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' }
-		],
-		'no-shadow': 'off',
-		'@typescript-eslint/no-shadow': ['error'],
-		'no-console': ['warn', { allow: ['error'] }],
 		'no-duplicate-imports': ['error', { includeExports: true }],
 		'@typescript-eslint/consistent-type-imports': [
 			'error',
@@ -49,18 +20,15 @@ module.exports = {
 				fixStyle: 'inline-type-imports'
 			}
 		],
-		'max-len': 'warn'
+		'max-len': 'warn',
+		'sonarjs/cognitive-complexity': 'warn',
+		'sonarjs/no-duplicate-string': 'off'
 	},
 	overrides: [
 		{
 			// enable eslint-plugin-testing-library rules or preset only for test files
-			files: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
-			extends: ['plugin:jest-dom/recommended', 'plugin:testing-library/react'],
+			files: ['**/+(test|jest)*.[jt]s?(x)', '**/types/commons.ts', '**/mocks/*', '**/gql/types.ts'],
 			rules: {
-				'jest-dom/prefer-enabled-disabled': 'off',
-				'testing-library/no-unnecessary-act': 'warn',
-				'testing-library/no-global-regexp-flag-in-query': 'error',
-				'testing-library/prefer-user-event': 'warn',
 				'import/no-extraneous-dependencies': 'off'
 			}
 		},

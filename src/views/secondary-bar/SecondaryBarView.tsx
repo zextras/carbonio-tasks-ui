@@ -17,7 +17,7 @@ import { useUserAccount } from '@zextras/carbonio-shell-ui';
 import { flatMap, map, noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
-function buildCollapsedItem(item: AccordionItemType): JSX.Element[] {
+function buildCollapsedItem(item: AccordionItemType): React.JSX.Element[] {
 	const element = (
 		<Tooltip label={item.label}>
 			<IconButton
@@ -29,14 +29,14 @@ function buildCollapsedItem(item: AccordionItemType): JSX.Element[] {
 			/>
 		</Tooltip>
 	);
-	const list: JSX.Element[] = [element];
+	const list: React.JSX.Element[] = [element];
 	if (item.items && item.items.length > 0) {
 		list.push(...flatMap(item.items, (subItem) => buildCollapsedItem(subItem)));
 	}
 	return list;
 }
 
-const SecondaryBarView = ({ expanded }: { expanded: boolean }): JSX.Element => {
+const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Element => {
 	const [t] = useTranslation();
 	const { name } = useUserAccount();
 

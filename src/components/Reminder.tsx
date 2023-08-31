@@ -17,7 +17,7 @@ export const Reminder = ({
 	reminderAt,
 	reminderAllDay,
 	...textProps
-}: ReminderProps): JSX.Element => {
+}: ReminderProps): React.JSX.Element => {
 	const { isExpired, formattedDate } = useReminder(reminderAt, reminderAllDay);
 
 	return (

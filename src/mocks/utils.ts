@@ -45,13 +45,13 @@ export interface Mock<
 export function populateTask(partialTask?: Partial<Task>): Task {
 	return {
 		__typename: 'Task',
-		id: faker.datatype.uuid(),
+		id: faker.string.uuid(),
 		title: faker.lorem.sentence(),
 		description: faker.helpers.arrayElement([faker.lorem.sentences(), null]),
 		createdAt: faker.date.past().getTime(),
 		priority: Priority.Medium,
 		status: Status.Open,
-		reminderAt: faker.helpers.arrayElement([faker.datatype.datetime().getTime(), null]),
+		reminderAt: faker.helpers.arrayElement([faker.date.anytime().getTime(), null]),
 		reminderAllDay: faker.helpers.arrayElement([faker.datatype.boolean(), null]),
 		...partialTask
 	};

@@ -43,7 +43,7 @@ const TextWithOptionalTooltip = ({
 	withTooltip,
 	children = null,
 	...rest
-}: TextWithOptionalTooltipProps): JSX.Element =>
+}: TextWithOptionalTooltipProps): React.JSX.Element =>
 	withTooltip ? (
 		<TextWithTooltip {...rest}>{children}</TextWithTooltip>
 	) : (
@@ -65,7 +65,7 @@ export const Text = ({
 	lineHeight = 1.5,
 	withTooltip = false,
 	...dsProps
-}: TextExtendedProps & TextWithOptionalTooltipProps): JSX.Element => (
+}: TextExtendedProps & TextWithOptionalTooltipProps): React.JSX.Element => (
 	<StyledText
 		$width={width}
 		$centered={centered}

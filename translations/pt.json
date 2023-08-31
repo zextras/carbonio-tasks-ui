@@ -1,15 +1,22 @@
 {
     "action": {
         "edit": "Editar",
-        "undo": "Desfazer"
+        "undo": "Desfazer",
+        "complete": "Completar"
     },
     "board": {
         "confirmButton": {
-            "edit": "Editar"
+            "edit": "Editar",
+            "create": "Criar"
         },
         "dateTimePicker": {
             "reminder": {
                 "label": "Lembrete"
+            },
+            "description": {
+                "error": {
+                    "label": "A opção de notificação está ativada, defina a data e hora para a notificação ou desative a notificação"
+                }
             }
         },
         "textArea": {
@@ -17,6 +24,9 @@
                 "error": {
                     "label": "O tamanho máximo permitido é de 4096 caracteres"
                 }
+            },
+            "taskDescription": {
+                "label": "Descrição"
             }
         },
         "label": {
@@ -26,6 +36,32 @@
         "select": {
             "priority": {
                 "label": "Prioridade"
+            }
+        },
+        "checkbox": {
+            "allDay": {
+                "label": "Lembre-me em cada login durante o dia"
+            }
+        },
+        "editTask": {
+            "title": "Editar tarefa"
+        },
+        "input": {
+            "description": {
+                "error": {
+                    "label": "O comprimento máximo é de 1024 caracteres"
+                }
+            },
+            "title": {
+                "label": "Título*"
+            }
+        },
+        "newTask": {
+            "title": "Nova tarefa"
+        },
+        "switch": {
+            "enableReminder": {
+                "label": "Ativar notificação"
             }
         }
     },
@@ -40,16 +76,61 @@
         "details": {
             "description": "Descrição",
             "priority": "Prioridade",
-            "reminder": "Lembrete"
-        }
+            "reminder": "Lembrete",
+            "creationDate": "Data de criação"
+        },
+        "allTasks": [
+            {
+                "message": "Clique em \"NOVA\" para criar uma tarefa.",
+                "title": "Comece a organizar o seu dia."
+            },
+            {
+                "message": "Pode criar até 200 tarefas.",
+                "title": "Clique em \"NOVA\" para criar uma tarefa."
+            },
+            {
+                "title": "Clique em \"NOVA\" para criar uma tarefa e comece a organizar as suas atividades."
+            }
+        ],
+        "allTasks_limitReached": [
+            {
+                "message": "Para criar uma nova, complete algumas das tarefas existentes.",
+                "title": "Atingiu o número máximo de tarefas."
+            }
+        ]
     },
     "label": {
-        "app_name": "Tarefas"
+        "app_name": "Tarefas",
+        "new": "Nova Tarefa"
     },
     "modal": {
         "close": "Fechar",
         "reminder": {
-            "dismiss": "Dispensar"
+            "dismiss": "Dispensar",
+            "completeAll": "Completar tudo",
+            "remindMeOn": "Avise-me em",
+            "undoAll": "Desfazer tudo",
+            "title": "Notificações de tarefas"
+        }
+    },
+    "newTaskBoard": {
+        "banner": {
+            "limitReached": "Atingiu as 200 tarefas. Para criar mais, complete as tarefas anteriores.",
+            "lastTask": "Esta é a última tarefa que pode criar. Para criar mais, complete as tarefas anteriores."
+        }
+    },
+    "secondaryBar": {
+        "allTasks": "Todas as Tarefas"
+    },
+    "snackbar": {
+        "completeTask": "A Tarefa \"{{taskTitle}}\" foi concluida",
+        "restoreTask": "Tarefa recuperada na pasta \"Todas as tarefas\"",
+        "tasksLimitReached": "Atingiu as 200 Tarefas. Para criar mais, complete as Tarefas anteriores."
+    },
+    "tasksListItem": {
+        "reminder": {
+            "doNotRemindMe": "Não desejo ser Notificado",
+            "remindMeOn": "Notificar-me em"
         }
     }
 }

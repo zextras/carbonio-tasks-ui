@@ -12,10 +12,10 @@ import { type Task } from '../gql/types';
 
 export const removeTaskFromList: (
 	...tasks: Pick<Task, '__typename' | 'id'>[]
-) => Modifier<Reference[] | undefined> =
+) => Modifier<readonly Reference[] | Reference> =
 	(...tasks) =>
 	(existing, { toReference }) => {
-		if (existing) {
+		if (existing && Array.isArray(existing)) {
 			const taskRefs = map(tasks, (task) => toReference(task)?.__ref);
 			return filter(existing, (itemRef) => !taskRefs.includes(itemRef.__ref));
 		}
@@ -24,19 +24,18 @@ export const removeTaskFromList: (
 
 export const addTaskToList: (
 	task: Pick<Task, '__typename' | 'id'>
-) => Modifier<Reference[] | undefined> =
+) => Modifier<readonly Reference[] | Reference> =
 	(task) =>
 	(existing, { toReference, readField }) => {
 		const newTaskRef = toReference(task);
-		if (existing && newTaskRef) {
+		if (existing && newTaskRef && Array.isArray(existing)) {
 			const updatedList = [...existing];
 			const index = findIndex(existing, (existingRef) => {
-				const existingTaskCreatedAt = readField({ fieldName: 'createdAt', from: existingRef }) as
-					| number
-					| undefined;
-				const newTaskCreatedAt = readField({ fieldName: 'createdAt', from: newTaskRef }) as
-					| number
-					| undefined;
+				const existingTaskCreatedAt = readField<number>({
+					fieldName: 'createdAt',
+					from: existingRef
+				});
+				const newTaskCreatedAt = readField<number>({ fieldName: 'createdAt', from: newTaskRef });
 				return (
 					existingTaskCreatedAt !== undefined &&
 					newTaskCreatedAt !== undefined &&

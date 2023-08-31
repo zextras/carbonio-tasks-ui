@@ -15,7 +15,7 @@ interface EmptyDisplayerProps {
 	translationKey: string;
 }
 
-export const EmptyDisplayer = ({ translationKey }: EmptyDisplayerProps): JSX.Element => {
+export const EmptyDisplayer = ({ translationKey }: EmptyDisplayerProps): React.JSX.Element => {
 	const { isFull } = useContext(ListContext);
 	const [randomPlaceholder] = useRandomPlaceholder<{
 		title: string;

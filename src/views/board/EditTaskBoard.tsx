@@ -12,7 +12,7 @@ import { trim } from 'lodash';
 import { CommonTaskBoard, type CommonTaskBoardProps } from './CommonTaskBoard';
 import { GetTaskDocument, Priority, UpdateTaskDocument } from '../../gql/types';
 
-const EditTaskBoard = (): JSX.Element => {
+const EditTaskBoard = (): React.JSX.Element => {
 	const { context } = useBoard<{ taskId: string }>();
 	const taskId = context?.taskId;
 	const { closeBoard } = useBoardHooks();

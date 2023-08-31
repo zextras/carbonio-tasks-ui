@@ -13,7 +13,7 @@ import { useRandomPlaceholder } from './useRandomPlaceholder';
 import { setup } from '../utils/testUtils';
 
 describe('Use random placeholder', () => {
-	const TestRandomPlaceholder = <TValue,>({ value }: { value: TValue }): JSX.Element => {
+	const TestRandomPlaceholder = <TValue,>({ value }: { value: TValue }): React.JSX.Element => {
 		// use a state to force rerender
 		const [randomPlaceholder, updateRandomPlaceholder] = useRandomPlaceholder('translation.key', {
 			defaultValue: value
@@ -28,7 +28,7 @@ describe('Use random placeholder', () => {
 	};
 
 	test('Return always the same placeholder if only one is provided', async () => {
-		const value = faker.random.words();
+		const value = faker.word.words();
 		const { user } = setup(<TestRandomPlaceholder value={value} />);
 		expect(screen.queryByText(value)).not.toBeInTheDocument();
 		await screen.findByText(value);
@@ -42,7 +42,7 @@ describe('Use random placeholder', () => {
 
 	test('Return a random placeholder on update', async () => {
 		// create a big array so that the probability of having a different value on second run is high
-		const values = Array.from(Array(100), () => faker.random.words(3));
+		const values = Array.from(Array(100), () => faker.word.words(3));
 		const firstValueRegexp = RegExp(values.join('|'));
 		const { user } = setup(<TestRandomPlaceholder value={values} />);
 
@@ -76,8 +76,8 @@ describe('Use random placeholder', () => {
 
 	test('Update placeholder if values change', async () => {
 		// create a big array so that the probability of having a different value on second run is high
-		const values = Array.from(Array(100), () => faker.random.words(3));
-		const valuesPlusOne = [...values, faker.random.words(3)];
+		const values = Array.from(Array(100), () => faker.word.words(3));
+		const valuesPlusOne = [...values, faker.word.words(3)];
 		const oneOfValues = RegExp(values.join('|'));
 		const { rerender } = setup(<TestRandomPlaceholder value={values} />);
 		const valueElement = await screen.findByText(oneOfValues);
@@ -91,7 +91,7 @@ describe('Use random placeholder', () => {
 
 	test('Does not update placeholder on rerender with the same values, even if the instance change', async () => {
 		// create a big array so that the probability of having a different value on second run is high
-		const values = Array.from(Array(100), () => faker.random.words(3));
+		const values = Array.from(Array(100), () => faker.word.words(3));
 		const oneOfValues = RegExp(values.join('|'));
 		const { rerender } = setup(<TestRandomPlaceholder value={values} />);
 		const valueElement = await screen.findByText(oneOfValues);
@@ -109,7 +109,7 @@ describe('Use random placeholder', () => {
 	test('Return an object if the translation is an object', async () => {
 		const toStringResult = 'print object';
 		const value = {
-			title: faker.random.words(),
+			title: faker.word.words(),
 			message: faker.lorem.sentence(),
 			toString(): string {
 				return toStringResult;
