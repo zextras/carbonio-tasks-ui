@@ -1,16 +1,9 @@
 {
     "label": {
-        "search": "Hae",
-        "password": "Salasana"
-    },
-    "cos": {
         "password": "Salasana"
     },
     "notification": {
         "mark_as_read": "Merkitse luetuksi"
-    },
-    "operations": {
-        "details": "Yksityiskohdat"
     },
     "board": {
         "label": {
