@@ -1,36 +1,19 @@
 {
-    "core": {
-        "subscription": {
-            "status": "الحالة"
-        }
-    },
     "cos": {
-        "disabled": "معطل",
-        "chats": "دردشات"
+        "disabled": "معطل"
     },
     "hsm": {
-        "name": "الاسم",
-        "edit": "تحرير"
+        "name": "الاسم"
     },
     "label": {
         "add": "إضافة",
-        "delete": "حذف",
         "email": "البريد الإلكتروني",
-        "description": "الوصف",
         "edit": "تحرير",
-        "message": "رسالة",
         "bucket_done_button": "تم",
-        "search": "البحث",
         "chats": "دردشات"
-    },
-    "account_details": {
-        "status": "الحالة"
     },
     "volume": {
         "volume_config_header": {
-            "name": "الاسم"
-        },
-        "volume_header": {
             "name": "الاسم"
         },
         "server_list_header": {
@@ -38,9 +21,6 @@
         }
     },
     "operations": {
-        "label": {
-            "notifications": "إعلامات"
-        },
         "operations_list_header": {
             "status": "الحالة"
         }

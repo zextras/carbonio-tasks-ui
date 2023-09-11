@@ -1,242 +1,133 @@
 {
     "label": {
-        "add": "Adăugare",
         "app_name": "Gestionare",
-        "delete": "Ştergere",
         "of": "a",
-        "status": "Stare",
         "accounts": "Conturi",
-        "authentication": "Autentificare",
         "closed": "Închis",
-        "domains": "Domenii",
         "external": "Extern",
-        "external_ldap": "LDAP extern",
         "filter": "Filtru",
-        "id": "ID",
         "locked": "Blocat",
-        "mb": "MB",
         "remove": "Eliminare",
-        "suspended": "Suspendat",
         "url": "URL",
-        "new_cos": "COS nouă",
         "notes": "Note",
-        "out_of_office_cache_lifetime": "Durata memorării în cache a ieşirii pe teren",
         "preferences": "Preferinţe",
-        "resources": "Resurse",
         "search": "Cauta",
-        "servers": "Servere",
         "time_zone": "Fus orar",
-        "use_iCal_delegation_model_for_shared_calendars_for_CalDAV_interface": "Utilizare model de delegare iCal pentru calendarele partajate pentru interfaţa CalDAV",
         "virtual_hosts": "Gazde virtuale",
-        "actions": "Acţiuni",
         "advanced": "Avansat",
-        "allow_sending_email_from_any_address": "Permite trimiterea mesajelor de la orice adresă",
         "always_show_the_mini-calendar": "Afişează întotdeauna mini-calendarul",
-        "automatically_add_invites_with_PUBLISH_method": "Adăugare automată invitaţii cu metoda PUBLICARE",
         "creation_date": "Data creării",
-        "details": "Detalii",
         "email": "Email",
-        "enable_mandatory_spell_check": "Activare verificare ortografică obligatorie",
         "gal": "GAL",
-        "home": "Acasa",
         "mailbox_quota": "Cotă căsuţă poştală",
-        "minimum_mail_polling_interval": "Interval minim de interogare ciclică a mesajelor",
         "account_status": "Stare cont",
-        "automatically_accept": "Acceptare automată",
         "bucket_cancel_button": "Anuleaza",
-        "class_of_service": "Clasă de servicii",
         "cos": "COS",
-        "yes": "Da",
         "device": "Dispozitiv",
-        "id_lbl": "ID",
         "location": "Locaţie",
-        "no": "Nu.",
         "password": "Parola",
-        "resource": "Resursă",
         "standard": "Standard",
-        "deleteing": "In curs de stergere ",
         "search_dot": "Cauta…",
-        "volume_cancel_button": "Anuleaza",
         "volume_name": "Nume volum",
-        "volume_type": "Tip volum",
         "week_day": {
             "monday": "luni",
-            "sunday": "duminică",
             "tuesday": "marţi"
         },
-        "current": "Actual",
         "domain": "Domeniu",
-        "helo": "Ajutor",
         "list_name": "Nume listă",
-        "message": "Mesaj",
         "never": "Niciodată",
-        "prefix": "Prefix",
         "prompt": "Întreabă",
-        "quotas": "Cote",
         "always": "Întotdeauna",
-        "calendar_options": "Opţiuni calendar",
         "compression_threshold": "Prag de comprimare",
-        "conversation": "Conversaţie",
         "configuration_lbl": "Configuraţie",
-        "scheduled": "Planificat",
         "email_address": "Adresa de e-mail",
-        "global": "Global",
         "volume_server_name": "Server",
-        "bucket_notes": "Note",
         "notifications": "Notificări",
-        "ID": "ID",
         "running": "Executare",
-        "Accounts": "Conturi",
         "contacts": "Contacte",
-        "storage": "Spatiu de stocare",
         "cancle_button": "Nu."
-    },
-    "core": {
-        "subscription": {
-            "hide": "Ascundere"
-        }
     },
     "domain": {
         "theme": "Tema",
-        "authentication": "Autentificare",
         "general_information": "Informaţii generale",
-        "most_result_return_gal_search": "Majoritatea rezultatelor căutării în GAL",
-        "manage": "Gestionare",
-        "gal_change_mode_external": "Extern"
+        "manage": "Gestionare"
     },
     "buckets": {
         "connection": {
             "notes": "Note"
         }
     },
-    "backup": {
-        "schedule": "Planificare"
-    },
     "cos": {
         "calendar_options": "Opţiuni calendar",
-        "contact_features": "Caracteristici contact",
         "display_external_images_in_HTML_mail": "Afişare imagini externe în mesaj HTML",
-        "enable_keyboard_shortcuts": "Activare taste rapide",
         "enable_toaster_notification_for_new_mail": "Activare notificare prin Toaster pentru e-mail nou",
-        "flash_browser_title_when_message_arrives": "Clipire titlu browser când soseşte un mesaj",
         "general_information": "Informaţii generale",
-        "highlight_the_Mail_tab_when_message_arrives": "Evidenţiere tab Mesaje când soseşte un mesaj",
         "language": "Limba",
-        "mail_options": "Opţiuni pentru mesaje",
         "number_of_items_to_display_per_page": "Număr elemente afişate pe o pagină",
-        "polling_interval": "Interval de interogare ciclică (timpul după care se verifică dacă sunt mesaje noi)",
         "receiving_mail": "Primire mesaje",
-        "search_features": "Caracteristicile căutare",
         "view_mail_as_html": "Afişare mesaj ca HTML (când este posibil)",
-        "admin_console_auth_token_lifetime": "Valabilitate simbol de autentificare în consola de administrare",
         "advanced_search": "Căutare avansată",
-        "auth_token_lifetime": "Valabilitate simbol de autentificare",
         "calendar": "Calendar",
-        "contacts": "Contacte",
         "default_view": {
-            "day": "Vizualizare zi",
-            "month": "Vizualizare lună"
+            "day": "Vizualizare zi"
         },
         "disable_attachment_viewing_from_web_mail_ui": "Dezactivare afişare fişiere ataşate în interfaţa de webmail",
-        "email_message_lifetime": "Valabilitate mesaj e-mail",
         "enable_failed_login_lockout": "Activare blocare la autentificare eşuată",
-        "enabled": "Activat",
         "free_busy_interop": "Interop liber / ocupat",
-        "imap_polling_interval": "Interval de interogare ciclică IMAP",
         "manuallly": "Manual",
-        "maximum_number_of_user_specific_forwarding_addresses": "Număr maxim de adrese de redirecţionare specificate de utilizator",
         "maximum_password_length": "Lungime maximă parolă",
-        "minimum_lower_case_characters": "Număr minim de caractere minuscule",
         "minimum_number_of_unique_password_history": "Istoricul numărului minim de parole unice",
-        "minimum_numeric_chracters": "Număr minim de caractere numerice",
         "minimum_password_length": "Lungime minimă parolă",
-        "minimum_upper_case_characters": "Număr minim de caractere majuscule",
         "offline_support_for_advanced_client": "Suport offline pentru clientul Advanced (Ajax)",
-        "pop3_polling_interval": "Intervalul de interogare ciclică POP3",
         "proxy_allowed_domain_name": "Numele domeniului permis de proxy",
-        "quota_warning_message_template": "Şablonul avertismentelor privitoare la cotă",
         "rss_polling_interval": "Intervalul de interogare ciclică RSS",
-        "saved_searches": "Căutări salvate",
         "shortest_allowed_duration_for_any_polling_interval": "Cea mai scurtă durată permisă pentru orice interval de interogare",
-        "status": "Stare",
         "time_to_lockout_account": "Durata blocării contului",
-        "timeout_policy": "Politica privind expirarea sesiunii",
-        "user_specific_fowarding_addresses": "Limitare câmp adresă de redirecţionare specificată de utilizator la (caractere)",
-        "enable_past_due_reminders": "Activare mementouri pentru scadenţe depăşite"
+        "user_specific_fowarding_addresses": "Limitare câmp adresă de redirecţionare specificată de utilizator la (caractere)"
     },
     "locale": {
         "chinese_china": "chineză (China)",
-        "french": "franceză",
         "hindi": "hindi",
-        "japanese": "japoneză",
         "portuguese_brazil": "portugheză (Brazilia)",
-        "russian": "rusă",
         "thai": "tailandeză"
     },
     "account_details": {
-        "mail": "Mesaje",
         "message_priority": "Prioritate mesaj",
-        "prevent_user_from_changing_password": "Împiedică utilizatorul să schimbe parola",
         "saved_searches": "Căutări salvate",
-        "tagging": "Etichetare",
         "as_new_mail_arrives": "La primirea unui mesaj",
-        "calendar": "Calendar",
         "default_view": {
-            "day": "Vizualizare zi",
-            "month": "Vizualizare lună"
+            "day": "Vizualizare zi"
         },
         "enable_smime": "Activare S/MIME",
-        "domain": "Domeniu",
         "SAVE": "Salveaza",
-        "send_check": "Trimite",
         "status": "Stare"
-    },
-    "connection": {
-        "notes": "Note"
     },
     "hsm": {
         "contact": "Persoană de contact",
-        "details": "Detalii",
         "edit": "Editeaza",
-        "items": "Elemente",
         "message": "Mesaj",
-        "no": "Nu.",
         "server": "Server",
-        "value": "Valoare",
-        "yes": "Da",
-        "scheduling": "Planificare"
+        "yes": "Da"
     },
     "volume": {
         "server_list_header": {
             "server": "Server"
         },
-        "volume_config_header": {
-            "name": "Nume"
-        },
         "volume_header": {
-            "current": "Actual",
-            "name": "Nume"
+            "current": "Actual"
         },
         "volume_indexer_header": {
-            "current": "Actual",
-            "name": "Nume"
+            "current": "Actual"
         }
     },
     "dashboard": {
         "description": "Descriere"
     },
-    "notification": {
-        "manage": "Gestionare"
-    },
     "operations": {
         "done": "Realizat",
-        "label": {
-            "status": "Stare"
-        },
         "operations_list_header": {
             "server": "Server"
-        },
-        "other": "Altele"
+        }
     },
     "new": "Nou",
     "modal": {
