@@ -7,7 +7,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen, waitFor, within } from '@testing-library/react';
-import { find, findIndex } from 'lodash';
+import { find } from 'lodash';
 import { Route } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
@@ -30,7 +30,7 @@ import { makeListItemsVisible, setup } from '../../utils/testUtils';
 
 describe('Task view', () => {
 	test('Show the empty list and the empty displayer if there is no task', async () => {
-		const findTasksMock = mockFindTasks({ status: Status.Open }, []);
+		const findTasksMock = mockFindTasks({}, []);
 		const mocks = [findTasksMock];
 		setup(
 			<Route path={ROUTES.task}>
@@ -48,7 +48,7 @@ describe('Task view', () => {
 
 	test('Show the task list and the empty displayer', async () => {
 		const tasks = populateTaskList();
-		const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+		const findTasksMock = mockFindTasks({}, tasks);
 		const mocks = [findTasksMock];
 		setup(
 			<Route path={ROUTES.task}>
@@ -72,7 +72,7 @@ describe('Task view', () => {
 		const task = tasks[0];
 		task.reminderAt = faker.date.anytime().getTime();
 		task.description = faker.lorem.sentences();
-		const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+		const findTasksMock = mockFindTasks({}, tasks);
 		const mocks = [findTasksMock, mockGetTask({ taskId: task.id }, task)];
 
 		const { findByRoleWithIcon, user } = setup(
@@ -117,7 +117,7 @@ describe('Task view', () => {
 		const task = tasks[0];
 		task.reminderAt = faker.date.anytime().getTime();
 		task.description = faker.lorem.sentences();
-		const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+		const findTasksMock = mockFindTasks({}, tasks);
 		const mocks = [findTasksMock, mockGetTask({ taskId: task.id }, task)];
 
 		const { getByRoleWithIcon, queryByRoleWithIcon, user } = setup(
@@ -146,12 +146,12 @@ describe('Task view', () => {
 	});
 
 	describe('Complete action', () => {
-		test('Displayer action remove the item from the list and close the displayer', async () => {
+		test('Displayer action not remove the item from the list', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.reminderAt = faker.date.anytime().getTime();
 			task.description = faker.lorem.sentences();
-			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
@@ -172,18 +172,15 @@ describe('Task view', () => {
 			await screen.findAllByText(task.title);
 			const action = screen.getByRole('button', { name: /complete/i });
 			await user.click(action);
-			await screen.findByText(EMPTY_DISPLAYER_HINT);
-			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
-			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
-			expect(screen.getByText(tasks[1].title)).toBeVisible();
+			expect(within(screen.getByTestId('main-list')).queryByText(task.title)).toBeVisible();
 		});
 
-		test('Hover action remove the item from the list and close the displayer', async () => {
+		test('Hover action not remove the item from the list', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.reminderAt = faker.date.anytime().getTime();
 			task.description = faker.lorem.sentences();
-			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
@@ -204,18 +201,15 @@ describe('Task view', () => {
 			await screen.findAllByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
-			await screen.findByText(EMPTY_DISPLAYER_HINT);
-			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
-			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
-			expect(screen.getByText(tasks[1].title)).toBeVisible();
+			expect(within(screen.getByTestId('main-list')).queryByText(task.title)).toBeVisible();
 		});
 
-		test('Contextual menu action remove the item from the list and close the displayer', async () => {
+		test('Contextual menu action not remove the item from the list', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.reminderAt = faker.date.anytime().getTime();
 			task.description = faker.lorem.sentences();
-			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [
 				findTasksMock,
 				mockGetTask({ taskId: task.id }, task),
@@ -243,16 +237,13 @@ describe('Task view', () => {
 			const contextualMenu = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
 			const action = within(contextualMenu).getByText(/complete/i);
 			await user.click(action);
-			await screen.findByText(EMPTY_DISPLAYER_HINT);
-			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
-			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
-			expect(screen.getByText(tasks[1].title)).toBeVisible();
+			expect(within(screen.getByTestId('main-list')).queryByText(task.title)).toBeVisible();
 		});
 
-		test('Show a snackbar with the possibility to undo the action', async () => {
+		test('Show a snackbar', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
-			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
 
 			const { user } = setup(
@@ -269,14 +260,13 @@ describe('Task view', () => {
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
 			expect(screen.getByText(/Task ".+" completed/i)).toBeVisible();
-			expect(screen.getByRole('button', { name: /undo/i })).toBeVisible();
 		});
 
 		test('Show the title cropped inside the snackbar if longer than 50 chars', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.title = faker.string.sample(60);
-			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
 
 			const { user } = setup(
@@ -293,14 +283,13 @@ describe('Task view', () => {
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
 			expect(screen.getByText(`Task "${task.title.substring(0, 50)}..." completed`)).toBeVisible();
-			expect(screen.getByRole('button', { name: /undo/i })).toBeVisible();
 		});
 
 		test('Show the entire title inside the snackbar if shorter than 50 chars', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.title = faker.string.sample(50);
-			const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
+			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
 
 			const { user } = setup(
@@ -317,53 +306,6 @@ describe('Task view', () => {
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
 			expect(screen.getByText(`Task "${task.title}" completed`)).toBeVisible();
-			expect(screen.getByRole('button', { name: /undo/i })).toBeVisible();
 		});
-
-		test.each([
-			[0, 10, 0],
-			[5, 10, 5],
-			[9, 10, 9]
-		])(
-			'Undo action within the snackbar show the task again in the same position (%i/%i) inside the list and show a snackbar of success',
-			async (taskIndex, listLength, expectedIndex) => {
-				const tasks = populateTaskList(listLength);
-				const task = tasks[taskIndex];
-				const findTasksMock = mockFindTasks({ status: Status.Open }, tasks);
-				const mocks = [
-					findTasksMock,
-					mockUpdateTaskStatus({ id: task.id, status: Status.Complete }),
-					mockUpdateTaskStatus({ id: task.id, status: Status.Open })
-				];
-
-				const { user } = setup(
-					<Route path={ROUTES.task}>
-						<TasksView />
-					</Route>,
-					{
-						mocks
-					}
-				);
-				await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
-				makeListItemsVisible();
-				await screen.findByText(task.title);
-				const listItems = screen.getAllByTestId(TEST_ID_SELECTOR.listItem);
-				expect(listItems).toHaveLength(listLength);
-				expect(findIndex(listItems, (item) => within(item).queryByText(task.title) !== null)).toBe(
-					taskIndex
-				);
-				const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
-				await user.click(action);
-				expect(screen.getAllByTestId(TEST_ID_SELECTOR.listItem)).toHaveLength(listLength - 1);
-				await user.click(screen.getByRole('button', { name: /undo/i }));
-				expect(
-					screen.queryByText(RegExp(`Task "${task.title}" completed`, 'i'))
-				).not.toBeInTheDocument();
-				expect(screen.getByText(/task restored in all tasks folder/i)).toBeVisible();
-				expect(findIndex(listItems, (item) => within(item).queryByText(task.title) !== null)).toBe(
-					expectedIndex
-				);
-			}
-		);
 	});
 });

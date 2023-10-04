@@ -10,6 +10,7 @@ import { screen } from '@testing-library/react';
 
 import { TaskDisplayer } from './TaskDisplayer';
 import { ICON_REGEXP } from '../constants/tests';
+import { Status } from '../gql/types';
 import { populateTask } from '../mocks/utils';
 import { formatDateFromTimestamp } from '../utils';
 import { setup } from '../utils/testUtils';
@@ -48,28 +49,43 @@ describe('Task displayer', () => {
 
 	describe('Actions', () => {
 		describe('Complete', () => {
-			test('Is visible and enabled', () => {
-				const task = populateTask();
-				const { getByRoleWithIcon } = setup(<TaskDisplayer task={task} />);
-				expect(
-					getByRoleWithIcon('button', { name: /complete/i, icon: ICON_REGEXP.completeAction })
-				).toBeVisible();
-				expect(
-					getByRoleWithIcon('button', { name: /complete/i, icon: ICON_REGEXP.completeAction })
-				).toBeEnabled();
+			test.each([
+				[Status.Open, 'visible and enabled'],
+				[Status.Complete, 'not present in the document']
+			])('When task is %s, complete action is %s', (status) => {
+				const task = populateTask({ status });
+				setup(<TaskDisplayer task={task} />);
+				if (status === Status.Open) {
+					expect(screen.getByRole('button', { name: /^complete/i })).toBeVisible();
+					expect(screen.getByRole('button', { name: /^complete/i })).toBeEnabled();
+				} else if (status === Status.Complete) {
+					expect(screen.queryByRole('button', { name: /^complete/i })).not.toBeInTheDocument();
+				}
+			});
+		});
+
+		describe('Uncomplete', () => {
+			test.each([
+				[Status.Complete, 'visible and enabled'],
+				[Status.Open, 'not present in the document']
+			])('When task is %s, uncomplete action is %s', (status) => {
+				const task = populateTask({ status });
+				setup(<TaskDisplayer task={task} />);
+				if (status === Status.Complete) {
+					expect(screen.getByRole('button', { name: /^uncomplete/i })).toBeVisible();
+					expect(screen.getByRole('button', { name: /^uncomplete/i })).toBeEnabled();
+				} else if (status === Status.Open) {
+					expect(screen.queryByRole('button', { name: /^uncomplete/i })).not.toBeInTheDocument();
+				}
 			});
 		});
 
 		describe('Edit', () => {
 			test('Is visible and enabled', () => {
 				const task = populateTask();
-				const { getByRoleWithIcon } = setup(<TaskDisplayer task={task} />);
-				expect(
-					getByRoleWithIcon('button', { name: /edit/i, icon: ICON_REGEXP.editAction })
-				).toBeVisible();
-				expect(
-					getByRoleWithIcon('button', { name: /edit/i, icon: ICON_REGEXP.editAction })
-				).toBeEnabled();
+				setup(<TaskDisplayer task={task} />);
+				expect(screen.getByRole('button', { name: /edit/i })).toBeVisible();
+				expect(screen.getByRole('button', { name: /edit/i })).toBeEnabled();
 			});
 		});
 	});
