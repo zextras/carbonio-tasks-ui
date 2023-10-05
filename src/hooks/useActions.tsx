@@ -3,23 +3,61 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { type Action, useSnackbar } from '@zextras/carbonio-design-system';
+import {
+	type Action,
+	Container,
+	useModal,
+	useSnackbar,
+	Text
+} from '@zextras/carbonio-design-system';
 import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 
 import { useCompleteAction } from './useCompleteAction';
 import { useReopenAction } from './useReopenAction';
+import { useTrashAction } from './useTrashAction';
 import { TASKS_ROUTE } from '../constants';
 import { Status, type Task } from '../gql/types';
 
 export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[] => {
 	const { id, title, status } = task;
 	const [t] = useTranslation();
+	const createModal = useModal();
+
 	const createSnackbar = useSnackbar();
 	const completeAction = useCompleteAction(id);
 	const reopenAction = useReopenAction(id);
+	const trashAction = useTrashAction(id);
+
+	const openDeleteModal = useCallback(() => {
+		const closeModal = createModal({
+			title: t('modal.delete.header', 'This action is irreversible'),
+			size: 'medium',
+			confirmLabel: t('modal.delete.button.confirm', 'Delete permanently'),
+			confirmColor: 'error',
+			onConfirm: () => {
+				trashAction().then(() => {
+					closeModal();
+				});
+			},
+			showCloseIcon: true,
+			onClose: () => {
+				closeModal();
+			},
+			children: (
+				<Container padding={{ vertical: 'large' }}>
+					<Text overflow="break-word" size="medium">
+						{t(
+							'modal.delete.body',
+							'You will delete permanently this task. You will not be able to recover this tasks anymore. This action is irreversible.'
+						)}
+					</Text>
+				</Container>
+			)
+		});
+	}, [createModal, t, trashAction]);
 
 	const reopenActionHandler = useCallback(() => {
 		reopenAction().then(() => {
@@ -68,12 +106,19 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 
 	// actions ordered by importance (most important first)
 	return useMemo<Action[]>((): Action[] => {
-		const actions = [
+		const actions: Action[] = [
 			{
 				id: 'edit',
 				label: t('action.edit', 'Edit'),
 				icon: 'Edit2Outline',
 				onClick: editAction
+			},
+			{
+				id: 'delete',
+				label: t('action.delete', 'Delete'),
+				icon: 'Trash2Outline',
+				onClick: openDeleteModal,
+				color: 'error'
 			}
 		];
 		if (status === Status.Complete) {
@@ -92,5 +137,5 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 			});
 		}
 		return actions;
-	}, [completeActionHandler, editAction, reopenActionHandler, status, t]);
+	}, [completeActionHandler, editAction, openDeleteModal, reopenActionHandler, status, t]);
 };

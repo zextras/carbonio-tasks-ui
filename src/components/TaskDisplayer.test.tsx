@@ -88,5 +88,14 @@ describe('Task displayer', () => {
 				expect(screen.getByRole('button', { name: /edit/i })).toBeEnabled();
 			});
 		});
+
+		describe('Delete', () => {
+			test('Is visible and enabled', () => {
+				const task = populateTask();
+				setup(<TaskDisplayer task={task} />);
+				expect(screen.getByRole('button', { name: /delete/i })).toBeVisible();
+				expect(screen.getByRole('button', { name: /delete/i })).toBeEnabled();
+			});
+		});
 	});
 });

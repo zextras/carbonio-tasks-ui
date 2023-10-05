@@ -37,11 +37,16 @@ export type Config = {
 export type Mutation = {
 	__typename?: 'Mutation';
 	createTask?: Maybe<Task>;
+	trashTask?: Maybe<Scalars['ID']['output']>;
 	updateTask?: Maybe<Task>;
 };
 
 export type MutationCreateTaskArgs = {
 	newTask: NewTaskInput;
+};
+
+export type MutationTrashTaskArgs = {
+	taskId: Scalars['ID']['input'];
 };
 
 export type MutationUpdateTaskArgs = {
@@ -162,6 +167,12 @@ export type CreateTaskMutation = {
 		  } & { __typename?: 'Task' })
 		| null;
 } & { __typename?: 'Mutation' };
+
+export type TrashTaskMutationVariables = Exact<{
+	taskId: Scalars['ID']['input'];
+}>;
+
+export type TrashTaskMutation = { trashTask?: string | null } & { __typename?: 'Mutation' };
 
 export type UpdateTaskMutationVariables = Exact<{
 	updateTask: UpdateTaskInput;
@@ -311,6 +322,42 @@ export const CreateTaskDocument = {
 		}
 	]
 } as unknown as DocumentNode<CreateTaskMutation, CreateTaskMutationVariables>;
+export const TrashTaskDocument = {
+	kind: 'Document',
+	definitions: [
+		{
+			kind: 'OperationDefinition',
+			operation: 'mutation',
+			name: { kind: 'Name', value: 'trashTask' },
+			variableDefinitions: [
+				{
+					kind: 'VariableDefinition',
+					variable: { kind: 'Variable', name: { kind: 'Name', value: 'taskId' } },
+					type: {
+						kind: 'NonNullType',
+						type: { kind: 'NamedType', name: { kind: 'Name', value: 'ID' } }
+					}
+				}
+			],
+			selectionSet: {
+				kind: 'SelectionSet',
+				selections: [
+					{
+						kind: 'Field',
+						name: { kind: 'Name', value: 'trashTask' },
+						arguments: [
+							{
+								kind: 'Argument',
+								name: { kind: 'Name', value: 'taskId' },
+								value: { kind: 'Variable', name: { kind: 'Name', value: 'taskId' } }
+							}
+						]
+					}
+				]
+			}
+		}
+	]
+} as unknown as DocumentNode<TrashTaskMutation, TrashTaskMutationVariables>;
 export const UpdateTaskDocument = {
 	kind: 'Document',
 	definitions: [

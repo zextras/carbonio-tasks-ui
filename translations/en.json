@@ -1,6 +1,7 @@
 {
     "action": {
         "complete": "Complete",
+        "delete": "Delete",
         "edit": "Edit",
         "uncomplete": "Uncomplete",
         "undo": "Undo"
@@ -99,6 +100,20 @@
     },
     "modal": {
         "close": "Close",
+        "delete": {
+            "body": "You will delete permanently this task. You will not be able to recover this tasks anymore. This action is irreversible.",
+            "button": {
+                "confirm": "Delete permanently"
+            },
+            "header": "This action is irreversible"
+        },
+        "deletePermanently": {
+            "body": "You will delete permanently this task. You will not be able to recover this tasks anymore. This action is irreversible.",
+            "button": {
+                "confirm": "Delete permanently"
+            },
+            "header": "This action is irreversible"
+        },
         "reminder": {
             "completeAll": "Complete all",
             "dismiss": "Dismiss",

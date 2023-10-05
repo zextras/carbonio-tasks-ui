@@ -228,5 +228,47 @@ describe('List item content', () => {
 				expect(within(dropdown).getByTestId(ICON_REGEXP.editAction)).toBeVisible();
 			});
 		});
+
+		describe('Delete', () => {
+			test('Is visible on hover', async () => {
+				const task = populateTask();
+				setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Open}
+					/>
+				);
+
+				// rtl isVisible is not working on hover bar
+				// Check that the action is inside the hover bar
+				expect(screen.getByTestId(ICON_REGEXP.deleteAction)).toBeInTheDocument();
+				expect(
+					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
+						ICON_REGEXP.deleteAction
+					)
+				).toBeInTheDocument();
+			});
+
+			test('Is visible in contextual menu', async () => {
+				const task = populateTask();
+				const { user } = setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Open}
+					/>
+				);
+
+				await user.rightClick(screen.getByText(task.title));
+				const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
+				expect(screen.getByText('Delete')).toBeVisible();
+				expect(within(dropdown).getByTestId(ICON_REGEXP.deleteAction)).toBeVisible();
+			});
+		});
 	});
 });
