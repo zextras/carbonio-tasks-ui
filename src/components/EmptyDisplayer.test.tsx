@@ -27,6 +27,6 @@ describe('Empty displayer', () => {
 		);
 		await screen.findByText(/you have reached the maximum number of tasks/i);
 		expect(screen.getByText(/you have reached the maximum number of tasks/i)).toBeVisible();
-		expect(screen.getByText(/to create a new one, complete some existing tasks/i)).toBeVisible();
+		expect(screen.getByText(/Delete your previous tasks to create more/i)).toBeVisible();
 	});
 });

@@ -83,7 +83,7 @@
         ],
         "allTasks_limitReached": [
             {
-                "message": "To create a new one, complete some existing tasks.",
+                "message": "Delete your previous tasks to create more.",
                 "title": "You have reached the maximum number of tasks."
             }
         ],
@@ -124,8 +124,8 @@
     },
     "newTaskBoard": {
         "banner": {
-            "lastTask": "This is the last task you can create. To create more complete your previous tasks.",
-            "limitReached": "You have reached your 200 tasks. To create more complete your previous tasks."
+            "lastTask": "This is the last task you can create. Delete your previous tasks to create more.",
+            "limitReached": "You have reached your 200 tasks. Delete your previous tasks to create more."
         }
     },
     "secondaryBar": {
@@ -134,7 +134,7 @@
     "snackbar": {
         "completeTask": "Task \"{{taskTitle}}\" completed",
         "restoreTask": "Task restored in All tasks folder",
-        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks.",
+        "tasksLimitReached": "You have reached your 200 tasks. Delete your previous tasks to create more.",
         "uncompleteTask": "Task \"{{taskTitle}}\" uncompleted"
     },
     "task": {
