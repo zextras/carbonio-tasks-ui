@@ -10,9 +10,6 @@ import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
 
 import {
-	UpdateTaskStatusDocument,
-	type UpdateTaskStatusMutation,
-	type UpdateTaskStatusMutationVariables,
 	CreateTaskDocument,
 	type CreateTaskMutation,
 	type CreateTaskMutationVariables,
@@ -29,7 +26,10 @@ import {
 	UpdateTaskDocument,
 	type UpdateTaskInput,
 	type UpdateTaskMutation,
-	type UpdateTaskMutationVariables
+	type UpdateTaskMutationVariables,
+	UpdateTaskStatusDocument,
+	type UpdateTaskStatusMutation,
+	type UpdateTaskStatusMutationVariables
 } from '../gql/types';
 
 export interface Mock<

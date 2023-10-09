@@ -13,7 +13,6 @@ import {
 	chain,
 	cloneDeep,
 	differenceBy,
-	filter,
 	find,
 	findIndex,
 	flatMap,
@@ -33,7 +32,6 @@ import { useLocation } from 'react-router-dom';
 
 import { ReminderModalContent } from './ReminderModalContent';
 import { ReminderModalFooter } from './ReminderModalFooter';
-import { removeTaskFromList } from '../apollo/cacheUtils';
 import { TASKS_ROUTE } from '../constants';
 import { FindTasksDocument, Status, type Task, UpdateTaskStatusDocument } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
@@ -459,21 +457,7 @@ export const RemindersManager = (): React.JSX.Element => {
 
 	const closeModalHandler = useCallback(() => {
 		setModalOpen(false);
-		const completedReminders = filter(
-			flatMapOfModalReminders,
-			(reminder) => reminder.status === Status.Complete
-		);
-		apolloClient.cache.modify({
-			fields: {
-				findTasks: removeTaskFromList(...completedReminders)
-			}
-		});
-		if (some(completedReminders, (reminder) => isActive(reminder.id))) {
-			removeActive({
-				replace: true
-			});
-		}
-	}, [apolloClient.cache, flatMapOfModalReminders, isActive, removeActive]);
+	}, []);
 
 	const completeTaskHandler = useCallback(
 		(task: Pick<Task, 'id'>) => () =>

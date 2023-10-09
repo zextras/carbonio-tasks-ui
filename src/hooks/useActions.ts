@@ -10,26 +10,35 @@ import { addBoard, getBoardById, reopenBoards, setCurrentBoard } from '@zextras/
 import { useTranslation } from 'react-i18next';
 
 import { useCompleteAction } from './useCompleteAction';
-import { useRestoreAction } from './useRestoreAction';
+import { useReopenAction } from './useReopenAction';
 import { TASKS_ROUTE } from '../constants';
-import { type Task } from '../gql/types';
+import { Status, type Task } from '../gql/types';
 
-export const useActions = (task: Pick<Task, 'id' | 'title'>): Action[] => {
+function getSnackbarTitle(title: string): string {
+	return title.length > 50 ? title.substring(0, 50).concat('...') : title;
+}
+
+export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[] => {
+	const { id, title, status } = task;
 	const [t] = useTranslation();
 	const createSnackbar = useSnackbar();
-	const completeAction = useCompleteAction(task.id);
-	const restoreAction = useRestoreAction(task.id);
+	const completeAction = useCompleteAction(id);
+	const reopenAction = useReopenAction(id);
 
-	const restoreActionHandler = useCallback(() => {
-		restoreAction().then(() => {
+	const reopenActionHandler = useCallback(() => {
+		reopenAction().then(() => {
 			createSnackbar({
 				type: 'success',
 				key: `snackbar-${Date.now()}`,
-				label: t('snackbar.restoreTask', 'Task restored in All tasks folder'),
+				label: t('snackbar.uncompleteTask', 'Task "{{taskTitle}}" uncompleted', {
+					replace: {
+						taskTitle: getSnackbarTitle(title)
+					}
+				}),
 				hideButton: true
 			});
 		});
-	}, [createSnackbar, restoreAction, t]);
+	}, [createSnackbar, reopenAction, t, title]);
 
 	const completeActionHandler = useCallback(() => {
 		completeAction().then(() => {
@@ -38,16 +47,13 @@ export const useActions = (task: Pick<Task, 'id' | 'title'>): Action[] => {
 				key: `snackbar-${Date.now()}`,
 				label: t('snackbar.completeTask', 'Task "{{taskTitle}}" completed', {
 					replace: {
-						taskTitle: `${
-							task.title.length > 50 ? task.title.substring(0, 50).concat('...') : task.title
-						}`
+						taskTitle: getSnackbarTitle(title)
 					}
 				}),
-				actionLabel: t('action.undo', 'Undo'),
-				onActionClick: restoreActionHandler
+				hideButton: true
 			});
 		});
-	}, [completeAction, createSnackbar, restoreActionHandler, t, task.title]);
+	}, [completeAction, createSnackbar, t, title]);
 
 	const editAction = useCallback<Action['onClick']>(() => {
 		const board = getBoardById(`edit-task-${task.id}`);
@@ -64,22 +70,30 @@ export const useActions = (task: Pick<Task, 'id' | 'title'>): Action[] => {
 		}
 	}, [t, task.id]);
 
-	// actions ordered by importance (most important first)
-	return useMemo<Action[]>(
-		(): Action[] => [
-			{
-				id: 'complete',
-				label: t('action.complete', 'Complete'),
-				icon: 'CheckmarkCircle2Outline',
-				onClick: completeActionHandler
-			},
+	return useMemo<Action[]>((): Action[] => {
+		const orderedActions = [
 			{
 				id: 'edit',
 				label: t('action.edit', 'Edit'),
 				icon: 'Edit2Outline',
 				onClick: editAction
 			}
-		],
-		[completeActionHandler, editAction, t]
-	);
+		];
+		if (status === Status.Complete) {
+			orderedActions.unshift({
+				id: 'uncomplete',
+				label: t('action.uncomplete', 'Uncomplete'),
+				icon: 'RadioButtonOffOutline',
+				onClick: reopenActionHandler
+			});
+		} else if (status === Status.Open) {
+			orderedActions.unshift({
+				id: 'complete',
+				label: t('action.complete', 'Complete'),
+				icon: 'CheckmarkCircle2Outline',
+				onClick: completeActionHandler
+			});
+		}
+		return orderedActions;
+	}, [completeActionHandler, editAction, reopenActionHandler, status, t]);
 };

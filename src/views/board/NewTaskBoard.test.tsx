@@ -37,9 +37,6 @@ describe('New task board', () => {
 	function prepareCache(tasks: Task[] = []): void {
 		global.apolloClient.writeQuery<FindTasksQuery, FindTasksQueryVariables>({
 			query: FindTasksDocument,
-			variables: {
-				status: Status.Open
-			},
 			data: {
 				findTasks: tasks
 			}
@@ -48,10 +45,7 @@ describe('New task board', () => {
 
 	function readQueryFindTasks(): FindTasksQuery | null {
 		return global.apolloClient.readQuery<FindTasksQuery, FindTasksQueryVariables>({
-			query: FindTasksDocument,
-			variables: {
-				status: Status.Open
-			}
+			query: FindTasksDocument
 		});
 	}
 
@@ -241,79 +235,85 @@ describe('New task board', () => {
 		});
 	});
 
-	test('Info banner appears when the limit of 199 tasks is reached', async () => {
-		const tasks = populateTaskList(MAX_TASKS_LIMIT - 2);
-		prepareCache(tasks);
+	test.each([[Status.Complete], [Status.Open]])(
+		'Info banner appears when the limit of 199 %s tasks is reached',
+		async (status) => {
+			const tasks = populateTaskList(MAX_TASKS_LIMIT - 2, { status });
+			prepareCache(tasks);
 
-		const newTaskInput: NewTaskInput = {
-			priority: Priority.Medium,
-			status: Status.Open,
-			title: 'task nr 199'
-		};
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'task nr 199'
+			};
 
-		const newTaskResult: Required<Task> = {
-			__typename: 'Task',
-			createdAt: new Date().getTime(),
-			id: faker.string.uuid(),
-			description: null,
-			reminderAllDay: null,
-			reminderAt: null,
-			...newTaskInput,
-			priority: newTaskInput.priority || Priority.Medium,
-			status: newTaskInput.status || Status.Open
-		};
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.string.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
 
-		const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
-		const mocks = [createTaskMock];
-		const { user } = setup(<NewTaskBoard />, { mocks });
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
 
-		const infoBannerText =
-			/This is the last task you can create\. To create more complete your previous tasks/i;
-		expect(screen.queryByText(infoBannerText)).not.toBeInTheDocument();
-		const createButton = screen.getByRole('button', { name: /create/i });
-		await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
-		await waitFor(() => expect(createButton).toBeEnabled());
-		await user.click(createButton);
-		await screen.findByText(infoBannerText);
-		expect(screen.getByText(infoBannerText)).toBeVisible();
-	});
+			const infoBannerText =
+				/This is the last task you can create\. To create more complete your previous tasks/i;
+			expect(screen.queryByText(infoBannerText)).not.toBeInTheDocument();
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			await screen.findByText(infoBannerText);
+			expect(screen.getByText(infoBannerText)).toBeVisible();
+		}
+	);
 
-	test('Warning banner appears when the limit of 200 tasks is reached', async () => {
-		const tasks = populateTaskList(MAX_TASKS_LIMIT - 1);
-		prepareCache(tasks);
+	test.each([[Status.Complete], [Status.Open]])(
+		'Warning banner appears when the limit of 200 %s tasks is reached',
+		async (status) => {
+			const tasks = populateTaskList(MAX_TASKS_LIMIT - 1, { status });
+			prepareCache(tasks);
 
-		const newTaskInput: NewTaskInput = {
-			priority: Priority.Medium,
-			status: Status.Open,
-			title: 'task nr 200'
-		};
+			const newTaskInput: NewTaskInput = {
+				priority: Priority.Medium,
+				status: Status.Open,
+				title: 'task nr 200'
+			};
 
-		const newTaskResult: Required<Task> = {
-			__typename: 'Task',
-			createdAt: new Date().getTime(),
-			id: faker.string.uuid(),
-			description: null,
-			reminderAllDay: null,
-			reminderAt: null,
-			...newTaskInput,
-			priority: newTaskInput.priority || Priority.Medium,
-			status: newTaskInput.status || Status.Open
-		};
+			const newTaskResult: Required<Task> = {
+				__typename: 'Task',
+				createdAt: new Date().getTime(),
+				id: faker.string.uuid(),
+				description: null,
+				reminderAllDay: null,
+				reminderAt: null,
+				...newTaskInput,
+				priority: newTaskInput.priority || Priority.Medium,
+				status: newTaskInput.status || Status.Open
+			};
 
-		const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
-		const mocks = [createTaskMock];
-		const { user } = setup(<NewTaskBoard />, { mocks });
+			const createTaskMock = mockCreateTask(newTaskInput, newTaskResult);
+			const mocks = [createTaskMock];
+			const { user } = setup(<NewTaskBoard />, { mocks });
 
-		const warningBannerText =
-			/You have reached your 200 tasks. To create more complete your previous tasks./i;
-		expect(screen.queryByText(warningBannerText)).not.toBeInTheDocument();
-		const createButton = screen.getByRole('button', { name: /create/i });
-		await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
-		await waitFor(() => expect(createButton).toBeEnabled());
-		await user.click(createButton);
-		screen.getByText(warningBannerText);
-		expect(screen.getByText(warningBannerText)).toBeVisible();
-	});
+			const warningBannerText =
+				/You have reached your 200 tasks. To create more complete your previous tasks./i;
+			expect(screen.queryByText(warningBannerText)).not.toBeInTheDocument();
+			const createButton = screen.getByRole('button', { name: /create/i });
+			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
+			await waitFor(() => expect(createButton).toBeEnabled());
+			await user.click(createButton);
+			screen.getByText(warningBannerText);
+			expect(screen.getByText(warningBannerText)).toBeVisible();
+		}
+	);
 
 	test('Snackbar appears when max limit is reached and click create button', async () => {
 		const tasks = populateTaskList(MAX_TASKS_LIMIT);

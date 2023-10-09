@@ -158,7 +158,7 @@ describe('App view', () => {
 			expect(screen.getByText(tasks[0].title)).toBeVisible();
 		});
 
-		test('When a reminder is completed from the reminders modal, remove the item from the list when the modal is closed with dismiss button', async () => {
+		test('When a reminder is completed from the reminders modal, the item remains in the list when the modal is closed with dismiss button', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
@@ -191,7 +191,7 @@ describe('App view', () => {
 			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
 			await screen.findByTestId(ICON_REGEXP.reminderComplete);
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
-			expect(screen.queryByText(tasks[0].title)).not.toBeInTheDocument();
+			expect(screen.getByText(tasks[0].title)).toBeVisible();
 		});
 
 		test('When a reminder is completed and restored from the reminders modal, leave the item in the list in the same position', async () => {
@@ -210,17 +210,22 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
-				initialRouterEntries: [`/${TASKS_ROUTE}`]
-			});
+			const { getByRoleWithIcon, user, findByRoleWithIcon } = setup(
+				<AppViewWithRemindersManager />,
+				{
+					initialRouterEntries: [`/${TASKS_ROUTE}`]
+				}
+			);
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
 			makeListItemsVisible();
 			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
 			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
-			await screen.findByTestId(ICON_REGEXP.reminderComplete);
-			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderUndoAction }));
+			const undoButton = await findByRoleWithIcon('button', {
+				icon: ICON_REGEXP.reminderUndoAction
+			});
+			await user.click(undoButton);
 			await waitForElementToBeRemoved(screen.queryByTestId(ICON_REGEXP.reminderComplete));
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			expect(screen.getByText(tasks[0].title)).toBeVisible();
@@ -229,7 +234,7 @@ describe('App view', () => {
 			).toBeVisible();
 		});
 
-		test('When a reminder is completed from the reminders modal, close the displayer if opened on the item', async () => {
+		test('When a reminder is completed from the reminders modal, does not close the displayer if opened on the item', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
@@ -261,8 +266,9 @@ describe('App view', () => {
 			await screen.findByTestId(ICON_REGEXP.reminderComplete);
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			showDisplayerPlaceholder();
-			expect(screen.getByText(EMPTY_DISPLAYER_HINT)).toBeVisible();
-			expect(screen.queryByText(tasks[0].title)).not.toBeInTheDocument();
+			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
+			expect(screen.getByText(/creation date/i)).toBeVisible();
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
 		});
 
 		test('When a reminder is completed from the reminders modal, does not close the displayer if opened on another item', async () => {
@@ -316,9 +322,12 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
-				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
-			});
+			const { findByRoleWithIcon, getByRoleWithIcon, user } = setup(
+				<AppViewWithRemindersManager />,
+				{
+					initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
+				}
+			);
 
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -326,8 +335,10 @@ describe('App view', () => {
 			await screen.findByText(/creation date/i);
 			expect(screen.getAllByText(tasks[0].title)).toHaveLength(3);
 			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
-			await screen.findByTestId(ICON_REGEXP.reminderComplete);
-			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderUndoAction }));
+			const undoButton = await findByRoleWithIcon('button', {
+				icon: ICON_REGEXP.reminderUndoAction
+			});
+			await user.click(undoButton);
 			await waitForElementToBeRemoved(screen.queryByTestId(ICON_REGEXP.reminderComplete));
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			showDisplayerPlaceholder();

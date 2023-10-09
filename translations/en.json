@@ -2,6 +2,7 @@
     "action": {
         "complete": "Complete",
         "edit": "Edit",
+        "uncomplete": "Uncomplete",
         "undo": "Undo"
     },
     "board": {
@@ -118,7 +119,8 @@
     "snackbar": {
         "completeTask": "Task \"{{taskTitle}}\" completed",
         "restoreTask": "Task restored in All tasks folder",
-        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks."
+        "tasksLimitReached": "You have reached your 200 tasks. To create more complete your previous tasks.",
+        "uncompleteTask": "Task \"{{taskTitle}}\" uncompleted"
     },
     "task": {
         "priority_high": "High",

@@ -7,6 +7,7 @@ export const ICON_REGEXP = {
 	closeModal: /^icon: Close$/i,
 	closeDisplayer: /^icon: CloseOutline$/i,
 	completeAction: /^icon: CheckmarkCircle2Outline$/i,
+	uncompleteAction: /^icon: RadioButtonOffOutline$/i,
 	editAction: /^icon: Edit2Outline$/i,
 	highPriority: /^icon: ArrowheadUp$/i,
 	inputCalendarIcon: /^icon: CalendarOutline$/i,
