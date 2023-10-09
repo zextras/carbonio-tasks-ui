@@ -23,6 +23,9 @@ import {
 	Priority,
 	Status,
 	type Task,
+	TrashTaskDocument,
+	type TrashTaskMutation,
+	type TrashTaskMutationVariables,
 	UpdateTaskDocument,
 	type UpdateTaskInput,
 	type UpdateTaskMutation,
@@ -125,6 +128,25 @@ export function mockUpdateTaskStatus(
 			(): FetchResult<UpdateTaskStatusMutation> => ({
 				data: {
 					updateTask
+				}
+			})
+		)
+	};
+}
+
+export function mockTrashTask(
+	variables: TrashTaskMutationVariables,
+	trashTask: TrashTaskMutation['trashTask'] = variables.taskId
+): Mock<TrashTaskMutation, TrashTaskMutationVariables> {
+	return {
+		request: {
+			query: TrashTaskDocument,
+			variables
+		},
+		result: jest.fn(
+			(): FetchResult<TrashTaskMutation> => ({
+				data: {
+					trashTask
 				}
 			})
 		)

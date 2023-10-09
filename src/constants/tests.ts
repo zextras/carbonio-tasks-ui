@@ -9,6 +9,7 @@ export const ICON_REGEXP = {
 	completeAction: /^icon: CheckmarkCircle2Outline$/i,
 	uncompleteAction: /^icon: RadioButtonOffOutline$/i,
 	editAction: /^icon: Edit2Outline$/i,
+	deleteAction: /^icon: Trash2Outline$/i,
 	highPriority: /^icon: ArrowheadUp$/i,
 	inputCalendarIcon: /^icon: CalendarOutline$/i,
 	lowPriority: /^icon: ArrowheadDown$/i,

@@ -22,6 +22,7 @@ export const ActionsHeader = ({ actions }: ActionsHeaderProps): React.JSX.Elemen
 					size={'medium'}
 					backgroundColor={'transparent'}
 					disabled={action.disabled}
+					color={action.color}
 				/>
 			)),
 		[actions]
