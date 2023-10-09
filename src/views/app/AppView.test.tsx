@@ -191,7 +191,7 @@ describe('App view', () => {
 			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
 			await screen.findByTestId(ICON_REGEXP.reminderComplete);
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
-			expect(screen.queryByText(tasks[0].title)).toBeVisible();
+			expect(screen.getByText(tasks[0].title)).toBeVisible();
 		});
 
 		test('When a reminder is completed and restored from the reminders modal, leave the item in the list in the same position', async () => {
