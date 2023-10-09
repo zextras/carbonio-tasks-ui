@@ -36,10 +36,6 @@ const ContentContainer = styled(Container)`
 	overflow: hidden;
 `;
 
-const MarginContainer = styled(Container)`
-	margin-left: auto;
-`;
-
 export const ListItemContent = React.memo<ListItemContentProps>(
 	({
 		id,
@@ -108,9 +104,14 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 										<Text overflow="ellipsis" size="medium">
 											{title}
 										</Text>
-										<MarginContainer width={'fit'} height={'fit'} flexShrink={0}>
+										<Container
+											margin={{ left: 'auto' }}
+											width={'fit'}
+											height={'fit'}
+											flexShrink={0}
+										>
 											<PriorityIcon priority={priority} />
-										</MarginContainer>
+										</Container>
 									</Row>
 									<Row
 										gap={'0.25rem'}

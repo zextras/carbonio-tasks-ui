@@ -146,7 +146,7 @@ describe('Task view', () => {
 	});
 
 	describe('Complete action', () => {
-		test('Displayer action not remove the item from the list', async () => {
+		test('Displayer action does not remove the item from the list', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.reminderAt = faker.date.anytime().getTime();
@@ -172,10 +172,10 @@ describe('Task view', () => {
 			await screen.findAllByText(task.title);
 			const action = screen.getByRole('button', { name: /complete/i });
 			await user.click(action);
-			expect(within(screen.getByTestId('main-list')).queryByText(task.title)).toBeVisible();
+			expect(within(screen.getByTestId('main-list')).getByText(task.title)).toBeVisible();
 		});
 
-		test('Hover action not remove the item from the list', async () => {
+		test('Hover action does not remove the item from the list', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.reminderAt = faker.date.anytime().getTime();
@@ -201,10 +201,10 @@ describe('Task view', () => {
 			await screen.findAllByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
-			expect(within(screen.getByTestId('main-list')).queryByText(task.title)).toBeVisible();
+			expect(within(screen.getByTestId('main-list')).getByText(task.title)).toBeVisible();
 		});
 
-		test('Contextual menu action not remove the item from the list', async () => {
+		test('Contextual menu action does not remove the item from the list', async () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 			task.reminderAt = faker.date.anytime().getTime();
@@ -237,7 +237,7 @@ describe('Task view', () => {
 			const contextualMenu = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
 			const action = within(contextualMenu).getByText(/complete/i);
 			await user.click(action);
-			expect(within(screen.getByTestId('main-list')).queryByText(task.title)).toBeVisible();
+			expect(within(screen.getByTestId('main-list')).getByText(task.title)).toBeVisible();
 		});
 
 		test('Show a snackbar', async () => {

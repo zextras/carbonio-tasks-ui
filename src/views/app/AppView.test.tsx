@@ -18,6 +18,7 @@ import { EMPTY_DISPLAYER_HINT, ICON_REGEXP, TEST_ID_SELECTOR } from '../../const
 import {
 	type FindTasksQuery,
 	type FindTasksQueryVariables,
+	GetTaskDocument,
 	type GetTaskQuery,
 	type GetTaskQueryVariables
 } from '../../gql/types';
@@ -233,6 +234,43 @@ describe('App view', () => {
 			).toBeVisible();
 		});
 
+		test('When a reminder is completed from the reminders modal, does not close the displayer if opened on the item', async () => {
+			const tasks = populateTaskList(10, { reminderAt: null });
+			// set reminder only for one item
+			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
+			const findTasksRequest = jest.fn();
+			server.use(
+				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', (req, res, ctx) => {
+					findTasksRequest();
+					return res(
+						ctx.data({
+							findTasks: tasks
+						})
+					);
+				}),
+				graphql.query<GetTaskQuery, GetTaskQueryVariables>(GetTaskDocument, (req, res, ctx) =>
+					res(ctx.data({ getTask: tasks[0] }))
+				)
+			);
+
+			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
+				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
+			});
+
+			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
+			await screen.findByText(/tasks reminders/i);
+			makeListItemsVisible();
+			await screen.findByText(/creation date/i);
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(3);
+			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
+			await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			await user.click(screen.getByRole('button', { name: /dismiss/i }));
+			showDisplayerPlaceholder();
+			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
+			expect(screen.getByText(/creation date/i)).toBeVisible();
+			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
+		});
+
 		test('When a reminder is completed from the reminders modal, does not close the displayer if opened on another item', async () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
@@ -297,12 +335,10 @@ describe('App view', () => {
 			await screen.findByText(/creation date/i);
 			expect(screen.getAllByText(tasks[0].title)).toHaveLength(3);
 			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
-
 			const undoButton = await findByRoleWithIcon('button', {
 				icon: ICON_REGEXP.reminderUndoAction
 			});
 			await user.click(undoButton);
-
 			await waitForElementToBeRemoved(screen.queryByTestId(ICON_REGEXP.reminderComplete));
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			showDisplayerPlaceholder();

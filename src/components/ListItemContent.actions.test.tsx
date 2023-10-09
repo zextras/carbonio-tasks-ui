@@ -69,128 +69,8 @@ describe('List item content', () => {
 			expect(screen.queryByTestId(TEST_ID_SELECTOR.dropdown)).not.toBeInTheDocument();
 		});
 
-		describe.each([
-			[Status.Open, 'visible'],
-			[Status.Complete, 'missing']
-		])('Complete', (status, visibility) => {
-			test(`When task status is ${status}, complete action is ${visibility} on hover`, async () => {
-				const task = populateTask();
-				setup(
-					<ListItemContent
-						id={task.id}
-						priority={task.priority}
-						title={task.title}
-						visible
-						status={status}
-					/>
-				);
-
-				if (status === Status.Complete) {
-					expect(screen.queryByTestId(ICON_REGEXP.completeAction)).not.toBeInTheDocument();
-					expect(
-						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).queryByTestId(
-							ICON_REGEXP.completeAction
-						)
-					).not.toBeInTheDocument();
-				} else if (status === Status.Open) {
-					// rtl isVisible is not working on hover bar
-					// Check that the action is inside the hover bar
-					expect(screen.getByTestId(ICON_REGEXP.completeAction)).toBeInTheDocument();
-					expect(
-						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
-							ICON_REGEXP.completeAction
-						)
-					).toBeInTheDocument();
-				}
-			});
-
-			test(`When task status is ${status}, complete action is ${visibility} in contextual menu`, async () => {
-				const task = populateTask();
-				const { user } = setup(
-					<ListItemContent
-						id={task.id}
-						priority={task.priority}
-						title={task.title}
-						visible
-						status={status}
-					/>
-				);
-
-				await user.rightClick(screen.getByText(task.title));
-				const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
-				if (status === Status.Open) {
-					expect(screen.getByText('Complete')).toBeVisible();
-					expect(within(dropdown).getByTestId(ICON_REGEXP.completeAction)).toBeVisible();
-				} else if (status === Status.Complete) {
-					expect(
-						within(dropdown).queryByTestId(ICON_REGEXP.completeAction)
-					).not.toBeInTheDocument();
-				}
-			});
-		});
-
-		describe.each([
-			[Status.Complete, 'visible'],
-			[Status.Open, 'missing']
-		])('Uncomplete', (status, visibility) => {
-			test(`When task status is ${status}, uncomplete action is ${visibility} on hover`, async () => {
-				const task = populateTask();
-				setup(
-					<ListItemContent
-						id={task.id}
-						priority={task.priority}
-						title={task.title}
-						visible
-						status={status}
-					/>
-				);
-
-				if (status === Status.Open) {
-					expect(screen.queryByTestId(ICON_REGEXP.uncompleteAction)).not.toBeInTheDocument();
-					expect(
-						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).queryByTestId(
-							ICON_REGEXP.uncompleteAction
-						)
-					).not.toBeInTheDocument();
-				} else if (status === Status.Complete) {
-					// rtl isVisible is not working on hover bar
-					// Check that the action is inside the hover bar
-					expect(screen.getByTestId(ICON_REGEXP.uncompleteAction)).toBeInTheDocument();
-					expect(
-						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
-							ICON_REGEXP.uncompleteAction
-						)
-					).toBeInTheDocument();
-				}
-			});
-
-			test(`When task status is ${status}, uncomplete action is ${visibility} in contextual menu`, async () => {
-				const task = populateTask();
-				const { user } = setup(
-					<ListItemContent
-						id={task.id}
-						priority={task.priority}
-						title={task.title}
-						visible
-						status={status}
-					/>
-				);
-
-				await user.rightClick(screen.getByText(task.title));
-				const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
-				if (status === Status.Complete) {
-					expect(screen.getByText('Uncomplete')).toBeVisible();
-					expect(within(dropdown).getByTestId(ICON_REGEXP.uncompleteAction)).toBeVisible();
-				} else if (status === Status.Open) {
-					expect(
-						within(dropdown).queryByTestId(ICON_REGEXP.uncompleteAction)
-					).not.toBeInTheDocument();
-				}
-			});
-		});
-
-		describe('Edit', () => {
-			test('Is visible on hover', async () => {
+		describe('Complete', () => {
+			test(`When task status is open, complete action is visible on hover`, async () => {
 				const task = populateTask();
 				setup(
 					<ListItemContent
@@ -204,13 +84,33 @@ describe('List item content', () => {
 
 				// rtl isVisible is not working on hover bar
 				// Check that the action is inside the hover bar
-				expect(screen.getByTestId(ICON_REGEXP.editAction)).toBeInTheDocument();
+				expect(screen.getByTestId(ICON_REGEXP.completeAction)).toBeInTheDocument();
 				expect(
-					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(ICON_REGEXP.editAction)
+					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
+						ICON_REGEXP.completeAction
+					)
 				).toBeInTheDocument();
 			});
+			test(`When task status is complete, complete action is missing on hover`, async () => {
+				const task = populateTask();
+				setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Complete}
+					/>
+				);
 
-			test('Is visible in contextual menu', async () => {
+				expect(screen.queryByTestId(ICON_REGEXP.completeAction)).not.toBeInTheDocument();
+				expect(
+					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).queryByTestId(
+						ICON_REGEXP.completeAction
+					)
+				).not.toBeInTheDocument();
+			});
+			test(`When task status is open, complete action is visible in contextual menu`, async () => {
 				const task = populateTask();
 				const { user } = setup(
 					<ListItemContent
@@ -224,9 +124,151 @@ describe('List item content', () => {
 
 				await user.rightClick(screen.getByText(task.title));
 				const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
-				expect(screen.getByText('Edit')).toBeVisible();
-				expect(within(dropdown).getByTestId(ICON_REGEXP.editAction)).toBeVisible();
+				expect(screen.getByText('Complete')).toBeVisible();
+				expect(within(dropdown).getByTestId(ICON_REGEXP.completeAction)).toBeVisible();
 			});
+			test(`When task status is complete, complete action is missing in contextual menu`, async () => {
+				const task = populateTask();
+				const { user } = setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Complete}
+					/>
+				);
+
+				await user.rightClick(screen.getByText(task.title));
+				const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
+				expect(within(dropdown).queryByTestId(ICON_REGEXP.completeAction)).not.toBeInTheDocument();
+			});
+		});
+
+		describe('Uncomplete', () => {
+			test(`When task status is complete, uncomplete action is visible on hover`, async () => {
+				const task = populateTask();
+				setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Complete}
+					/>
+				);
+
+				// rtl isVisible is not working on hover bar
+				// Check that the action is inside the hover bar
+				expect(screen.getByTestId(ICON_REGEXP.uncompleteAction)).toBeInTheDocument();
+				expect(
+					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
+						ICON_REGEXP.uncompleteAction
+					)
+				).toBeInTheDocument();
+			});
+			test(`When task status is open, uncomplete action is missing on hover`, async () => {
+				const task = populateTask();
+				setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Open}
+					/>
+				);
+
+				expect(screen.queryByTestId(ICON_REGEXP.uncompleteAction)).not.toBeInTheDocument();
+				expect(
+					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).queryByTestId(
+						ICON_REGEXP.uncompleteAction
+					)
+				).not.toBeInTheDocument();
+			});
+			test(`When task status is complete, uncomplete action is visible in contextual menu`, async () => {
+				const task = populateTask();
+				const { user } = setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Complete}
+					/>
+				);
+
+				await user.rightClick(screen.getByText(task.title));
+				const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
+				expect(screen.getByText('Uncomplete')).toBeVisible();
+				expect(within(dropdown).getByTestId(ICON_REGEXP.uncompleteAction)).toBeVisible();
+			});
+			test(`When task status is open, uncomplete action is missing in contextual menu`, async () => {
+				const task = populateTask();
+				const { user } = setup(
+					<ListItemContent
+						id={task.id}
+						priority={task.priority}
+						title={task.title}
+						visible
+						status={Status.Open}
+					/>
+				);
+
+				await user.rightClick(screen.getByText(task.title));
+				const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
+				expect(
+					within(dropdown).queryByTestId(ICON_REGEXP.uncompleteAction)
+				).not.toBeInTheDocument();
+			});
+		});
+
+		describe('Edit', () => {
+			test.each([[Status.Open], [Status.Complete]])(
+				'When task status is %s, edit action is visible on hover',
+				async (status) => {
+					const task = populateTask();
+					setup(
+						<ListItemContent
+							id={task.id}
+							priority={task.priority}
+							title={task.title}
+							visible
+							status={status}
+						/>
+					);
+
+					// rtl isVisible is not working on hover bar
+					// Check that the action is inside the hover bar
+					expect(screen.getByTestId(ICON_REGEXP.editAction)).toBeInTheDocument();
+					expect(
+						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
+							ICON_REGEXP.editAction
+						)
+					).toBeInTheDocument();
+				}
+			);
+
+			test.each([[Status.Open], [Status.Complete]])(
+				'When task status is %s, edit action is visible in contextual menu',
+				async (status) => {
+					const task = populateTask();
+					const { user } = setup(
+						<ListItemContent
+							id={task.id}
+							priority={task.priority}
+							title={task.title}
+							visible
+							status={status}
+						/>
+					);
+
+					await user.rightClick(screen.getByText(task.title));
+					const dropdown = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
+					expect(screen.getByText('Edit')).toBeVisible();
+					expect(within(dropdown).getByTestId(ICON_REGEXP.editAction)).toBeVisible();
+				}
+			);
 		});
 	});
 });

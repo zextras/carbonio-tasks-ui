@@ -29,9 +29,6 @@ const NewTaskBoard = (): React.JSX.Element => {
 	const createSnackbar = useSnackbar();
 
 	const { data: findTasksResult } = useQuery(FindTasksDocument, {
-		variables: {
-			status: Status.Open
-		},
 		fetchPolicy: 'cache-first',
 		notifyOnNetworkStatusChange: true,
 		errorPolicy: 'all'

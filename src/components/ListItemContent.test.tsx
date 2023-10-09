@@ -34,27 +34,34 @@ describe('List item content', () => {
 	});
 
 	describe('Status', () => {
-		test.each([
-			[Status.Complete, 'visible'],
-			[Status.Open, 'not in the document']
-		])('When status is %s then completed icon is %s', async (status) => {
+		test('When status is complete then completed icon is visible', async () => {
 			setup(
 				<ListItemContent
 					id={'id1'}
 					title={'Task title'}
 					priority={Priority.Medium}
 					visible
-					status={status}
+					status={Status.Complete}
 				/>
 			);
 
-			if (status === Status.Complete) {
-				const completeIcon = await screen.findByTestId(ICON_REGEXP.reminderComplete);
-				expect(completeIcon).toBeVisible();
-			} else if (status === Status.Open) {
-				const completeIcon = screen.queryByTestId(ICON_REGEXP.reminderComplete);
-				expect(completeIcon).not.toBeInTheDocument();
-			}
+			const completeIcon = await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			expect(completeIcon).toBeVisible();
+		});
+
+		test('When status is open then completed icon is not in the document', async () => {
+			setup(
+				<ListItemContent
+					id={'id1'}
+					title={'Task title'}
+					priority={Priority.Medium}
+					visible
+					status={Status.Open}
+				/>
+			);
+
+			const completeIcon = screen.queryByTestId(ICON_REGEXP.reminderComplete);
+			expect(completeIcon).not.toBeInTheDocument();
 		});
 	});
 
