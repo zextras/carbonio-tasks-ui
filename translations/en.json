@@ -126,6 +126,7 @@
     },
     "snackbar": {
         "completeTask": "Task \"{{taskTitle}}\" completed",
+        "permanentlyDeletedTask": "Task permanently deleted",
         "restoreTask": "Task restored in All tasks folder",
         "tasksLimitReached": "You have reached your 200 tasks. Delete your previous tasks to create more.",
         "uncompleteTask": "Task \"{{taskTitle}}\" uncompleted"

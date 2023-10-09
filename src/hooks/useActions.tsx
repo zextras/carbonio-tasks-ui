@@ -44,6 +44,12 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 			onConfirm: () => {
 				trashAction().then(() => {
 					closeModal();
+					createSnackbar({
+						type: 'success',
+						key: `snackbar-${Date.now()}`,
+						label: t('snackbar.permanentlyDeletedTask', 'Task permanently deleted'),
+						hideButton: true
+					});
 				});
 			},
 			showCloseIcon: true,
@@ -61,7 +67,7 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 				</Container>
 			)
 		});
-	}, [createModal, t, trashAction]);
+	}, [createModal, createSnackbar, t, trashAction]);
 
 	const reopenActionHandler = useCallback(() => {
 		reopenAction().then(() => {

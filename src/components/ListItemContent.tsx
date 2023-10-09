@@ -98,7 +98,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 									<Row gap={'0.25rem'} width="fill" wrap="nowrap">
 										{status === Status.Complete && (
 											<Container width={'fit'} height={'fit'} flexShrink={0}>
-												<Icon icon={'Checkmark'} color={'success'} />
+												<Icon size={'large'} icon={'Checkmark'} color={'success'} />
 											</Container>
 										)}
 										<Text overflow="ellipsis" size="medium">

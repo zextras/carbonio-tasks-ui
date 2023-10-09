@@ -263,7 +263,7 @@ describe('App view', () => {
 			await screen.findByText(/creation date/i);
 			expect(screen.getAllByText(tasks[0].title)).toHaveLength(3);
 			await user.click(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction }));
-			await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			await within(screen.getByTestId('reminder-modal')).findByTestId(ICON_REGEXP.reminderComplete);
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			showDisplayerPlaceholder();
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
