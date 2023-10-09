@@ -26,7 +26,7 @@ export const EmptyDisplayer = ({ translationKey }: EmptyDisplayerProps): React.J
 			isFull
 				? {
 						title: 'You have reached the maximum number of tasks.',
-						message: 'To create a new one, complete some existing tasks.'
+						message: 'Delete your previous tasks to create more.'
 				  }
 				: {
 						title: 'Start organizing your day.',
