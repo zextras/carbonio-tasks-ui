@@ -92,8 +92,14 @@ describe('Task displayer', () => {
 		});
 
 		describe('Delete', () => {
-			test('Is visible and enabled', () => {
-				const task = populateTask();
+			test('When task is complete, delete action is visible and enabled', () => {
+				const task = populateTask({ status: Status.Complete });
+				setup(<TaskDisplayer task={task} />);
+				expect(screen.getByRole('button', { name: /delete/i })).toBeVisible();
+				expect(screen.getByRole('button', { name: /delete/i })).toBeEnabled();
+			});
+			test('When task is open, delete action is visible and enabled', () => {
+				const task = populateTask({ status: Status.Open });
 				setup(<TaskDisplayer task={task} />);
 				expect(screen.getByRole('button', { name: /delete/i })).toBeVisible();
 				expect(screen.getByRole('button', { name: /delete/i })).toBeEnabled();

@@ -15,7 +15,7 @@ import { TrashTaskDocument, type TrashTaskMutation } from '../gql/types';
 type TrashActionFn = () => Promise<FetchResult<TrashTaskMutation>>;
 
 export const useTrashAction = (taskId: string): TrashActionFn => {
-	const { removeActive } = useActiveItem();
+	const { removeActive, isActive } = useActiveItem();
 	const [trashTask] = useMutation(TrashTaskDocument, {
 		variables: {
 			taskId
@@ -35,13 +35,13 @@ export const useTrashAction = (taskId: string): TrashActionFn => {
 					}
 				}
 			}).then((result) => {
-				if (result.data?.trashTask) {
+				if (result.data?.trashTask && isActive(result.data.trashTask)) {
 					// replace history so that a back navigation does not re-open the displayer
 					// for a task which is no more visible
 					removeActive({ replace: true });
 				}
 				return result;
 			}),
-		[removeActive, trashTask]
+		[isActive, removeActive, trashTask]
 	);
 };

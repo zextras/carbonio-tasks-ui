@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: AGPL-3.0-only
 
-#import "../fragments/task.graphql"
-
 mutation trashTask($taskId: ID!) {
     trashTask(taskId: $taskId)
 }
