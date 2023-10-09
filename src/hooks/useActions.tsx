@@ -21,6 +21,10 @@ import { useTrashAction } from './useTrashAction';
 import { TASKS_ROUTE } from '../constants';
 import { Status, type Task } from '../gql/types';
 
+function getSnackbarTitle(title: string): string {
+	return title.length > 50 ? title.substring(0, 50).concat('...') : title;
+}
+
 export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[] => {
 	const { id, title, status } = task;
 	const [t] = useTranslation();
@@ -66,7 +70,7 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 				key: `snackbar-${Date.now()}`,
 				label: t('snackbar.uncompleteTask', 'Task "{{taskTitle}}" uncompleted', {
 					replace: {
-						taskTitle: `${title.length > 50 ? title.substring(0, 50).concat('...') : title}`
+						taskTitle: getSnackbarTitle(title)
 					}
 				}),
 				hideButton: true
@@ -81,7 +85,7 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 				key: `snackbar-${Date.now()}`,
 				label: t('snackbar.completeTask', 'Task "{{taskTitle}}" completed', {
 					replace: {
-						taskTitle: `${title.length > 50 ? title.substring(0, 50).concat('...') : title}`
+						taskTitle: getSnackbarTitle(title)
 					}
 				}),
 				hideButton: true
@@ -104,9 +108,8 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 		}
 	}, [t, task.id]);
 
-	// actions ordered by importance (most important first)
 	return useMemo<Action[]>((): Action[] => {
-		const actions: Action[] = [
+		const orderedActions: Action[] = [
 			{
 				id: 'edit',
 				label: t('action.edit', 'Edit'),
@@ -122,20 +125,20 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 			}
 		];
 		if (status === Status.Complete) {
-			actions.unshift({
+			orderedActions.unshift({
 				id: 'uncomplete',
 				label: t('action.uncomplete', 'Uncomplete'),
 				icon: 'RadioButtonOffOutline',
 				onClick: reopenActionHandler
 			});
 		} else if (status === Status.Open) {
-			actions.unshift({
+			orderedActions.unshift({
 				id: 'complete',
 				label: t('action.complete', 'Complete'),
 				icon: 'CheckmarkCircle2Outline',
 				onClick: completeActionHandler
 			});
 		}
-		return actions;
+		return orderedActions;
 	}, [completeActionHandler, editAction, openDeleteModal, reopenActionHandler, status, t]);
 };
