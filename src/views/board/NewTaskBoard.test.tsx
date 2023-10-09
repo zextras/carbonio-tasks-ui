@@ -264,7 +264,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 
 			const infoBannerText =
-				/This is the last task you can create\. To create more complete your previous tasks/i;
+				/This is the last task you can create\. Delete your previous tasks to create more/i;
 			expect(screen.queryByText(infoBannerText)).not.toBeInTheDocument();
 			const createButton = screen.getByRole('button', { name: /create/i });
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
@@ -304,7 +304,7 @@ describe('New task board', () => {
 			const { user } = setup(<NewTaskBoard />, { mocks });
 
 			const warningBannerText =
-				/You have reached your 200 tasks. To create more complete your previous tasks./i;
+				/You have reached your 200 tasks. Delete your previous tasks to create more./i;
 			expect(screen.queryByText(warningBannerText)).not.toBeInTheDocument();
 			const createButton = screen.getByRole('button', { name: /create/i });
 			await user.type(screen.getByRole('textbox', { name: /title/i }), newTaskInput.title);
@@ -348,7 +348,7 @@ describe('New task board', () => {
 
 		// Snackbar and banner have the same text
 		const snackbarText =
-			'You have reached your 200 tasks. To create more complete your previous tasks.';
+			'You have reached your 200 tasks. Delete your previous tasks to create more.';
 		expect(screen.getAllByText(snackbarText).length).toBe(2);
 		expect(createTaskMock.result).not.toHaveBeenCalled();
 	});

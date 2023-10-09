@@ -50,7 +50,7 @@ const NewTaskBoard = (): React.JSX.Element => {
 					type: 'warning',
 					label: t(
 						'snackbar.tasksLimitReached',
-						'You have reached your 200 tasks. To create more complete your previous tasks.'
+						'You have reached your 200 tasks. Delete your previous tasks to create more.'
 					),
 					replace: false,
 					hideButton: true
@@ -98,7 +98,7 @@ const NewTaskBoard = (): React.JSX.Element => {
 					<NewTaskLimitBanner
 						bannerLabel={t(
 							'newTaskBoard.banner.lastTask',
-							'This is the last task you can create. To create more complete your previous tasks.'
+							'This is the last task you can create. Delete your previous tasks to create more.'
 						)}
 						bannerIcon={'InfoOutline'}
 						bannerColor={'info'}
@@ -108,7 +108,7 @@ const NewTaskBoard = (): React.JSX.Element => {
 					<NewTaskLimitBanner
 						bannerLabel={t(
 							'newTaskBoard.banner.limitReached',
-							'You have reached your 200 tasks. To create more complete your previous tasks.'
+							'You have reached your 200 tasks. Delete your previous tasks to create more.'
 						)}
 						bannerIcon={'AlertTriangleOutline'}
 						bannerColor={'warning'}
