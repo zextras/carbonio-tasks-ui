@@ -94,6 +94,7 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 							priority={task.priority}
 							reminderAt={task.reminderAt}
 							reminderAllDay={task.reminderAllDay}
+							status={task.status}
 							id={task.id}
 							onClick={setActive}
 						/>
@@ -129,7 +130,11 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 			</Row>
 			<Divider color="gray3" />
 			<Container minHeight={0} maxHeight={'100%'}>
-				{(!isEmpty(items) && <ListV2 background={'gray6'}>{items}</ListV2>) || (
+				{(!isEmpty(items) && (
+					<ListV2 data-testid="main-list" background={'gray6'}>
+						{items}
+					</ListV2>
+				)) || (
 					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
 						{emptyListPlaceholder}
 					</Text>

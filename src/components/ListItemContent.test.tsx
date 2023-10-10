@@ -11,44 +11,83 @@ import subDays from 'date-fns/subDays';
 
 import { ListItemContent } from './ListItemContent';
 import { ICON_REGEXP } from '../constants/tests';
-import { Priority } from '../gql/types';
+import { Priority, Status } from '../gql/types';
 import { populateTask } from '../mocks/utils';
 import { setup } from '../utils/testUtils';
 
 describe('List item content', () => {
 	describe('Title', () => {
 		test('The title is always shown', () => {
-			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Medium} visible />);
+			setup(
+				<ListItemContent
+					id={'id1'}
+					title={'Task title'}
+					priority={Priority.Medium}
+					visible
+					status={Status.Open}
+				/>
+			);
 			const title = screen.getByText('Task title');
 			expect(title).toBeInTheDocument();
 			expect(title).toBeVisible();
 		});
 	});
 
+	describe('Status', () => {
+		test('When status is complete then completed icon is visible', async () => {
+			setup(
+				<ListItemContent
+					id={'id1'}
+					title={'Task title'}
+					priority={Priority.Medium}
+					visible
+					status={Status.Complete}
+				/>
+			);
+
+			const completeIcon = await screen.findByTestId(ICON_REGEXP.reminderComplete);
+			expect(completeIcon).toBeVisible();
+		});
+
+		test('When status is open then completed icon is not in the document', async () => {
+			setup(
+				<ListItemContent
+					id={'id1'}
+					title={'Task title'}
+					priority={Priority.Medium}
+					visible
+					status={Status.Open}
+				/>
+			);
+
+			const completeIcon = screen.queryByTestId(ICON_REGEXP.reminderComplete);
+			expect(completeIcon).not.toBeInTheDocument();
+		});
+	});
+
 	describe('Priority', () => {
-		test('When priority is high then high priority icon is shown', async () => {
-			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.High} visible />);
-			const highPriorityIcon = await screen.findByTestId(ICON_REGEXP.highPriority);
+		test.each([
+			[Priority.High, ICON_REGEXP.highPriority],
+			[Priority.Low, ICON_REGEXP.lowPriority],
+			[Priority.Medium, ICON_REGEXP.mediumPriority]
+		])(
+			'When priority is %s then %s priority icon is shown',
+			async (priority, priorityIconRegexp) => {
+				setup(
+					<ListItemContent
+						id={'id1'}
+						title={'Task title'}
+						priority={priority}
+						visible
+						status={Status.Open}
+					/>
+				);
+				const priorityIcon = await screen.findByTestId(priorityIconRegexp);
 
-			expect(highPriorityIcon).toBeInTheDocument();
-			expect(highPriorityIcon).toBeVisible();
-		});
-
-		test('When priority is low then low priority icon is shown', async () => {
-			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Low} visible />);
-			const lowPriorityIcon = await screen.findByTestId(ICON_REGEXP.lowPriority);
-
-			expect(lowPriorityIcon).toBeInTheDocument();
-			expect(lowPriorityIcon).toBeVisible();
-		});
-
-		test('When priority is medium then medium priority icon is shown', async () => {
-			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Medium} visible />);
-			const mediumPriorityIcon = await screen.findByTestId(ICON_REGEXP.mediumPriority);
-
-			expect(mediumPriorityIcon).toBeInTheDocument();
-			expect(mediumPriorityIcon).toBeVisible();
-		});
+				expect(priorityIcon).toBeInTheDocument();
+				expect(priorityIcon).toBeVisible();
+			}
+		);
 	});
 
 	describe('Expired icon', () => {
@@ -62,6 +101,7 @@ describe('List item content', () => {
 					priority={Priority.Medium}
 					visible
 					reminderAt={sevenDaysAgo.valueOf()}
+					status={Status.Open}
 				/>
 			);
 			const reminderExpiredIcon = await screen.findByTestId(ICON_REGEXP.reminderExpired);
@@ -73,7 +113,15 @@ describe('List item content', () => {
 
 	describe('Reminder info', () => {
 		test('When there is not a reminder then the string "Do not remind me" is shown', async () => {
-			setup(<ListItemContent id={'id1'} title={'Task title'} priority={Priority.Medium} visible />);
+			setup(
+				<ListItemContent
+					id={'id1'}
+					title={'Task title'}
+					priority={Priority.Medium}
+					visible
+					status={Status.Open}
+				/>
+			);
 			const reminderText = await screen.findByText('Do not remind me');
 
 			expect(reminderText).toBeInTheDocument();
@@ -90,6 +138,7 @@ describe('List item content', () => {
 					priority={Priority.Medium}
 					visible
 					reminderAt={sevenDaysAgo.valueOf()}
+					status={Status.Open}
 				/>
 			);
 			const reminderText = await screen.findByText('Remind me on');
@@ -109,6 +158,7 @@ describe('List item content', () => {
 					priority={Priority.Medium}
 					visible
 					reminderAt={pastDate.valueOf()}
+					status={Status.Open}
 				/>
 			);
 			const reminderDate = await screen.findByText('Aug 08, 1988 - 09:15');
@@ -129,6 +179,7 @@ describe('List item content', () => {
 					visible
 					reminderAt={pastDate.valueOf()}
 					reminderAllDay
+					status={Status.Open}
 				/>
 			);
 			expect(screen.queryByText('Jun 12, 1995 - 09:15')).not.toBeInTheDocument();
@@ -160,6 +211,7 @@ describe('List item content', () => {
 					visible
 					reminderAt={yesterdayAtNoon.valueOf()}
 					reminderAllDay
+					status={Status.Open}
 				/>
 			);
 			const minusOutlineIcon = await screen.findByTestId(ICON_REGEXP.reminderExpired);
@@ -179,6 +231,7 @@ describe('List item content', () => {
 					visible
 					reminderAt={todayAtNoon}
 					reminderAllDay
+					status={Status.Open}
 				/>
 			);
 			expect(screen.queryByTestId(ICON_REGEXP.reminderExpired)).not.toBeInTheDocument();
@@ -194,6 +247,7 @@ describe('List item content', () => {
 					priority={Priority.Medium}
 					visible
 					reminderAt={oneMilliSecondAgo}
+					status={Status.Open}
 				/>
 			);
 			const reminderExpiredIcon = await screen.findByTestId(ICON_REGEXP.reminderExpired);
@@ -212,6 +266,7 @@ describe('List item content', () => {
 					priority={Priority.Medium}
 					visible
 					reminderAt={now}
+					status={Status.Open}
 				/>
 			);
 			expect(screen.queryByTestId(ICON_REGEXP.reminderExpired)).not.toBeInTheDocument();
@@ -228,6 +283,7 @@ describe('List item content', () => {
 				title={task.title}
 				onClick={clickFn}
 				visible
+				status={Status.Open}
 			/>
 		);
 		await user.click(screen.getByText(task.title));
@@ -238,7 +294,13 @@ describe('List item content', () => {
 	test('When not visible, no data is shown', () => {
 		const task = populateTask();
 		setup(
-			<ListItemContent id={task.id} priority={Priority.High} title={task.title} visible={false} />
+			<ListItemContent
+				id={task.id}
+				priority={Priority.High}
+				title={task.title}
+				visible={false}
+				status={Status.Open}
+			/>
 		);
 		expect(screen.queryByText(task.title)).not.toBeInTheDocument();
 		expect(screen.queryByTestId(ICON_REGEXP.highPriority)).not.toBeInTheDocument();

@@ -27,13 +27,9 @@ describe('Actions header', () => {
 				onClick: jest.fn()
 			}
 		];
-		const { getByRoleWithIcon } = setup(<ActionsHeader actions={actions} />);
-		expect(
-			getByRoleWithIcon('button', { name: /action 1/i, icon: 'icon: PeopleOutline' })
-		).toBeVisible();
-		expect(
-			getByRoleWithIcon('button', { name: /action 2/i, icon: 'icon: ActivityOutline' })
-		).toBeVisible();
+		setup(<ActionsHeader actions={actions} />);
+		expect(screen.getByRole('button', { name: /action 1/i })).toBeVisible();
+		expect(screen.getByRole('button', { name: /action 2/i })).toBeVisible();
 	});
 
 	test('Click on an action calls action callback', async () => {

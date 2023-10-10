@@ -20,7 +20,7 @@ export const TaskDisplayer = ({ task }: TaskDisplayerProps): React.JSX.Element =
 	const actions = useActions(task);
 	return (
 		<Container background={'gray5'} mainAlignment={'flex-start'} padding={{ bottom: '1rem' }}>
-			<DisplayerHeader title={task.title} />
+			<DisplayerHeader title={task.title} status={task.status} />
 			<Container
 				padding={{ horizontal: '1rem' }}
 				mainAlignment={'flex-start'}
