@@ -548,7 +548,6 @@ export const RemindersManager = (): React.JSX.Element => {
 
 	return (
 		<Modal
-			data-testid={'reminder-modal'}
 			title={t('modal.reminder.title', 'Tasks reminders')}
 			open={isModalOpen && isTasksView}
 			onClose={closeModalHandler}

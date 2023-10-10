@@ -455,5 +455,29 @@ describe('Task view', () => {
 			expect(screen.queryByText(task.title)).not.toBeInTheDocument();
 			expect(screen.getByText(tasks[1].title)).toBeVisible();
 		});
+
+		test('Show a snackbar', async () => {
+			const tasks = populateTaskList();
+			const task = tasks[0];
+			const findTasksMock = mockFindTasks({}, tasks);
+			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];
+
+			const { user } = setup(
+				<Route path={ROUTES.task}>
+					<TasksView />
+				</Route>,
+				{
+					mocks
+				}
+			);
+			await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
+			makeListItemsVisible();
+			await screen.findByText(task.title);
+			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.deleteAction);
+			await user.click(action);
+			const confirmButton = await screen.findByRole('button', { name: /^delete permanently/i });
+			await user.click(confirmButton);
+			expect(screen.getByText('Task permanently deleted')).toBeVisible();
+		});
 	});
 });

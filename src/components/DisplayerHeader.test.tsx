@@ -14,6 +14,16 @@ import { Status } from '../gql/types';
 import { setup } from '../utils/testUtils';
 
 describe('Displayer header', () => {
+	test('Checkmark is visible when status is Complete', () => {
+		const title = faker.lorem.words();
+		setup(<DisplayerHeader title={title} status={Status.Complete} />);
+		expect(screen.getByTestId(ICON_REGEXP.reminderComplete)).toBeVisible();
+	});
+	test('Checkmark is not in the document when status is Open', () => {
+		const title = faker.lorem.words();
+		setup(<DisplayerHeader title={title} status={Status.Open} />);
+		expect(screen.queryByTestId(ICON_REGEXP.reminderComplete)).not.toBeInTheDocument();
+	});
 	test.each([[Status.Open], [Status.Complete]])('Show the title when status is %s', (status) => {
 		const title = faker.lorem.words();
 		setup(<DisplayerHeader title={title} status={status} />);
