@@ -22,13 +22,12 @@ import {
 	within
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { ModalManager } from '@zextras/carbonio-design-system';
+import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
 import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 
-import { SnackbarStackManager } from '../components/SnackbarStackManager';
 import { type Mock } from '../mocks/utils';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
@@ -182,11 +181,11 @@ const Wrapper = ({ mocks, initialRouterEntries, children }: WrapperProps): React
 			initialIndex={(initialRouterEntries?.length || 1) - 1}
 		>
 			<StyledWrapper>
-				<SnackbarStackManager>
+				<SnackbarManager>
 					<I18NextTestProvider>
 						<ModalManager>{children}</ModalManager>
 					</I18NextTestProvider>
-				</SnackbarStackManager>
+				</SnackbarManager>
 			</StyledWrapper>
 		</MemoryRouter>
 	</ApolloProviderWrapper>
