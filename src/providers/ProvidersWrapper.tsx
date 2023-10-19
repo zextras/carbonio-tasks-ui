@@ -11,18 +11,11 @@ import { ModalManager } from '@zextras/carbonio-design-system';
 
 import { StyledWrapper } from './StyledWrapper';
 import buildClient from '../apollo';
-import { SnackbarStackManager } from '../components/SnackbarStackManager';
 import { type OneOrMany } from '../types/utils';
 
 interface ProvidersWrapperProps {
 	children?: OneOrMany<React.ReactNode>;
 }
-
-export const ManagersProvider = ({ children }: ProvidersWrapperProps): React.JSX.Element => (
-	<SnackbarStackManager>
-		<ModalManager>{children}</ModalManager>
-	</SnackbarStackManager>
-);
 
 export const ProvidersWrapper = ({ children }: ProvidersWrapperProps): React.JSX.Element => {
 	const apolloClient = useMemo(() => buildClient(), []);
@@ -30,7 +23,7 @@ export const ProvidersWrapper = ({ children }: ProvidersWrapperProps): React.JSX
 	return (
 		<StyledWrapper>
 			<ApolloProvider client={apolloClient}>
-				<ManagersProvider>{children}</ManagersProvider>
+				<ModalManager>{children}</ModalManager>
 			</ApolloProvider>
 		</StyledWrapper>
 	);
