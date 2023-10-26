@@ -1,48 +1,28 @@
 {
     "label": {
-        "description": "توضیح",
         "bucket_done_button": "انجام",
-        "type": "نوع",
         "details": "جزئیات",
-        "of": "از",
         "search": "جستجو",
-        "edit": "ویرایش",
         "cancel": "لغو",
-        "settings": "تنظیمات",
         "purge": "پاکسازی",
-        "reset": "تنظیم مجدد",
-        "date": "تاریخ",
-        "Type": "نوع"
+        "date": "تاریخ"
     },
     "domain": {
         "theme": "پوسته‌ها"
     },
-    "cos": {
-        "disabled": "غیرفعال"
-    },
     "hsm": {
-        "details": "جزئیات",
-        "name": "نام"
+        "details": "جزئیات"
     },
     "volume": {
         "server_list_header": {
             "description": "توضیح"
-        },
-        "volume_header": {
-            "name": "نام"
         }
     },
     "dashboard": {
         "description": "توضیح"
     },
-    "notification": {
-        "copy": "ایجاد رونوشت"
-    },
     "operations": {
         "details": "جزئیات"
-    },
-    "account_details": {
-        "SAVE": "ذخیره کردن"
     },
     "action": {
         "edit": "ویرایش"
