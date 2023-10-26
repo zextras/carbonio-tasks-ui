@@ -1,0 +1,18 @@
+{
+    "action": {
+        "edit": "Szerkesztés"
+    },
+    "board": {
+        "label": {
+            "description": "Leírás"
+        }
+    },
+    "label": {
+        "app_name": "Feladatok"
+    },
+    "displayer": {
+        "details": {
+            "description": "Leírás"
+        }
+    }
+}

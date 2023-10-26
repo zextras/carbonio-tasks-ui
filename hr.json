@@ -1,0 +1,25 @@
+{
+    "action": {
+        "edit": "Uredi",
+        "undo": "Vrati"
+    },
+    "board": {
+        "label": {
+            "description": "Opis"
+        }
+    },
+    "displayer": {
+        "details": {
+            "description": "Opis"
+        }
+    },
+    "modal": {
+        "close": "Zatvori",
+        "reminder": {
+            "dismiss": "Odbaci"
+        }
+    },
+    "task": {
+        "status_open": "Otvori"
+    }
+}
