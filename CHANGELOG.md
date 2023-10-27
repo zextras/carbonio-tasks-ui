@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.6](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.5...v0.0.6) (2023-10-27)
+
+
+### Features
+
+* make completed tasks visible ([869176c](https://github.com/zextras/carbonio-tasks-ui/commit/869176cd057f8e730dfcf531ae776dfa833bb58a)), closes [#49](https://github.com/zextras/carbonio-tasks-ui/issues/49)
+
 ### [0.0.5](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.4...v0.0.5) (2023-08-31)
 
 ### [0.0.4](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.3...v0.0.4) (2023-06-05)
