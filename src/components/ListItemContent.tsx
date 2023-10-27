@@ -16,13 +16,13 @@ import { Reminder } from './Reminder';
 import { HoverContainer, ListItemContainer } from './StyledComponents';
 import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
-import type { Task } from '../gql/types';
+import { type Task, Status } from '../gql/types';
 import { useActions } from '../hooks/useActions';
 import { useReminder } from '../hooks/useReminder';
 
 type ListItemContentProps = Pick<
 	Task,
-	'id' | 'priority' | 'reminderAt' | 'reminderAllDay' | 'title'
+	'id' | 'priority' | 'reminderAt' | 'reminderAllDay' | 'title' | 'status'
 > & {
 	visible?: boolean;
 	onClick?: (id: string) => void;
@@ -44,12 +44,13 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 		title,
 		reminderAllDay,
 		onClick,
+		status,
 		// others props
 		visible
 	}) => {
 		const [t] = useTranslation();
 		const { isExpired: isReminderExpired } = useReminder(reminderAt, reminderAllDay);
-		const actions = useActions({ id, title });
+		const actions = useActions({ id, title, status });
 
 		const clickHandler = useCallback<React.MouseEventHandler<HTMLDivElement>>(() => {
 			onClick?.(id);
@@ -94,11 +95,21 @@ export const ListItemContent = React.memo<ListItemContentProps>(
 									width="fill"
 									mainAlignment={'flex-start'}
 								>
-									<Row gap={'0.25rem'} width="fill" wrap="nowrap" mainAlignment="space-between">
+									<Row gap={'0.25rem'} width="fill" wrap="nowrap">
+										{status === Status.Complete && (
+											<Container width={'fit'} height={'fit'} flexShrink={0}>
+												<Icon size={'large'} icon={'Checkmark'} color={'success'} />
+											</Container>
+										)}
 										<Text overflow="ellipsis" size="medium">
 											{title}
 										</Text>
-										<Container width={'fit'} height={'fit'} flexShrink={0}>
+										<Container
+											margin={{ left: 'auto' }}
+											width={'fit'}
+											height={'fit'}
+											flexShrink={0}
+										>
 											<PriorityIcon priority={priority} />
 										</Container>
 									</Row>

@@ -19,6 +19,7 @@ scalar DateTime
 
 type Mutation {
 	createTask(newTask: NewTaskInput!): Task
+	trashTask(taskId: ID!): ID
 	updateTask(updateTask: UpdateTaskInput!): Task
 }
 

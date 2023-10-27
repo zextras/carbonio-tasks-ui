@@ -19,10 +19,10 @@ export const ActionsHeader = ({ actions }: ActionsHeaderProps): React.JSX.Elemen
 					label={action.label}
 					type={'outlined'}
 					onClick={action.onClick}
-					icon={action.icon}
 					size={'medium'}
 					backgroundColor={'transparent'}
 					disabled={action.disabled}
+					color={action.color}
 				/>
 			)),
 		[actions]

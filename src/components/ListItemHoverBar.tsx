@@ -26,7 +26,8 @@ export const ListItemHoverBar = ({
 				onClick: (event): ReturnType<DSAction['onClick']> => {
 					event.stopPropagation();
 					action.onClick(event);
-				}
+				},
+				color: undefined
 			})),
 		[actions]
 	);

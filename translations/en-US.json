@@ -1,0 +1,29 @@
+{
+    "action": {
+        "edit": "Edit",
+        "undo": "Undo"
+    },
+    "board": {
+        "label": {
+            "description": "Description",
+            "details": "Details"
+        }
+    },
+    "task": {
+        "status_open": "Open"
+    },
+    "displayer": {
+        "details": {
+            "description": "Description"
+        }
+    },
+    "label": {
+        "app_name": "Tasks"
+    },
+    "modal": {
+        "close": "Close",
+        "reminder": {
+            "dismiss": "Dismiss"
+        }
+    }
+}

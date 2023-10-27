@@ -10,9 +10,6 @@ import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
 
 import {
-	UpdateTaskStatusDocument,
-	type UpdateTaskStatusMutation,
-	type UpdateTaskStatusMutationVariables,
 	CreateTaskDocument,
 	type CreateTaskMutation,
 	type CreateTaskMutationVariables,
@@ -26,10 +23,16 @@ import {
 	Priority,
 	Status,
 	type Task,
+	TrashTaskDocument,
+	type TrashTaskMutation,
+	type TrashTaskMutationVariables,
 	UpdateTaskDocument,
 	type UpdateTaskInput,
 	type UpdateTaskMutation,
-	type UpdateTaskMutationVariables
+	type UpdateTaskMutationVariables,
+	UpdateTaskStatusDocument,
+	type UpdateTaskStatusMutation,
+	type UpdateTaskStatusMutationVariables
 } from '../gql/types';
 
 export interface Mock<
@@ -125,6 +128,25 @@ export function mockUpdateTaskStatus(
 			(): FetchResult<UpdateTaskStatusMutation> => ({
 				data: {
 					updateTask
+				}
+			})
+		)
+	};
+}
+
+export function mockTrashTask(
+	variables: TrashTaskMutationVariables,
+	trashTask: TrashTaskMutation['trashTask'] = variables.taskId
+): Mock<TrashTaskMutation, TrashTaskMutationVariables> {
+	return {
+		request: {
+			query: TrashTaskDocument,
+			variables
+		},
+		result: jest.fn(
+			(): FetchResult<TrashTaskMutation> => ({
+				data: {
+					trashTask
 				}
 			})
 		)
