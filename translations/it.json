@@ -68,7 +68,14 @@
             "remindMeOn": "Ricordamelo il",
             "title": "Promemoria delle attività"
         },
-        "close": "Chiudi"
+        "close": "Chiudi",
+        "delete": {
+            "button": {
+                "confirm": "Elimina definitivamente"
+            },
+            "header": "L'azione è irreversibile",
+            "body": "Stai per eliminare definitivamente questa attività. Non sarà più possibile ripristinarla. Questa azione non è reversibile."
+        }
     },
     "task": {
         "priority_high": "Alta",
@@ -80,7 +87,9 @@
     "action": {
         "edit": "Modifica",
         "undo": "Annulla",
-        "complete": "Completa"
+        "complete": "Completa",
+        "delete": "Elimina",
+        "uncomplete": "Non completato"
     },
     "displayer": {
         "details": {
@@ -104,7 +113,7 @@
         ],
         "allTasks_limitReached": [
             {
-                "message": "Per creare una nuova attività, completane alcune di già esistenti.",
+                "message": "Elimina le attività precedenti per crearne di nuove.",
                 "title": "Hai raggiunto il numero massimo di attività."
             }
         ]
@@ -118,14 +127,16 @@
     },
     "newTaskBoard": {
         "banner": {
-            "lastTask": "Questa è l'ultima attività che puoi creare. Per crearne altre, completane alcune già esistenti.",
-            "limitReached": "Hai raggiunto le 200 attività consentite. Per crearne altre, completane alcune tra quelle esistenti."
+            "lastTask": "Questa è l'ultima attività che puoi creare. Elimina le attività precedenti per crearne di nuove.",
+            "limitReached": "Hai raggiunto le 200 attività consentite. Elimina le attività precedenti per crearne di nuove."
         }
     },
     "snackbar": {
         "completeTask": "Attività \"{{taskTitle}}\" completata",
         "restoreTask": "Attività ripristinata nella cartella Tutte le attività",
-        "tasksLimitReached": "Hai raggiunto le 200 attività consentite. Per crearne altre, completane alcune tra quelle esistenti."
+        "tasksLimitReached": "Hai raggiunto le 200 attività consentite. Elimina le attività precedenti per crearne di nuove.",
+        "permanentlyDeletedTask": "Attività eliminata definitivamente",
+        "uncompleteTask": "Attività \"{{taskTitle}}\" non completata"
     },
     "tasksListItem": {
         "reminder": {

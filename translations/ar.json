@@ -1,32 +1,7 @@
 {
-    "cos": {
-        "disabled": "معطل"
-    },
-    "hsm": {
-        "name": "الاسم"
-    },
-    "label": {
-        "add": "إضافة",
-        "email": "البريد الإلكتروني",
-        "edit": "تحرير",
-        "bucket_done_button": "تم",
-        "chats": "دردشات"
-    },
-    "volume": {
-        "volume_config_header": {
-            "name": "الاسم"
-        },
-        "server_list_header": {
-            "description": "الوصف"
-        }
-    },
-    "operations": {
-        "operations_list_header": {
-            "status": "الحالة"
-        }
-    },
     "action": {
-        "edit": "تحرير"
+        "edit": "تحرير",
+        "delete": "حذف"
     },
     "board": {
         "label": {

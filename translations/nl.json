@@ -70,7 +70,8 @@
     "action": {
         "edit": "Bewerken",
         "undo": "Ongedaan maken",
-        "complete": "Voltooid"
+        "complete": "Voltooid",
+        "delete": "Verwijderen"
     },
     "displayer": {
         "details": {
@@ -111,6 +112,12 @@
             "remindMeOn": "Herinner me aan",
             "undoAll": "Alles ongedaan maken",
             "title": "Taken herinneringen"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Permanent verwijderen"
+            },
+            "header": "Deze actie is onomkeerbaar"
         }
     },
     "newTaskBoard": {

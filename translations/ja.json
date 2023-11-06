@@ -2,7 +2,8 @@
     "action": {
         "edit": "編集",
         "undo": "元に戻す",
-        "complete": "完了"
+        "complete": "完了",
+        "delete": "削除する"
     },
     "board": {
         "confirmButton": {
@@ -104,6 +105,12 @@
             "title": "タスクリマインダー",
             "remindMeOn": "にリマインドする",
             "undoAll": "すべて元に戻す"
+        },
+        "delete": {
+            "button": {
+                "confirm": "完全に削除する"
+            },
+            "header": "この操作は元に戻せません"
         }
     },
     "task": {

@@ -38,6 +38,12 @@
             "remindMeOn": "Hatırlat",
             "title": "Görev Anımsatıcıları",
             "undoAll": "Hepsini geri al"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Kalıcı olarak sil"
+            },
+            "header": "Bu işlemin geri dönüşü yoktur"
         }
     },
     "task": {
@@ -50,7 +56,8 @@
     "action": {
         "edit": "Düzenle",
         "undo": "Geri al",
-        "complete": "Tamamla"
+        "complete": "Tamamla",
+        "delete": "Sil"
     },
     "board": {
         "confirmButton": {
