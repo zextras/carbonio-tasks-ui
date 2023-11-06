@@ -2,7 +2,8 @@
     "action": {
         "edit": "Editar",
         "undo": "Desfazer",
-        "complete": "Completar"
+        "complete": "Completar",
+        "delete": "Apagar"
     },
     "board": {
         "confirmButton": {
@@ -111,6 +112,12 @@
             "remindMeOn": "Avise-me em",
             "undoAll": "Desfazer tudo",
             "title": "Notificações de tarefas"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Apagar permanentemente"
+            },
+            "header": "Esta ação é irreversível"
         }
     },
     "newTaskBoard": {

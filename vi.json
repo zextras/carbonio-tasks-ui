@@ -1,7 +1,8 @@
 {
     "action": {
         "edit": "Chỉnh sửa",
-        "undo": "Hoàn tác"
+        "undo": "Hoàn tác",
+        "delete": "Xoá"
     },
     "board": {
         "confirmButton": {
@@ -49,6 +50,12 @@
         "close": "Đóng",
         "reminder": {
             "dismiss": "Bỏ qua"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Xoá vĩnh viễn"
+            },
+            "header": "Tác vụ này là không thể đảo ngược"
         }
     }
 }

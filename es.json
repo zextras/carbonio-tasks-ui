@@ -2,7 +2,8 @@
     "action": {
         "edit": "Editar",
         "undo": "Deshacer",
-        "complete": "Completar"
+        "complete": "Completar",
+        "delete": "Eliminar"
     },
     "board": {
         "label": {
@@ -111,6 +112,12 @@
             "remindMeOn": "Recordarme el",
             "title": "Recordatorio de tareas",
             "undoAll": "Deshacer todo"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Eliminar permanentemente"
+            },
+            "header": "La acción no se puede deshacer"
         }
     },
     "newTaskBoard": {

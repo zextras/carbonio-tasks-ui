@@ -1,7 +1,8 @@
 {
     "action": {
         "edit": "Uredi",
-        "undo": "Vrati"
+        "undo": "Vrati",
+        "delete": "Izbriši"
     },
     "board": {
         "label": {
@@ -17,6 +18,11 @@
         "close": "Zatvori",
         "reminder": {
             "dismiss": "Odbaci"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Obriši trajno"
+            }
         }
     },
     "task": {
