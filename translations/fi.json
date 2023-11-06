@@ -1,10 +1,4 @@
 {
-    "label": {
-        "password": "Salasana"
-    },
-    "notification": {
-        "mark_as_read": "Merkitse luetuksi"
-    },
     "board": {
         "label": {
             "details": "Yksityiskohdat"

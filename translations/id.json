@@ -2,7 +2,8 @@
     "action": {
         "edit": "Edit",
         "undo": "Urungkan",
-        "complete": "Selesai"
+        "complete": "Selesai",
+        "delete": "Hapus"
     },
     "task": {
         "priority_high": "Tinggi",
@@ -111,6 +112,12 @@
             "remindMeOn": "Ingatkan saya pada",
             "undoAll": "Batalkan semua",
             "title": "Pengingat tugas"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Hapus secara permanen"
+            },
+            "header": "Tindakan ini tidak dapat dibatalkan"
         }
     },
     "newTaskBoard": {

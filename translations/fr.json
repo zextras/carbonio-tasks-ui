@@ -97,7 +97,8 @@
     "action": {
         "edit": "Modifier",
         "undo": "Revenir en arrière",
-        "complete": "Terminée"
+        "complete": "Terminée",
+        "delete": "Effacer"
     },
     "label": {
         "app_name": "Tâches",
@@ -111,6 +112,12 @@
             "remindMeOn": "Rappelez-moi sur",
             "title": "Rappel de Tâches",
             "undoAll": "Tout annuler"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Supprimer définitivement"
+            },
+            "header": "Cette action est irréversible"
         }
     },
     "secondaryBar": {
