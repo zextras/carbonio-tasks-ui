@@ -1,7 +1,8 @@
 {
     "action": {
         "edit": "Edit",
-        "undo": "Undo"
+        "undo": "Undo",
+        "delete": "Delete"
     },
     "board": {
         "label": {
@@ -24,6 +25,11 @@
         "close": "Close",
         "reminder": {
             "dismiss": "Dismiss"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Delete permanently"
+            }
         }
     }
 }

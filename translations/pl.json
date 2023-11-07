@@ -1,100 +1,7 @@
 {
-    "timezone": {
-        "america_asuncion": "{{value}} Asuncion",
-        "asia_amman": "{{value}} Jordania",
-        "asia_srednekolymsk": "{{value}} Czokurdach (RTZ 10)",
-        "pacific_fiji": "{{value}} Fidżi"
-    },
-    "buckets": {
-        "alibaba_regions": {
-            "ap_northeast_1": "Japonia (Tokyo)"
-        },
-        "amazon_regions": {
-            "govcloud": "AWS GovCloud (USA)"
-        }
-    },
-    "core": {
-        "subscription": {
-            "features": "Rozwiń"
-        }
-    },
-    "domain": {
-        "many_domain_info_msg": "Ale dużo domen! Którą z nich chcesz zobaczyć? Aby filtrować, zacznij wpisywać.",
-        "unit_measure_hours": "Godziny"
-    },
     "label": {
         "app_name": "Zadania",
-        "certificate": "Certyfikat",
-        "details": "Szczegóły",
-        "save_and_leave": "Zapisz i opuść",
-        "location": "Lokalizacja",
-        "viewed_name_auto_fill": "Wyświetlana nazwa (automatyczne uzupełnianie)",
-        "secret_key": "Tajny klucz",
-        "name_of_signature": "Nazwa podpisu",
-        "force_delete": "Wymuś usunięcie",
-        "create_new_domain": "Stwórz nową domenę",
-        "activate_and_update": "Aktywuj i zaktualizuj",
-        "domain": "Domena",
-        "volume_name": "Nazwa woluminu",
-        "sending_mails": "Wysyłanie e-maili",
-        "i_want_to_set_signature": "Chcę ustawić podpis",
-        "appointments_default_duration": "Domyślna długość trwania spotkania",
-        "owners_description": "Właściciele mogą zarządzać członkami list dystrybucyjnych (dodawanie i usuwanie e-maili) i edytować jej opcje.",
-        "configuration_lbl": "Konfiguracja",
-        "device_id": "ID urządzenia",
-        "admin_panel": "Panel administracyjny",
-        "link_button": "LINK",
-        "storage_centralized": "Chcę, żeby ta pamięć była zcentralizowana",
-        "Aliases": "Aliasy",
-        "general_options": "Ustawienia ogólne",
-        "volume_created_msg": "Wolumin został stworzony",
-        "sort_by_percentage": "Sortuj wg udziału",
-        "delegate_send_settings": "Deleguj ustawienia wysyłania",
-        "privacy_lbl": "<bold>Prywatność</bold>",
-        "gal_update_frequencey_value": "Częstotliwość aktualizacji GLA",
         "new": "Nowe zadanie"
-    },
-    "backup": {
-        "data_retention_policies": "Polityka przechowywania danych",
-        "running": "działa"
-    },
-    "cos": {
-        "general_features": "Funkcje ogólne",
-        "time_to_lockout_account": "Czas blokady konta",
-        "mail": "Skrzynka pocztowa",
-        "use_ical_delegation_model_for_shared_calendars": "Używaj modelu delegacji iCal dla udostępnionych kalendarzy",
-        "allow_sending_cancellation_mail": "Zezwalaj na wysyłanie e-maili o anulowaniu"
-    },
-    "locale": {
-        "hindi": "Hindi"
-    },
-    "account": {
-        "new": {
-            "create_otp_wizard": "Stwórz hasło OTP"
-        }
-    },
-    "account_details": {
-        "view_mail_as_html": "Wyświetlaj e-maile jako HTML",
-        "distribution_list_folder": "Folder listy dystrybucyjnej",
-        "read_mails_only": "Tylko wyświetlanie e-maili (brak uprawnień do wysyłania e-maili)",
-        "who_will_be_delegates": "Które osoby będą pełnomocnikami?",
-        "services_passphrase": "Hasło usług"
-    },
-    "volume": {
-        "volume_config_header": {
-            "indexer": "Indeksowanie"
-        }
-    },
-    "hsm": {
-        "document": "Dokument",
-        "secondry": "Drugorzędny"
-    },
-    "select_bucket_or_create_new_bucket_helperText": "Wygląda na to, że nie ustawiiono typu bucketa.\n\t\t\t\t\t\t\t\t\tKliknij w przycisk \"NOWY BUCKET\", aby stworzyć nowy.",
-    "virtual_hosts": {
-        "load_and_verify_certificate": "Prześlij i zweryfikuj certyfikat"
-    },
-    "operations": {
-        "cancel_opearation_btn": "ANULUJ OPERACJĘ"
     },
     "modal": {
         "close": "Zamknij",
@@ -104,12 +11,21 @@
             "title": "Przypomnienia o zadaniach",
             "remindMeOn": "Przypomnij mi o",
             "undoAll": "Cofnij wszystko"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Trwale usuń"
+            },
+            "header": "Tej czynności nie da się odwrócić",
+            "body": "Trwale usuniesz to zadanie. Nie będziesz już w stanie odzyskać tego zadania. Tej czynności nie da się cofnąć."
         }
     },
     "action": {
         "complete": "Ukończ",
         "edit": "Edytuj",
-        "undo": "Cofnij"
+        "undo": "Cofnij",
+        "delete": "Usuń",
+        "uncomplete": "Cofnij ukończenie"
     },
     "board": {
         "confirmButton": {
@@ -194,7 +110,7 @@
         ],
         "allTasks_limitReached": [
             {
-                "message": "Aby stworzyć nowe zadanie, musisz najpierw ukończyć już istniejące.",
+                "message": "Usuń swoje poprzednie zadania, aby stworzyć nowe.",
                 "title": "Osiągnąłeś max. ilość zadań."
             }
         ]
@@ -211,8 +127,10 @@
     },
     "snackbar": {
         "completeTask": "Zadanie \"{{taskTitle}}\" zostało ukończone",
-        "tasksLimitReached": "Osiągnąłeś liczbę 200 zadań. Aby stworzyć ich więcej, ukończ najpierw istniejące zadania.",
-        "restoreTask": "Zadanie zostało przywrócone w folderze wszystkich zadań"
+        "tasksLimitReached": "Osiągnąłeś liczbę 200 zadań. Aby stworzyć ich więcej, usuń najpierw istniejące zadania.",
+        "restoreTask": "Zadanie zostało przywrócone w folderze wszystkich zadań",
+        "permanentlyDeletedTask": "Zadanie zostało trwale usunięte",
+        "uncompleteTask": "Ukończenie zadania \"{{taskTitle}}\" zostało cofnięte"
     },
     "tasksListItem": {
         "reminder": {
@@ -222,8 +140,8 @@
     },
     "newTaskBoard": {
         "banner": {
-            "limitReached": "Osiągnąłeś liczbę 200 zadań. Aby stworzyć ich więcej, ukończ najpierw istniejące zadania.",
-            "lastTask": "To ostatnie zadanie, które możesz stworzyć. Aby stworzyć więcej, ukończ najpierw istniejące zadania."
+            "limitReached": "Osiągnąłeś liczbę 200 zadań. Aby stworzyć ich więcej, usuń najpierw istniejące zadania.",
+            "lastTask": "To ostatnie zadanie, które możesz stworzyć. Aby stworzyć więcej, usuń najpierw istniejące zadania."
         }
     }
 }

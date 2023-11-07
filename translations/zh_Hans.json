@@ -7,6 +7,12 @@
             "remindMeOn": "提醒时间：",
             "title": "任务提醒",
             "undoAll": "撤消全部"
+        },
+        "delete": {
+            "button": {
+                "confirm": "永久删除"
+            },
+            "header": "该操作为不可逆操作"
         }
     },
     "task": {
@@ -19,7 +25,8 @@
     "action": {
         "edit": "编辑",
         "undo": "撤消",
-        "complete": "完成"
+        "complete": "完成",
+        "delete": "删除"
     },
     "board": {
         "confirmButton": {

@@ -72,6 +72,12 @@
             "remindMeOn": "Lembre-me em",
             "title": "Lembretes de tarefas",
             "undoAll": "Desfazer tudo"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Excluir permanentemente"
+            },
+            "header": "Esta ação é irreversível"
         }
     },
     "task": {
@@ -84,7 +90,8 @@
     "action": {
         "edit": "Editar",
         "undo": "Desfazer",
-        "complete": "Completar"
+        "complete": "Completar",
+        "delete": "Excluir"
     },
     "displayer": {
         "details": {

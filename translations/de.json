@@ -2,7 +2,8 @@
     "action": {
         "edit": "Bearbeiten",
         "undo": "Rückgängig machen",
-        "complete": "Abgeschlossen"
+        "complete": "Abgeschlossen",
+        "delete": "Löschen"
     },
     "board": {
         "confirmButton": {
@@ -104,6 +105,12 @@
             "remindMeOn": "Erinnern Sie mich an",
             "title": "Aufgabenerinnerungen",
             "undoAll": "Alles rückgängig"
+        },
+        "delete": {
+            "button": {
+                "confirm": "Endgültig löschen"
+            },
+            "header": "Diese Aktion ist unwiderruflich"
         }
     },
     "task": {
