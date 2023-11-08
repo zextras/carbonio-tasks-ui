@@ -25,7 +25,7 @@ export default {
 	// An array of glob patterns indicating a set of files for which coverage information should be collected
 	collectCoverageFrom: [
 		'src/**/*.{js,ts}(x)?',
-		'!**/*.test.ts(x)?', // exclude tests which name starts with test or mock
+		'!**/*.test.ts(x)?', // exclude tests
 		'!src/**/mocks/**/*', // exclude msw handlers
 		'!src/mocks/**/*', // exclude msw handlers
 		'!**/(test|mock)*.ts(x)?', // exclude file which name starts with test or mock
