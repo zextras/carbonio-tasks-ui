@@ -25,6 +25,7 @@ export default {
 	// An array of glob patterns indicating a set of files for which coverage information should be collected
 	collectCoverageFrom: [
 		'src/**/*.{js,ts}(x)?',
+		'!**/*.test.ts(x)?', // exclude tests
 		'!src/**/mocks/**/*', // exclude msw handlers
 		'!src/mocks/**/*', // exclude msw handlers
 		'!**/(test|mock)*.ts(x)?', // exclude file which name starts with test or mock
@@ -43,7 +44,7 @@ export default {
 	coverageProvider: 'babel',
 
 	// A list of reporter names that Jest uses when writing coverage reports
-	coverageReporters: ['text', 'cobertura'],
+	coverageReporters: ['text', 'cobertura', 'lcov'],
 
 	// An object that configures minimum threshold enforcement for coverage results
 	coverageThreshold: {
