@@ -72,7 +72,7 @@ const App = (): React.ReactNode => {
 
 		addRoute({
 			route: TASKS_ROUTE,
-			position: 10,
+			position: 600,
 			visible: true,
 			label: appNameLabel,
 			primaryBar: 'ListViewOutline',
