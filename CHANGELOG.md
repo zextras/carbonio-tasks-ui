@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.8](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.7...v0.0.8) (2024-01-10)
+
+
+### Features
+
+* update position in primary bar ([b5edd8f](https://github.com/zextras/carbonio-tasks-ui/commit/b5edd8fee158610587fed058da55fe9c94a21352)), closes [#59](https://github.com/zextras/carbonio-tasks-ui/issues/59)
+
 ### [0.0.7](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.6...v0.0.7) (2023-11-06)
 
 ### [0.0.6](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.5...v0.0.6) (2023-10-27)
