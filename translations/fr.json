@@ -82,7 +82,7 @@
         ],
         "allTasks_limitReached": [
             {
-                "message": "Pour en créer une nouvelle, terminez des tâches existantes.",
+                "message": "Supprimez vos tâches précédentes pour en créer de nouvelles.",
                 "title": "Vous avez atteint le nombre maximum de Tâches."
             }
         ]
@@ -98,7 +98,8 @@
         "edit": "Modifier",
         "undo": "Revenir en arrière",
         "complete": "Terminée",
-        "delete": "Effacer"
+        "delete": "Effacer",
+        "uncomplete": "Inachevée"
     },
     "label": {
         "app_name": "Tâches",
@@ -117,7 +118,8 @@
             "button": {
                 "confirm": "Supprimer définitivement"
             },
-            "header": "Cette action est irréversible"
+            "header": "Cette action est irréversible",
+            "body": "Vous aller supprimez définitivement cette tâche. Vous ne serez plus en mesure de récupérer cette tâche. Cette action est irréversible."
         }
     },
     "secondaryBar": {
@@ -125,14 +127,16 @@
     },
     "newTaskBoard": {
         "banner": {
-            "lastTask": "Il s'agit de la dernière tâche que vous pouvez créer. Pour en créer d'autres, terminez les tâches précédentes.",
-            "limitReached": "Vous avez atteint vos 200 tâches. Pour en créer d'autres, terminez vos tâches précédentes."
+            "lastTask": "Il s'agit de la dernière tâche que vous pouvez créer. Supprimez les tâches précédentes pour en créer de nouvelles.",
+            "limitReached": "Vous avez atteint vos 200 tâches. Supprimez vos tâches précédentes pour en créer de nouvelles."
         }
     },
     "snackbar": {
         "completeTask": "La Tâche \"{{taskTitle}}\" est terminée",
         "restoreTask": "La Tâche a été restaurée dans le dossier Toutes les Tâches",
-        "tasksLimitReached": "Vous avez atteint vos 200 tâches. Pour en créer d'autres, terminez vos tâches précédentes."
+        "tasksLimitReached": "Vous avez atteint vos 200 tâches. Supprimez vos tâches précédentes pour en créer de nouvelles.",
+        "permanentlyDeletedTask": "Tâche supprimée définitivement",
+        "uncompleteTask": "La tâche \"{{taskTitle}}\" est inachevée"
     },
     "tasksListItem": {
         "reminder": {
