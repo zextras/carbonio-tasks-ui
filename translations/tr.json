@@ -21,7 +21,7 @@
         ],
         "allTasks_limitReached": [
             {
-                "message": "Yeni bir tane oluşturmak için, var olan bazı görevleri tamamlayın.",
+                "message": "Daha fazlasını oluşturmak için önceki görevlerinizi silin.",
                 "title": "Maksimum görev sayısına ulaştınız."
             }
         ]
@@ -43,7 +43,8 @@
             "button": {
                 "confirm": "Kalıcı olarak sil"
             },
-            "header": "Bu işlemin geri dönüşü yoktur"
+            "header": "Bu işlemin geri dönüşü yoktur",
+            "body": "Bu görevi kalıcı olarak sileceksiniz. Bu görevi sonra geri getiremeyeceksiniz. Bu işlemin geri dönüşü yoktur."
         }
     },
     "task": {
@@ -57,7 +58,8 @@
         "edit": "Düzenle",
         "undo": "Geri al",
         "complete": "Tamamla",
-        "delete": "Sil"
+        "delete": "Sil",
+        "uncomplete": "Tamamlanmadı"
     },
     "board": {
         "confirmButton": {
@@ -122,8 +124,8 @@
     },
     "newTaskBoard": {
         "banner": {
-            "lastTask": "Bu, oluşturabileceğiniz son görevdir. Daha fazla oluşturmak için önceki görevleri tamamlayının.",
-            "limitReached": "200 görev sınırına ulaştınız. Daha fazla oluşturmak için önceki görevleri tamamlayın."
+            "lastTask": "Bu, oluşturabileceğiniz son görevdir. Daha fazla oluşturmak için önceki görevleri silin.",
+            "limitReached": "200 görev sınırına ulaştınız. Daha fazla oluşturmak için önceki görevleri silin."
         }
     },
     "secondaryBar": {
@@ -132,7 +134,9 @@
     "snackbar": {
         "completeTask": "\"{{ taskTitle }}\" görevi tamamlandı",
         "restoreTask": "Görev, Tüm görevler klasöründe geri yüklendi",
-        "tasksLimitReached": "200 görev sınırına ulaştınız. Daha fazla oluşturmak için önceki görevleri tamamlayın."
+        "tasksLimitReached": "200 görev sınırına ulaştınız. Daha fazla oluşturmak için önceki görevleri silin.",
+        "permanentlyDeletedTask": "Görev kalıcı olarak silindi",
+        "uncompleteTask": "\"{{ taskTitle }}\" görevi tamamlanmadı"
     },
     "tasksListItem": {
         "reminder": {
