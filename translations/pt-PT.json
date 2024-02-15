@@ -1,0 +1,11 @@
+{
+    "action": {
+        "delete": "Eliminar",
+        "edit": "Editar"
+    },
+    "board": {
+        "label": {
+            "details": "Detalhes"
+        }
+    }
+}
