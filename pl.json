@@ -16,7 +16,7 @@
             "button": {
                 "confirm": "Trwale usuń"
             },
-            "header": "Tej czynności nie da się odwrócić",
+            "header": "Tej czynności nie da się cofnąć",
             "body": "Trwale usuniesz to zadanie. Nie będziesz już w stanie odzyskać tego zadania. Tej czynności nie da się cofnąć."
         }
     },
@@ -84,7 +84,7 @@
         },
         "checkbox": {
             "allDay": {
-                "label": "Przypominaj mi podczas każdego logowania w trakcie dnia"
+                "label": "Przypominaj mi po każdym logowaniu w trakcie dnia"
             }
         }
     },
