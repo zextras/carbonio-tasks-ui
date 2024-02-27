@@ -202,7 +202,8 @@ describe('Edit task board', () => {
 			const editButton = screen.getByRole('button', { name: /edit/i });
 			const descriptionInput = screen.getByRole('textbox', { name: /description/i });
 			const maxLengthDescription = faker.string.alpha({ length: 4096 });
-			await user.type(descriptionInput, maxLengthDescription);
+			await user.click(descriptionInput);
+			await user.paste(maxLengthDescription);
 			expect(descriptionInput).toHaveValue(maxLengthDescription);
 			expect(editButton).toBeEnabled();
 			expect(

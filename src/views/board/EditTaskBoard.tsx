@@ -21,7 +21,7 @@ const EditTaskBoard = (): React.JSX.Element => {
 	const { data: getTaskResult } = useQuery(GetTaskDocument, {
 		errorPolicy: 'all',
 		variables: {
-			taskId: taskId || ''
+			taskId: taskId ?? ''
 		},
 		skip: !taskId
 	});
@@ -96,9 +96,9 @@ const EditTaskBoard = (): React.JSX.Element => {
 				<CommonTaskBoard
 					initialTitle={initialTitle}
 					initialPriority={initialPriority}
-					initialDescription={initialDescription || ''}
+					initialDescription={initialDescription ?? ''}
 					initialEnableReminder={!!initialReminderAt}
-					initialIsAllDay={initialReminderAllDay || false}
+					initialIsAllDay={initialReminderAllDay ?? false}
 					initialDate={initialReminderAt ? new Date(initialReminderAt) : new Date()}
 					onConfirm={onConfirm}
 					confirmLabel={t('board.confirmButton.edit', 'edit')}
