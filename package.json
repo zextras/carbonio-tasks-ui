@@ -97,7 +97,7 @@
 		"priority": 10,
 		"type": "carbonio",
 		"display": "Tasks",
-		"icon": "ListViewOutline"
+		"icon": "CheckmarkCircle2Outline"
 	},
 	"config": {
 		"translations_repository": "git@github.com:Zextras/carbonio-tasks-ui-i18n.git"
