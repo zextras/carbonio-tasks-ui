@@ -64,7 +64,7 @@
 		"jest-junit": "^16.0.0",
 		"jest-styled-components": "^7.2.0",
 		"msw": "^1.2.3",
-		"node-fetch": "^2.6.12",
+		"node-fetch": "^3.3.2",
 		"typescript": "^5.1.6"
 	},
 	"dependencies": {
