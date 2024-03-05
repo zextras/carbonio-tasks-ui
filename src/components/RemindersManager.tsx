@@ -139,6 +139,7 @@ export const RemindersManager = (): React.JSX.Element => {
 	const [modalReminders, setModalReminders] = useState<
 		Array<{ date: string; reminders: TaskWithReminder[] }>
 	>([]);
+	const modalRemindersRef = useRef<Array<{ date: string; reminders: TaskWithReminder[] }>>([]);
 	// map of tasks keyed by reminder date (formatted)
 	const remindersByDateRef = useRef<Record<string, ReminderEntity[]>>({});
 	const location = useLocation();
@@ -229,10 +230,6 @@ export const RemindersManager = (): React.JSX.Element => {
 							reminders: reminderGroup
 						}));
 						newState.push(...newReminderEntries);
-						if (newReminders.length > 0) {
-							// notify with a sound the adding of a new reminder in the modal
-							notifyReminders(flatMap(newState, (reminderGroup) => reminderGroup.reminders).length);
-						}
 						return newState;
 					});
 					// keep modal open
@@ -249,12 +246,6 @@ export const RemindersManager = (): React.JSX.Element => {
 				setModalReminders(newModalReminders);
 				// open modal if there is something to show
 				const shouldOpenModal = newModalReminders.length > 0;
-				if (shouldOpenModal) {
-					// notify with a sound the opening of the modal
-					notifyReminders(
-						flatMap(newModalReminders, (reminderGroup) => reminderGroup.reminders).length
-					);
-				}
 				// reset timout for reminders shown with this call so that they result as already seen in next modals
 				forEach(reminders, (reminder) => {
 					reminder.clearTimout();
@@ -262,8 +253,23 @@ export const RemindersManager = (): React.JSX.Element => {
 				return shouldOpenModal;
 			});
 		},
-		[getVisibleReminders, notifyReminders]
+		[getVisibleReminders]
 	);
+
+	useEffect(() => {
+		const diffNewDate = differenceBy(
+			modalReminders,
+			modalRemindersRef.current,
+			(item) => item.date
+		);
+
+		modalRemindersRef.current = modalReminders;
+
+		if (diffNewDate.length > 0) {
+			// notify with a sound the opening of the modal or the adding of a new reminder in the modal
+			notifyReminders(flatMap(modalReminders, (reminderGroup) => reminderGroup.reminders).length);
+		}
+	}, [modalReminders, notifyReminders]);
 
 	const showReminderDebounced = useMemo(() => debounceWithAllArgs(_showReminder), [_showReminder]);
 
