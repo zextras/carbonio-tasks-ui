@@ -311,7 +311,7 @@ export const CommonTaskBoard = ({
 								? t(
 										'board.input.description.error.label',
 										'Maximum length allowed is 1024 characters'
-								  )
+									)
 								: undefined
 						}
 					/>
@@ -362,7 +362,7 @@ export const CommonTaskBoard = ({
 										? t(
 												'board.dateTimePicker.description.error.label',
 												'The reminder option is enabled, set date and time for it or disable the reminder'
-										  )
+											)
 										: undefined
 								}
 							/>
@@ -388,7 +388,7 @@ export const CommonTaskBoard = ({
 							? t(
 									'board.textArea.description.error.label',
 									'Maximum length allowed is 4096 characters'
-							  )
+								)
 							: undefined
 					}
 				/>
