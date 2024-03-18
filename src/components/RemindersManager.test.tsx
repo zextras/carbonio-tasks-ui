@@ -635,7 +635,8 @@ describe('Reminders manager', () => {
 	});
 
 	test('When the modal is opened by a reminder expiration, and a new reminder expires with the modal still open, the new reminder is placed at the end', async () => {
-		const now = Date.now();
+		const now = new Date(2024, 2, 18, 9, 15).getTime();
+		jest.setSystemTime(now);
 		const allDayReminder = populateTask({
 			reminderAt: now,
 			reminderAllDay: true,
