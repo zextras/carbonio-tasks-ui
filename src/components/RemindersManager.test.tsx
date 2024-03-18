@@ -423,16 +423,8 @@ describe('Reminders manager', () => {
 		expect(visibleDates[2]).toHaveTextContent(aMinuteAgoDate);
 		const taskTitles = screen.getAllByText(/task item/i);
 		expect(taskTitles).toHaveLength(4);
-		// FIXME: the all day items seems to invert position sometime.
-		// 	I think the position should be deterministic, check how to fix this
-		//  For the moment, check that is an all day task by matching partially and exclusively
 		expect(taskTitles[0]).toHaveTextContent(allDay1.title);
 		expect(taskTitles[1]).toHaveTextContent(allDay2.title);
-		// const allDayTaskTitles = [allDay1.title, allDay2.title];
-		// expect(taskTitles[0]).toHaveTextContent(RegExp(allDayTaskTitles.join('|')));
-		// expect(taskTitles[1]).toHaveTextContent(
-		// 	RegExp(without(allDayTaskTitles, taskTitles[0].textContent as string).join('|'))
-		// );
 		expect(taskTitles[2]).toHaveTextContent(withTime2.title);
 		expect(taskTitles[3]).toHaveTextContent(withTime1.title);
 	});
