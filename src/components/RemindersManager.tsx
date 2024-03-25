@@ -313,60 +313,67 @@ export const RemindersManager = (): React.JSX.Element => {
 		}
 	}, []);
 
-	const updateRegisteredReminder = useCallback(
-		(reminder: ReminderEntity): void => {
-			const remindersByDate = remindersByDateRef.current;
+	const findRegisteredReminder = useCallback(
+		(
+			reminder: Pick<ReminderEntity, 'id'>
+		): { key: string; index: number } | { key: undefined; index: undefined } =>
 			// Find the previous position of the reminder by searching inside all the entries.
 			// Retrieve both the dateKey and the index with a "reduce" to make a single cycle.
 			// The two fields are both valued or both undefined, there cannot be a hybrid situation.
-			const { prevKey, prevIndex } = reduce<
-				typeof remindersByDate,
-				{ prevKey: string; prevIndex: number } | { prevKey: undefined; prevIndex: undefined }
+			reduce<
+				typeof remindersByDateRef.current,
+				{ key: string; index: number } | { key: undefined; index: undefined }
 			>(
-				remindersByDate,
+				remindersByDateRef.current,
 				(result, reminders, key) => {
 					const reminderIndex = findIndex(reminders, (item) => item.id === reminder.id);
 					if (reminderIndex >= 0) {
-						return { prevKey: key, prevIndex: reminderIndex };
+						return { key, index: reminderIndex };
 					}
 					return result;
 				},
-				{ prevKey: undefined, prevIndex: undefined }
-			);
+				{ key: undefined, index: undefined }
+			),
+		[]
+	);
 
+	const updateRegisteredReminder = useCallback(
+		(reminder: ReminderEntity): void => {
+			const remindersByDate = remindersByDateRef.current;
+			const { key: prevKey, index: prevIndex } = findRegisteredReminder(reminder);
 			const newDateKey = reminder.getKey();
-			if (prevKey && remindersByDate[prevKey] !== undefined && prevIndex >= 0) {
-				// if the reminder was truly registered
-				// clear the timeout of the previous object
-				remindersByDate[prevKey][prevIndex].clearTimout();
-				if (reminder.status !== Status.Complete) {
-					// if the status is still not complete, start the new timer
-					reminder.startTimeout(showReminderDebounced);
-					if (prevKey === newDateKey) {
-						// update the reminder keeping the same position if the key is not changed (reminderAt and reminderAllDay are not changed)
-						remindersByDate[prevKey][prevIndex] = reminder;
-					} else {
-						// otherwise clear the previous position and push the item to the new dateKey map
-						pullAt(remindersByDate[prevKey], prevIndex);
-						// delete the entry from the map if there is no reminder left for it
-						if (remindersByDate[prevKey].length === 0) {
-							delete remindersByDate[prevKey];
-						}
-						if (remindersByDate[newDateKey] === undefined) {
-							remindersByDate[newDateKey] = [];
-						}
-						remindersByDate[newDateKey].push(reminder);
-					}
-				} else {
-					// if the status has changed and now the task is completed, clear the previous position
-					pullAt(remindersByDate[prevKey], prevIndex);
-				}
-			} else {
+			if (!prevKey || remindersByDate[prevKey] === undefined || prevIndex < 0) {
 				// if the reminder was not truly registered, register it
 				registerReminder(reminder);
+				return;
 			}
+			// if the reminder was truly registered
+			// clear the timeout of the previous object
+			remindersByDate[prevKey][prevIndex].clearTimout();
+			if (reminder.status === Status.Complete) {
+				// if the status has changed and now the task is completed, clear the previous position
+				pullAt(remindersByDate[prevKey], prevIndex);
+				return;
+			}
+			// if the status is still not complete, start the new timer
+			reminder.startTimeout(showReminderDebounced);
+			if (prevKey === newDateKey) {
+				// if the key is not changed (reminderAt and reminderAllDay are not changed) update the reminder keeping the same position
+				remindersByDate[prevKey][prevIndex] = reminder;
+				return;
+			}
+			// otherwise clear the previous position and push the item to the new dateKey map
+			pullAt(remindersByDate[prevKey], prevIndex);
+			// delete the entry from the map if there is no reminder left for it
+			if (remindersByDate[prevKey].length === 0) {
+				delete remindersByDate[prevKey];
+			}
+			if (remindersByDate[newDateKey] === undefined) {
+				remindersByDate[newDateKey] = [];
+			}
+			remindersByDate[newDateKey].push(reminder);
 		},
-		[registerReminder, showReminderDebounced]
+		[findRegisteredReminder, registerReminder, showReminderDebounced]
 	);
 
 	const registerRemindersFromTasks = useCallback(
