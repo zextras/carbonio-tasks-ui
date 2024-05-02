@@ -84,9 +84,9 @@ export const useBoard: <T>() => shell.Board<T> = () => {
 	};
 };
 
-export const getBoardById: typeof shell.getBoardById = jest.fn();
+export const getBoardById: typeof shell.getBoardById = () => undefined;
 
-export const closeBoard: typeof shell.closeBoard = jest.fn();
+export const closeBoard: typeof shell.closeBoard = () => undefined;
 
 export const t = (key: string, defaultValue?: string | TOptions): string => {
 	if (typeof defaultValue === 'string') {
