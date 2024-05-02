@@ -6,7 +6,7 @@
 
 import { useCallback } from 'react';
 
-import type shell from '@zextras/carbonio-shell-ui';
+import type * as shell from '@zextras/carbonio-shell-ui';
 import { type TOptions } from 'i18next';
 import { noop, trimStart } from 'lodash';
 import { useHistory } from 'react-router-dom';
@@ -103,4 +103,4 @@ const notificationManagerInstance: shell.INotificationManager = {
 };
 export const getNotificationManager = (): shell.INotificationManager => notificationManagerInstance;
 
-export const updatePrimaryBadge: shell.AppSetters['updatePrimaryBadge'] = noop;
+export const updatePrimaryBadge: typeof shell.updatePrimaryBadge = noop;
