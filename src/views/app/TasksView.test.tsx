@@ -174,6 +174,7 @@ describe('Task view', () => {
 			await screen.findAllByText(task.title);
 			const action = screen.getByRole('button', { name: /complete/i });
 			await user.click(action);
+			await screen.findAllByTestId(ICON_REGEXP.completedTask);
 			expect(within(screen.getByTestId('main-list')).getByText(task.title)).toBeVisible();
 		});
 
@@ -203,6 +204,7 @@ describe('Task view', () => {
 			await screen.findAllByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
+			await screen.findAllByTestId(ICON_REGEXP.completedTask);
 			expect(within(screen.getByTestId('main-list')).getByText(task.title)).toBeVisible();
 		});
 
@@ -239,6 +241,7 @@ describe('Task view', () => {
 			const contextualMenu = await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
 			const action = within(contextualMenu).getByText(/complete/i);
 			await user.click(action);
+			await screen.findAllByTestId(ICON_REGEXP.completedTask);
 			expect(within(screen.getByTestId('main-list')).getByText(task.title)).toBeVisible();
 		});
 
@@ -261,6 +264,7 @@ describe('Task view', () => {
 			await screen.findByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
+			await screen.findAllByTestId(ICON_REGEXP.completedTask);
 			expect(screen.getByText(/Task ".+" completed/i)).toBeVisible();
 		});
 
@@ -284,6 +288,7 @@ describe('Task view', () => {
 			await screen.findByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
+			await screen.findAllByTestId(ICON_REGEXP.completedTask);
 			expect(screen.getByText(`Task "${task.title.substring(0, 50)}..." completed`)).toBeVisible();
 		});
 
@@ -307,7 +312,8 @@ describe('Task view', () => {
 			await screen.findByText(task.title);
 			const action = within(screen.getByTestId(task.id)).getByTestId(ICON_REGEXP.completeAction);
 			await user.click(action);
-			expect(screen.getByText(`Task "${task.title}" completed`)).toBeVisible();
+			await screen.findAllByTestId(ICON_REGEXP.completedTask);
+			expect(await screen.findByText(`Task "${task.title}" completed`)).toBeVisible();
 		});
 	});
 
@@ -412,7 +418,7 @@ describe('Task view', () => {
 			});
 			expect(screen.queryByText(tasks[1].title)).not.toBeInTheDocument();
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
-			expect(screen.getByText(/creation date/i)).toBeVisible();
+			expect(await screen.findByText(/creation date/i)).toBeVisible();
 			expect(screen.getAllByText(tasks[0].title)).toHaveLength(2);
 		});
 
@@ -478,7 +484,7 @@ describe('Task view', () => {
 			await user.click(action);
 			const confirmButton = await screen.findByRole('button', { name: /^delete permanently/i });
 			await user.click(confirmButton);
-			expect(screen.getByText('Task permanently deleted')).toBeVisible();
+			expect(await screen.findByText('Task permanently deleted')).toBeVisible();
 		});
 
 		test('Close edit board if open when task is deleted', async () => {
@@ -513,7 +519,7 @@ describe('Task view', () => {
 			await user.click(action);
 			const confirmButton = await screen.findByRole('button', { name: /^delete permanently/i });
 			await user.click(confirmButton);
-			expect(screen.getByText('Task permanently deleted')).toBeVisible();
+			expect(await screen.findByText('Task permanently deleted')).toBeVisible();
 			expect(closeBoardSpy).toHaveBeenCalledWith(`edit-task-${task.id}`);
 		});
 
@@ -543,7 +549,7 @@ describe('Task view', () => {
 			await user.click(action);
 			const confirmButton = await screen.findByRole('button', { name: /^delete permanently/i });
 			await user.click(confirmButton);
-			expect(screen.getByText('Task permanently deleted')).toBeVisible();
+			expect(await screen.findByText('Task permanently deleted')).toBeVisible();
 			expect(closeBoardSpy).not.toHaveBeenCalled();
 		});
 	});

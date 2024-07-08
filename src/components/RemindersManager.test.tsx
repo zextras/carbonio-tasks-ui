@@ -76,6 +76,10 @@ describe('Reminders manager', () => {
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayBeforeNow, {
@@ -112,6 +116,10 @@ describe('Reminders manager', () => {
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayBeforeNow, {
@@ -129,6 +137,10 @@ describe('Reminders manager', () => {
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayAfterNow, {
@@ -155,6 +167,10 @@ describe('Reminders manager', () => {
 			jest.advanceTimersByTime(1);
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(todayAfterNow, {
@@ -282,6 +298,10 @@ describe('Reminders manager', () => {
 		const mocks = [findTasksMock];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(screen.getByText(task.title)).toBeVisible();
 	});
 
@@ -330,6 +350,10 @@ describe('Reminders manager', () => {
 			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		const dismissButton = screen.getByRole('button', { name: /dismiss/i });
 		expect(dismissButton).toBeVisible();
 		expect(dismissButton).toBeEnabled();
@@ -346,6 +370,10 @@ describe('Reminders manager', () => {
 			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		const closeButton = getByRoleWithIcon('button', { icon: ICON_REGEXP.closeModal });
 		expect(closeButton).toBeVisible();
 		expect(closeButton).toBeEnabled();
@@ -517,6 +545,10 @@ describe('Reminders manager', () => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
 				includeTime: false
@@ -557,6 +589,10 @@ describe('Reminders manager', () => {
 		];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
@@ -608,6 +644,10 @@ describe('Reminders manager', () => {
 		];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
@@ -671,6 +711,10 @@ describe('Reminders manager', () => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(screen.getByText(expiringReminder1.title)).toBeVisible();
 		expect(screen.queryByText(expiringReminder2.title)).not.toBeInTheDocument();
 		act(() => {
@@ -716,6 +760,10 @@ describe('Reminders manager', () => {
 			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction })).toBeVisible();
 		expect(getByRoleWithIcon('button', { icon: ICON_REGEXP.reminderCompleteAction })).toBeEnabled();
 		expect(
@@ -734,6 +782,10 @@ describe('Reminders manager', () => {
 			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		const completeAction = getByRoleWithIcon('button', {
 			icon: ICON_REGEXP.reminderCompleteAction
 		});
@@ -1205,6 +1257,10 @@ describe('Reminders manager', () => {
 			jest.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(
 			screen.getByText(
 				formatDateFromTimestamp(tenMinutesFromNow, {
@@ -1407,6 +1463,10 @@ describe('Reminders manager', () => {
 			jest.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(screen.getByText(updatedTask.title)).toBeVisible();
 		expect(screen.queryByText(task.title)).not.toBeInTheDocument();
 		expect(screen.getByTestId(ICON_REGEXP.highPriority)).toBeVisible();
@@ -1448,6 +1508,10 @@ describe('Reminders manager', () => {
 			jest.advanceTimersByTime(timeoutLimitFromNow);
 		});
 		await waitForModalToOpen();
+		act(() => {
+			// run modal timers
+			jest.runOnlyPendingTimers();
+		});
 		expect(screen.getByText(task.title)).toBeVisible();
 	});
 });

@@ -79,7 +79,7 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const allTasksLabel = useMemo(() => t('secondaryBar.allTasks', 'All Tasks'), [t]);
 	const { activeItem, setActive } = useActiveItem();
-	const [emptyListPlaceholder] = useRandomPlaceholder('list.empty', {
+	const [emptyListPlaceholder] = useRandomPlaceholder<string>('list.empty', {
 		defaultValue: "It looks like there's nothing here."
 	});
 

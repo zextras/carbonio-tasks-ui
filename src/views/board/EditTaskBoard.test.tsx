@@ -361,6 +361,9 @@ describe('Edit task board', () => {
 
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
+				await act(async () => {
+					await jest.advanceTimersToNextTimerAsync();
+				});
 				const expected: Partial<Task> = { id: task.id, reminderAt: 0, reminderAllDay: false };
 				expect(updateTaskHandler).toHaveBeenCalledWith(
 					expect.objectContaining({
@@ -431,6 +434,9 @@ describe('Edit task board', () => {
 
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
+				await act(async () => {
+					await jest.advanceTimersToNextTimerAsync();
+				});
 				const expected: Partial<Task> = {
 					id: task.id,
 					reminderAt: chosenDate.valueOf(),
@@ -498,6 +504,9 @@ describe('Edit task board', () => {
 
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
+				await act(async () => {
+					await jest.advanceTimersToNextTimerAsync();
+				});
 				const expected: Partial<Task> = {
 					id: task.id,
 					reminderAt: previousReminderAtValue.getTime(),
