@@ -553,7 +553,6 @@ describe('Reminders manager', () => {
 		];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
-
 		act(() => {
 			jest.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
@@ -1236,7 +1235,6 @@ describe('Reminders manager', () => {
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await editTask({ ...task, reminderAt: null });
-
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 	});
 
