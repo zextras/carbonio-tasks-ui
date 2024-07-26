@@ -68,7 +68,7 @@
 	},
 	"dependencies": {
 		"@apollo/client": "~3.9.9",
-		"@zextras/carbonio-design-system": "^7.0.0-next-24-12-0.4",
+		"@zextras/carbonio-design-system": ">=7.0.0-next-24-12-0.4 <7.0.0-next-25-3-0",
 		"@zextras/carbonio-shell-ui": "file:../carbonio-shell-ui/zextras-carbonio-shell-ui-7.0.1.tgz",
 		"core-js": "^3.32.0",
 		"date-fns": "^2.30.0",

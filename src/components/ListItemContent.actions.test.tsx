@@ -5,7 +5,7 @@
  */
 import React from 'react';
 
-import { screen, waitFor, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 
 import { ListItemContent } from './ListItemContent';
 import { ICON_REGEXP, TEST_ID_SELECTOR } from '../constants/tests';
@@ -65,10 +65,10 @@ describe('List item content', () => {
 			await user.rightClick(screen.getByText(task.title));
 			await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
 			expect(screen.getByTestId(TEST_ID_SELECTOR.dropdown)).toBeVisible();
-			await waitFor(async () => {
-				await user.click(screen.getByTestId(ICON_REGEXP.mediumPriority));
-				expect(screen.queryByTestId(TEST_ID_SELECTOR.dropdown)).not.toBeInTheDocument();
-			});
+			await user.click(screen.getByTestId(ICON_REGEXP.mediumPriority));
+			expect(await screen.findByText(/do not remind me/i)).toBeVisible();
+			await screen.findByText(task.title);
+			expect(screen.queryByTestId(TEST_ID_SELECTOR.dropdown)).not.toBeInTheDocument();
 		});
 
 		describe('Complete', () => {

@@ -6,7 +6,7 @@
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import gql from 'graphql-tag';
 import { Route } from 'react-router-dom';
 
@@ -149,12 +149,9 @@ describe('Displayer', () => {
 		expect(screen.getByText(RegExp(task.priority, 'i'))).toBeVisible();
 		expect(screen.queryByText(/description/i)).not.toBeInTheDocument();
 		// wait for query to run
-		await waitFor(
-			() =>
-				new Promise((resolve) => {
-					setTimeout(resolve, 0);
-				})
-		);
+		await act(async () => {
+			await jest.advanceTimersToNextTimerAsync();
+		});
 		// partial data are still visible
 		expect(screen.getByText(task.title)).toBeVisible();
 		expect(screen.getByText(RegExp(task.priority, 'i'))).toBeVisible();
