@@ -92,8 +92,8 @@ const App = (): React.ReactNode => {
 		});
 	}, [t]);
 
-	const newAction: NewAction = useMemo(
-		() => ({
+	const newAction = useMemo(
+		(): NewAction => ({
 			id: 'new-task',
 			label: t('label.new', 'New Task'),
 			icon: 'CheckmarkCircle2Outline',
