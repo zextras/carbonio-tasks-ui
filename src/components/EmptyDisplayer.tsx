@@ -5,7 +5,7 @@
  */
 import React, { useContext } from 'react';
 
-import { Container, Padding, Text } from '@zextras/carbonio-design-system';
+import { Container, Padding, Row, Text } from '@zextras/carbonio-design-system';
 
 import { ListContext } from '../contexts';
 import { useRandomPlaceholder } from '../hooks/useRandomPlaceholder';
@@ -48,7 +48,7 @@ export const EmptyDisplayer = ({ translationKey }: EmptyDisplayerProps): React.J
 					{randomPlaceholder?.title || ''}
 				</Text>
 			</Padding>
-			<Container width="60%">
+			<Row width="60%">
 				<Text
 					size="small"
 					color="gray1"
@@ -58,7 +58,7 @@ export const EmptyDisplayer = ({ translationKey }: EmptyDisplayerProps): React.J
 				>
 					{randomPlaceholder?.message || ''}
 				</Text>
-			</Container>
+			</Row>
 		</Container>
 	);
 };
