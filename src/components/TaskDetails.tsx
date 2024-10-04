@@ -5,14 +5,13 @@
  */
 import React, { useMemo } from 'react';
 
-import { Container, Icon, Row } from '@zextras/carbonio-design-system';
+import { Container, Icon, Row, Text } from '@zextras/carbonio-design-system';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';
-import { Text } from './Text';
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';
 import type { OneOrMany } from '../types/utils';
@@ -44,10 +43,10 @@ const DetailItem = ({
 			flexShrink={1}
 			flexBasis={'fit-content'}
 		>
-			<Text size={'small'} color={'gray1'}>
+			<Text size={'small'} color={'gray1'} lineHeight={1.5}>
 				{label}
 			</Text>
-			<Text size={'medium'} color={'gray0'} overflow={'break-word'}>
+			<Text size={'medium'} color={'gray0'} overflow={'break-word'} lineHeight={1.5}>
 				<Row gap={'0.5rem'} wrap={'nowrap'}>
 					{children}
 				</Row>

@@ -6,12 +6,11 @@
 
 import React, { useMemo } from 'react';
 
-import { Container, Icon, Button, Row, Tooltip } from '@zextras/carbonio-design-system';
+import { Container, Icon, Button, Row, Tooltip, Text } from '@zextras/carbonio-design-system';
 import { map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { PriorityIcon } from './PriorityIcon';
-import { Text } from './Text';
 import { type Priority, Status, type Task } from '../gql/types';
 
 type ReminderItemType = Pick<Task, 'id' | 'title' | 'priority' | 'status'>;
@@ -53,11 +52,13 @@ const ReminderItem = ({
 					{status === Status.Complete && <Icon icon={'Checkmark'} color={'success'} />}
 				</Row>
 				<Row wrap={'nowrap'} flexShrink={1} minWidth={0} flexGrow={1} mainAlignment={'flex-start'}>
-					<Text size={'medium'}>{title}</Text>
+					<Text size={'medium'} lineHeight={1.5}>
+						{title}
+					</Text>
 				</Row>
 				<Row flexShrink={1} flexBasis={'fit-content'}>
 					{status === Status.Complete && (
-						<Text size={'medium'} weight={'bold'}>
+						<Text size={'medium'} weight={'bold'} lineHeight={1.5}>
 							{t('task.status', {
 								context: status.toLowerCase(),
 								defaultValue: 'Completed'
@@ -123,10 +124,10 @@ const ReminderGroup = ({
 	return (
 		<Container gap={'0.5rem'} height={'fit'} crossAlignment={'flex-start'}>
 			<Row gap={'0.5rem'} wrap={'nowrap'}>
-				<Text color={'secondary'} size={'medium'}>
+				<Text color={'secondary'} size={'medium'} lineHeight={1.5}>
 					{t('modal.reminder.remindMeOn', 'Remind me on')}
 				</Text>
-				<Text color={'primary'} size={'medium'}>
+				<Text color={'primary'} size={'medium'} lineHeight={1.5}>
 					{date}
 				</Text>
 			</Row>

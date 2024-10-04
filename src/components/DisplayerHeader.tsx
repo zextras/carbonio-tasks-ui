@@ -5,9 +5,8 @@
  */
 import React, { useCallback } from 'react';
 
-import { Container, Divider, Icon, Button } from '@zextras/carbonio-design-system';
+import { Container, Divider, Icon, Button, TextWithTooltip } from '@zextras/carbonio-design-system';
 
-import { Text } from './Text';
 import { Status } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
 
@@ -38,7 +37,7 @@ export const DisplayerHeader = ({ title, status }: DisplayerHeaderProps): React.
 						<Icon size={'large'} icon={'Checkmark'} color={'success'} />
 					</Container>
 				)}
-				<Text withTooltip>{title}</Text>
+				<TextWithTooltip lineHeight={1.5}>{title}</TextWithTooltip>
 				<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>
 					<Button
 						type={'ghost'}

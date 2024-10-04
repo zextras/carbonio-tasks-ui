@@ -7,12 +7,13 @@
 import React, { useMemo } from 'react';
 
 import {
+	Text,
 	Container,
 	Divider,
 	getColor,
 	ListItem,
 	type ListItemProps,
-	ListV2,
+	List,
 	pseudoClasses,
 	Row
 } from '@zextras/carbonio-design-system';
@@ -22,7 +23,6 @@ import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled
 
 import { ListItemContent } from './ListItemContent';
 import { HoverBarContainer } from './StyledComponents';
-import { Text } from './Text';
 import { LIST_WIDTH } from '../constants';
 import type { FindTasksQuery } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
@@ -79,7 +79,7 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 	const [t] = useTranslation();
 	const allTasksLabel = useMemo(() => t('secondaryBar.allTasks', 'All Tasks'), [t]);
 	const { activeItem, setActive } = useActiveItem();
-	const [emptyListPlaceholder] = useRandomPlaceholder('list.empty', {
+	const [emptyListPlaceholder] = useRandomPlaceholder<string>('list.empty', {
 		defaultValue: "It looks like there's nothing here."
 	});
 
@@ -126,16 +126,23 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 				flexGrow={1}
 				gap="medium"
 			>
-				<Text>{allTasksLabel}</Text>
+				<Text lineHeight={1.5}>{allTasksLabel}</Text>
 			</Row>
 			<Divider color="gray3" />
 			<Container minHeight={0} maxHeight={'100%'}>
 				{(!isEmpty(items) && (
-					<ListV2 data-testid="main-list" background={'gray6'}>
+					<List data-testid="main-list" background={'gray6'}>
 						{items}
-					</ListV2>
+					</List>
 				)) || (
-					<Text size={'small'} weight={'bold'} overflow={'break-word'} color={'secondary'} centered>
+					<Text
+						size={'small'}
+						weight={'bold'}
+						overflow={'break-word'}
+						color={'secondary'}
+						textAlign={'center'}
+						lineHeight={1.5}
+					>
 						{emptyListPlaceholder}
 					</Text>
 				)}

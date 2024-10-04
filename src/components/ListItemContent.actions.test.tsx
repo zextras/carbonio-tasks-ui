@@ -66,6 +66,8 @@ describe('List item content', () => {
 			await screen.findByTestId(TEST_ID_SELECTOR.dropdown);
 			expect(screen.getByTestId(TEST_ID_SELECTOR.dropdown)).toBeVisible();
 			await user.click(screen.getByTestId(ICON_REGEXP.mediumPriority));
+			expect(await screen.findByText(/do not remind me/i)).toBeVisible();
+			await screen.findByText(task.title);
 			expect(screen.queryByTestId(TEST_ID_SELECTOR.dropdown)).not.toBeInTheDocument();
 		});
 
@@ -84,12 +86,12 @@ describe('List item content', () => {
 
 				// rtl isVisible is not working on hover bar
 				// Check that the action is inside the hover bar
-				expect(screen.getByTestId(ICON_REGEXP.completeAction)).toBeInTheDocument();
+				expect(screen.getByTestId(ICON_REGEXP.completeAction)).toBeVisible();
 				expect(
 					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 						ICON_REGEXP.completeAction
 					)
-				).toBeInTheDocument();
+				).toBeVisible();
 			});
 			test(`When task status is complete, complete action is missing on hover`, async () => {
 				const task = populateTask();
@@ -160,12 +162,12 @@ describe('List item content', () => {
 
 				// rtl isVisible is not working on hover bar
 				// Check that the action is inside the hover bar
-				expect(screen.getByTestId(ICON_REGEXP.uncompleteAction)).toBeInTheDocument();
+				expect(screen.getByTestId(ICON_REGEXP.uncompleteAction)).toBeVisible();
 				expect(
 					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 						ICON_REGEXP.uncompleteAction
 					)
-				).toBeInTheDocument();
+				).toBeVisible();
 			});
 			test(`When task status is open, uncomplete action is missing on hover`, async () => {
 				const task = populateTask();
@@ -240,12 +242,12 @@ describe('List item content', () => {
 
 					// rtl isVisible is not working on hover bar
 					// Check that the action is inside the hover bar
-					expect(screen.getByTestId(ICON_REGEXP.editAction)).toBeInTheDocument();
+					expect(screen.getByTestId(ICON_REGEXP.editAction)).toBeVisible();
 					expect(
 						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 							ICON_REGEXP.editAction
 						)
-					).toBeInTheDocument();
+					).toBeVisible();
 				}
 			);
 
@@ -288,12 +290,12 @@ describe('List item content', () => {
 
 					// rtl isVisible is not working on hover bar
 					// Check that the action is inside the hover bar
-					expect(screen.getByTestId(ICON_REGEXP.deleteAction)).toBeInTheDocument();
+					expect(screen.getByTestId(ICON_REGEXP.deleteAction)).toBeVisible();
 					expect(
 						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 							ICON_REGEXP.deleteAction
 						)
-					).toBeInTheDocument();
+					).toBeVisible();
 				}
 			);
 

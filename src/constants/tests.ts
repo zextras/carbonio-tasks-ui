@@ -19,7 +19,8 @@ export const ICON_REGEXP = {
 	reminderCompleteAction: /^icon: CheckmarkCircleOutline$/i,
 	reminderUndoAction: /^icon: UndoOutline$/i,
 	switchOff: /^icon: ToggleLeftOutline$/i,
-	switchOn: /^icon: ToggleRight$/i
+	switchOn: /^icon: ToggleRight$/i,
+	completedTask: /^icon: Checkmark$/i
 } as const;
 
 export const TEST_ID_SELECTOR = {

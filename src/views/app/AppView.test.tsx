@@ -249,7 +249,7 @@ describe('App view', () => {
 				icon: ICON_REGEXP.reminderUndoAction
 			});
 			await user.click(undoButton);
-			await waitForElementToBeRemoved(screen.queryByTestId(ICON_REGEXP.reminderComplete));
+			await waitForElementToBeRemoved(screen.queryAllByTestId(ICON_REGEXP.reminderComplete));
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			expect(screen.getByText(tasks[0].title)).toBeVisible();
 			expect(
@@ -373,7 +373,7 @@ describe('App view', () => {
 				icon: ICON_REGEXP.reminderUndoAction
 			});
 			await user.click(undoButton);
-			await waitForElementToBeRemoved(screen.queryByTestId(ICON_REGEXP.reminderComplete));
+			await waitForElementToBeRemoved(screen.queryAllByTestId(ICON_REGEXP.reminderComplete));
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			showDisplayerPlaceholder();
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();

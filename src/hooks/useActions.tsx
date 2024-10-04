@@ -8,9 +8,9 @@ import React, { useCallback, useMemo } from 'react';
 import {
 	type Action,
 	Container,
-	useModal,
 	useSnackbar,
-	Text
+	Text,
+	useModal
 } from '@zextras/carbonio-design-system';
 import {
 	addBoard,

@@ -16,12 +16,12 @@ import {
 	queries,
 	queryHelpers,
 	render,
+	renderHook,
 	type RenderOptions,
 	type RenderResult,
 	screen,
 	within
 } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
 import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
 import i18next, { type i18n } from 'i18next';
