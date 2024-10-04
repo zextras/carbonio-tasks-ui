@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { Container, Icon, Row } from '@zextras/carbonio-design-system';
+import { Container, Icon, Row, Text } from '@zextras/carbonio-design-system';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
@@ -14,7 +14,6 @@ import { ListItemHoverBar } from './ListItemHoverBar';
 import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';
 import { HoverContainer, ListItemContainer } from './StyledComponents';
-import { Text } from './Text';
 import { LIST_ITEM_HEIGHT } from '../constants';
 import { type Task, Status } from '../gql/types';
 import { useActions } from '../hooks/useActions';
@@ -100,7 +99,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(function ListIte
 											<Icon size={'large'} icon={'Checkmark'} color={'success'} />
 										</Container>
 									)}
-									<Text overflow="ellipsis" size="medium">
+									<Text overflow="ellipsis" size="medium" lineHeight={1.5}>
 										{title}
 									</Text>
 									<Container margin={{ left: 'auto' }} width={'fit'} height={'fit'} flexShrink={0}>
@@ -128,7 +127,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(function ListIte
 									>
 										{reminderAt ? (
 											<>
-												<Text size="small">
+												<Text size="small" lineHeight={1.5}>
 													{t('tasksListItem.reminder.remindMeOn', 'Remind me on')}&nbsp;
 												</Text>
 												<Container width={'fit'} height={'fit'} flexShrink={0} maxWidth={'100%'}>
@@ -136,7 +135,7 @@ export const ListItemContent = React.memo<ListItemContentProps>(function ListIte
 												</Container>
 											</>
 										) : (
-											<Text color="secondary" size="small">
+											<Text color="secondary" size="small" lineHeight={1.5}>
 												{missingReminderLabel}
 											</Text>
 										)}

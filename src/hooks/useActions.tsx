@@ -42,9 +42,9 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 	const trashAction = useTrashAction(id);
 
 	const openDeleteModal = useCallback(() => {
-		const idModal = 'delete-task';
+		const modalId = 'delete-task-modal';
 		createModal({
-			id: idModal,
+			id: modalId,
 			title: t('modal.delete.header', 'This action is irreversible'),
 			size: 'medium',
 			confirmLabel: t('modal.delete.button.confirm', 'Delete permanently'),
@@ -56,7 +56,7 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 					if (board) {
 						closeBoard(boardId);
 					}
-					closeModal(idModal);
+					closeModal(modalId);
 					createSnackbar({
 						severity: 'success',
 						key: `snackbar-${Date.now()}`,
@@ -67,7 +67,7 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 			},
 			showCloseIcon: true,
 			onClose: () => {
-				closeModal(idModal);
+				closeModal(modalId);
 			},
 			children: (
 				<Container padding={{ vertical: 'large' }}>

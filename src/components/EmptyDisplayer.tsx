@@ -5,9 +5,8 @@
  */
 import React, { useContext } from 'react';
 
-import { Container, Padding } from '@zextras/carbonio-design-system';
+import { Container, Padding, Text } from '@zextras/carbonio-design-system';
 
-import { Text } from './Text';
 import { ListContext } from '../contexts';
 import { useRandomPlaceholder } from '../hooks/useRandomPlaceholder';
 
@@ -38,13 +37,28 @@ export const EmptyDisplayer = ({ translationKey }: EmptyDisplayerProps): React.J
 	return (
 		<Container>
 			<Padding all="medium">
-				<Text color="gray1" overflow="break-word" weight="bold" size="large" centered>
+				<Text
+					color="gray1"
+					overflow="break-word"
+					weight="bold"
+					size="large"
+					textAlign={'center'}
+					lineHeight={1.5}
+				>
 					{randomPlaceholder?.title || ''}
 				</Text>
 			</Padding>
-			<Text size="small" color="gray1" overflow="break-word" width="60%" centered>
-				{randomPlaceholder?.message || ''}
-			</Text>
+			<Container width="60%">
+				<Text
+					size="small"
+					color="gray1"
+					overflow="break-word"
+					textAlign={'center'}
+					lineHeight={1.5}
+				>
+					{randomPlaceholder?.message || ''}
+				</Text>
+			</Container>
 		</Container>
 	);
 };
