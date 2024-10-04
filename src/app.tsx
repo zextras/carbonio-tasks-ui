@@ -4,13 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import React, { lazy, Suspense, useEffect } from 'react';
+import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
 import {
 	ACTION_TYPES,
 	addBoard,
 	addBoardView,
 	addRoute,
+	type NewAction,
 	registerActions,
 	type SecondaryBarComponentProps,
 	Spinner
@@ -91,27 +92,31 @@ const App = (): React.ReactNode => {
 		});
 	}, [t]);
 
+	const newAction = useMemo(
+		(): NewAction => ({
+			id: 'new-task',
+			label: t('label.new', 'New Task'),
+			icon: 'CheckmarkCircle2Outline',
+			execute: (): void => {
+				addBoard({
+					boardViewId: `${TASKS_ROUTE}/new`,
+					title: t('board.newTask.title', 'New Task')
+				});
+			},
+			disabled: false,
+			primary: true,
+			group: TASKS_APP_ID
+		}),
+		[t]
+	);
+
 	useEffect(() => {
-		// create button actions
-		registerActions({
+		registerActions<NewAction>({
 			id: 'new-task',
 			type: ACTION_TYPES.NEW,
-			action: () => ({
-				id: 'new-task',
-				label: t('label.new', 'New Task'),
-				icon: 'CheckmarkCircle2Outline',
-				onClick: (): void => {
-					addBoard({
-						boardViewId: `${TASKS_ROUTE}/new`,
-						title: t('board.newTask.title', 'New Task')
-					});
-				},
-				disabled: false,
-				primary: true,
-				group: TASKS_APP_ID
-			})
+			action: () => newAction
 		});
-	}, [t]);
+	}, [newAction]);
 
 	return (
 		<Route path={`/:module/:taskId?`}>
