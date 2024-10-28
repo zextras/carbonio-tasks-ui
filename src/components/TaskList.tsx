@@ -15,11 +15,12 @@ import {
 	type ListItemProps,
 	List,
 	pseudoClasses,
-	Row
+	Row,
+	type AnyColor
 } from '@zextras/carbonio-design-system';
 import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled, { css, type DefaultTheme, type SimpleInterpolation } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { ListItemContent } from './ListItemContent';
 import { HoverBarContainer } from './StyledComponents';
@@ -33,27 +34,24 @@ type TaskListProps = {
 	tasks: NonNullableList<FindTasksQuery['findTasks']>;
 };
 
-const StyledListItem = styled(ListItem).attrs<
-	ListItemProps,
-	{ backgroundColor?: string | keyof DefaultTheme['palette'] }
->(({ background, selectedBackground, activeBackground, active, selected }) => ({
-	backgroundColor: (active && activeBackground) || (selected && selectedBackground) || background
-}))`
-	${({ backgroundColor, theme }): SimpleInterpolation =>
-		backgroundColor && pseudoClasses(theme, backgroundColor, 'color')}
+const StyledListItem = styled(ListItem)<{
+	$backgroundColor?: AnyColor;
+}>`
+	${({ $backgroundColor, theme }): undefined | ReturnType<typeof pseudoClasses> | string =>
+		$backgroundColor && pseudoClasses(theme, $backgroundColor, 'color')}
 	transition: none;
 
-	${({ backgroundColor, theme }): SimpleInterpolation =>
-		backgroundColor &&
+	${({ $backgroundColor, theme }): undefined | string | ReturnType<typeof css> =>
+		$backgroundColor &&
 		css`
 			${HoverBarContainer} {
-				background: linear-gradient(to right, transparent, ${getColor(backgroundColor, theme)});
+				background: linear-gradient(to right, transparent, ${getColor($backgroundColor, theme)});
 			}
 			&:focus ${HoverBarContainer} {
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${backgroundColor}.focus`, theme)}
+					${getColor(`${$backgroundColor}.focus`, theme)}
 				);
 			}
 
@@ -61,7 +59,7 @@ const StyledListItem = styled(ListItem).attrs<
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${backgroundColor}.hover`, theme)}
+					${getColor(`${$backgroundColor}.hover`, theme)}
 				);
 			}
 
@@ -69,11 +67,27 @@ const StyledListItem = styled(ListItem).attrs<
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${backgroundColor}.active`, theme)}
+					${getColor(`${$backgroundColor}.active`, theme)}
 				);
 			}
 		`}
 `;
+
+const CustomListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
+	function CustomListItemFn(props, ref) {
+		return (
+			<StyledListItem
+				ref={ref}
+				$backgroundColor={
+					(props.active && props.activeBackground) ||
+					(props.selected && props.selectedBackground) ||
+					props.background
+				}
+				{...props}
+			/>
+		);
+	}
+);
 
 export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 	const [t] = useTranslation();
@@ -86,7 +100,7 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 	const items = useMemo(
 		() =>
 			map(tasks, (task) => (
-				<StyledListItem key={task.id} active={task.id === activeItem} data-testid={'list-item'}>
+				<CustomListItem key={task.id} active={task.id === activeItem} data-testid={'list-item'}>
 					{(visible): React.JSX.Element => (
 						<ListItemContent
 							visible={visible}
@@ -99,7 +113,7 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 							onClick={setActive}
 						/>
 					)}
-				</StyledListItem>
+				</CustomListItem>
 			)),
 		[activeItem, setActive, tasks]
 	);
