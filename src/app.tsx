@@ -14,7 +14,8 @@ import {
 	type NewAction,
 	registerActions,
 	type SecondaryBarComponentProps,
-	Spinner
+	Spinner,
+	useAuthenticated
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { Route } from 'react-router-dom';
@@ -67,30 +68,33 @@ const EditTaskBoardView = (): React.JSX.Element => (
 
 const App = (): React.ReactNode => {
 	const [t] = useTranslation();
+	const isAuthenticated = useAuthenticated();
 
 	useEffect(() => {
-		const appNameLabel = t('label.app_name', 'Tasks');
+		if (isAuthenticated) {
+			const appNameLabel = t('label.app_name', 'Tasks');
 
-		addRoute({
-			route: TASKS_ROUTE,
-			position: 600,
-			visible: true,
-			label: appNameLabel,
-			primaryBar: 'CheckmarkCircle2Outline',
-			secondaryBar: SecondaryBarView,
-			appView: AppView
-		});
+			addRoute({
+				route: TASKS_ROUTE,
+				position: 600,
+				visible: true,
+				label: appNameLabel,
+				primaryBar: 'CheckmarkCircle2Outline',
+				secondaryBar: SecondaryBarView,
+				appView: AppView
+			});
 
-		// boards
-		addBoardView({
-			id: `${TASKS_ROUTE}/new`,
-			component: NewTaskBoardView
-		});
-		addBoardView({
-			id: `${TASKS_ROUTE}/edit`,
-			component: EditTaskBoardView
-		});
-	}, [t]);
+			// boards
+			addBoardView({
+				id: `${TASKS_ROUTE}/new`,
+				component: NewTaskBoardView
+			});
+			addBoardView({
+				id: `${TASKS_ROUTE}/edit`,
+				component: EditTaskBoardView
+			});
+		}
+	}, [isAuthenticated, t]);
 
 	const newAction = useMemo(
 		(): NewAction => ({
@@ -111,20 +115,22 @@ const App = (): React.ReactNode => {
 	);
 
 	useEffect(() => {
-		registerActions<NewAction>({
-			id: 'new-task',
-			type: ACTION_TYPES.NEW,
-			action: () => newAction
-		});
-	}, [newAction]);
+		if (isAuthenticated) {
+			registerActions<NewAction>({
+				id: 'new-task',
+				type: ACTION_TYPES.NEW,
+				action: () => newAction
+			});
+		}
+	}, [isAuthenticated, newAction]);
 
-	return (
+	return isAuthenticated ? (
 		<Route path={`/:module/:taskId?`}>
 			<ProvidersWrapper>
 				<RemindersManager />
 			</ProvidersWrapper>
 		</Route>
-	);
+	) : null;
 };
 
 export default App;
