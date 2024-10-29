@@ -68,33 +68,30 @@ const EditTaskBoardView = (): React.JSX.Element => (
 
 const App = (): React.ReactNode => {
 	const [t] = useTranslation();
-	const isAuthenticated = useAuthenticated();
 
 	useEffect(() => {
-		if (isAuthenticated) {
-			const appNameLabel = t('label.app_name', 'Tasks');
+		const appNameLabel = t('label.app_name', 'Tasks');
 
-			addRoute({
-				route: TASKS_ROUTE,
-				position: 600,
-				visible: true,
-				label: appNameLabel,
-				primaryBar: 'CheckmarkCircle2Outline',
-				secondaryBar: SecondaryBarView,
-				appView: AppView
-			});
+		addRoute({
+			route: TASKS_ROUTE,
+			position: 600,
+			visible: true,
+			label: appNameLabel,
+			primaryBar: 'CheckmarkCircle2Outline',
+			secondaryBar: SecondaryBarView,
+			appView: AppView
+		});
 
-			// boards
-			addBoardView({
-				id: `${TASKS_ROUTE}/new`,
-				component: NewTaskBoardView
-			});
-			addBoardView({
-				id: `${TASKS_ROUTE}/edit`,
-				component: EditTaskBoardView
-			});
-		}
-	}, [isAuthenticated, t]);
+		// boards
+		addBoardView({
+			id: `${TASKS_ROUTE}/new`,
+			component: NewTaskBoardView
+		});
+		addBoardView({
+			id: `${TASKS_ROUTE}/edit`,
+			component: EditTaskBoardView
+		});
+	}, [t]);
 
 	const newAction = useMemo(
 		(): NewAction => ({
@@ -115,22 +112,26 @@ const App = (): React.ReactNode => {
 	);
 
 	useEffect(() => {
-		if (isAuthenticated) {
-			registerActions<NewAction>({
-				id: 'new-task',
-				type: ACTION_TYPES.NEW,
-				action: () => newAction
-			});
-		}
-	}, [isAuthenticated, newAction]);
+		registerActions<NewAction>({
+			id: 'new-task',
+			type: ACTION_TYPES.NEW,
+			action: () => newAction
+		});
+	}, [newAction]);
 
-	return isAuthenticated ? (
+	return (
 		<Route path={`/:module/:taskId?`}>
 			<ProvidersWrapper>
 				<RemindersManager />
 			</ProvidersWrapper>
 		</Route>
-	) : null;
+	);
 };
 
-export default App;
+const AuthenticatedApp = (): React.ReactNode => {
+	const isAuthenticated = useAuthenticated();
+
+	return isAuthenticated ? <App /> : null;
+};
+
+export default AuthenticatedApp;
