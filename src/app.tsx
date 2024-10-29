@@ -66,7 +66,7 @@ const EditTaskBoardView = (): React.JSX.Element => (
 	</Suspense>
 );
 
-const App = (): React.ReactNode => {
+const App = (): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	useEffect(() => {
@@ -128,7 +128,7 @@ const App = (): React.ReactNode => {
 	);
 };
 
-const AuthenticatedApp = (): React.ReactNode => {
+const AuthenticatedApp = (): React.JSX.Element | null => {
 	const isAuthenticated = useAuthenticated();
 
 	return isAuthenticated ? <App /> : null;
