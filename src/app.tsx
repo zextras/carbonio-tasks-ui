@@ -66,7 +66,7 @@ const EditTaskBoardView = (): React.JSX.Element => (
 	</Suspense>
 );
 
-const App = (): React.JSX.Element => {
+const AuthenticatedApp = (): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	useEffect(() => {
@@ -128,10 +128,10 @@ const App = (): React.JSX.Element => {
 	);
 };
 
-const AuthenticatedApp = (): React.JSX.Element | null => {
+const App = (): React.JSX.Element | null => {
 	const isAuthenticated = useAuthenticated();
 
-	return isAuthenticated ? <App /> : null;
+	return isAuthenticated ? <AuthenticatedApp /> : null;
 };
 
-export default AuthenticatedApp;
+export default App;
