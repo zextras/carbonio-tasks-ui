@@ -104,3 +104,5 @@ const notificationManagerInstance: shell.INotificationManager = {
 export const getNotificationManager = (): shell.INotificationManager => notificationManagerInstance;
 
 export const updatePrimaryBadge: typeof shell.updatePrimaryBadge = noop;
+export const useAuthenticated: typeof shell.useAuthenticated = () => true;
+export const addRoute: typeof shell.addRoute = () => '';
