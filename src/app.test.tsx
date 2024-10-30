@@ -6,27 +6,73 @@
 
 import React from 'react';
 
-import { screen } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import App from './app';
+import { TASKS_ROUTE } from './constants';
 import { setup } from './utils/testUtils';
+import { ACTION_TYPES } from '../__mocks__/@zextras/carbonio-shell-ui';
 
-jest.mock('./AuthenticatedApp', () => ({
-	AuthenticatedApp: (): React.JSX.Element => (
-		<div data-testid="authenticated-app">Authenticated Content</div>
-	)
-}));
-
-it('should render AuthenticatedApp if the user is authenticated', () => {
-	setup(<App />);
-	expect(screen.getByTestId('authenticated-app')).toBeVisible();
-	expect(screen.getByText(/authenticated content/i)).toBeVisible();
+beforeEach(() => {
+	jest.clearAllMocks();
 });
 
-it('should not render AuthenticatedApp if the user is not authenticated', () => {
-	jest.spyOn(shell, 'useAuthenticated').mockReturnValue(false);
-	setup(<App />);
-	expect(screen.queryByTestId('authenticated-app')).not.toBeInTheDocument();
-	expect(screen.queryByText(/authenticated content/i)).not.toBeInTheDocument();
+describe('App', () => {
+	describe('User authenticated', () => {
+		it('should call addRoute', () => {
+			const addRouteMock = jest.spyOn(shell, 'addRoute');
+			setup(<App />);
+			expect(addRouteMock).toHaveBeenCalledWith<Parameters<typeof shell.addRoute>>(
+				expect.objectContaining({
+					route: TASKS_ROUTE,
+					position: 600,
+					visible: true,
+					label: 'Tasks',
+					primaryBar: 'CheckmarkCircle2Outline',
+					secondaryBar: expect.anything(),
+					appView: expect.anything()
+				})
+			);
+		});
+
+		it('should call addBoardView', () => {
+			const addBoardViewMock = jest.spyOn(shell, 'addBoardView');
+			setup(<App />);
+			expect(addBoardViewMock).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>(
+				expect.objectContaining({
+					id: `${TASKS_ROUTE}/new`,
+					component: expect.anything()
+				})
+			);
+			expect(addBoardViewMock).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>(
+				expect.objectContaining({
+					id: `${TASKS_ROUTE}/edit`,
+					component: expect.anything()
+				})
+			);
+		});
+
+		it('should call registerActions', () => {
+			const registerActionsMock = jest.spyOn(shell, 'registerActions');
+			setup(<App />);
+			expect(registerActionsMock).toHaveBeenCalledWith<Parameters<typeof shell.registerActions>>(
+				expect.objectContaining({
+					id: 'new-task',
+					type: ACTION_TYPES.NEW,
+					action: expect.anything()
+				})
+			);
+		});
+	});
+
+	it('should not register the route, board and actions if the user is not authenticated', () => {
+		jest.spyOn(shell, 'useAuthenticated').mockReturnValue(false);
+		const addRouteMock = jest.spyOn(shell, 'addRoute');
+		const addBoardViewMock = jest.spyOn(shell, 'addBoardView');
+		const registerActionsMock = jest.spyOn(shell, 'registerActions');
+		setup(<App />);
+		expect(addRouteMock).not.toHaveBeenCalled();
+		expect(addBoardViewMock).not.toHaveBeenCalled();
+		expect(registerActionsMock).not.toHaveBeenCalled();
+	});
 });

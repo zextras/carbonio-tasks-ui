@@ -106,3 +106,5 @@ export const getNotificationManager = (): shell.INotificationManager => notifica
 export const updatePrimaryBadge: typeof shell.updatePrimaryBadge = noop;
 export const useAuthenticated: typeof shell.useAuthenticated = () => true;
 export const addRoute: typeof shell.addRoute = () => '';
+export const addBoardView: typeof shell.addBoardView = () => '';
+export const registerActions: typeof shell.registerActions = () => undefined;
