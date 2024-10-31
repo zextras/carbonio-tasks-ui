@@ -14,7 +14,8 @@ import {
 	type NewAction,
 	registerActions,
 	type SecondaryBarComponentProps,
-	Spinner
+	Spinner,
+	useAuthenticated
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { Route } from 'react-router-dom';
@@ -65,7 +66,7 @@ const EditTaskBoardView = (): React.JSX.Element => (
 	</Suspense>
 );
 
-const App = (): React.ReactNode => {
+export const AuthenticatedApp = (): React.JSX.Element => {
 	const [t] = useTranslation();
 
 	useEffect(() => {
@@ -125,6 +126,12 @@ const App = (): React.ReactNode => {
 			</ProvidersWrapper>
 		</Route>
 	);
+};
+
+const App = (): React.JSX.Element | null => {
+	const isAuthenticated = useAuthenticated();
+
+	return isAuthenticated ? <AuthenticatedApp /> : null;
 };
 
 export default App;
