@@ -13,10 +13,6 @@ import { TASKS_ROUTE } from './constants';
 import { setup } from './utils/testUtils';
 import { ACTION_TYPES } from '../__mocks__/@zextras/carbonio-shell-ui';
 
-beforeEach(() => {
-	jest.clearAllMocks();
-});
-
 describe('App', () => {
 	describe('User authenticated', () => {
 		it('should call addRoute', () => {
