@@ -138,7 +138,6 @@ export const TaskList = ({ tasks }: TaskListProps): React.JSX.Element => {
 				data-testid="list-header"
 				flexShrink={0}
 				flexGrow={1}
-				gap="medium"
 			>
 				<Text lineHeight={1.5}>{allTasksLabel}</Text>
 			</Row>
