@@ -6,6 +6,7 @@
 
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
+import { Spinner } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -14,7 +15,6 @@ import {
 	type NewAction,
 	registerActions,
 	type SecondaryBarComponentProps,
-	Spinner,
 	useAuthenticated
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
@@ -39,19 +39,19 @@ const LazyEditTaskBoardView = lazy(
 );
 
 const AppView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense fallback={<Spinner color={'primary'} />}>
 		<LazyAppView />
 	</Suspense>
 );
 
 const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense fallback={<Spinner color={'primary'} />}>
 		<LazySecondaryBarView {...props} />
 	</Suspense>
 );
 
 const NewTaskBoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense fallback={<Spinner color={'primary'} />}>
 		<ProvidersWrapper>
 			<LazyNewTaskBoardView />
 		</ProvidersWrapper>
@@ -59,7 +59,7 @@ const NewTaskBoardView = (): React.JSX.Element => (
 );
 
 const EditTaskBoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense fallback={<Spinner color={'primary'} />}>
 		<ProvidersWrapper>
 			<LazyEditTaskBoardView />
 		</ProvidersWrapper>
