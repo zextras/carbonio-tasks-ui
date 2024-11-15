@@ -52,9 +52,14 @@ const CustomText = styled(Text)`
 	line-height: 1.5rem;
 `;
 
-export const CustomSelectLabelFactory: React.VFC<
-	ComponentProps<NonNullable<SelectProps['LabelFactory']>>
-> = ({ selected, label, open, focus, background, disabled }) => {
+export const CustomSelectLabelFactory = ({
+	selected,
+	label,
+	open,
+	focus,
+	background,
+	disabled
+}: ComponentProps<NonNullable<SelectProps['LabelFactory']>>): React.JSX.Element => {
 	const selectedLabels = useMemo(
 		() =>
 			!isEmpty(selected) &&

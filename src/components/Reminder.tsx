@@ -5,13 +5,17 @@
  */
 import React from 'react';
 
-import { type TextProps } from '@zextras/carbonio-design-system';
+import { type TextProps, Text } from '@zextras/carbonio-design-system';
+import styled from 'styled-components';
 
-import { Text } from './Text';
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';
 
 type ReminderProps = Pick<Task, 'reminderAt' | 'reminderAllDay'> & TextProps;
+
+const StyledText = styled(Text)`
+	display: 'inline';
+`;
 
 export const Reminder = ({
 	reminderAt,
@@ -21,14 +25,14 @@ export const Reminder = ({
 	const { isExpired, formattedDate } = useReminder(reminderAt, reminderAllDay);
 
 	return (
-		<Text
+		<StyledText
 			color={isExpired ? 'error' : 'text'}
 			weight={isExpired ? 'bold' : 'regular'}
 			size="small"
-			inline
+			lineHeight={1.5}
 			{...textProps}
 		>
 			{formattedDate}
-		</Text>
+		</StyledText>
 	);
 };

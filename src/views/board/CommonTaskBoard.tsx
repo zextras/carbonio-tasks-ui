@@ -6,6 +6,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
+	Text,
 	Button,
 	type ButtonProps,
 	Checkbox,
@@ -30,7 +31,6 @@ import { t, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { find, size, trim } from 'lodash';
 
 import { CustomSelectLabelFactory } from '../../components/CustomSelectLabelFactory';
-import { Text } from '../../components/Text';
 import {
 	ALL_DAY_DATE_TIME_PICKER_DATE_FORMAT,
 	TASK_DESCRIPTION_MAX_LENGTH,
@@ -50,7 +50,7 @@ const PrioritySelectionItem = ({
 }): React.JSX.Element => (
 	<Container width="fit" mainAlignment="flex-start" orientation="horizontal" gap={'1rem'}>
 		<Icon icon={icon} color={iconColor} />
-		<Text>{label}</Text>
+		<Text lineHeight={1.5}>{label}</Text>
 	</Container>
 );
 
@@ -285,7 +285,7 @@ export const CommonTaskBoard = ({
 				padding={{ horizontal: 'small', top: 'small' }}
 				gap={'0.5rem'}
 			>
-				<Text weight={'bold'} overflow={'ellipsis'}>
+				<Text weight={'bold'} overflow={'ellipsis'} lineHeight={1.5}>
 					{t('board.label.details', 'Details')}
 				</Text>
 				<Container
@@ -355,7 +355,9 @@ export const CommonTaskBoard = ({
 						label={t('board.checkbox.allDay.label', 'Remind me at every login throughout the day')}
 					/>
 				)}
-				<Text weight={'bold'}>{t('board.label.description', 'Description')}</Text>
+				<Text weight={'bold'} lineHeight={1.5}>
+					{t('board.label.description', 'Description')}
+				</Text>
 				<TextArea
 					borderColor={'gray3'}
 					label={t('board.textArea.taskDescription.label', 'Task Description')}

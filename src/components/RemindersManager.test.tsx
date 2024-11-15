@@ -29,7 +29,7 @@ import { Link } from 'react-router-dom';
 import { RemindersManager } from './RemindersManager';
 import { removeTaskFromList } from '../apollo/cacheUtils';
 import { TASKS_ROUTE } from '../constants';
-import { ICON_REGEXP } from '../constants/tests';
+import { ICON_REGEXP, TIMERS } from '../constants/tests';
 import { Priority, Status, type Task, TaskFragmentDoc, type UpdateTaskInput } from '../gql/types';
 import {
 	mockFindTasks,
@@ -46,7 +46,11 @@ beforeEach(() => {
 
 describe('Reminders manager', () => {
 	async function waitForModalToOpen(): Promise<HTMLElement> {
-		return screen.findByText(/tasks reminders/i);
+		const modal = await screen.findByText(/tasks reminders/i);
+		await act(async () => {
+			await jest.advanceTimersByTimeAsync(TIMERS.modal.delayOpen);
+		});
+		return modal;
 	}
 
 	async function editTask(updateTask: UpdateTaskInput): Promise<void> {
@@ -61,12 +65,9 @@ describe('Reminders manager', () => {
 				}
 			});
 		}
-		await waitFor(
-			() =>
-				new Promise((resolve) => {
-					setTimeout(resolve, 0);
-				})
-		);
+		await act(async () => {
+			await jest.advanceTimersToNextTimerAsync();
+		});
 	}
 
 	test('On load show reminder which is set for today, before now, with a specific time', async () => {
@@ -92,17 +93,12 @@ describe('Reminders manager', () => {
 
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: ['/aModule'] });
-		act(() => {
-			jest.runOnlyPendingTimers();
-		});
+
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		// wait for lazyQuery to run
-		await waitFor(
-			() =>
-				new Promise((resolve) => {
-					setTimeout(resolve, 0);
-				})
-		);
+		await act(async () => {
+			await jest.advanceTimersToNextTimerAsync();
+		});
 	});
 
 	test('On load show reminder set for today, before now, all day', async () => {
@@ -1229,9 +1225,6 @@ describe('Reminders manager', () => {
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await editTask({ ...task, reminderAt: tenMinutesBeforeNow });
-		act(() => {
-			jest.runOnlyPendingTimers();
-		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 	});
 
@@ -1242,9 +1235,6 @@ describe('Reminders manager', () => {
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await editTask({ ...task, reminderAt: null });
-		act(() => {
-			jest.runOnlyPendingTimers();
-		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 	});
 

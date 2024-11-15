@@ -1,7 +1,8 @@
 {
   "extends": "@zextras/carbonio-ui-configs/rules/typescript.json",
   "compilerOptions": {
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noUncheckedSideEffectImports": true
   },
   "exclude": ["./node_modules/*"]
 }
