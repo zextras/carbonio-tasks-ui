@@ -6,6 +6,7 @@
 
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
+import { Container, Spinner } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -20,7 +21,6 @@ import { useTranslation } from 'react-i18next';
 import { Route } from 'react-router-dom';
 
 import { RemindersManager } from './components/RemindersManager';
-import { Spinner } from './components/Spinner';
 import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { ProvidersWrapper } from './providers/ProvidersWrapper';
 
@@ -39,19 +39,37 @@ const LazyEditTaskBoardView = lazy(
 );
 
 const AppView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense
+		fallback={
+			<Container>
+				<Spinner color={'primary'} />
+			</Container>
+		}
+	>
 		<LazyAppView />
 	</Suspense>
 );
 
 const SecondaryBarView = (props: SecondaryBarComponentProps): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense
+		fallback={
+			<Container>
+				<Spinner color={'primary'} />
+			</Container>
+		}
+	>
 		<LazySecondaryBarView {...props} />
 	</Suspense>
 );
 
 const NewTaskBoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense
+		fallback={
+			<Container>
+				<Spinner color={'primary'} />
+			</Container>
+		}
+	>
 		<ProvidersWrapper>
 			<LazyNewTaskBoardView />
 		</ProvidersWrapper>
@@ -59,7 +77,13 @@ const NewTaskBoardView = (): React.JSX.Element => (
 );
 
 const EditTaskBoardView = (): React.JSX.Element => (
-	<Suspense fallback={<Spinner />}>
+	<Suspense
+		fallback={
+			<Container>
+				<Spinner color={'primary'} />
+			</Container>
+		}
+	>
 		<ProvidersWrapper>
 			<LazyEditTaskBoardView />
 		</ProvidersWrapper>
