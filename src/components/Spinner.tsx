@@ -8,7 +8,7 @@ import React from 'react';
 import { Container, Spinner as SpinnerDS } from '@zextras/carbonio-design-system';
 
 export const Spinner = (): React.JSX.Element => (
-	<Container width="fill" height="fill" mainAlignment="center" crossAlignment="center">
+	<Container>
 		<SpinnerDS color={'primary'} />
 	</Container>
 );
