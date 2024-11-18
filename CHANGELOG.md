@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.14](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.13...v0.0.14) (2024-11-15)
+
+
+### Features
+
+* load module only if the user is authenticated ([5ba9708](https://github.com/zextras/carbonio-tasks-ui/commit/5ba9708467eac4cbfac027f9c13102432772cb22)), closes [#162](https://github.com/zextras/carbonio-tasks-ui/issues/162)
+* update to react v18 ([4cd7807](https://github.com/zextras/carbonio-tasks-ui/commit/4cd7807d94acc8023e08e456f56a3427bcb34340)), closes [#130](https://github.com/zextras/carbonio-tasks-ui/issues/130)
+
 ### [0.0.13](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.12...v0.0.13) (2024-08-21)
 
 ### [0.0.12](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.11...v0.0.12) (2024-06-14)
