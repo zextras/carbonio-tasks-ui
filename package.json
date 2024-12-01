@@ -67,7 +67,7 @@
 		"uuid": "^10.0.0"
 	},
 	"dependencies": {
-		"@apollo/client": "~3.10.8",
+		"@apollo/client": "~3.11.10",
 		"@zextras/carbonio-design-system": "^8.1.0",
 		"@zextras/carbonio-shell-ui": "devel",
 		"core-js": "^3.38.1",
