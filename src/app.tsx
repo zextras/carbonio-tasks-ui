@@ -14,6 +14,7 @@ import {
 	type NewAction,
 	registerActions,
 	type SecondaryBarComponentProps,
+	upsertApp,
 	useAuthenticated
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
@@ -80,6 +81,11 @@ export const AuthenticatedApp = (): React.JSX.Element => {
 			primaryBar: 'CheckmarkCircle2Outline',
 			secondaryBar: SecondaryBarView,
 			appView: AppView
+		});
+
+		upsertApp({
+			name: TASKS_APP_ID,
+			display: appNameLabel
 		});
 
 		// boards
