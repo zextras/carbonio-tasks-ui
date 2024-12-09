@@ -9,9 +9,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, screen, waitFor } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
-import addMonths from 'date-fns/addMonths';
-import getDate from 'date-fns/getDate';
-import subDays from 'date-fns/subDays';
+import { addMonths, getDate, subDays } from 'date-fns';
 import { graphql, type GraphQLResponseResolver, HttpResponse } from 'msw';
 
 import EditTaskBoard from './EditTaskBoard';

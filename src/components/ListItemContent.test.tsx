@@ -7,7 +7,7 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
-import subDays from 'date-fns/subDays';
+import { subDays } from 'date-fns';
 
 import { ListItemContent } from './ListItemContent';
 import { ICON_REGEXP } from '../constants/tests';

@@ -17,7 +17,7 @@ import {
 	Text
 } from '@zextras/carbonio-design-system';
 import { isEmpty } from 'lodash';
-import styled, { css, type SimpleInterpolation } from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import { Priority } from '../gql/types';
 
@@ -40,7 +40,7 @@ const ContainerEl = styled(Container)<{ $focus: boolean }>`
 	&:hover {
 		background: ${({ theme }): string => getColor(`gray5.hover`, theme)};
 	}
-	${({ $focus, theme }): SimpleInterpolation =>
+	${({ $focus, theme }): false | ReturnType<typeof css> =>
 		$focus &&
 		css`
 			background: ${getColor(`gray5.focus`, theme)};
