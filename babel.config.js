@@ -8,7 +8,7 @@ module.exports = (api) => {
 	if (api.env('test')) {
 		presetEnv = '@babel/preset-env';
 	} else {
-		presetEnv = ['@babel/preset-env', { useBuiltIns: 'usage', corejs: 3.32 }];
+		presetEnv = ['@babel/preset-env', { useBuiltIns: 'usage', corejs: '3.40' }];
 	}
 	return {
 		presets: [presetEnv, '@babel/preset-react', '@babel/preset-typescript'],
