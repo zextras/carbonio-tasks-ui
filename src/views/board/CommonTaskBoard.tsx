@@ -330,7 +330,7 @@ export const CommonTaskBoard = ({
 						width={'fill'}
 						label={t('board.dateTimePicker.reminder.label', 'Reminder')}
 						defaultValue={date || undefined}
-						includeTime={!isAllDay}
+						showTimeSelect={!isAllDay}
 						onChange={handleChange}
 						dateFormat={
 							isAllDay

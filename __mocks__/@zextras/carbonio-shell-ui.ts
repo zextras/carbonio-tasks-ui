@@ -108,3 +108,4 @@ export const useAuthenticated: typeof shell.useAuthenticated = () => true;
 export const addRoute: typeof shell.addRoute = () => '';
 export const addBoardView: typeof shell.addBoardView = () => '';
 export const registerActions: typeof shell.registerActions = () => undefined;
+export const upsertApp: typeof shell.upsertApp = () => undefined;

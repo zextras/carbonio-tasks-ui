@@ -14,13 +14,14 @@ import {
 	type NewAction,
 	registerActions,
 	type SecondaryBarComponentProps,
-	Spinner,
+	upsertApp,
 	useAuthenticated
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
 import { Route } from 'react-router-dom';
 
 import { RemindersManager } from './components/RemindersManager';
+import { Spinner } from './components/Spinner';
 import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { ProvidersWrapper } from './providers/ProvidersWrapper';
 
@@ -80,6 +81,11 @@ export const AuthenticatedApp = (): React.JSX.Element => {
 			primaryBar: 'CheckmarkCircle2Outline',
 			secondaryBar: SecondaryBarView,
 			appView: AppView
+		});
+
+		upsertApp({
+			name: TASKS_APP_ID,
+			display: appNameLabel
 		});
 
 		// boards

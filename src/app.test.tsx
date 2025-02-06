@@ -9,7 +9,7 @@ import React from 'react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import App from './app';
-import { TASKS_ROUTE } from './constants';
+import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { setup } from './utils/testUtils';
 import { ACTION_TYPES } from '../__mocks__/@zextras/carbonio-shell-ui';
 
@@ -59,6 +59,17 @@ describe('App', () => {
 				})
 			);
 		});
+
+		it('should call upsertApp', () => {
+			const upsertAppMock = jest.spyOn(shell, 'upsertApp');
+			setup(<App />);
+			expect(upsertAppMock).toHaveBeenCalledWith<Parameters<typeof shell.upsertApp>>(
+				expect.objectContaining({
+					name: TASKS_APP_ID,
+					display: 'Tasks'
+				})
+			);
+		});
 	});
 
 	it('should not register the route, board and actions if the user is not authenticated', () => {
@@ -66,9 +77,11 @@ describe('App', () => {
 		const addRouteMock = jest.spyOn(shell, 'addRoute');
 		const addBoardViewMock = jest.spyOn(shell, 'addBoardView');
 		const registerActionsMock = jest.spyOn(shell, 'registerActions');
+		const upsertAppMock = jest.spyOn(shell, 'upsertApp');
 		setup(<App />);
 		expect(addRouteMock).not.toHaveBeenCalled();
 		expect(addBoardViewMock).not.toHaveBeenCalled();
 		expect(registerActionsMock).not.toHaveBeenCalled();
+		expect(upsertAppMock).not.toHaveBeenCalled();
 	});
 });
