@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.15](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.14...v0.0.15) (2025-02-06)
+
+
+### Features
+
+* disable transition of secondary bar accordion ([4333bf3](https://github.com/zextras/carbonio-tasks-ui/commit/4333bf3af6edee1fe49b216f483af93a76d5d713)), closes [#184](https://github.com/zextras/carbonio-tasks-ui/issues/184)
+
 ### [0.0.14](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.13...v0.0.14) (2024-11-15)
 
 
