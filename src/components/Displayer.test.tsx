@@ -8,7 +8,7 @@ import React from 'react';
 import { faker } from '@faker-js/faker';
 import { act, screen } from '@testing-library/react';
 import gql from 'graphql-tag';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { Displayer } from './Displayer';
 import { ROUTES } from '../constants';
@@ -58,9 +58,9 @@ describe('Displayer', () => {
 		const task = populateTask();
 		const mocks = [mockGetTask({ taskId: task.id }, task)];
 		const { getByRoleWithIcon } = setup(
-			<Route path={ROUTES.task}>
-				<Displayer translationKey={'translation.key'} />
-			</Route>,
+			<Routes>
+				<Route path={ROUTES.task} element={<Displayer translationKey={'translation.key'} />} />
+			</Routes>,
 			{
 				initialRouterEntries: [`/${task.id}`],
 				mocks
@@ -87,9 +87,9 @@ describe('Displayer', () => {
 		const getTaskMock = mockGetTask({ taskId: task.id }, task);
 		const mocks = [getTaskMock];
 		setup(
-			<Route path={ROUTES.task}>
-				<Displayer translationKey={'translation.key'} />
-			</Route>,
+			<Routes>
+				<Route path={ROUTES.task} element={<Displayer translationKey={'translation.key'} />} />
+			</Routes>,
 			{ initialRouterEntries: [`/${task.id}`], mocks }
 		);
 		await screen.findByText(task.title);
@@ -110,9 +110,9 @@ describe('Displayer', () => {
 		const getTaskMock = mockGetTask({ taskId: task.id }, task);
 		const mocks = [getTaskMock];
 		setup(
-			<Route path={ROUTES.task}>
-				<Displayer translationKey={'translation.key'} />
-			</Route>,
+			<Routes>
+				<Route path={ROUTES.task} element={<Displayer translationKey={'translation.key'} />} />
+			</Routes>,
 			{ initialRouterEntries: [`/${task.id}`], mocks }
 		);
 		await screen.findByText(task.title);
@@ -139,9 +139,9 @@ describe('Displayer', () => {
 		);
 		const mocks = [getTaskMock];
 		setup(
-			<Route path={ROUTES.task}>
-				<Displayer translationKey={'translation.key'} />
-			</Route>,
+			<Routes>
+				<Route path={ROUTES.task} element={<Displayer translationKey={'translation.key'} />} />
+			</Routes>,
 			{ initialRouterEntries: [`/${task.id}`], mocks }
 		);
 		await screen.findByText(task.title);

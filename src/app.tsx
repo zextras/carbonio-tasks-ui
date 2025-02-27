@@ -18,11 +18,11 @@ import {
 	useAuthenticated
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { RemindersManager } from './components/RemindersManager';
 import { Spinner } from './components/Spinner';
-import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
+import { ROUTES, TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { ProvidersWrapper } from './providers/ProvidersWrapper';
 
 const LazyAppView = lazy(() => import(/* webpackChunkName: "appView" */ './views/app/AppView'));
@@ -126,11 +126,16 @@ export const AuthenticatedApp = (): React.JSX.Element => {
 	}, [newAction]);
 
 	return (
-		<Route path={`/:module/:taskId?`}>
-			<ProvidersWrapper>
-				<RemindersManager />
-			</ProvidersWrapper>
-		</Route>
+		<Routes>
+			<Route
+				path={`:module${ROUTES.task}`}
+				element={
+					<ProvidersWrapper>
+						<RemindersManager />
+					</ProvidersWrapper>
+				}
+			/>
+		</Routes>
 	);
 };
 
