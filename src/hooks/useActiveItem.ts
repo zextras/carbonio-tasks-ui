@@ -7,7 +7,6 @@ import { useCallback, useEffect, useRef } from 'react';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { TASKS_ROUTE } from '../constants';
 import type { TasksPathParams } from '../types/commons';
 
 type UseActiveItemReturnType = {
@@ -45,7 +44,7 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 
 	const removeActive = useCallback<UseActiveItemReturnType['removeActive']>(
 		(options) => {
-			navigate(`/${TASKS_ROUTE}`, { replace: options?.replace });
+			navigate('..', { replace: options?.replace });
 		},
 		[navigate]
 	);
