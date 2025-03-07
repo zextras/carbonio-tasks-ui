@@ -18,7 +18,6 @@ import {
 	useAuthenticated
 } from '@zextras/carbonio-shell-ui';
 import { useTranslation } from 'react-i18next';
-import { Route } from 'react-router-dom';
 
 import { RemindersManager } from './components/RemindersManager';
 import { Spinner } from './components/Spinner';
@@ -126,11 +125,9 @@ export const AuthenticatedApp = (): React.JSX.Element => {
 	}, [newAction]);
 
 	return (
-		<Route path={`/:module/:taskId?`}>
-			<ProvidersWrapper>
-				<RemindersManager />
-			</ProvidersWrapper>
-		</Route>
+		<ProvidersWrapper>
+			<RemindersManager />
+		</ProvidersWrapper>
 	);
 };
 
