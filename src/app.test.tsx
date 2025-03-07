@@ -13,6 +13,8 @@ import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { setup } from './utils/testUtils';
 import { ACTION_TYPES } from '../__mocks__/@zextras/carbonio-shell-ui';
 
+jest.mock('./components/RemindersManager');
+
 describe('App', () => {
 	describe('User authenticated', () => {
 		it('should call addRoute', () => {
