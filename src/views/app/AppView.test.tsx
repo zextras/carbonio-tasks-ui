@@ -124,17 +124,12 @@ describe('App view', () => {
 
 	describe('Reminders', () => {
 		const AppViewWithRemindersManager = (): React.JSX.Element => (
-			<Routes>
-				<Route
-					path={`/${TASKS_ROUTE}/*`}
-					element={
-						<>
-							<RemindersManager />
-							<AppView />
-						</>
-					}
-				/>
-			</Routes>
+			<>
+				<Routes>
+					<Route path={`/${TASKS_ROUTE}/*`} element={<AppView />} />
+				</Routes>
+				<RemindersManager />
+			</>
 		);
 		test('Show modal of reminders on load if there is at least one reminder to show', async () => {
 			const tasks = populateTaskList();
