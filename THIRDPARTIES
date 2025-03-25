@@ -27,7 +27,6 @@ MIT License (MIT) applies to:
 @types/react-router-dom, Copyright (c) Microsoft Corporation.
 @types/react, Copyright (c) Microsoft Corporation.
 @types/styled-components, Copyright (c) Microsoft Corporation.
-@types/uuid, Copyright (c) Microsoft Corporation.
 babel-plugin-i18next-extract, Copyright 2019 Gilbert Gilb's <gilbsgilbert@gmail.com>
 babel-plugin-styled-components, Copyright (c) 2016-present Vladimir Danchenkov and Maximilian Stoiber
 core-js, Copyright (c) 2014-2024 Denis Pushkarev
@@ -52,7 +51,6 @@ react-router-dom, Copyright (c) React Training 2015-2019. Copyright (c) Remix So
 react, Copyright (c) Facebook, Inc. and its affiliates.
 styled-components, Copyright (c) 2016-present Glen Maddern and Maximilian Stoiber
 ts-node, Copyright (c) 2014 Blake Embrey (hello@blakeembrey.com)
-uuid, Copyright (c) 2010-2020 Robert Kieffer and other contributors
 
 MIT License
 
