@@ -69,7 +69,7 @@
 		"@zextras/carbonio-shell-ui": "10.0.0-devel.1744805695533",
 		"core-js": "^3.40.0",
 		"date-fns": "^4.1.0",
-		"graphql": "^16.9.0",
+		"graphql": "^16.10.0",
 		"i18next": "^22.5.1",
 		"lodash": "^4.17.21",
 		"react": "^18.3.1",
