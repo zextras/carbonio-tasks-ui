@@ -5,20 +5,19 @@
  */
 import { useCallback, useEffect, useRef } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { useNavigation, type UseNavigationReturnType } from './useNavigation';
 import type { TasksPathParams } from '../types/commons';
 
 type UseActiveItemReturnType = {
 	activeItem: string;
 	isActive: (id: string) => boolean;
-	setActive: (id: string, options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
-	removeActive: (options?: Parameters<UseNavigationReturnType['navigateTo']>[1]) => void;
+	setActive: (id: string, options?: { replace?: boolean }) => void;
+	removeActive: (options?: { replace?: boolean }) => void;
 };
 
 export const useActiveItem = (): UseActiveItemReturnType => {
-	const { navigateTo } = useNavigation();
+	const navigate = useNavigate();
 	const { taskId } = useParams<TasksPathParams>();
 	const activeTaskIdRef = useRef<string>();
 
@@ -38,17 +37,17 @@ export const useActiveItem = (): UseActiveItemReturnType => {
 
 	const setActive = useCallback<UseActiveItemReturnType['setActive']>(
 		(id, options) => {
-			navigateTo(id, options);
+			navigate(`../${id}`, { replace: options?.replace });
 		},
-		[navigateTo]
+		[navigate]
 	);
 
 	const removeActive = useCallback<UseActiveItemReturnType['removeActive']>(
 		(options) => {
-			navigateTo('/', options);
+			navigate('..', { replace: options?.replace });
 		},
-		[navigateTo]
+		[navigate]
 	);
 
-	return { activeItem: taskId, isActive, setActive, removeActive };
+	return { activeItem: taskId!, isActive, setActive, removeActive };
 };

@@ -9,7 +9,7 @@ import { faker } from '@faker-js/faker';
 import { act, screen, waitFor, within } from '@testing-library/react';
 import * as shell from '@zextras/carbonio-shell-ui';
 import { find } from 'lodash';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { TasksView } from './TasksView';
 import { RANDOM_PLACEHOLDER_TIMEOUT, ROUTES } from '../../constants';
@@ -35,9 +35,9 @@ describe('Task view', () => {
 		const findTasksMock = mockFindTasks({}, []);
 		const mocks = [findTasksMock];
 		setup(
-			<Route path={ROUTES.task}>
-				<TasksView />
-			</Route>,
+			<Routes>
+				<Route path={ROUTES.task} element={<TasksView />} />
+			</Routes>,
 			{ mocks }
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
@@ -53,9 +53,9 @@ describe('Task view', () => {
 		const findTasksMock = mockFindTasks({}, tasks);
 		const mocks = [findTasksMock];
 		setup(
-			<Route path={ROUTES.task}>
-				<TasksView />
-			</Route>,
+			<Routes>
+				<Route path={ROUTES.task} element={<TasksView />} />
+			</Routes>,
 			{ mocks }
 		);
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
@@ -78,9 +78,9 @@ describe('Task view', () => {
 		const mocks = [findTasksMock, mockGetTask({ taskId: task.id }, task)];
 
 		const { findByRoleWithIcon, user } = setup(
-			<Route path={ROUTES.task}>
-				<TasksView />
-			</Route>,
+			<Routes>
+				<Route path={ROUTES.task} element={<TasksView />} />
+			</Routes>,
 			{
 				mocks
 			}
@@ -123,9 +123,9 @@ describe('Task view', () => {
 		const mocks = [findTasksMock, mockGetTask({ taskId: task.id }, task)];
 
 		const { getByRoleWithIcon, queryByRoleWithIcon, user } = setup(
-			<Route path={ROUTES.task}>
-				<TasksView />
-			</Route>,
+			<Routes>
+				<Route path={`${ROUTES.task}`} element={<TasksView />} />
+			</Routes>,
 			{
 				mocks,
 				initialRouterEntries: [`/${task.id}`]
@@ -161,9 +161,9 @@ describe('Task view', () => {
 			];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks,
 					initialRouterEntries: [`/${task.id}`]
@@ -191,9 +191,9 @@ describe('Task view', () => {
 			];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks,
 					initialRouterEntries: [`/${task.id}`]
@@ -221,9 +221,9 @@ describe('Task view', () => {
 			];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks,
 					initialRouterEntries: [`/${task.id}`]
@@ -252,9 +252,9 @@ describe('Task view', () => {
 			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks
 				}
@@ -276,9 +276,9 @@ describe('Task view', () => {
 			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks
 				}
@@ -300,9 +300,9 @@ describe('Task view', () => {
 			const mocks = [findTasksMock, mockUpdateTaskStatus({ id: task.id, status: Status.Complete })];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks
 				}
@@ -331,9 +331,9 @@ describe('Task view', () => {
 			];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks,
 					initialRouterEntries: [`/${task.id}`]
@@ -365,9 +365,9 @@ describe('Task view', () => {
 			];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks,
 					initialRouterEntries: [`/${task.id}`]
@@ -398,9 +398,9 @@ describe('Task view', () => {
 			];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks,
 					initialRouterEntries: [`/${tasks[0].id}`]
@@ -435,9 +435,9 @@ describe('Task view', () => {
 			];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks,
 					initialRouterEntries: [`/${task.id}`]
@@ -470,9 +470,9 @@ describe('Task view', () => {
 			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks
 				}
@@ -504,9 +504,9 @@ describe('Task view', () => {
 			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks
 				}
@@ -534,9 +534,9 @@ describe('Task view', () => {
 			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];
 
 			const { user } = setup(
-				<Route path={ROUTES.task}>
-					<TasksView />
-				</Route>,
+				<Routes>
+					<Route path={ROUTES.task} element={<TasksView />} />
+				</Routes>,
 				{
 					mocks
 				}

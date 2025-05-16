@@ -12,6 +12,4 @@ library(
 	])
 )
 
-zappPipeline(
-	disableAutoTranslationsSync: true
-)
+zappPipeline()
