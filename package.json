@@ -64,7 +64,7 @@
 		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@apollo/client": "~3.10.8",
+		"@apollo/client": "~3.13.8",
 		"@zextras/carbonio-design-system": "10.1.1",
 		"@zextras/carbonio-shell-ui": "11.0.1",
 		"core-js": "^3.40.0",
