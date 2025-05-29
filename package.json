@@ -87,6 +87,7 @@
 	"carbonio": {
 		"name": "carbonio-tasks-ui",
 		"priority": 10,
+		"attrKey": "carbonioFeatureTasksEnabled",
 		"type": "carbonio",
 		"display": "Tasks",
 		"icon": "CheckmarkCircle2Outline"
