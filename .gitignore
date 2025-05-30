@@ -9,7 +9,6 @@
 /junit.xml
 /coverage
 /.idea
-/LICENSES
 .env
 .graphqlconfig
 zextras-carbonio-*.tgz
