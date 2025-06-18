@@ -1,6 +1,6 @@
 {
 	"name": "carbonio-tasks-ui",
-	"version": "0.0.16",
+	"version": "0.0.17",
 	"description": "Tasks module",
 	"main": "src/app.tsx",
 	"scripts": {
@@ -24,11 +24,11 @@
 		"@babel/preset-env": "^7.26.9",
 		"@babel/preset-react": "^7.26.3",
 		"@babel/preset-typescript": "^7.27.0",
-		"@commitlint/cli": "^19.8.0",
-		"@commitlint/config-conventional": "^19.8.0",
+		"@commitlint/cli": "^19.8.1",
+		"@commitlint/config-conventional": "^19.8.1",
 		"@faker-js/faker": "^9.7.0",
 		"@graphql-codegen/add": "^5.0.3",
-		"@graphql-codegen/cli": "^5.0.5",
+		"@graphql-codegen/cli": "^5.0.6",
 		"@graphql-codegen/fragment-matcher": "^5.1.0",
 		"@graphql-codegen/schema-ast": "^4.1.0",
 		"@graphql-codegen/typed-document-node": "^5.1.1",
@@ -87,6 +87,7 @@
 	"carbonio": {
 		"name": "carbonio-tasks-ui",
 		"priority": 10,
+		"attrKey": "carbonioFeatureTasksEnabled",
 		"type": "carbonio",
 		"display": "Tasks",
 		"icon": "CheckmarkCircle2Outline"
