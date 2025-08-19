@@ -8,7 +8,6 @@ import '@testing-library/jest-dom';
 import { act, configure } from '@testing-library/react';
 import dotenv from 'dotenv';
 import failOnConsole from 'jest-fail-on-console';
-import 'jest-styled-components';
 import { noop } from 'lodash';
 
 import buildClient from './apollo';
