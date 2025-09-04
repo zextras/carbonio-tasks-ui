@@ -6,13 +6,13 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 
+import styled from '@emotion/styled';
 import {
 	Dropdown,
 	type DropdownItem,
 	type DropdownProps,
 	useCombinedRefs
 } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
 
 export interface ContextualMenuProps extends Omit<DropdownProps, 'items' | 'contextMenu'> {
 	actions: DropdownItem[];
