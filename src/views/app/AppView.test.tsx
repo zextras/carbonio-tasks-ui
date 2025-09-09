@@ -105,6 +105,11 @@ describe('App view', () => {
 			graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 				findTasksRequest();
 				return HttpResponse.json({ data: { findTasks: [task] } });
+			}),
+			graphql.query<GetTaskQuery, GetTaskQueryVariables>(GetTaskDocument, ({ variables }) => {
+				const { taskId } = variables;
+				const taskResult = [task].find((item) => item.id === taskId);
+				return HttpResponse.json({ data: { getTask: taskResult || null } });
 			})
 		);
 		const { getByRoleWithIcon, user } = setup(<AppView />, {
@@ -297,6 +302,11 @@ describe('App view', () => {
 							findTasks: tasks
 						}
 					});
+				}),
+				graphql.query<GetTaskQuery, GetTaskQueryVariables>(GetTaskDocument, ({ variables }) => {
+					const { taskId } = variables;
+					const taskResult = tasks.find((item) => item.id === taskId);
+					return HttpResponse.json({ data: { getTask: taskResult || null } });
 				})
 			);
 
@@ -335,6 +345,11 @@ describe('App view', () => {
 							findTasks: tasks
 						}
 					});
+				}),
+				graphql.query<GetTaskQuery, GetTaskQueryVariables>(GetTaskDocument, ({ variables }) => {
+					const { taskId } = variables;
+					const taskResult = tasks.find((item) => item.id === taskId);
+					return HttpResponse.json({ data: { getTask: taskResult || null } });
 				})
 			);
 

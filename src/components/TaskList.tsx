@@ -6,6 +6,8 @@
 
 import React, { useMemo } from 'react';
 
+import { css } from '@emotion/react';
+import styled from '@emotion/styled';
 import {
 	Text,
 	Container,
@@ -20,7 +22,6 @@ import {
 } from '@zextras/carbonio-design-system';
 import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled, { css } from 'styled-components';
 
 import { ListItemContent } from './ListItemContent';
 import { HoverBarContainer } from './StyledComponents';

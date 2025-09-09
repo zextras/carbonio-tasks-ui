@@ -5,10 +5,10 @@
  */
 import React, { useMemo } from 'react';
 
+import styled from '@emotion/styled';
 import { Container, Icon, Row, Text } from '@zextras/carbonio-design-system';
 import { capitalize } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components';
 
 import { PriorityIcon } from './PriorityIcon';
 import { Reminder } from './Reminder';

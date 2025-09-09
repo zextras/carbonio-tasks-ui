@@ -8,6 +8,7 @@ import React, { type ReactElement, useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
+import { matchers } from '@emotion/jest';
 import {
 	act,
 	type ByRoleMatcher,
@@ -31,6 +32,8 @@ import { MemoryRouter } from 'react-router-dom';
 
 import { type Mock } from '../mocks/utils';
 import { StyledWrapper } from '../providers/StyledWrapper';
+
+expect.extend(matchers);
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']> & {
 	readonly rightClick: (target: Element) => Promise<void>;
