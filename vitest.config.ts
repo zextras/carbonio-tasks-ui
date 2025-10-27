@@ -5,10 +5,18 @@
  */
 import { ApolloClient } from '@apollo/client';
 import graphql from '@rollup/plugin-graphql';
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	plugins: [graphql()],
+	plugins: [
+		react({
+			babel: {
+				plugins: ['@emotion/babel-plugin']
+			}
+		}),
+		graphql()
+	],
 	define: {
 		BASE_PATH: JSON.stringify('/')
 	},
@@ -21,6 +29,7 @@ export default defineConfig({
 
 		// Coverage configuration
 		coverage: {
+			enabled: false, // Disable by default for speed, enable with --coverage flag
 			provider: 'v8',
 			reporter: ['text', 'cobertura', 'lcov'],
 			include: ['src/**/*.{js,ts,jsx,tsx}'],
