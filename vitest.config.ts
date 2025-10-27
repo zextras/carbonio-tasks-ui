@@ -62,7 +62,15 @@ export default defineConfig({
 		restoreMocks: true,
 
 		// Retry configuration
-		retry: 2
+		retry: 2,
+
+		// Pool settings - use threads for better performance
+		pool: 'threads',
+		poolOptions: {
+			threads: {
+				singleThread: false
+			}
+		}
 	},
 	resolve: {
 		alias: {

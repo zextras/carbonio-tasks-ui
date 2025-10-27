@@ -10,6 +10,8 @@
 		"prepare": "is-ci || husky",
 		"start": "sdk watch",
 		"test": "vitest run --passWithNoTests",
+		"test:coverage": "vitest run --coverage",
+		"test:watch": "vitest watch",
 		"type-check": "tsc --noEmit",
 		"type-check:watch": "npm run type-check -- --watch",
 		"codegen": "NODE_TLS_REJECT_UNAUTHORIZED=0 graphql-codegen --config codegen.ts",
