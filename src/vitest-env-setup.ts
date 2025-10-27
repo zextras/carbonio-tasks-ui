@@ -70,50 +70,6 @@ beforeAll(() => {
 
 	// initialize an apollo client instance for test and makes it available globally
 	global.apolloClient = buildClient();
-
-	// define browser objects not available in jsdom
-	// https://jestjs.io/docs/en/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
-
-	Object.defineProperty(window, 'matchMedia', {
-		writable: true,
-		value: (query: string): MediaQueryList => ({
-			matches: false,
-			media: query,
-			onchange: null,
-			addListener: noop, // Deprecated
-			removeListener: noop, // Deprecated
-			addEventListener: noop,
-			removeEventListener: noop,
-			dispatchEvent: () => true
-		})
-	});
-
-	Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
-		writable: true,
-		value: noop
-	});
-
-	Element.prototype.scrollTo = noop;
-
-	window.resizeTo = function resizeTo(width, height): void {
-		Object.assign(this, {
-			innerWidth: width,
-			innerHeight: height,
-			outerWidth: width,
-			outerHeight: height
-		}).dispatchEvent(new this.Event('resize'));
-	};
-
-	Object.defineProperty(window, 'ResizeObserver', {
-		writable: true,
-		value: function ResizeObserverMock(): ResizeObserver {
-			return {
-				observe: noop,
-				unobserve: noop,
-				disconnect: noop
-			};
-		}
-	});
 });
 
 afterAll(() => server.close());

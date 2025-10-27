@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { vi } from 'vitest';
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
@@ -414,7 +415,7 @@ describe('Task view', () => {
 			const confirmButton = await screen.findByRole('button', { name: /^delete permanently/i });
 			await user.click(confirmButton);
 			act(() => {
-				jest.advanceTimersByTime(RANDOM_PLACEHOLDER_TIMEOUT);
+				vi.advanceTimersByTime(RANDOM_PLACEHOLDER_TIMEOUT);
 			});
 			expect(screen.queryByText(tasks[1].title)).not.toBeInTheDocument();
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
@@ -491,14 +492,14 @@ describe('Task view', () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 
-			jest.spyOn(shell, 'getBoardById').mockReturnValue({
+			vi.spyOn(shell, 'getBoardById').mockReturnValue({
 				id: `edit-task-${task.id}`,
 				boardViewId: '',
 				app: '',
 				icon: '',
 				title: ''
 			});
-			const closeBoardSpy = jest.spyOn(shell, 'closeBoard');
+			const closeBoardSpy = vi.spyOn(shell, 'closeBoard');
 
 			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];
@@ -527,8 +528,8 @@ describe('Task view', () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 
-			jest.spyOn(shell, 'getBoardById').mockReturnValue(undefined);
-			const closeBoardSpy = jest.spyOn(shell, 'closeBoard');
+			vi.spyOn(shell, 'getBoardById').mockReturnValue(undefined);
+			const closeBoardSpy = vi.spyOn(shell, 'closeBoard');
 
 			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];

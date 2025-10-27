@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { vi } from 'vitest';
 import React from 'react';
 
 import { screen } from '@testing-library/react';
@@ -275,7 +276,7 @@ describe('List item content', () => {
 
 	test('Click on item calls callback', async () => {
 		const task = populateTask();
-		const clickFn = jest.fn();
+		const clickFn = vi.fn();
 		const { user } = setup(
 			<ListItemContent
 				id={task.id}

@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { vi } from 'vitest';
 import React from 'react';
 
 import * as shell from '@zextras/carbonio-shell-ui';
@@ -13,12 +14,12 @@ import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { setup } from './utils/testUtils';
 import { ACTION_TYPES } from '../__mocks__/@zextras/carbonio-shell-ui';
 
-jest.mock('./components/RemindersManager');
+vi.mock('./components/RemindersManager');
 
 describe('App', () => {
 	describe('User authenticated', () => {
 		it('should call addRoute', () => {
-			const addRouteMock = jest.spyOn(shell, 'addRoute');
+			const addRouteMock = vi.spyOn(shell, 'addRoute');
 			setup(<App />);
 			expect(addRouteMock).toHaveBeenCalledWith<Parameters<typeof shell.addRoute>>(
 				expect.objectContaining({
@@ -34,7 +35,7 @@ describe('App', () => {
 		});
 
 		it('should call addBoardView', () => {
-			const addBoardViewMock = jest.spyOn(shell, 'addBoardView');
+			const addBoardViewMock = vi.spyOn(shell, 'addBoardView');
 			setup(<App />);
 			expect(addBoardViewMock).toHaveBeenCalledWith<Parameters<typeof shell.addBoardView>>(
 				expect.objectContaining({
@@ -51,7 +52,7 @@ describe('App', () => {
 		});
 
 		it('should call registerActions', () => {
-			const registerActionsMock = jest.spyOn(shell, 'registerActions');
+			const registerActionsMock = vi.spyOn(shell, 'registerActions');
 			setup(<App />);
 			expect(registerActionsMock).toHaveBeenCalledWith<Parameters<typeof shell.registerActions>>(
 				expect.objectContaining({
@@ -63,7 +64,7 @@ describe('App', () => {
 		});
 
 		it('should call upsertApp', () => {
-			const upsertAppMock = jest.spyOn(shell, 'upsertApp');
+			const upsertAppMock = vi.spyOn(shell, 'upsertApp');
 			setup(<App />);
 			expect(upsertAppMock).toHaveBeenCalledWith<Parameters<typeof shell.upsertApp>>(
 				expect.objectContaining({
@@ -75,11 +76,11 @@ describe('App', () => {
 	});
 
 	it('should not register the route, board and actions if the user is not authenticated', () => {
-		jest.spyOn(shell, 'useAuthenticated').mockReturnValue(false);
-		const addRouteMock = jest.spyOn(shell, 'addRoute');
-		const addBoardViewMock = jest.spyOn(shell, 'addBoardView');
-		const registerActionsMock = jest.spyOn(shell, 'registerActions');
-		const upsertAppMock = jest.spyOn(shell, 'upsertApp');
+		vi.spyOn(shell, 'useAuthenticated').mockReturnValue(false);
+		const addRouteMock = vi.spyOn(shell, 'addRoute');
+		const addBoardViewMock = vi.spyOn(shell, 'addBoardView');
+		const registerActionsMock = vi.spyOn(shell, 'registerActions');
+		const upsertAppMock = vi.spyOn(shell, 'upsertApp');
 		setup(<App />);
 		expect(addRouteMock).not.toHaveBeenCalled();
 		expect(addBoardViewMock).not.toHaveBeenCalled();

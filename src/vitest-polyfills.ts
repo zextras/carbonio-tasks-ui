@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { noop } from 'lodash';
 import { vi } from 'vitest';
 
 // Polyfill globals that jsdom doesn't provide but are needed for MSW and modern browsers
@@ -43,9 +44,56 @@ if (typeof global.TransformStream === 'undefined') {
 	global.TransformStream = TransformStream;
 }
 
+// Mock matchMedia (needed for TinyMCE and other libraries)
+Object.defineProperty(window, 'matchMedia', {
+	writable: true,
+	value: (query: string): MediaQueryList => ({
+		matches: false,
+		media: query,
+		onchange: null,
+		addListener: noop, // Deprecated
+		removeListener: noop, // Deprecated
+		addEventListener: noop,
+		removeEventListener: noop,
+		dispatchEvent: () => true
+	})
+});
+
+// Mock scrollIntoView
+Object.defineProperty(window.HTMLElement.prototype, 'scrollIntoView', {
+	writable: true,
+	value: noop
+});
+
+// Mock scrollTo
+Element.prototype.scrollTo = noop;
+
+// Mock resizeTo
+window.resizeTo = function resizeTo(width, height): void {
+	Object.assign(this, {
+		innerWidth: width,
+		innerHeight: height,
+		outerWidth: width,
+		outerHeight: height
+	}).dispatchEvent(new this.Event('resize'));
+};
+
+// Mock ResizeObserver
+Object.defineProperty(window, 'ResizeObserver', {
+	writable: true,
+	value: function ResizeObserverMock(): ResizeObserver {
+		return {
+			observe: noop,
+			unobserve: noop,
+			disconnect: noop
+		};
+	}
+});
+
 // mock a simplified crypto
 Object.defineProperty(window.crypto, 'randomUUID', {
 	writable: true,
 	value: vi.fn(() => Math.random().toString())
 });
+
 

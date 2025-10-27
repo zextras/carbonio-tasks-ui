@@ -8,6 +8,7 @@ import type { FetchResult } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
 import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
+import { vi } from 'vitest';
 
 import {
 	CreateTaskDocument,
@@ -83,7 +84,7 @@ export function mockGetTask(
 			query: GetTaskDocument,
 			variables
 		},
-		result: jest.fn(
+		result: vi.fn(
 			(): FetchResult<GetTaskQuery> => ({
 				data: {
 					getTask: task
@@ -104,7 +105,7 @@ export function mockFindTasks(
 			query: FindTasksDocument,
 			variables
 		},
-		result: jest.fn(
+		result: vi.fn(
 			(): FetchResult<FindTasksQuery> => ({
 				data: {
 					findTasks: tasks
@@ -124,7 +125,7 @@ export function mockUpdateTaskStatus(
 			query: UpdateTaskStatusDocument,
 			variables
 		},
-		result: jest.fn(
+		result: vi.fn(
 			(): FetchResult<UpdateTaskStatusMutation> => ({
 				data: {
 					updateTask
@@ -143,7 +144,7 @@ export function mockTrashTask(
 			query: TrashTaskDocument,
 			variables
 		},
-		result: jest.fn(
+		result: vi.fn(
 			(): FetchResult<TrashTaskMutation> => ({
 				data: {
 					trashTask
@@ -171,7 +172,7 @@ export function mockCreateTask(
 				}
 			}
 		},
-		result: jest.fn(
+		result: vi.fn(
 			(): FetchResult<CreateTaskMutation> => ({
 				data: {
 					createTask: task
@@ -200,7 +201,7 @@ export function mockUpdateTask(
 				}
 			}
 		},
-		result: jest.fn(
+		result: vi.fn(
 			(): FetchResult<UpdateTaskMutation> => ({
 				data: {
 					updateTask: task

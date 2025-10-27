@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { vi } from 'vitest';
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
@@ -41,14 +42,14 @@ import { formatDateFromTimestamp } from '../utils';
 import { setup } from '../utils/testUtils';
 
 beforeEach(() => {
-	jest.setSystemTime(new Date(2024, 2, 18, 16, 33));
+	vi.setSystemTime(new Date(2024, 2, 18, 16, 33));
 });
 
 describe('Reminders manager', () => {
 	async function waitForModalToOpen(): Promise<HTMLElement> {
 		const modal = await screen.findByText(/tasks reminders/i);
 		await act(async () => {
-			await jest.advanceTimersByTimeAsync(TIMERS.modal.delayOpen);
+			await vi.advanceTimersByTimeAsync(TIMERS.modal.delayOpen);
 		});
 		return modal;
 	}
@@ -66,7 +67,7 @@ describe('Reminders manager', () => {
 			});
 		}
 		await act(async () => {
-			await jest.advanceTimersToNextTimerAsync();
+			await vi.advanceTimersToNextTimerAsync();
 		});
 	}
 
@@ -97,7 +98,7 @@ describe('Reminders manager', () => {
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		// wait for lazyQuery to run
 		await act(async () => {
-			await jest.advanceTimersToNextTimerAsync();
+			await vi.advanceTimersToNextTimerAsync();
 		});
 	});
 
@@ -144,11 +145,11 @@ describe('Reminders manager', () => {
 		const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		act(() => {
-			jest.advanceTimersByTime(msDiffFromNow - 1);
+			vi.advanceTimersByTime(msDiffFromNow - 1);
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		act(() => {
-			jest.advanceTimersByTime(1);
+			vi.advanceTimersByTime(1);
 		});
 		await waitForModalToOpen();
 		expect(
@@ -172,7 +173,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		expect(
@@ -196,7 +197,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		expect(
@@ -218,7 +219,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		expect(
@@ -240,7 +241,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		expect(
@@ -261,7 +262,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(task1.title)).not.toBeInTheDocument();
@@ -292,7 +293,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(task.title)).not.toBeInTheDocument();
@@ -312,7 +313,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitFor(() => expect(findTaskMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersByTime(todayAfterNow - now);
+			vi.advanceTimersByTime(todayAfterNow - now);
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 		expect(screen.queryByText(task.title)).not.toBeInTheDocument();
@@ -453,7 +454,7 @@ describe('Reminders manager', () => {
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
 		const visibleDates = screen.getAllByText(
@@ -510,7 +511,7 @@ describe('Reminders manager', () => {
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
 		const visibleDates = screen.getAllByText(
@@ -554,7 +555,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		const visibleDates = screen.getAllByText(
 			formatDateFromTimestamp(now, {
@@ -605,7 +606,7 @@ describe('Reminders manager', () => {
 		setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 		await waitForModalToOpen();
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
 		const visibleDates = screen.getAllByText(
@@ -664,13 +665,13 @@ describe('Reminders manager', () => {
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
 		expect(screen.getByText(expiringReminder1.title)).toBeVisible();
 		expect(screen.queryByText(expiringReminder2.title)).not.toBeInTheDocument();
 		act(() => {
-			jest.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
+			vi.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
 		});
 		const dateString = formatDateFromTimestamp(now, {
 			includeTime: false
@@ -930,7 +931,7 @@ describe('Reminders manager', () => {
 		await user.click(completeAllButton);
 		await screen.findByRole('button', { name: /undo all/i });
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await screen.findByText(expiring.title);
 		expect(screen.queryByRole('button', { name: /undo all/i })).not.toBeInTheDocument();
@@ -970,7 +971,7 @@ describe('Reminders manager', () => {
 				reminderAt: faker.date.between({ from: startOfToday(), to: Date.now() }).getTime(),
 				reminderAllDay: false
 			});
-			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
+			const mockNotify = vi.spyOn(getNotificationManager(), 'notify');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 			await waitForModalToOpen();
@@ -988,12 +989,12 @@ describe('Reminders manager', () => {
 				reminderAt: addMinutes(Date.now(), 1).getTime(),
 				reminderAllDay: false
 			});
-			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
+			const mockNotify = vi.spyOn(getNotificationManager(), 'notify');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 			act(() => {
 				// advance timers by 1 minute to make reminder expires
-				jest.advanceTimersByTime(60000);
+				vi.advanceTimersByTime(60000);
 			});
 			await waitForModalToOpen();
 			expect(mockNotify).toHaveBeenCalled();
@@ -1011,11 +1012,11 @@ describe('Reminders manager', () => {
 			const fiveMinutesFromNow = addMinutes(now, 5).getTime();
 			const task1 = populateTask({ reminderAt: oneMinuteFromNow, reminderAllDay: false });
 			const task2 = populateTask({ reminderAt: fiveMinutesFromNow, reminderAllDay: false });
-			const mockNotify = jest.spyOn(getNotificationManager(), 'notify');
+			const mockNotify = vi.spyOn(getNotificationManager(), 'notify');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task1, task2])];
 			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/${TASKS_ROUTE}`] });
 			act(() => {
-				jest.advanceTimersByTime(oneMinuteFromNow - now);
+				vi.advanceTimersByTime(oneMinuteFromNow - now);
 			});
 			await waitForModalToOpen();
 			expect(mockNotify).toHaveBeenCalled();
@@ -1023,7 +1024,7 @@ describe('Reminders manager', () => {
 			// clear mock calls
 			mockNotify.mockClear();
 			act(() => {
-				jest.advanceTimersByTime(fiveMinutesFromNow - now);
+				vi.advanceTimersByTime(fiveMinutesFromNow - now);
 			});
 			expect(mockNotify).toHaveBeenCalled();
 			expect(mockNotify).toHaveBeenCalledTimes(1);
@@ -1039,7 +1040,7 @@ describe('Reminders manager', () => {
 				reminderAt: faker.date.between({ from: startOfToday(), to: Date.now() }).getTime(),
 				reminderAllDay: false
 			});
-			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mockShowBadge = vi.spyOn(carbonioShellUi, 'updatePrimaryBadge');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/differentModule`] });
 			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
@@ -1056,13 +1057,13 @@ describe('Reminders manager', () => {
 				reminderAt: faker.date.between({ from: Date.now(), to: endOfToday() }).getTime(),
 				reminderAllDay: false
 			});
-			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mockShowBadge = vi.spyOn(carbonioShellUi, 'updatePrimaryBadge');
 			const findTaskRequest = mockFindTasks({ status: Status.Open }, [task]);
 			const mocks = [findTaskRequest];
 			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/differentModule`] });
 			await waitFor(() => expect(findTaskRequest.result).toHaveBeenCalled());
 			act(() => {
-				jest.runOnlyPendingTimers();
+				vi.runOnlyPendingTimers();
 			});
 			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
 			expect(mockShowBadge).toHaveBeenCalledTimes(1);
@@ -1079,7 +1080,7 @@ describe('Reminders manager', () => {
 				reminderAt: index % 3 === 0 ? addMinutes(Date.now(), 5).getTime() : Date.now(),
 				reminderAllDay: index % 3 === 1
 			}));
-			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mockShowBadge = vi.spyOn(carbonioShellUi, 'updatePrimaryBadge');
 			const mocks = [mockFindTasks({ status: Status.Open }, tasks)];
 			setup(<RemindersManager />, { mocks, initialRouterEntries: [`/differentModule`] });
 			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
@@ -1090,7 +1091,7 @@ describe('Reminders manager', () => {
 			expect(mockShowBadge).toHaveBeenCalledWith(...args1);
 			mockShowBadge.mockClear();
 			act(() => {
-				jest.runOnlyPendingTimers();
+				vi.runOnlyPendingTimers();
 			});
 			await waitFor(() => expect(mockShowBadge).toHaveBeenCalled());
 			const args2: Parameters<typeof updatePrimaryBadge> = [
@@ -1105,7 +1106,7 @@ describe('Reminders manager', () => {
 				reminderAt: faker.date.between({ from: startOfToday(), to: Date.now() }).getTime(),
 				reminderAllDay: false
 			});
-			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mockShowBadge = vi.spyOn(carbonioShellUi, 'updatePrimaryBadge');
 			const mocks = [mockFindTasks({ status: Status.Open }, [task])];
 			const { user } = setup(
 				<>
@@ -1133,7 +1134,7 @@ describe('Reminders manager', () => {
 			});
 			const task2 = populateTask({ reminderAt: now, reminderAllDay: true });
 			const task3 = populateTask({ reminderAt: tenMinutesFromNow, reminderAllDay: false });
-			const mockShowBadge = jest.spyOn(carbonioShellUi, 'updatePrimaryBadge');
+			const mockShowBadge = vi.spyOn(carbonioShellUi, 'updatePrimaryBadge');
 			const findTaskRequest = mockFindTasks({ status: Status.Open }, [task1, task2, task3]);
 			const mocks = [findTaskRequest];
 			const { user } = setup(<RemindersManager />, {
@@ -1144,13 +1145,13 @@ describe('Reminders manager', () => {
 			await waitForModalToOpen();
 			expect(mockShowBadge).not.toHaveBeenCalled();
 			act(() => {
-				jest.advanceTimersByTime(fiveMinutesFromNow - now);
+				vi.advanceTimersByTime(fiveMinutesFromNow - now);
 			});
 			await waitForModalToOpen();
 			expect(mockShowBadge).not.toHaveBeenCalled();
 			await user.click(screen.getByRole('button', { name: /dismiss/i }));
 			act(() => {
-				jest.advanceTimersByTime(tenMinutesFromNow - now);
+				vi.advanceTimersByTime(tenMinutesFromNow - now);
 			});
 			await waitForModalToOpen();
 			expect(mockShowBadge).not.toHaveBeenCalled();
@@ -1172,11 +1173,11 @@ describe('Reminders manager', () => {
 		});
 		await waitFor(() => expect(findTasksRequest.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersByTime(60000);
+			vi.advanceTimersByTime(60000);
 		});
 		await editTask({ ...task, status: Status.Complete });
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		expect(screen.queryByText(/tasks reminders/i)).not.toBeInTheDocument();
 	});
@@ -1192,13 +1193,13 @@ describe('Reminders manager', () => {
 			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		await editTask({ ...task, reminderAt: tenMinutesFromNow });
 		act(() => {
-			jest.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
+			vi.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
 		});
 		await waitForModalToOpen();
 		expect(
@@ -1280,7 +1281,7 @@ describe('Reminders manager', () => {
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
 			// advance timers of 5 minutes to make group of reminders to check expires
-			jest.advanceTimersByTime(60000 * 5);
+			vi.advanceTimersByTime(60000 * 5);
 		});
 		// modal opens because of the fiveMinutesFromNow with-time reminders
 		await waitForModalToOpen();
@@ -1288,7 +1289,7 @@ describe('Reminders manager', () => {
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
 			// advance timers of 2 minutes to make the additional reminder expire
-			jest.advanceTimersByTime(60000 * 2);
+			vi.advanceTimersByTime(60000 * 2);
 		});
 		// modal opens because the additional reminder is expired
 		await waitForModalToOpen();
@@ -1309,14 +1310,14 @@ describe('Reminders manager', () => {
 		});
 		act(() => {
 			// advance timers of another 3 minutes to make group of reminders to check expires
-			jest.advanceTimersByTime(60000 * 3);
+			vi.advanceTimersByTime(60000 * 3);
 		});
 		await waitForModalToOpen();
 		// close so that on next opening the tasks are shown in their "already seen" position
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
 		act(() => {
 			// advance timers of 2 minutes to make the additional reminder expire
-			jest.advanceTimersByTime(60000 * 2);
+			vi.advanceTimersByTime(60000 * 2);
 		});
 		// modal opens because the additional reminder is expired
 		await waitForModalToOpen();
@@ -1348,7 +1349,7 @@ describe('Reminders manager', () => {
 			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
 		let taskTitles = screen.getAllByText(/task 5 minutes/i);
@@ -1358,7 +1359,7 @@ describe('Reminders manager', () => {
 		const newTitle = 'Task 5 minutes index 1 edited';
 		await editTask({ ...taskToEdit, title: newTitle });
 		act(() => {
-			jest.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
+			vi.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
 		});
 		await waitForModalToOpen();
 		taskTitles = screen.getAllByText(/task 5 minutes/i);
@@ -1382,7 +1383,7 @@ describe('Reminders manager', () => {
 			initialRouterEntries: [`/${TASKS_ROUTE}`]
 		});
 		act(() => {
-			jest.advanceTimersByTime(fiveMinutesFromNow - now);
+			vi.advanceTimersByTime(fiveMinutesFromNow - now);
 		});
 		await waitForModalToOpen();
 		await user.click(screen.getByRole('button', { name: /dismiss/i }));
@@ -1394,7 +1395,7 @@ describe('Reminders manager', () => {
 		};
 		await editTask(updatedTask);
 		act(() => {
-			jest.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
+			vi.advanceTimersByTime(tenMinutesFromNow - fiveMinutesFromNow);
 		});
 		await waitForModalToOpen();
 		expect(screen.getByText(updatedTask.title)).toBeVisible();
@@ -1435,7 +1436,7 @@ describe('Reminders manager', () => {
 		});
 		await waitFor(() => expect(findTasksMock.result).toHaveBeenCalled());
 		act(() => {
-			jest.advanceTimersByTime(timeoutLimitFromNow);
+			vi.advanceTimersByTime(timeoutLimitFromNow);
 		});
 		await waitForModalToOpen();
 		expect(screen.getByText(task.title)).toBeVisible();

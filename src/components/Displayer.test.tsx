@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { vi } from 'vitest';
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
@@ -150,7 +151,7 @@ describe('Displayer', () => {
 		expect(screen.queryByText(/description/i)).not.toBeInTheDocument();
 		// wait for query to run
 		await act(async () => {
-			await jest.advanceTimersToNextTimerAsync();
+			await vi.advanceTimersToNextTimerAsync();
 		});
 		// partial data are still visible
 		expect(screen.getByText(task.title)).toBeVisible();

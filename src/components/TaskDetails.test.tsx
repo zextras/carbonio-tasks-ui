@@ -87,7 +87,7 @@ describe('Task details', () => {
 				reminderAt: new Date(2023, 11, 25, 12, 25, 0, 0).getTime(),
 				reminderAllDay: false
 			});
-			jest.setSystemTime(new Date(2024, 5, 4, 18, 14, 57, 0));
+			vi.setSystemTime(new Date(2024, 5, 4, 18, 14, 57, 0));
 			setup(
 				<TaskDetails
 					createdAt={task.createdAt}

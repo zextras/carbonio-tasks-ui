@@ -25,7 +25,7 @@ describe('Reminder', () => {
 	});
 
 	test('When expired show date as error', () => {
-		jest.setSystemTime(new Date(2024, 5, 4, 17, 53, 42, 0));
+		vi.setSystemTime(new Date(2024, 5, 4, 17, 53, 42, 0));
 		const date = new Date(2024, 5, 4, 17, 53, 41, 0);
 		setup(<Reminder reminderAt={date.valueOf()} />);
 		expect(screen.getByText('Jun 04, 2024, 05:53 PM')).toHaveStyle({
@@ -35,7 +35,7 @@ describe('Reminder', () => {
 	});
 
 	test('When not expired does not show date as error', () => {
-		jest.setSystemTime(new Date(2024, 5, 4, 17, 53, 42, 0));
+		vi.setSystemTime(new Date(2024, 5, 4, 17, 53, 42, 0));
 		const date = new Date(2024, 5, 4, 17, 53, 43, 0);
 		setup(<Reminder reminderAt={date.valueOf()} />);
 		expect(screen.getByText('Jun 04, 2024, 05:53 PM')).toHaveStyle({

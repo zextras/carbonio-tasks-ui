@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { vi } from 'vitest';
 import React from 'react';
 
 import { screen } from '@testing-library/react';
@@ -18,13 +19,13 @@ describe('Actions header', () => {
 				id: 'act1',
 				label: 'Action 1',
 				icon: 'PeopleOutline',
-				onClick: jest.fn()
+				onClick: vi.fn()
 			},
 			{
 				id: 'act2',
 				label: 'Action 2',
 				icon: 'ActivityOutline',
-				onClick: jest.fn()
+				onClick: vi.fn()
 			}
 		];
 		setup(<ActionsHeader actions={actions} />);
@@ -38,7 +39,7 @@ describe('Actions header', () => {
 				id: 'act1',
 				label: 'Action 1',
 				icon: 'PeopleOutline',
-				onClick: jest.fn()
+				onClick: vi.fn()
 			}
 		];
 		const { user } = setup(<ActionsHeader actions={actions} />);
@@ -55,7 +56,7 @@ describe('Actions header', () => {
 				id: 'act1',
 				label: 'Action 1',
 				icon: 'PeopleOutline',
-				onClick: jest.fn(),
+				onClick: vi.fn(),
 				disabled: true
 			}
 		];

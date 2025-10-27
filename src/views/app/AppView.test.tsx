@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only
  */
+import { vi } from 'vitest';
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
@@ -30,13 +31,13 @@ import { makeListItemsVisible, setup } from '../../utils/testUtils';
 describe('App view', () => {
 	function showDisplayerPlaceholder(): void {
 		act(() => {
-			jest.advanceTimersByTime(RANDOM_PLACEHOLDER_TIMEOUT);
+			vi.advanceTimersByTime(RANDOM_PLACEHOLDER_TIMEOUT);
 		});
 	}
 
 	test('Show tasks view', async () => {
 		const tasks = populateTaskList(10);
-		const findTasksRequest = jest.fn();
+		const findTasksRequest = vi.fn();
 		server.use(
 			graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 				findTasksRequest();
@@ -51,7 +52,7 @@ describe('App view', () => {
 		setup(<AppView />);
 		await screen.findByText(/all tasks/i);
 		await act(async () => {
-			await jest.advanceTimersToNextTimerAsync();
+			await vi.advanceTimersToNextTimerAsync();
 		});
 		await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 		showDisplayerPlaceholder();
@@ -65,7 +66,7 @@ describe('App view', () => {
 	test('Open displayer on click on an item', async () => {
 		const tasks = populateTaskList();
 		const task = tasks[tasks.length - 1];
-		const findTasksRequest = jest.fn();
+		const findTasksRequest = vi.fn();
 		server.use(
 			graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 				findTasksRequest();
@@ -84,7 +85,7 @@ describe('App view', () => {
 		const { user } = setup(<AppView />);
 		await screen.findByText(/all tasks/i);
 		await act(async () => {
-			await jest.advanceTimersToNextTimerAsync();
+			await vi.advanceTimersToNextTimerAsync();
 		});
 		await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 		showDisplayerPlaceholder();
@@ -100,7 +101,7 @@ describe('App view', () => {
 
 	test('List item is highlighted when and only when it is opened in the displayer', async () => {
 		const task = populateTask();
-		const findTasksRequest = jest.fn();
+		const findTasksRequest = vi.fn();
 		server.use(
 			graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 				findTasksRequest();
@@ -117,7 +118,7 @@ describe('App view', () => {
 		});
 		await screen.findByText(/all tasks/i);
 		await act(async () => {
-			await jest.advanceTimersToNextTimerAsync();
+			await vi.advanceTimersToNextTimerAsync();
 		});
 		await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 		makeListItemsVisible();
@@ -139,7 +140,7 @@ describe('App view', () => {
 		test('Show modal of reminders on load if there is at least one reminder to show', async () => {
 			const tasks = populateTaskList();
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
-			const findTasksRequest = jest.fn();
+			const findTasksRequest = vi.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 					findTasksRequest();
@@ -157,13 +158,13 @@ describe('App view', () => {
 
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
-				await jest.advanceTimersToNextTimerAsync();
+				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
 			act(() => {
 				// advance timers to make modal content visible
-				jest.advanceTimersByTime(TIMERS.modal.delayOpen);
+				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
 			});
 			expect(
 				within(screen.getByTestId(TEST_ID_SELECTOR.modal)).getByText(tasks[0].title)
@@ -174,7 +175,7 @@ describe('App view', () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
-			const findTasksRequest = jest.fn();
+			const findTasksRequest = vi.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 					findTasksRequest();
@@ -192,7 +193,7 @@ describe('App view', () => {
 
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
-				await jest.advanceTimersToNextTimerAsync();
+				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -208,7 +209,7 @@ describe('App view', () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
-			const findTasksRequest = jest.fn();
+			const findTasksRequest = vi.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>('findTasks', () => {
 					findTasksRequest();
@@ -229,7 +230,7 @@ describe('App view', () => {
 
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
-				await jest.advanceTimersToNextTimerAsync();
+				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -252,7 +253,7 @@ describe('App view', () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
-			const findTasksRequest = jest.fn();
+			const findTasksRequest = vi.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 					findTasksRequest();
@@ -273,7 +274,7 @@ describe('App view', () => {
 
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
-				await jest.advanceTimersToNextTimerAsync();
+				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -293,7 +294,7 @@ describe('App view', () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
-			const findTasksRequest = jest.fn();
+			const findTasksRequest = vi.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 					findTasksRequest();
@@ -315,7 +316,7 @@ describe('App view', () => {
 			});
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
-				await jest.advanceTimersToNextTimerAsync();
+				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
@@ -336,7 +337,7 @@ describe('App view', () => {
 			const tasks = populateTaskList(10, { reminderAt: null });
 			// set reminder only for one item
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
-			const findTasksRequest = jest.fn();
+			const findTasksRequest = vi.fn();
 			server.use(
 				graphql.query<FindTasksQuery, FindTasksQueryVariables>(FindTasksDocument, () => {
 					findTasksRequest();
@@ -362,7 +363,7 @@ describe('App view', () => {
 
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
-				await jest.advanceTimersToNextTimerAsync();
+				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);

@@ -9,12 +9,15 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [graphql()],
+	define: {
+		BASE_PATH: JSON.stringify('/')
+	},
 	test: {
 		// Test environment
 		environment: 'jsdom',
 
 		// Setup files
-		setupFiles: ['./src/vitest-polyfills.ts', './src/vitest-env-setup.ts'],
+		setupFiles: ['./src/vitest-polyfills.ts', './src/vitest-setup-mocks.ts', './src/vitest-env-setup.ts'],
 
 		// Coverage configuration
 		coverage: {

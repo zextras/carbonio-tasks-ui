@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
+import { vi } from 'vitest';
 import React from 'react';
 
 import { faker } from '@faker-js/faker';
@@ -35,7 +36,7 @@ type UpdateTaskHandler = GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskM
 describe('Edit task board', () => {
 	const checkboxLabelText = /Remind me at every login throughout the day/i;
 	function spyUseBoard(taskId: string): void {
-		jest.spyOn(shell, 'useBoard').mockReturnValue({
+		vi.spyOn(shell, 'useBoard').mockReturnValue({
 			context: { taskId },
 			id: '',
 			boardViewId: '',
@@ -349,7 +350,7 @@ describe('Edit task board', () => {
 				const { user } = setup(<EditTaskBoard />);
 
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
@@ -360,7 +361,7 @@ describe('Edit task board', () => {
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				const expected: Partial<Task> = { id: task.id, reminderAt: 0, reminderAllDay: false };
 				expect(updateTaskHandler).toHaveBeenCalledWith(
@@ -420,7 +421,7 @@ describe('Edit task board', () => {
 				const { user } = setup(<EditTaskBoard />);
 
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
@@ -433,7 +434,7 @@ describe('Edit task board', () => {
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				const expected: Partial<Task> = {
 					id: task.id,
@@ -492,7 +493,7 @@ describe('Edit task board', () => {
 				const { user } = setup(<EditTaskBoard />);
 
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
@@ -503,7 +504,7 @@ describe('Edit task board', () => {
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				const expected: Partial<Task> = {
 					id: task.id,

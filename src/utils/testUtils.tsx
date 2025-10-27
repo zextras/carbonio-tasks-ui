@@ -8,7 +8,6 @@ import React, { type ReactElement, useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-import { matchers } from '@emotion/jest';
 import {
 	act,
 	type ByRoleMatcher,
@@ -29,11 +28,10 @@ import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
+import { type Mock as VitestMock, vi } from 'vitest';
 
 import { type Mock } from '../mocks/utils';
 import { StyledWrapper } from '../providers/StyledWrapper';
-
-expect.extend(matchers);
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']> & {
 	readonly rightClick: (target: Element) => Promise<void>;
@@ -239,7 +237,7 @@ export const setup = (
 	ui: ReactElement,
 	options?: SetupOptions
 ): { user: UserEvent } & ReturnType<typeof customRender> => ({
-	user: setupUserEvent({ advanceTimers: jest.advanceTimersByTime, ...options?.setupOptions }),
+	user: setupUserEvent({ advanceTimers: vi.advanceTimersByTime, ...options?.setupOptions }),
 	...customRender(ui, {
 		initialRouterEntries: options?.initialRouterEntries,
 		mocks: options?.mocks,
@@ -260,9 +258,9 @@ export const setupHook = <TProps, TResult>(
 
 export function makeListItemsVisible(): void {
 	const { calls, instances } = (
-		window.IntersectionObserver as jest.Mock<
-			IntersectionObserver,
-			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit]
+		window.IntersectionObserver as VitestMock<
+			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit],
+			IntersectionObserver
 		>
 	).mock;
 	calls.forEach((call, index) => {
