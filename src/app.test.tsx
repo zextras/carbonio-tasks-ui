@@ -5,6 +5,8 @@
  */
 
 import { vi } from 'vitest';
+
+vi.mock('@zextras/carbonio-shell-ui');
 import React from 'react';
 
 import * as shell from '@zextras/carbonio-shell-ui';

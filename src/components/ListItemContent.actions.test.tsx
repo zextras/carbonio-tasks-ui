@@ -1,3 +1,5 @@
+import { vi } from 'vitest';
+vi.mock('@zextras/carbonio-shell-ui');
 /*
  * SPDX-FileCopyrightText: 2023 Zextras <https://www.zextras.com>
  *

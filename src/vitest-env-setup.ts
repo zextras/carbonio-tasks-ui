@@ -38,9 +38,9 @@ console.error = (...args: unknown[]) => {
 };
 
 beforeEach(() => {
-	// Do not useFakeTimers with `whatwg-fetch` if using mocked server
+	// Enable fake timers for userEvent compatibility
+	// Do not fake queueMicrotask to avoid issues with MSW
 	// https://github.com/mswjs/msw/issues/448
-	// Enable fake timers globally, excluding queueMicrotask (equivalent to Jest's fakeTimers config)
 	vi.useFakeTimers({ shouldAdvanceTime: true, toFake: ['Date', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'setImmediate', 'clearImmediate'] });
 
 	// reset apollo client cache

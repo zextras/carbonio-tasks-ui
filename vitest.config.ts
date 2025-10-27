@@ -25,7 +25,7 @@ export default defineConfig({
 		environment: 'jsdom',
 
 		// Setup files
-		setupFiles: ['./src/vitest-polyfills.ts', './src/vitest-setup-mocks.ts', './src/vitest-env-setup.ts'],
+		setupFiles: ['./src/vitest-polyfills.ts', './src/vitest-env-setup.ts'],
 
 		// Coverage configuration
 		coverage: {
@@ -62,15 +62,7 @@ export default defineConfig({
 		restoreMocks: true,
 
 		// Retry configuration
-		retry: 2,
-
-		// Pool settings - use threads for better performance
-		pool: 'threads',
-		poolOptions: {
-			threads: {
-				singleThread: false
-			}
-		}
+		retry: 2
 	},
 	resolve: {
 		alias: {
