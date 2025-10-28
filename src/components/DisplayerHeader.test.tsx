@@ -39,11 +39,11 @@ describe('Displayer header', () => {
 			expect(titleElement).toBeVisible();
 			// register listeners of tooltip
 			act(() => {
-				jest.runOnlyPendingTimers();
+				vi.runOnlyPendingTimers();
 			});
 			// simulate a text with a scroll width greater than the client width
-			jest.spyOn(titleElement, 'clientWidth', 'get').mockReturnValue(300);
-			jest.spyOn(titleElement, 'scrollWidth', 'get').mockReturnValue(500);
+			vi.spyOn(titleElement, 'clientWidth', 'get').mockReturnValue(300);
+			vi.spyOn(titleElement, 'scrollWidth', 'get').mockReturnValue(500);
 			await user.hover(screen.getByText(title));
 			await screen.findByTestId(TEST_ID_SELECTOR.tooltip);
 			expect(screen.getAllByText(title)).toHaveLength(2);

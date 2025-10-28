@@ -30,6 +30,8 @@ import {
 import { formatDateFromTimestamp } from '../../utils';
 import { makeListItemsVisible, setup } from '../../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('Task view', () => {
 	test('Show the empty list and the empty displayer if there is no task', async () => {
 		const findTasksMock = mockFindTasks({}, []);
@@ -414,7 +416,7 @@ describe('Task view', () => {
 			const confirmButton = await screen.findByRole('button', { name: /^delete permanently/i });
 			await user.click(confirmButton);
 			act(() => {
-				jest.advanceTimersByTime(RANDOM_PLACEHOLDER_TIMEOUT);
+				vi.advanceTimersByTime(RANDOM_PLACEHOLDER_TIMEOUT);
 			});
 			expect(screen.queryByText(tasks[1].title)).not.toBeInTheDocument();
 			expect(screen.queryByText(EMPTY_DISPLAYER_HINT)).not.toBeInTheDocument();
@@ -491,14 +493,14 @@ describe('Task view', () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 
-			jest.spyOn(shell, 'getBoardById').mockReturnValue({
+			vi.spyOn(shell, 'getBoardById').mockReturnValue({
 				id: `edit-task-${task.id}`,
 				boardViewId: '',
 				app: '',
 				icon: '',
 				title: ''
 			});
-			const closeBoardSpy = jest.spyOn(shell, 'closeBoard');
+			const closeBoardSpy = vi.spyOn(shell, 'closeBoard');
 
 			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];
@@ -527,8 +529,8 @@ describe('Task view', () => {
 			const tasks = populateTaskList();
 			const task = tasks[0];
 
-			jest.spyOn(shell, 'getBoardById').mockReturnValue(undefined);
-			const closeBoardSpy = jest.spyOn(shell, 'closeBoard');
+			vi.spyOn(shell, 'getBoardById').mockReturnValue(undefined);
+			const closeBoardSpy = vi.spyOn(shell, 'closeBoard');
 
 			const findTasksMock = mockFindTasks({}, tasks);
 			const mocks = [findTasksMock, mockTrashTask({ taskId: task.id })];

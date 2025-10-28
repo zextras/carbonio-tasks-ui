@@ -13,6 +13,8 @@ import { Priority, Status } from '../gql/types';
 import { populateTask } from '../mocks/utils';
 import { setup } from '../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('List item content', () => {
 	describe('Actions', () => {
 		test('Hover bar is not rendered if item is not visible', () => {

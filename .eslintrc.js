@@ -33,7 +33,9 @@ module.exports = {
 				'**/mocks/**/*',
 				'**/gql/types.ts',
 				'**/tests/**/*',
-				'codegen.ts'
+				'codegen.ts',
+				'src/setupTests.ts',
+				'vitest.config.ts'
 			],
 			rules: {
 				'import/no-extraneous-dependencies': 'off'

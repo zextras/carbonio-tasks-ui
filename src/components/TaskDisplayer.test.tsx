@@ -15,6 +15,8 @@ import { populateTask } from '../mocks/utils';
 import { formatDateFromTimestamp } from '../utils';
 import { setup } from '../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('Task displayer', () => {
 	test('Show all task information', () => {
 		const task = populateTask();

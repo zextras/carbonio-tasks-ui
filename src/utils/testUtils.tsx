@@ -8,7 +8,6 @@ import React, { type ReactElement, useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-import { matchers } from '@emotion/jest';
 import {
 	act,
 	type ByRoleMatcher,
@@ -29,40 +28,14 @@ import i18next, { type i18n } from 'i18next';
 import { filter } from 'lodash';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
+import { type Mock as ViMock } from 'vitest';
 
 import { type Mock } from '../mocks/utils';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
-expect.extend(matchers);
-
 export type UserEvent = ReturnType<(typeof userEvent)['setup']> & {
 	readonly rightClick: (target: Element) => Promise<void>;
 };
-
-/**
- * Matcher function to search a string in more html elements and not just in a single element.
- */
-const queryAllByTextWithMarkup: GetAllBy<[string | RegExp]> = (container, text) =>
-	screen.queryAllByText((_content, element) => {
-		if (element && element instanceof HTMLElement) {
-			const hasText = (singleNode: Element): boolean => {
-				const regExp = RegExp(text);
-				return singleNode.textContent != null && regExp.test(singleNode.textContent);
-			};
-			const childrenDontHaveText = Array.from(element.children).every((child) => !hasText(child));
-			return hasText(element) && childrenDontHaveText;
-		}
-		return false;
-	});
-
-const getByTextWithMarkupMultipleError = (
-	container: Element | null,
-	text: string | RegExp
-): string => `Found multiple elements with text: ${text}`;
-const getByTextWithMarkupMissingError = (
-	container: Element | null,
-	text: string | RegExp
-): string => `Unable to find an element with text: ${text}`;
 
 type ByRoleWithIconOptions = ByRoleOptions & {
 	icon: string | RegExp;
@@ -91,18 +64,6 @@ const getByRoleWithIconMissingError = (
 ): string => `Unable to find an element with role ${role} and icon ${options.icon}`;
 
 const [
-	queryByTextWithMarkup,
-	getAllByTextWithMarkup,
-	getByTextWithMarkup,
-	findAllByTextWithMarkup,
-	findByTextWithMarkup
-] = queryHelpers.buildQueries<[string | RegExp]>(
-	queryAllByTextWithMarkup,
-	getByTextWithMarkupMultipleError,
-	getByTextWithMarkupMissingError
-);
-
-const [
 	queryByRoleWithIcon,
 	getAllByRoleWithIcon,
 	getByRoleWithIcon,
@@ -115,12 +76,6 @@ const [
 );
 
 const customQueries = {
-	// byTextWithMarkup
-	queryByTextWithMarkup,
-	getAllByTextWithMarkup,
-	getByTextWithMarkup,
-	findAllByTextWithMarkup,
-	findByTextWithMarkup,
 	// byRoleWithIcon
 	queryByRoleWithIcon,
 	getAllByRoleWithIcon,
@@ -239,7 +194,7 @@ export const setup = (
 	ui: ReactElement,
 	options?: SetupOptions
 ): { user: UserEvent } & ReturnType<typeof customRender> => ({
-	user: setupUserEvent({ advanceTimers: jest.advanceTimersByTime, ...options?.setupOptions }),
+	user: setupUserEvent({ advanceTimers: vi.advanceTimersByTime, ...options?.setupOptions }),
 	...customRender(ui, {
 		initialRouterEntries: options?.initialRouterEntries,
 		mocks: options?.mocks,
@@ -259,12 +214,7 @@ export const setupHook = <TProps, TResult>(
 	});
 
 export function makeListItemsVisible(): void {
-	const { calls, instances } = (
-		window.IntersectionObserver as jest.Mock<
-			IntersectionObserver,
-			[callback: IntersectionObserverCallback, options?: IntersectionObserverInit]
-		>
-	).mock;
+	const { calls, instances } = (window.IntersectionObserver as ViMock).mock;
 	calls.forEach((call, index) => {
 		const [onChange] = call;
 		// trigger the intersection on the observed element
@@ -280,4 +230,25 @@ export function makeListItemsVisible(): void {
 			);
 		});
 	});
+}
+
+export function getElementStyles(element: HTMLElement): CSSStyleDeclaration {
+	return window.getComputedStyle(element);
+}
+
+export function hexToRgb(hex: string): string {
+	let tmp = hex.replace('#', '');
+
+	if (tmp.length === 3) {
+		tmp = hex
+			.split('')
+			.map((char) => char + char)
+			.join('');
+	}
+
+	const r = parseInt(tmp.substring(0, 2), 16);
+	const g = parseInt(tmp.substring(2, 4), 16);
+	const b = parseInt(tmp.substring(4, 6), 16);
+
+	return `rgb(${r}, ${g}, ${b})`;
 }
