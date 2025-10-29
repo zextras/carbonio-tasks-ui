@@ -22,7 +22,7 @@ export default defineConfig({
 		})
 	],
 	test: {
-		reporters: isCI ? ['default'] : ['verbose'],
+		reporters: isCI ? ['default', 'junit'] : ['verbose'],
 		retry,
 		environment: 'jsdom',
 		setupFiles: ['./src/setupTests.ts'],
