@@ -36,7 +36,7 @@ export default defineConfig({
 			provider: 'v8',
 			reporter: isCI ? ['text', 'cobertura', 'lcov'] : ['text', 'html'],
 			include: ['src/**/*.{ts,tsx}'],
-			exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts'],
+			exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts', 'src/utils/testUtils.ts'],
 			thresholds: {
 				branches: 75,
 				functions: 75,
