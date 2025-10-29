@@ -16,7 +16,6 @@ import {
 	queries,
 	queryHelpers,
 	render,
-	renderHook,
 	type RenderOptions,
 	type RenderResult,
 	screen,
@@ -201,17 +200,6 @@ export const setup = (
 		...options?.renderOptions
 	})
 });
-
-export const setupHook = <TProps, TResult>(
-	callback: Parameters<typeof renderHook<TProps, TResult>>[0],
-	options?: Parameters<typeof renderHook<TProps, TResult>>[1] & { i18n?: i18n }
-): ReturnType<typeof renderHook<TProps, TResult>> =>
-	renderHook<TProps, TResult>(callback, {
-		wrapper: ({ children }) => (
-			<I18NextTestProvider i18n={options?.i18n}>{children}</I18NextTestProvider>
-		),
-		...options
-	});
 
 export function makeListItemsVisible(): void {
 	const { calls, instances } = (window.IntersectionObserver as ViMock).mock;
