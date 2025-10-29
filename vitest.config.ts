@@ -10,7 +10,7 @@ import { defineConfig } from 'vitest/config';
 dotenv.config({ path: '.env' });
 
 const retry = process.env.JEST_RETRY_TIMES ? parseInt(process.env.JEST_RETRY_TIMES, 10) : 2;
-console.log(process.env);
+const isCI = process.env.CI === 'true';
 
 export default defineConfig({
 	plugins: [
@@ -22,12 +22,12 @@ export default defineConfig({
 		})
 	],
 	test: {
-		reporters: process.env.CI ? ['default'] : ['verbose'],
+		reporters: isCI ? ['default'] : ['verbose'],
 		retry,
 		environment: 'jsdom',
 		setupFiles: ['./src/setupTests.ts'],
 		restoreMocks: true,
-		maxWorkers: process.env.CI ? 2 : undefined,
+		maxWorkers: isCI ? 2 : undefined,
 		coverage: {
 			enabled: true,
 			provider: 'v8',
