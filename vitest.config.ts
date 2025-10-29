@@ -35,7 +35,8 @@ export default defineConfig({
 			enabled: true,
 			provider: 'v8',
 			reporter: isCI ? ['text', 'cobertura', 'lcov'] : ['text', 'html'],
-			exclude: ['node_modules/', 'src/setupTests.ts'],
+			include: ['src/**/*.{ts,tsx}'],
+			exclude: ['src/**/*.test.{ts,tsx}', 'src/**/*.d.ts'],
 			thresholds: {
 				branches: 75,
 				functions: 75,
