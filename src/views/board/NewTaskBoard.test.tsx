@@ -92,7 +92,8 @@ describe('New task board', () => {
 			const titleInput = screen.getByRole('textbox', { name: /title/i });
 			const createButton = screen.getByRole('button', { name: /create/i });
 			const maxLengthString = faker.string.alpha({ length: 1024 });
-			await user.type(titleInput, maxLengthString);
+			await user.click(titleInput);
+			await user.paste(maxLengthString);
 			expect(titleInput).toHaveValue(maxLengthString);
 			expect(createButton).toBeEnabled();
 			expect(
