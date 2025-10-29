@@ -23,6 +23,9 @@ export default defineConfig({
 	],
 	test: {
 		reporters: isCI ? ['default', 'junit'] : ['verbose'],
+		outputFile: {
+			junit: './junit.xml'
+		},
 		retry,
 		environment: 'jsdom',
 		setupFiles: ['./src/setupTests.ts'],
