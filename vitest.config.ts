@@ -31,7 +31,7 @@ export default defineConfig({
 		coverage: {
 			enabled: true,
 			provider: 'v8',
-			reporter: ['lcov', 'cobertura'],
+			reporter: isCI ? ['text', 'cobertura', 'lcov'] : ['text', 'html'],
 			exclude: ['node_modules/', 'src/setupTests.ts'],
 			thresholds: {
 				branches: 75,
