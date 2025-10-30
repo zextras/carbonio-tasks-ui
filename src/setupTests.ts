@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import failOnConsole from 'vitest-fail-on-console';
 
 import buildClient from './apollo';
