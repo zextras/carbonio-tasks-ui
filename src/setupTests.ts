@@ -11,18 +11,9 @@ import buildClient from './apollo';
 import server from './mocks/server';
 
 failOnConsole({
-	shouldFailOnWarn: false,
-	shouldFailOnError: true,
 	silenceMessage: (message) =>
-		// Warning: Failed prop type: Invalid prop `target` of type `Window` supplied to `ForwardRef(SnackbarFn)`, expected instance of `Window`
-		// This warning is printed in the console for this render. This happens because window element is a jsdom representation of the window,
-		// and it's an object instead of a Window class instance, so the check on the prop type fail for the target prop
-		/Invalid prop `\w+`(\sof type `\w+`)? supplied to `(\w+(\(\w+\))?)`/.test(message) ||
 		// errors forced from the tests
-		/Controlled error/gi.test(message) ||
-		/The "input" argument must be an instance of ArrayBuffer or ArrayBufferView. Received an instance of File/.test(
-			message
-		)
+		/Controlled error/gi.test(message)
 });
 
 beforeAll(() => {

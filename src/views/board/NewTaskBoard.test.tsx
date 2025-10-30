@@ -235,7 +235,7 @@ describe('New task board', () => {
 		});
 	});
 
-	test.skip.each([[Status.Complete], [Status.Open]])(
+	test.each([[Status.Complete], [Status.Open]])(
 		'Info banner appears when the limit of 199 %s tasks is reached',
 		async (status) => {
 			const tasks = populateTaskList(MAX_TASKS_LIMIT - 2, { status });
@@ -275,7 +275,7 @@ describe('New task board', () => {
 		}
 	);
 
-	test.skip.each([[Status.Complete], [Status.Open]])(
+	test.each([[Status.Complete], [Status.Open]])(
 		'Warning banner appears when the limit of 200 %s tasks is reached',
 		async (status) => {
 			const tasks = populateTaskList(MAX_TASKS_LIMIT - 1, { status });
