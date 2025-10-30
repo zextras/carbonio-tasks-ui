@@ -39,7 +39,6 @@
 		"@graphql-codegen/typescript": "^5.0.2",
 		"@graphql-codegen/typescript-operations": "^5.0.2",
 		"@graphql-eslint/eslint-plugin": "^4.4.0",
-		"@graphql-tools/jest-transform": "^2.0.0",
 		"@testing-library/dom": "^10.3.0",
 		"@testing-library/jest-dom": "^6.9.1",
 		"@testing-library/react": "^16.0.0",

@@ -9,7 +9,7 @@ import { defineConfig } from 'vitest/config';
 
 dotenv.config({ path: '.env' });
 
-const retry = process.env.JEST_RETRY_TIMES ? parseInt(process.env.JEST_RETRY_TIMES, 10) : 2;
+const retry = process.env.TEST_RETRY_TIMES ? parseInt(process.env.TEST_RETRY_TIMES, 10) : 2;
 const isCI = process.env.CI === 'true';
 
 export default defineConfig({

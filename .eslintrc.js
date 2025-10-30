@@ -28,7 +28,7 @@ module.exports = {
 		{
 			// enable eslint-plugin-testing-library rules or preset only for test files
 			files: [
-				'**/+(test|jest)*.[jt]s?(x)',
+				'**/+test*.[jt]s?(x)',
 				'**/types/commons.ts',
 				'**/mocks/**/*',
 				'**/gql/types.ts',
