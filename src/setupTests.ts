@@ -35,6 +35,19 @@ afterAll(() => {
 	vi.useRealTimers();
 });
 
+beforeAll(() => {
+	Object.defineProperty(window, 'ResizeObserver', {
+		writable: true,
+		value: function ResizeObserverMock(): ResizeObserver {
+			return {
+				observe: (): undefined => undefined,
+				unobserve: (): undefined => undefined,
+				disconnect: (): undefined => undefined
+			};
+		}
+	});
+});
+
 beforeEach(() => {
 	Object.defineProperty(window, 'IntersectionObserver', {
 		writable: true,

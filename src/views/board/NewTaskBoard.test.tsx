@@ -211,7 +211,7 @@ describe('New task board', () => {
 			expect(screen.getByRole('textbox', { name: /description/i })).toHaveValue('');
 		});
 
-		test.skip('When the limit of 4096 characters is reached the create button is disabled and the error description appears', async () => {
+		test('When the limit of 4096 characters is reached the create button is disabled and the error description appears', async () => {
 			prepareCache();
 
 			const { user } = setup(<NewTaskBoard />, { mocks: [] });
@@ -221,7 +221,8 @@ describe('New task board', () => {
 			const maxLengthDescription = faker.string.alpha({ length: 4096 });
 			await user.type(screen.getByRole('textbox', { name: /title/i }), 'something');
 			await waitFor(() => expect(createButton).toBeEnabled());
-			await user.type(descriptionInput, maxLengthDescription);
+			await user.click(descriptionInput);
+			await user.paste(maxLengthDescription);
 			expect(descriptionInput).toHaveValue(maxLengthDescription);
 			expect(createButton).toBeEnabled();
 			expect(
@@ -314,7 +315,7 @@ describe('New task board', () => {
 		}
 	);
 
-	test.skip('Snackbar appears when max limit is reached and click create button', async () => {
+	test('Snackbar appears when max limit is reached and click create button', async () => {
 		const tasks = populateTaskList(MAX_TASKS_LIMIT);
 		prepareCache(tasks);
 

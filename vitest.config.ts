@@ -39,6 +39,7 @@ export default defineConfig({
 			exclude: [
 				'src/types',
 				'src/mocks',
+				'src/setupTests.ts',
 				// Test files
 				'**/*.test.{ts,tsx}',
 				'**/*.spec.{ts,tsx}',
