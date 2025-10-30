@@ -36,7 +36,30 @@ export default defineConfig({
 			provider: 'v8',
 			reporter: isCI ? ['text', 'cobertura', 'lcov'] : ['text', 'html'],
 			include: ['src/**/*.{ts,tsx}'],
-			exclude: ['src/**/*.test.{ts,tsx}'],
+			exclude: [
+				'src/types',
+				'src/mocks',
+				// Test files
+				'**/*.test.{ts,tsx}',
+				'**/*.spec.{ts,tsx}',
+
+				// Type definitions
+				'**/*.d.ts',
+
+				// Test utilities
+				'**/setupTests.{ts,tsx}',
+				'**/testUtils.{ts,tsx}',
+				'**/test-utils.{ts,tsx}',
+
+				// Test folders
+				'**/__tests__/**',
+				'**/__mocks__/**',
+
+				// Build artifacts
+				'**/dist/**',
+				'**/coverage/**',
+				'**/node_modules/**'
+			],
 			thresholds: {
 				branches: 75,
 				functions: 75,

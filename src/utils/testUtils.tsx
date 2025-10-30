@@ -19,7 +19,8 @@ import {
 	type RenderOptions,
 	type RenderResult,
 	screen,
-	within
+	within,
+	renderHook
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ModalManager, SnackbarManager } from '@zextras/carbonio-design-system';
@@ -240,3 +241,14 @@ export function hexToRgb(hex: string): string {
 
 	return `rgb(${r}, ${g}, ${b})`;
 }
+
+export const setupHook = <TProps, TResult>(
+	callback: Parameters<typeof renderHook<TProps, TResult>>[0],
+	options?: Parameters<typeof renderHook<TProps, TResult>>[1] & { i18n?: i18n }
+): ReturnType<typeof renderHook<TProps, TResult>> =>
+	renderHook<TProps, TResult>(callback, {
+		wrapper: ({ children }) => (
+			<I18NextTestProvider i18n={options?.i18n}>{children}</I18NextTestProvider>
+		),
+		...options
+	});

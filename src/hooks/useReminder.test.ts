@@ -5,8 +5,7 @@
  */
 
 import { useReminder } from './useReminder';
-import { setupHook } from '../utils/setupHook';
-import { getAppI18n } from '../utils/testUtils';
+import { getAppI18n, setupHook } from '../utils/testUtils';
 
 describe('useReminder', () => {
 	it('should return isExpired true if reminderAt is before now in the same day and it is not allDay', () => {
