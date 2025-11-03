@@ -69,7 +69,7 @@
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.1",
 		"@zextras/carbonio-design-system": "^11.0.0-devel.4",
-		"@zextras/carbonio-shell-ui": "12.0.0-devel.1756980987860",
+		"@zextras/carbonio-shell-ui": "12.0.0",
 		"core-js": "^3.45.1",
 		"date-fns": "^4.1.0",
 		"graphql": "^16.10.0",
