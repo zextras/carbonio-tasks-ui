@@ -6,6 +6,7 @@
 
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 
+import { Container, Spinner as SpinnerDS } from '@zextras/carbonio-design-system';
 import {
 	ACTION_TYPES,
 	addBoard,
@@ -20,7 +21,6 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import { RemindersManager } from './components/RemindersManager';
-import { Spinner } from './components/Spinner';
 import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { ProvidersWrapper } from './providers/ProvidersWrapper';
 
@@ -36,6 +36,12 @@ const LazyNewTaskBoardView = lazy(
 
 const LazyEditTaskBoardView = lazy(
 	() => import(/* webpackChunkName: "editTaskView" */ './views/board/EditTaskBoard')
+);
+
+export const Spinner = (): React.JSX.Element => (
+	<Container>
+		<SpinnerDS color={'primary'} />
+	</Container>
 );
 
 const AppView = (): React.JSX.Element => (

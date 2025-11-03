@@ -7,6 +7,9 @@ MIT License (MIT) applies to:
 @babel/preset-typescript, Copyright (c) 2014-present Sebastian McKenzie and other contributors
 @commitlint/cli, Copyright (c) 2016 - present Mario Nebl
 @commitlint/config-conventional, Copyright (c) 2016 - present Mario Nebl
+@emotion/babel-plugin, Copyright (c) Emotion team and other contributors
+@emotion/react, Copyright (c) Emotion team and other contributors
+@emotion/styled, Copyright (c) Emotion team and other contributors
 @faker-js/faker, Copyright (c) 2022-2025; faker.js - Copyright (c) 2011-2020 Marak Squires
 @graphql-codegen/add, Copyright (c) 2016 Dotan Simha
 @graphql-codegen/cli, Copyright (c) 2016 Dotan Simha
@@ -16,18 +19,16 @@ MIT License (MIT) applies to:
 @graphql-codegen/typescript-operations, Copyright (c) 2016 Dotan Simha
 @graphql-codegen/typescript, Copyright (c) 2016 Dotan Simha
 @graphql-eslint/eslint-plugin, Copyright (c) 2022 Dimitri POSTOLOV
-@graphql-tools/jest-transform, Copyright (c) 2020 The Guild, Inc.
 @testing-library/dom, Copyright (c) 2017 Kent C. Dodds
 @testing-library/jest-dom, Copyright (c) 2017 Kent C. Dodds
 @testing-library/react, Copyright (c) 2017 Kent C. Dodds
 @testing-library/user-event, Copyright (c) 2020 Giorgio Polvara
-@types/jest, Copyright (c) Microsoft Corporation.
 @types/lodash, Copyright (c) Microsoft Corporation.
 @types/react-dom, Copyright (c) Microsoft Corporation.
-@types/react-router-dom, Copyright (c) Microsoft Corporation.
 @types/react, Copyright (c) Microsoft Corporation.
-@types/styled-components, Copyright (c) Microsoft Corporation.
-babel-plugin-styled-components, Copyright (c) 2016-present Vladimir Danchenkov and Maximilian Stoiber
+@vitejs/plugin-react, Copyright (c) 2019-present, Yuxi (Evan) You and Vite contributors
+@vitest/coverage-v8, Copyright (c) 2021-Present Vitest Team
+@vitest/ui, Copyright (c) 2021-Present Vitest Team
 core-js, Copyright (c) 2014-2025 Denis Pushkarev
 date-fns, Copyright (c) 2021 Sasha Koss and Lesha Koss https://kossnocorp.mit-license.org
 eslint-plugin-notice, Copyright (c) 2017 Nick Deis
@@ -37,18 +38,16 @@ history, Copyright (c) React Training 2016-2020. Copyright (c) Remix Software 20
 husky, Copyright (c) 2021 typicode
 i18next, Copyright (c) 2022 i18next
 is-ci, Copyright (c) 2016-2021 Thomas Watson Steen
-jest-environment-jsdom, Copyright (c) Meta Platforms, Inc. and affiliates.
-jest-fail-on-console, Copyright (c) 2022 Valentin Hervieu
-jest-styled-components, Copyright (c) 2017 - present Michele Bertoli
-jest, Copyright (c) Meta Platforms, Inc. and affiliates.
+jsdom, Copyright (c) 2010 Elijah Insua
 lodash, Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
 msw, Copyright (c) 2018–present Artem Zakharchenko
 react-dom, Copyright (c) Facebook, Inc. and its affiliates.
 react-i18next, Copyright (c) 2023 i18next
 react-router-dom, Copyright (c) React Training LLC 2015-2019. Copyright (c) Remix Software Inc. 2020-2021. Copyright (c) Shopify Inc. 2022-2023
 react, Copyright (c) Facebook, Inc. and its affiliates.
-styled-components, Copyright (c) 2016-present Glen Maddern and Maximilian Stoiber
 ts-node, Copyright (c) 2014 Blake Embrey (hello@blakeembrey.com)
+vitest-fail-on-console, Copyright (c) 2024 Thomas Brodusch
+vitest, Copyright (c) 2021-Present Vitest Team
 
 MIT License
 
@@ -337,7 +336,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 Apache License 2.0 (Apache-2.0) applies to:
 
-jest-junit, Copyright 2019 Jason Palmer
 typescript, Copyright (c) Microsoft Corporation.
 
 Apache License

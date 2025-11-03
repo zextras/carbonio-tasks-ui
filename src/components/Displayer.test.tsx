@@ -18,6 +18,8 @@ import { mockGetTask, populateTask } from '../mocks/utils';
 import { formatDateFromTimestamp } from '../utils';
 import { setup } from '../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('Displayer', () => {
 	const TASK_FULL_DATA = gql`
 		fragment TaskFullData on Task {
@@ -150,7 +152,7 @@ describe('Displayer', () => {
 		expect(screen.queryByText(/description/i)).not.toBeInTheDocument();
 		// wait for query to run
 		await act(async () => {
-			await jest.advanceTimersToNextTimerAsync();
+			await vi.advanceTimersToNextTimerAsync();
 		});
 		// partial data are still visible
 		expect(screen.getByText(task.title)).toBeVisible();

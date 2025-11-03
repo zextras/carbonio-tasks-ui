@@ -29,6 +29,8 @@ import {
 import { mockCreateTask, populateTaskList } from '../../mocks/utils';
 import { setup } from '../../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('New task board', () => {
 	function prepareCache(tasks: Task[] = []): void {
 		global.apolloClient.writeQuery<FindTasksQuery, FindTasksQueryVariables>({
@@ -90,7 +92,8 @@ describe('New task board', () => {
 			const titleInput = screen.getByRole('textbox', { name: /title/i });
 			const createButton = screen.getByRole('button', { name: /create/i });
 			const maxLengthString = faker.string.alpha({ length: 1024 });
-			await user.type(titleInput, maxLengthString);
+			await user.click(titleInput);
+			await user.paste(maxLengthString);
 			expect(titleInput).toHaveValue(maxLengthString);
 			expect(createButton).toBeEnabled();
 			expect(
@@ -218,7 +221,8 @@ describe('New task board', () => {
 			const maxLengthDescription = faker.string.alpha({ length: 4096 });
 			await user.type(screen.getByRole('textbox', { name: /title/i }), 'something');
 			await waitFor(() => expect(createButton).toBeEnabled());
-			await user.type(descriptionInput, maxLengthDescription);
+			await user.click(descriptionInput);
+			await user.paste(maxLengthDescription);
 			expect(descriptionInput).toHaveValue(maxLengthDescription);
 			expect(createButton).toBeEnabled();
 			expect(

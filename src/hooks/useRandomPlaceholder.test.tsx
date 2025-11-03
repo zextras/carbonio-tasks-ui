@@ -35,7 +35,7 @@ describe('Use random placeholder', () => {
 		expect(screen.getByText(value)).toBeVisible();
 		await user.click(screen.getByRole('button'));
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		expect(screen.getByText(value)).toBeVisible();
 	});
@@ -54,7 +54,7 @@ describe('Use random placeholder', () => {
 		const secondValueRegexp = RegExp(secondUpdateValues.join('|'));
 		await user.click(screen.getByRole('button'));
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		const secondValueElement = await screen.findByText(secondValueRegexp);
 		const secondValue = secondValueElement.textContent as string;
@@ -65,7 +65,7 @@ describe('Use random placeholder', () => {
 		const thirdValueRegexp = RegExp(thirdUpdateValues.join('|'));
 		await user.click(screen.getByRole('button'));
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		const thirdValueElement = await screen.findByText(thirdValueRegexp);
 		const thirdValue = thirdValueElement.textContent as string;
@@ -100,7 +100,7 @@ describe('Use random placeholder', () => {
 		// rerender with a new instance which contains the same data
 		rerender(<TestRandomPlaceholder value={[...values]} />);
 		act(() => {
-			jest.advanceTimersToNextTimer();
+			vi.advanceTimersToNextTimer();
 		});
 		await screen.findByText(oneOfValues);
 		expect(screen.getByText(value)).toBeVisible();
