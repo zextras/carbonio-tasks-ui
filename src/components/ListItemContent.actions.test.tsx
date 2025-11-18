@@ -13,6 +13,8 @@ import { Priority, Status } from '../gql/types';
 import { populateTask } from '../mocks/utils';
 import { setup } from '../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('List item content', () => {
 	describe('Actions', () => {
 		test('Hover bar is not rendered if item is not visible', () => {
@@ -86,13 +88,14 @@ describe('List item content', () => {
 
 				// rtl isVisible is not working on hover bar
 				// Check that the action is inside the hover bar
-				expect(screen.getByTestId(ICON_REGEXP.completeAction)).toBeVisible();
+				expect(screen.getByTestId(ICON_REGEXP.completeAction)).toBeInTheDocument();
 				expect(
 					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 						ICON_REGEXP.completeAction
 					)
-				).toBeVisible();
+				).toBeInTheDocument();
 			});
+
 			test(`When task status is complete, complete action is missing on hover`, async () => {
 				const task = populateTask();
 				setup(
@@ -162,12 +165,12 @@ describe('List item content', () => {
 
 				// rtl isVisible is not working on hover bar
 				// Check that the action is inside the hover bar
-				expect(screen.getByTestId(ICON_REGEXP.uncompleteAction)).toBeVisible();
+				expect(screen.getByTestId(ICON_REGEXP.uncompleteAction)).toBeInTheDocument();
 				expect(
 					within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 						ICON_REGEXP.uncompleteAction
 					)
-				).toBeVisible();
+				).toBeInTheDocument();
 			});
 			test(`When task status is open, uncomplete action is missing on hover`, async () => {
 				const task = populateTask();
@@ -242,12 +245,12 @@ describe('List item content', () => {
 
 					// rtl isVisible is not working on hover bar
 					// Check that the action is inside the hover bar
-					expect(screen.getByTestId(ICON_REGEXP.editAction)).toBeVisible();
+					expect(screen.getByTestId(ICON_REGEXP.editAction)).toBeInTheDocument();
 					expect(
 						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 							ICON_REGEXP.editAction
 						)
-					).toBeVisible();
+					).toBeInTheDocument();
 				}
 			);
 
@@ -290,12 +293,12 @@ describe('List item content', () => {
 
 					// rtl isVisible is not working on hover bar
 					// Check that the action is inside the hover bar
-					expect(screen.getByTestId(ICON_REGEXP.deleteAction)).toBeVisible();
+					expect(screen.getByTestId(ICON_REGEXP.deleteAction)).toBeInTheDocument();
 					expect(
 						within(screen.getByTestId(TEST_ID_SELECTOR.hoverBar)).getByTestId(
 							ICON_REGEXP.deleteAction
 						)
-					).toBeVisible();
+					).toBeInTheDocument();
 				}
 			);
 

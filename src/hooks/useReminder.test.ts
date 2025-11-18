@@ -9,14 +9,14 @@ import { getAppI18n, setupHook } from '../utils/testUtils';
 
 describe('useReminder', () => {
 	it('should return isExpired true if reminderAt is before now in the same day and it is not allDay', () => {
-		jest.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
+		vi.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
 		const reminderAt = new Date(2024, 5, 4, 17, 30, 0, 0);
 		const { result } = setupHook(() => useReminder(reminderAt.getTime(), false));
 		expect(result.current.isExpired).toBe(true);
 	});
 
 	it('should return isExpired false if reminderAt is after now in the same day and it is not allDay', () => {
-		jest.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
+		vi.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
 		const reminderAt = new Date(2024, 5, 4, 17, 32, 0, 0);
 		const { result } = setupHook(() => useReminder(reminderAt.getTime(), false));
 		expect(result.current.isExpired).toBe(false);
@@ -26,7 +26,7 @@ describe('useReminder', () => {
 		'should return isExpired false if reminderAt is equal to now and allDay is %s',
 		(allDay) => {
 			const now = new Date(2024, 5, 4, 17, 31, 15, 0);
-			jest.setSystemTime(now);
+			vi.setSystemTime(now);
 			const reminderAt = now;
 			const { result } = setupHook(() => useReminder(reminderAt.getTime(), allDay));
 			expect(result.current.isExpired).toBe(false);
@@ -34,21 +34,21 @@ describe('useReminder', () => {
 	);
 
 	it('should return isExpired false if reminderAt is before now in the same day and it is allDay', () => {
-		jest.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
+		vi.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
 		const reminderAt = new Date(2024, 5, 4, 17, 30, 0, 0);
 		const { result } = setupHook(() => useReminder(reminderAt.getTime(), true));
 		expect(result.current.isExpired).toBe(false);
 	});
 
 	it('should return isExpired false if reminderAt is after now in the same day and it is allDay', () => {
-		jest.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
+		vi.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
 		const reminderAt = new Date(2024, 5, 4, 17, 32, 0, 0);
 		const { result } = setupHook(() => useReminder(reminderAt.getTime(), true));
 		expect(result.current.isExpired).toBe(false);
 	});
 
 	it('should return isExpired true if reminderAt is before now not in the same day and it is allDay', () => {
-		jest.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
+		vi.setSystemTime(new Date(2024, 5, 4, 17, 31, 15, 0));
 		const reminderAt = new Date(2024, 5, 3, 17, 30, 0, 0);
 		const { result } = setupHook(() => useReminder(reminderAt.getTime(), true));
 		expect(result.current.isExpired).toBe(true);

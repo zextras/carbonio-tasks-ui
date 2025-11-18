@@ -15,6 +15,8 @@ import { Priority, Status } from '../gql/types';
 import { populateTask } from '../mocks/utils';
 import { setup } from '../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('List item content', () => {
 	describe('Title', () => {
 		test('The title is always shown', () => {
@@ -275,7 +277,7 @@ describe('List item content', () => {
 
 	test('Click on item calls callback', async () => {
 		const task = populateTask();
-		const clickFn = jest.fn();
+		const clickFn = vi.fn();
 		const { user } = setup(
 			<ListItemContent
 				id={task.id}

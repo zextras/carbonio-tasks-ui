@@ -32,10 +32,12 @@ import { setup } from '../../utils/testUtils';
 type GetTaskHandler = GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>;
 type UpdateTaskHandler = GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVariables>;
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('Edit task board', () => {
 	const checkboxLabelText = /Remind me at every login throughout the day/i;
 	function spyUseBoard(taskId: string): void {
-		jest.spyOn(shell, 'useBoard').mockReturnValue({
+		vi.spyOn(shell, 'useBoard').mockReturnValue({
 			context: { taskId },
 			id: '',
 			boardViewId: '',
@@ -312,17 +314,14 @@ describe('Edit task board', () => {
 					reminderAt: new Date().getTime(),
 					reminderAllDay: true
 				});
-				const getTaskHandler = jest.fn<ReturnType<GetTaskHandler>, Parameters<GetTaskHandler>>(() =>
+				const getTaskHandler = vi.fn<GetTaskHandler>(() =>
 					HttpResponse.json({
 						data: {
 							getTask: task
 						}
 					})
 				);
-				const updateTaskHandler = jest.fn<
-					ReturnType<UpdateTaskHandler>,
-					Parameters<UpdateTaskHandler>
-				>(({ variables }) => {
+				const updateTaskHandler = vi.fn<UpdateTaskHandler>(({ variables }) => {
 					const { updateTask } = variables;
 					return HttpResponse.json({
 						data: {
@@ -349,7 +348,7 @@ describe('Edit task board', () => {
 				const { user } = setup(<EditTaskBoard />);
 
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
@@ -360,7 +359,7 @@ describe('Edit task board', () => {
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				const expected: Partial<Task> = { id: task.id, reminderAt: 0, reminderAllDay: false };
 				expect(updateTaskHandler).toHaveBeenCalledWith(
@@ -383,17 +382,14 @@ describe('Edit task board', () => {
 					reminderAt: new Date().getTime(),
 					reminderAllDay: previousReminderAllDayValue
 				});
-				const getTaskHandler = jest.fn<ReturnType<GetTaskHandler>, Parameters<GetTaskHandler>>(() =>
+				const getTaskHandler = vi.fn<GetTaskHandler>(() =>
 					HttpResponse.json({
 						data: {
 							getTask: task
 						}
 					})
 				);
-				const updateTaskHandler = jest.fn<
-					ReturnType<UpdateTaskHandler>,
-					Parameters<UpdateTaskHandler>
-				>(({ variables }) => {
+				const updateTaskHandler = vi.fn<UpdateTaskHandler>(({ variables }) => {
 					const { updateTask } = variables;
 					return HttpResponse.json({
 						data: {
@@ -420,7 +416,7 @@ describe('Edit task board', () => {
 				const { user } = setup(<EditTaskBoard />);
 
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
@@ -433,7 +429,7 @@ describe('Edit task board', () => {
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				const expected: Partial<Task> = {
 					id: task.id,
@@ -455,17 +451,14 @@ describe('Edit task board', () => {
 					reminderAt: previousReminderAtValue.getTime(),
 					reminderAllDay: false
 				});
-				const getTaskHandler = jest.fn<ReturnType<GetTaskHandler>, Parameters<GetTaskHandler>>(() =>
+				const getTaskHandler = vi.fn<GetTaskHandler>(() =>
 					HttpResponse.json({
 						data: {
 							getTask: task
 						}
 					})
 				);
-				const updateTaskHandler = jest.fn<
-					ReturnType<UpdateTaskHandler>,
-					Parameters<UpdateTaskHandler>
-				>(({ variables }) => {
+				const updateTaskHandler = vi.fn<UpdateTaskHandler>(({ variables }) => {
 					const { updateTask } = variables;
 					return HttpResponse.json({
 						data: {
@@ -492,7 +485,7 @@ describe('Edit task board', () => {
 				const { user } = setup(<EditTaskBoard />);
 
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				await waitFor(() => expect(getTaskHandler).toHaveBeenCalled());
 				await awaitEditBoardRender();
@@ -503,7 +496,7 @@ describe('Edit task board', () => {
 				const editButton = screen.getByRole('button', { name: /edit/i });
 				await user.click(editButton);
 				await act(async () => {
-					await jest.advanceTimersToNextTimerAsync();
+					await vi.advanceTimersToNextTimerAsync();
 				});
 				const expected: Partial<Task> = {
 					id: task.id,

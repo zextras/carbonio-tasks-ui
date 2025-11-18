@@ -5,8 +5,8 @@
  */
 import React from 'react';
 
+import styled from '@emotion/styled';
 import { type TextProps, Text } from '@zextras/carbonio-design-system';
-import styled from 'styled-components';
 
 import type { Task } from '../gql/types';
 import { useReminder } from '../hooks/useReminder';

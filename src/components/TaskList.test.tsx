@@ -12,6 +12,8 @@ import { EMPTY_LIST_HINT } from '../constants/tests';
 import { populateTaskList } from '../mocks/utils';
 import { makeListItemsVisible, setup } from '../utils/testUtils';
 
+vi.mock('@zextras/carbonio-shell-ui');
+
 describe('Task list', () => {
 	test('Show a placeholder when the list is empty', async () => {
 		setup(<TaskList tasks={[]} />);
