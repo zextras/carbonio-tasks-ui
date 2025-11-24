@@ -30,7 +30,7 @@
 		"@commitlint/cli": "^20.1.0",
 		"@commitlint/config-conventional": "^20.0.0",
 		"@emotion/babel-plugin": "^11.13.5",
-		"@faker-js/faker": "^10.0.0",
+		"@faker-js/faker": "^10.1.0",
 		"@graphql-codegen/add": "^6.0.0",
 		"@graphql-codegen/cli": "^6.0.0",
 		"@graphql-codegen/fragment-matcher": "^6.0.0",
