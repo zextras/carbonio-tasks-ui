@@ -6,13 +6,11 @@
 
 import React, { useMemo } from 'react';
 
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import {
 	Text,
 	Container,
 	Divider,
-	getColor,
 	ListItem,
 	type ListItemProps,
 	List,
@@ -24,7 +22,6 @@ import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
 
 import { ListItemContent } from './ListItemContent';
-import { HoverBarContainer } from './StyledComponents';
 import { LIST_WIDTH } from '../constants';
 import type { FindTasksQuery } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
@@ -41,37 +38,6 @@ const StyledListItem = styled(ListItem)<{
 	${({ $backgroundColor, theme }): undefined | ReturnType<typeof pseudoClasses> | string =>
 		$backgroundColor && pseudoClasses(theme, $backgroundColor, 'color')}
 	transition: none;
-
-	${({ $backgroundColor, theme }): undefined | string | ReturnType<typeof css> =>
-		$backgroundColor &&
-		css`
-			${HoverBarContainer} {
-				background: linear-gradient(to right, transparent, ${getColor($backgroundColor, theme)});
-			}
-			&:focus ${HoverBarContainer} {
-				background: linear-gradient(
-					to right,
-					transparent,
-					${getColor(`${$backgroundColor}.focus`, theme)}
-				);
-			}
-
-			&:hover ${HoverBarContainer} {
-				background: linear-gradient(
-					to right,
-					transparent,
-					${getColor(`${$backgroundColor}.hover`, theme)}
-				);
-			}
-
-			&:active ${HoverBarContainer} {
-				background: linear-gradient(
-					to right,
-					transparent,
-					${getColor(`${$backgroundColor}.active`, theme)}
-				);
-			}
-		`}
 `;
 
 const CustomListItem = React.forwardRef<HTMLDivElement, ListItemProps>(
