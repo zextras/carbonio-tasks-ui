@@ -9,12 +9,11 @@ import { Container, Row } from '@zextras/carbonio-design-system';
 
 export const HoverContainer = styled(Row)``;
 
-export const HoverBarContainer = styled(Row)`
+export const HoverBarContainer = styled(Container)`
 	display: none;
 	position: absolute;
-	top: 0;
 	right: 0;
-	background: linear-gradient(to right, transparent, currentColor);
+	background: linear-gradient(to right, transparent, currentColor 50%, currentColor 100%);
 `;
 
 export const ListItemContainer = styled(Container)`
