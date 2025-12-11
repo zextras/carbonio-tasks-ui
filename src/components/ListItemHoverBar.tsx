@@ -36,11 +36,10 @@ export const ListItemHoverBar = ({
 		<HoverBarContainer
 			wrap="nowrap"
 			data-testid="hover-bar"
-			width={'100%'}
-			padding={{ right: '0.5rem' }}
+			padding={{ top: '0.5rem', right: '0.5rem', left: '2rem' }}
 			{...rest}
 		>
-			<CollapsingActions actions={actionsMapped} size={'large'} color={'text'} gap={'0.25rem'} />
+			<CollapsingActions actions={actionsMapped} size={'medium'} color={'text'} gap={'0.25rem'} />
 		</HoverBarContainer>
 	);
 };
