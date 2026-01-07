@@ -52,7 +52,7 @@ const StyledListItem = styled(ListItem)<{
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${$backgroundColor}.focus`, theme)} 50%,
+					${getColor(`${$backgroundColor}.focus`, theme)} 1rem,
 					${getColor(`${$backgroundColor}.focus`, theme)} 100%
 				);
 			}
@@ -61,7 +61,7 @@ const StyledListItem = styled(ListItem)<{
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${$backgroundColor}.hover`, theme)} 50%,
+					${getColor(`${$backgroundColor}.hover`, theme)} 1rem,
 					${getColor(`${$backgroundColor}.hover`, theme)} 100%
 				);
 			}
@@ -70,7 +70,7 @@ const StyledListItem = styled(ListItem)<{
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${$backgroundColor}.active`, theme)} 50%,
+					${getColor(`${$backgroundColor}.active`, theme)} 1rem,
 					${getColor(`${$backgroundColor}.active`, theme)} 100%
 				);
 			}
