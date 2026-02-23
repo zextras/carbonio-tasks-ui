@@ -12,13 +12,13 @@ import {
 	Text,
 	Container,
 	Divider,
-	getColor,
 	ListItem,
 	type ListItemProps,
 	List,
 	pseudoClasses,
 	Row,
-	type AnyColor
+	type AnyColor,
+	getColor
 } from '@zextras/carbonio-design-system';
 import { isEmpty, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -52,7 +52,8 @@ const StyledListItem = styled(ListItem)<{
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${$backgroundColor}.focus`, theme)}
+					${getColor(`${$backgroundColor}.focus`, theme)} 1rem,
+					${getColor(`${$backgroundColor}.focus`, theme)} 100%
 				);
 			}
 
@@ -60,7 +61,8 @@ const StyledListItem = styled(ListItem)<{
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${$backgroundColor}.hover`, theme)}
+					${getColor(`${$backgroundColor}.hover`, theme)} 1rem,
+					${getColor(`${$backgroundColor}.hover`, theme)} 100%
 				);
 			}
 
@@ -68,7 +70,8 @@ const StyledListItem = styled(ListItem)<{
 				background: linear-gradient(
 					to right,
 					transparent,
-					${getColor(`${$backgroundColor}.active`, theme)}
+					${getColor(`${$backgroundColor}.active`, theme)} 1rem,
+					${getColor(`${$backgroundColor}.active`, theme)} 100%
 				);
 			}
 		`}
