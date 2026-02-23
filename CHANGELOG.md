@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.19](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.18...v0.0.19) (2026-02-23)
+
+
+### Features
+
+* improve hover action button size and blur effect ([5e08dfd](https://github.com/zextras/carbonio-tasks-ui/commit/5e08dfd7044e6f133a35c7e371a444a62aa80389)), closes [#303](https://github.com/zextras/carbonio-tasks-ui/issues/303)
+* improve hovering of the lists ([d8fdcfc](https://github.com/zextras/carbonio-tasks-ui/commit/d8fdcfcd30190d05b151d6cb0a1ba0bddec274cf)), closes [#295](https://github.com/zextras/carbonio-tasks-ui/issues/295)
+
+
+### Bug Fixes
+
+* add sonarqube-scanner dependency to resolve CI permission issue ([bbb671b](https://github.com/zextras/carbonio-tasks-ui/commit/bbb671bd592f0f7d7cd3c318001ed39a2b815d70)), closes [#307](https://github.com/zextras/carbonio-tasks-ui/issues/307)
+* **deps:** upgrade node to v22 ([#304](https://github.com/zextras/carbonio-tasks-ui/issues/304)) ([f598579](https://github.com/zextras/carbonio-tasks-ui/commit/f59857936c8fefdf7e5637f0527ee74deb5fddc7))
+
 ### [0.0.18](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.17...v0.0.18) (2025-11-18)
 
 ### 0.0.17 (2025-05-30)
