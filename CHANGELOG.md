@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.20](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.19...v0.0.20) (2026-02-27)
+
+
+### Bug Fixes
+
+* update jenkins-lib-ui to v1.0.8 ([7737d47](https://github.com/zextras/carbonio-tasks-ui/commit/7737d470128608d17f24e60fc41249adcb03d778))
+
 ### [0.0.19](https://github.com/zextras/carbonio-tasks-ui/compare/v0.0.18...v0.0.19) (2026-02-23)
 
 
