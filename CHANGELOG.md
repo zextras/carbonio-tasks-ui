@@ -1,3 +1,22 @@
+## <small>0.0.22 (2026-04-27)</small>
+
+* build(release): migrate to semantic-release (#331) ([b26d83e](https://github.com/zextras/carbonio-tasks-ui/commit/b26d83e)), closes [#331](https://github.com/zextras/carbonio-tasks-ui/issues/331)
+* chore(deps): lock file maintenance (#328) ([db4c244](https://github.com/zextras/carbonio-tasks-ui/commit/db4c244)), closes [#328](https://github.com/zextras/carbonio-tasks-ui/issues/328)
+* chore(deps): update babel (#299) ([dd6f625](https://github.com/zextras/carbonio-tasks-ui/commit/dd6f625)), closes [#299](https://github.com/zextras/carbonio-tasks-ui/issues/299)
+* chore(deps): update carbonio-ui-sdk to 2.2.2 (#327) ([441f63d](https://github.com/zextras/carbonio-tasks-ui/commit/441f63d)), closes [#327](https://github.com/zextras/carbonio-tasks-ui/issues/327)
+* chore(deps): update dependency @babel/preset-env to ^7.29.2 (#322) ([abfdb43](https://github.com/zextras/carbonio-tasks-ui/commit/abfdb43)), closes [#322](https://github.com/zextras/carbonio-tasks-ui/issues/322)
+* chore(deps): update dependency @types/lodash to ^4.17.24 (#300) ([dc4bde5](https://github.com/zextras/carbonio-tasks-ui/commit/dc4bde5)), closes [#300](https://github.com/zextras/carbonio-tasks-ui/issues/300)
+* chore(deps): update dependency sonarqube-scanner to ^4.3.4 ([e86ab81](https://github.com/zextras/carbonio-tasks-ui/commit/e86ab81)), closes [#309](https://github.com/zextras/carbonio-tasks-ui/issues/309)
+* chore(deps): update dependency sonarqube-scanner to ^4.3.5 (#319) ([9c1235d](https://github.com/zextras/carbonio-tasks-ui/commit/9c1235d)), closes [#319](https://github.com/zextras/carbonio-tasks-ui/issues/319)
+* chore(deps): update dependency zextras/jenkins-lib-ui to v1.0.10 (#320) ([ddd8064](https://github.com/zextras/carbonio-tasks-ui/commit/ddd8064)), closes [#320](https://github.com/zextras/carbonio-tasks-ui/issues/320)
+* chore(deps): update react (#323) ([595ec01](https://github.com/zextras/carbonio-tasks-ui/commit/595ec01)), closes [#323](https://github.com/zextras/carbonio-tasks-ui/issues/323)
+* refactor: migrate from npm to pnpm (#330) ([bbc1cb4](https://github.com/zextras/carbonio-tasks-ui/commit/bbc1cb4)), closes [#330](https://github.com/zextras/carbonio-tasks-ui/issues/330)
+* fix(deps): update dependency @zextras/carbonio-shell-ui to ^14.0.1 (#324) ([7a1478f](https://github.com/zextras/carbonio-tasks-ui/commit/7a1478f)), closes [#324](https://github.com/zextras/carbonio-tasks-ui/issues/324) [#8203](https://github.com/zextras/carbonio-tasks-ui/issues/8203)
+* fix(deps): update dependency lodash to ^4.17.23 (#316) ([eb5d104](https://github.com/zextras/carbonio-tasks-ui/commit/eb5d104)), closes [#316](https://github.com/zextras/carbonio-tasks-ui/issues/316)
+* fix(deps): update dependency react-router-dom to ^6.30.3 (#325) ([60c1a2c](https://github.com/zextras/carbonio-tasks-ui/commit/60c1a2c)), closes [#325](https://github.com/zextras/carbonio-tasks-ui/issues/325)
+* Merge pull request #313 from zextras/version-bumper/v0.0.19-1 ([f348d84](https://github.com/zextras/carbonio-tasks-ui/commit/f348d84)), closes [#313](https://github.com/zextras/carbonio-tasks-ui/issues/313)
+* Merge pull request #318 from zextras/version-bumper/v0.0.21-1 ([722f5c9](https://github.com/zextras/carbonio-tasks-ui/commit/722f5c9)), closes [#318](https://github.com/zextras/carbonio-tasks-ui/issues/318)
+
 # Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
