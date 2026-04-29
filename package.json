@@ -59,7 +59,7 @@
 		"@zextras/carbonio-ui-configs": "2.1.0",
 		"@zextras/carbonio-ui-sdk": "2.2.2",
 		"dotenv": "16.5.0",
-		"eslint": "8.57.0",
+		"eslint": "8.57.1",
 		"eslint-plugin-notice": "1.0.0",
 		"graphql-tag": "2.12.6",
 		"history": "5.3.0",
