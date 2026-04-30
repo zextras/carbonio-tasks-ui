@@ -1,3 +1,9 @@
+## <small>0.0.23 (2026-04-30)</small>
+
+* fix(deps): update dependency lodash to v4.18.1 [security] (#329) ([591f154](https://github.com/zextras/carbonio-tasks-ui/commit/591f154)), closes [#329](https://github.com/zextras/carbonio-tasks-ui/issues/329)
+* chore(deps): update dependency @zextras/carbonio-ui-sdk to v2.2.6 (#332) ([a45e9cb](https://github.com/zextras/carbonio-tasks-ui/commit/a45e9cb)), closes [#332](https://github.com/zextras/carbonio-tasks-ui/issues/332)
+* chore(deps): update dependency eslint to v8.57.1 (#333) ([3c75bbc](https://github.com/zextras/carbonio-tasks-ui/commit/3c75bbc)), closes [#333](https://github.com/zextras/carbonio-tasks-ui/issues/333)
+
 ## <small>0.0.22 (2026-04-27)</small>
 
 * build(release): migrate to semantic-release (#331) ([b26d83e](https://github.com/zextras/carbonio-tasks-ui/commit/b26d83e)), closes [#331](https://github.com/zextras/carbonio-tasks-ui/issues/331)
