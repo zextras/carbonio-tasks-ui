@@ -1,3 +1,10 @@
+## <small>0.0.24 (2026-05-12)</small>
+
+* Merge pull request #340 from zextras/IN-1095-jfrog-cost-optimization-usage-analysis-and-mitigation-s ([b61995c](https://github.com/zextras/carbonio-tasks-ui/commit/b61995c)), closes [#340](https://github.com/zextras/carbonio-tasks-ui/issues/340)
+* build(release): update jenkins-lib-ui to 1.0.13 ([8749b7c](https://github.com/zextras/carbonio-tasks-ui/commit/8749b7c))
+* chore(deps): update dependency @babel/preset-env to v7.29.5 (#335) ([af08f87](https://github.com/zextras/carbonio-tasks-ui/commit/af08f87)), closes [#335](https://github.com/zextras/carbonio-tasks-ui/issues/335)
+* chore(deps): update graphqlcodegenerator monorepo (#337) ([76e3459](https://github.com/zextras/carbonio-tasks-ui/commit/76e3459)), closes [#337](https://github.com/zextras/carbonio-tasks-ui/issues/337)
+
 ## <small>0.0.23 (2026-04-30)</small>
 
 * fix(deps): update dependency lodash to v4.18.1 [security] (#329) ([591f154](https://github.com/zextras/carbonio-tasks-ui/commit/591f154)), closes [#329](https://github.com/zextras/carbonio-tasks-ui/issues/329)
