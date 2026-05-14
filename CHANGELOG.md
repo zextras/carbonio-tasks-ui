@@ -1,3 +1,8 @@
+## <small>0.0.25 (2026-05-14)</small>
+
+* fix(ci): migrate Jenkinsfile to jenkins-lib-common (#341) ([6b57660](https://github.com/zextras/carbonio-tasks-ui/commit/6b57660)), closes [#341](https://github.com/zextras/carbonio-tasks-ui/issues/341)
+* chore(deps): update dependency sonarqube-scanner to v4.3.6 (#336) ([1a3c6d2](https://github.com/zextras/carbonio-tasks-ui/commit/1a3c6d2)), closes [#336](https://github.com/zextras/carbonio-tasks-ui/issues/336)
+
 ## <small>0.0.24 (2026-05-12)</small>
 
 * Merge pull request #340 from zextras/IN-1095-jfrog-cost-optimization-usage-analysis-and-mitigation-s ([b61995c](https://github.com/zextras/carbonio-tasks-ui/commit/b61995c)), closes [#340](https://github.com/zextras/carbonio-tasks-ui/issues/340)
