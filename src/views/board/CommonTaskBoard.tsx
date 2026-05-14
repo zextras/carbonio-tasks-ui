@@ -295,6 +295,8 @@ export const CommonTaskBoard = ({
 					crossAlignment={'flex-start'}
 				>
 					<Input
+						// eslint-disable-next-line jsx-a11y/no-autofocus
+						autoFocus
 						label={t('board.input.title.label', 'Title*')}
 						backgroundColor={'gray5'}
 						borderColor={'gray3'}
