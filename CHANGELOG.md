@@ -1,3 +1,7 @@
+## 0.1.0 (2026-05-14)
+
+* feat: add autofocus to task title input ([7b32bac](https://github.com/zextras/carbonio-tasks-ui/commit/7b32bac)), closes [#339](https://github.com/zextras/carbonio-tasks-ui/issues/339)
+
 ## <small>0.0.25 (2026-05-14)</small>
 
 * fix(ci): migrate Jenkinsfile to jenkins-lib-common (#341) ([6b57660](https://github.com/zextras/carbonio-tasks-ui/commit/6b57660)), closes [#341](https://github.com/zextras/carbonio-tasks-ui/issues/341)
