@@ -12,3 +12,4 @@
 .env
 .graphqlconfig
 zextras-carbonio-*.tgz
+/.worktrees/
