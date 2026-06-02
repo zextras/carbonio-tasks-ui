@@ -1,3 +1,12 @@
+## <small>0.1.1 (2026-06-02)</small>
+
+* build: migrate to buildah (FQDN images + jenkins-lib-common@2.10.0) (#346) ([36a1b6d](https://github.com/zextras/carbonio-tasks-ui/commit/36a1b6d)), closes [#346](https://github.com/zextras/carbonio-tasks-ui/issues/346)
+* chore(deps): lock file maintenance (#334) ([db157d2](https://github.com/zextras/carbonio-tasks-ui/commit/db157d2)), closes [#334](https://github.com/zextras/carbonio-tasks-ui/issues/334)
+* chore(deps): lock file maintenance (#343) ([88e7035](https://github.com/zextras/carbonio-tasks-ui/commit/88e7035)), closes [#343](https://github.com/zextras/carbonio-tasks-ui/issues/343)
+* chore(deps): update dependency zextras/jenkins-lib-common to v2.7.0 (#342) ([06f795b](https://github.com/zextras/carbonio-tasks-ui/commit/06f795b)), closes [#342](https://github.com/zextras/carbonio-tasks-ui/issues/342)
+* chore(deps): update dependency zextras/jenkins-lib-common to v2.9.2 (#344) ([6d7b798](https://github.com/zextras/carbonio-tasks-ui/commit/6d7b798)), closes [#344](https://github.com/zextras/carbonio-tasks-ui/issues/344)
+* chore(deps): update semantic-release monorepo (#338) ([12c799b](https://github.com/zextras/carbonio-tasks-ui/commit/12c799b)), closes [#338](https://github.com/zextras/carbonio-tasks-ui/issues/338)
+
 ## 0.1.0 (2026-05-14)
 
 * feat: add autofocus to task title input ([7b32bac](https://github.com/zextras/carbonio-tasks-ui/commit/7b32bac)), closes [#339](https://github.com/zextras/carbonio-tasks-ui/issues/339)
