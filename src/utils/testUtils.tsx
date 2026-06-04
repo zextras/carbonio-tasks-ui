@@ -7,7 +7,7 @@
 import React, { type ReactElement, useMemo } from 'react';
 
 import { ApolloProvider } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
 	act,
 	type ByRoleMatcher,
@@ -30,7 +30,6 @@ import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter } from 'react-router-dom';
 import { type Mock as ViMock } from 'vitest';
 
-import { type Mock } from '../mocks/utils';
 import { StyledWrapper } from '../providers/StyledWrapper';
 
 export type UserEvent = ReturnType<(typeof userEvent)['setup']> & {
@@ -105,7 +104,7 @@ export const getAppI18n = (): i18n => {
 interface WrapperProps {
 	children?: React.ReactNode | undefined;
 	initialRouterEntries?: string[];
-	mocks?: Mock[];
+	mocks?: MockedResponse[];
 }
 
 const ApolloProviderWrapper = ({
@@ -113,7 +112,7 @@ const ApolloProviderWrapper = ({
 	mocks
 }: {
 	children: React.ReactNode;
-	mocks: Mock[] | undefined;
+	mocks: MockedResponse[] | undefined;
 }): React.JSX.Element =>
 	mocks ? (
 		<MockedProvider mocks={mocks} cache={global.apolloClient.cache}>
