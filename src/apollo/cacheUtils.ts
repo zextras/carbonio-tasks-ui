@@ -12,7 +12,7 @@ import { type Task } from '../gql/types';
 
 export const removeTaskFromList: (
 	...tasks: Pick<Task, '__typename' | 'id'>[]
-) => Modifier<readonly Reference[] | Reference> =
+) => Modifier<readonly Reference[]> =
 	(...tasks) =>
 	(existing, { toReference }) => {
 		if (existing && Array.isArray(existing)) {
@@ -24,7 +24,7 @@ export const removeTaskFromList: (
 
 export const addTaskToList: (
 	task: Pick<Task, '__typename' | 'id'>
-) => Modifier<readonly Reference[] | Reference> =
+) => Modifier<readonly Reference[]> =
 	(task) =>
 	(existing, { toReference, readField }) => {
 		const newTaskRef = toReference(task);

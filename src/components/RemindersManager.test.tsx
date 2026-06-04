@@ -6,6 +6,7 @@
 
 import React from 'react';
 
+import { type Reference } from '@apollo/client';
 import { faker } from '@faker-js/faker';
 import { act, screen, waitFor } from '@testing-library/react';
 import * as carbonioShellUi from '@zextras/carbonio-shell-ui';
@@ -61,7 +62,7 @@ describe('Reminders manager', () => {
 			data: updateTask
 		});
 		if (updateTask.status === Status.Complete) {
-			global.apolloClient.cache.modify({
+			global.apolloClient.cache.modify<{ findTasks: Reference[] }>({
 				fields: {
 					findTasks: removeTaskFromList(updateTask)
 				}

@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { type Reference, useMutation, useQuery } from '@apollo/client';
 import { Banner, useSnackbar } from '@zextras/carbonio-design-system';
 import { t, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { filter, trim } from 'lodash';
@@ -68,7 +68,7 @@ const NewTaskBoard = (): React.JSX.Element => {
 					},
 					update(cache, { data }) {
 						if (data?.createTask) {
-							cache.modify({
+							cache.modify<{ findTasks: Reference[] }>({
 								fields: {
 									findTasks: addTaskToList(data.createTask)
 								}

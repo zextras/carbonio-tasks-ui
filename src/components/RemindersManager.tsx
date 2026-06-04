@@ -129,9 +129,7 @@ export const RemindersManager = (): React.JSX.Element => {
 		errorPolicy: 'all'
 	});
 	// lazy query used to load data at first load
-	const [findRemindersLazyQuery] = useLazyQuery(FindTasksDocument, {
-		variables: { status: Status.Open }
-	});
+	const [findRemindersLazyQuery] = useLazyQuery(FindTasksDocument);
 	const [updateTaskStatus] = useMutation(UpdateTaskStatusDocument);
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 	// Array of group of reminders.
@@ -394,7 +392,7 @@ export const RemindersManager = (): React.JSX.Element => {
 	useEffect(() => {
 		// init reminders manager by requesting all tasks with the lazy query
 		remindersByDateRef.current = {};
-		findRemindersLazyQuery()
+		findRemindersLazyQuery({ variables: { status: Status.Open } })
 			.then((result) => {
 				if (result?.data?.findTasks) {
 					registerRemindersFromTasks(result.data.findTasks);

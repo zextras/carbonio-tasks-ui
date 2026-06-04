@@ -6,7 +6,7 @@
 
 import { useCallback } from 'react';
 
-import { type FetchResult, useMutation } from '@apollo/client';
+import { type FetchResult, type Reference, useMutation } from '@apollo/client';
 
 import { useActiveItem } from './useActiveItem';
 import { removeTaskFromList } from '../apollo/cacheUtils';
@@ -27,7 +27,7 @@ export const useTrashAction = (taskId: string): TrashActionFn => {
 			trashTask({
 				update: (cache, { data }) => {
 					if (data?.trashTask) {
-						cache.modify({
+						cache.modify<{ findTasks: Reference[] }>({
 							fields: {
 								findTasks: removeTaskFromList({ id: data.trashTask, __typename: 'Task' })
 							}
