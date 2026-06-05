@@ -7,7 +7,7 @@ import react from '@vitejs/plugin-react';
 import dotenv from 'dotenv';
 import { defineConfig } from 'vitest/config';
 
-dotenv.config({ path: '.env' });
+dotenv.config({ path: '.env', quiet: true });
 
 const retry = process.env.TEST_RETRY_TIMES ? parseInt(process.env.TEST_RETRY_TIMES, 10) : 2;
 const isCI = process.env.CI === 'true';
