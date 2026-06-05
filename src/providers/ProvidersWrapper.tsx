@@ -6,7 +6,7 @@
 
 import React, { useMemo } from 'react';
 
-import { ApolloProvider } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { ModalManager } from '@zextras/carbonio-design-system';
 
 import { StyledWrapper } from './StyledWrapper';

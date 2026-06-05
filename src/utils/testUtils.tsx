@@ -6,8 +6,9 @@
 
 import React, { type ReactElement, useMemo } from 'react';
 
-import { ApolloProvider } from '@apollo/client';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { ApolloProvider } from '@apollo/client/react';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
 	act,
 	type ByRoleMatcher,
@@ -104,7 +105,7 @@ export const getAppI18n = (): i18n => {
 interface WrapperProps {
 	children?: React.ReactNode | undefined;
 	initialRouterEntries?: string[];
-	mocks?: MockedResponse[];
+	mocks?: MockLink.MockedResponse[];
 }
 
 const ApolloProviderWrapper = ({
@@ -112,7 +113,7 @@ const ApolloProviderWrapper = ({
 	mocks
 }: {
 	children: React.ReactNode;
-	mocks: MockedResponse[] | undefined;
+	mocks: MockLink.MockedResponse[] | undefined;
 }): React.JSX.Element =>
 	mocks ? (
 		<MockedProvider mocks={mocks} cache={global.apolloClient.cache}>

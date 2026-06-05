@@ -4,8 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import type { FetchResult } from '@apollo/client';
-import type { MockedResponse } from '@apollo/client/testing';
+import type { ApolloLink } from '@apollo/client';
+import type { MockLink } from '@apollo/client/testing';
 import { faker } from '@faker-js/faker';
 import type { DocumentNode } from 'graphql';
 
@@ -38,7 +38,7 @@ import {
 export interface Mock<
 	TData extends Record<string, unknown> = Record<string, unknown>,
 	V extends Record<string, unknown> = Record<string, unknown>
-> extends MockedResponse<TData> {
+> extends MockLink.MockedResponse<TData> {
 	request: {
 		query: DocumentNode;
 		variables: V;
@@ -84,7 +84,7 @@ export function mockGetTask(
 			variables
 		},
 		result: vi.fn(
-			(): FetchResult<GetTaskQuery> => ({
+			(): ApolloLink.Result<GetTaskQuery> => ({
 				data: {
 					getTask: task
 				}
@@ -105,7 +105,7 @@ export function mockFindTasks(
 			variables
 		},
 		result: vi.fn(
-			(): FetchResult<FindTasksQuery> => ({
+			(): ApolloLink.Result<FindTasksQuery> => ({
 				data: {
 					findTasks: tasks
 				}
@@ -125,7 +125,7 @@ export function mockUpdateTaskStatus(
 			variables
 		},
 		result: vi.fn(
-			(): FetchResult<UpdateTaskStatusMutation> => ({
+			(): ApolloLink.Result<UpdateTaskStatusMutation> => ({
 				data: {
 					updateTask
 				}
@@ -144,7 +144,7 @@ export function mockTrashTask(
 			variables
 		},
 		result: vi.fn(
-			(): FetchResult<TrashTaskMutation> => ({
+			(): ApolloLink.Result<TrashTaskMutation> => ({
 				data: {
 					trashTask
 				}
@@ -172,7 +172,7 @@ export function mockCreateTask(
 			}
 		},
 		result: vi.fn(
-			(): FetchResult<CreateTaskMutation> => ({
+			(): ApolloLink.Result<CreateTaskMutation> => ({
 				data: {
 					createTask: task
 				}
@@ -201,7 +201,7 @@ export function mockUpdateTask(
 			}
 		},
 		result: vi.fn(
-			(): FetchResult<UpdateTaskMutation> => ({
+			(): ApolloLink.Result<UpdateTaskMutation> => ({
 				data: {
 					updateTask: task
 				}

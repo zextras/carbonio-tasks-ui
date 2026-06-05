@@ -142,6 +142,20 @@ describe('App view', () => {
 				<RemindersManager />
 			</>
 		);
+
+		// Flush, inside act, the async loading of the reminders performed on mount by
+		// RemindersManager: the lazy query resolution, the consequent cache write and
+		// the cache-change notifications of the cache-only useQuery (which in Apollo
+		// Client 4 are delivered asynchronously through useSyncExternalStore), plus the
+		// showReminderDebounced timer that opens the modal. Wrapping these in act keeps
+		// every RemindersManager state update from leaking outside act. This must be
+		// awaited right after the render, before any non-act wait (e.g. findByText),
+		// otherwise the cache notification fires during that wait, outside act.
+		async function flushRemindersLoad(): Promise<void> {
+			await act(async () => {
+				await vi.advanceTimersByTimeAsync(TIMERS.modal.delayOpen);
+			});
+		}
 		test('Show modal of reminders on load if there is at least one reminder to show', async () => {
 			const tasks = populateTaskList();
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
@@ -161,16 +175,13 @@ describe('App view', () => {
 				initialRouterEntries: [`/${TASKS_ROUTE}`]
 			});
 
+			await flushRemindersLoad();
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
-			act(() => {
-				// advance timers to make modal content visible
-				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
-			});
 			expect(
 				within(screen.getByTestId(TEST_ID_SELECTOR.modal)).getByText(tasks[0].title)
 			).toBeVisible();
@@ -196,6 +207,7 @@ describe('App view', () => {
 				initialRouterEntries: [`/${TASKS_ROUTE}`]
 			});
 
+			await flushRemindersLoad();
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -233,6 +245,7 @@ describe('App view', () => {
 				}
 			);
 
+			await flushRemindersLoad();
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -279,6 +292,7 @@ describe('App view', () => {
 				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
 			});
 
+			await flushRemindersLoad();
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -321,6 +335,7 @@ describe('App view', () => {
 			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
 				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[1].id}`]
 			});
+			await flushRemindersLoad();
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -370,6 +385,7 @@ describe('App view', () => {
 				}
 			);
 
+			await flushRemindersLoad();
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();

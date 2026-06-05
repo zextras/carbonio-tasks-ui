@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 import { Modal } from '@zextras/carbonio-design-system';
 import { getNotificationManager, updatePrimaryBadge } from '@zextras/carbonio-shell-ui';
 import { isAfter, isBefore, isToday, startOfDay } from 'date-fns';
