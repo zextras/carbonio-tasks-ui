@@ -26,7 +26,7 @@ import {
 	type UpdateTaskMutationVariables
 } from '../../gql/types';
 import server from '../../mocks/server';
-import { mockGetTask, mockUpdateTask, populateTask } from '../../mocks/utils';
+import { mockGetTask, mockUpdateTask, type PopulatedTask, populateTask } from '../../mocks/utils';
 import { setup } from '../../utils/testUtils';
 
 type GetTaskHandler = GraphQLResponseResolver<GetTaskQuery, GetTaskQueryVariables>;
@@ -87,8 +87,7 @@ describe('Edit task board', () => {
 				id: task.id,
 				title: newTitle
 			};
-			const updateTaskResult: Task = {
-				__typename: 'Task',
+			const updateTaskResult: PopulatedTask = {
 				...task,
 				title: updateTaskInput.title || ''
 			};
@@ -136,8 +135,7 @@ describe('Edit task board', () => {
 				id: task.id,
 				priority: Priority.Low
 			};
-			const updateTaskResult: Task = {
-				__typename: 'Task',
+			const updateTaskResult: PopulatedTask = {
 				...task,
 				priority: updateTaskInput.priority || Priority.Low
 			};
@@ -227,10 +225,9 @@ describe('Edit task board', () => {
 				id: task.id,
 				description: newDescription
 			};
-			const updateTaskResult: Task = {
-				__typename: 'Task',
+			const updateTaskResult: PopulatedTask = {
 				...task,
-				description: updateTaskInput.description
+				description: updateTaskInput.description ?? null
 			};
 			const updateTaskMock = mockUpdateTask(updateTaskInput, updateTaskResult);
 			const mocks = [getTaskMock, updateTaskMock];
@@ -334,8 +331,9 @@ describe('Edit task board', () => {
 								description: updateTask.description || task.description,
 								priority: updateTask.priority || task.priority,
 								createdAt: task.createdAt,
+								// Apollo needs `__typename` at runtime to normalize the result; v6 result types omit it.
 								__typename: 'Task'
-							}
+							} as UpdateTaskMutation['updateTask']
 						}
 					});
 				});
@@ -402,8 +400,9 @@ describe('Edit task board', () => {
 								description: updateTask.description || task.description,
 								priority: updateTask.priority || task.priority,
 								createdAt: task.createdAt,
+								// Apollo needs `__typename` at runtime to normalize the result; v6 result types omit it.
 								__typename: 'Task'
-							}
+							} as UpdateTaskMutation['updateTask']
 						}
 					});
 				});
@@ -471,8 +470,9 @@ describe('Edit task board', () => {
 								description: updateTask.description || task.description,
 								priority: updateTask.priority || task.priority,
 								createdAt: task.createdAt,
+								// Apollo needs `__typename` at runtime to normalize the result; v6 result types omit it.
 								__typename: 'Task'
-							}
+							} as UpdateTaskMutation['updateTask']
 						}
 					});
 				});
