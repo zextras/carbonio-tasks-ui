@@ -63,8 +63,8 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 beforeAll(() => {
-	global.apolloClient = buildClient();
+	globalThis.apolloClient = buildClient();
 });
-beforeEach(() => {
-	global.apolloClient.resetStore();
+beforeEach(async () => {
+	await globalThis.apolloClient.clearStore();
 });
