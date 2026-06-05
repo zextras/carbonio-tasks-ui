@@ -58,7 +58,7 @@
 		"@vitest/ui": "4.1.8",
 		"@zextras/carbonio-ui-configs": "2.1.0",
 		"@zextras/carbonio-ui-sdk": "2.3.6",
-		"dotenv": "16.6.1",
+		"dotenv": "17.4.2",
 		"eslint": "8.57.1",
 		"eslint-plugin-notice": "1.0.0",
 		"graphql-tag": "2.12.6",
