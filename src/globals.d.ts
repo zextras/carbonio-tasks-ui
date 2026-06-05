@@ -6,8 +6,8 @@
 
 /* eslint-disable no-var,vars-on-top */
 
-import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import type { ApolloClient } from '@apollo/client';
 
 declare global {
-	var apolloClient: ApolloClient<NormalizedCacheObject>;
+	var apolloClient: ApolloClient;
 }

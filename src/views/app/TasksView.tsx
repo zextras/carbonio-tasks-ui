@@ -6,7 +6,7 @@
 
 import React, { useMemo } from 'react';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { Container, Responsive } from '@zextras/carbonio-design-system';
 import { filter } from 'lodash';
 

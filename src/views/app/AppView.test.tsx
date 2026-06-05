@@ -142,6 +142,22 @@ describe('App view', () => {
 				<RemindersManager />
 			</>
 		);
+
+		// Render AppView together with RemindersManager and drain, inside act, the
+		// reminders loading it starts on mount: the lazy query, the cache-change
+		// notification Apollo Client 4 delivers asynchronously via useSyncExternalStore
+		// and the debounced modal open. Done before any non-act wait (e.g. findByText),
+		// so none of those RemindersManager state updates escapes act. Advancing by
+		// TIMERS.modal.delayOpen also lets the reminders modal finish opening.
+		async function setupRemindersView(
+			initialRouterEntries: Array<string>
+		): Promise<ReturnType<typeof setup>> {
+			const renderResult = setup(<AppViewWithRemindersManager />, { initialRouterEntries });
+			await act(async () => {
+				await vi.advanceTimersByTimeAsync(TIMERS.modal.delayOpen);
+			});
+			return renderResult;
+		}
 		test('Show modal of reminders on load if there is at least one reminder to show', async () => {
 			const tasks = populateTaskList();
 			tasks[0].reminderAt = faker.date.between({ from: startOfToday(), to: Date.now() }).getTime();
@@ -157,20 +173,13 @@ describe('App view', () => {
 				})
 			);
 
-			setup(<AppViewWithRemindersManager />, {
-				initialRouterEntries: [`/${TASKS_ROUTE}`]
-			});
-
+			await setupRemindersView([`/${TASKS_ROUTE}`]);
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
 			});
 			await waitFor(() => expect(findTasksRequest).toHaveBeenCalled());
 			await screen.findByText(/tasks reminders/i);
-			act(() => {
-				// advance timers to make modal content visible
-				vi.advanceTimersByTime(TIMERS.modal.delayOpen);
-			});
 			expect(
 				within(screen.getByTestId(TEST_ID_SELECTOR.modal)).getByText(tasks[0].title)
 			).toBeVisible();
@@ -192,10 +201,7 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
-				initialRouterEntries: [`/${TASKS_ROUTE}`]
-			});
-
+			const { getByRoleWithIcon, user } = await setupRemindersView([`/${TASKS_ROUTE}`]);
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -226,13 +232,9 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user, findByRoleWithIcon } = setup(
-				<AppViewWithRemindersManager />,
-				{
-					initialRouterEntries: [`/${TASKS_ROUTE}`]
-				}
-			);
-
+			const { getByRoleWithIcon, user, findByRoleWithIcon } = await setupRemindersView([
+				`/${TASKS_ROUTE}`
+			]);
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -275,10 +277,9 @@ describe('App view', () => {
 				)
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
-				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
-			});
-
+			const { getByRoleWithIcon, user } = await setupRemindersView([
+				`/${TASKS_ROUTE}/${tasks[0].id}`
+			]);
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -318,9 +319,9 @@ describe('App view', () => {
 				})
 			);
 
-			const { getByRoleWithIcon, user } = setup(<AppViewWithRemindersManager />, {
-				initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[1].id}`]
-			});
+			const { getByRoleWithIcon, user } = await setupRemindersView([
+				`/${TASKS_ROUTE}/${tasks[1].id}`
+			]);
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();
@@ -363,13 +364,9 @@ describe('App view', () => {
 				})
 			);
 
-			const { findByRoleWithIcon, getByRoleWithIcon, user } = setup(
-				<AppViewWithRemindersManager />,
-				{
-					initialRouterEntries: [`/${TASKS_ROUTE}/${tasks[0].id}`]
-				}
-			);
-
+			const { findByRoleWithIcon, getByRoleWithIcon, user } = await setupRemindersView([
+				`/${TASKS_ROUTE}/${tasks[0].id}`
+			]);
 			await screen.findByText(/all tasks/i);
 			await act(async () => {
 				await vi.advanceTimersToNextTimerAsync();

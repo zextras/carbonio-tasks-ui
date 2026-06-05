@@ -5,10 +5,18 @@
  */
 
 import '@testing-library/jest-dom/vitest';
+import { MockLink } from '@apollo/client/testing';
 import failOnConsole from 'vitest-fail-on-console';
 
 import buildClient from './apollo';
 import server from './mocks/server';
+
+// Apollo Client 4 makes MockLink use a random "realistic" delay (20-50ms) by default.
+// Restore the v3 behaviour of resolving mocks without delay so the existing tests,
+// which rely on synchronous resolution under fake timers, keep working.
+MockLink.defaultOptions = {
+	delay: 0
+};
 
 failOnConsole({
 	silenceMessage: (message) =>

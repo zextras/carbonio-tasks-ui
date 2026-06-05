@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo } from 'react';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { t, useBoard, useBoardHooks } from '@zextras/carbonio-shell-ui';
 import { trim } from 'lodash';
 

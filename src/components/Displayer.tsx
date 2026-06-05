@@ -6,12 +6,12 @@
 
 import React, { useMemo } from 'react';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { Container } from '@zextras/carbonio-design-system';
 
 import { EmptyDisplayer } from './EmptyDisplayer';
 import { TaskDisplayer } from './TaskDisplayer';
-import { GetTaskDocument } from '../gql/types';
+import { GetTaskDocument, type Task } from '../gql/types';
 import { useActiveItem } from '../hooks/useActiveItem';
 
 export interface DisplayerProps {
@@ -20,7 +20,7 @@ export interface DisplayerProps {
 
 export const Displayer = ({ translationKey }: DisplayerProps): React.JSX.Element => {
 	const { activeItem } = useActiveItem();
-	const { data } = useQuery(GetTaskDocument, {
+	const { data, previousData, error } = useQuery(GetTaskDocument, {
 		variables: {
 			taskId: activeItem
 		},
@@ -29,11 +29,17 @@ export const Displayer = ({ translationKey }: DisplayerProps): React.JSX.Element
 		errorPolicy: 'all'
 	});
 
+	// Apollo Client 4 sets data to undefined when a network error occurs (even with
+	// errorPolicy 'all'). Only in that case fall back to previousData, so the partial
+	// data already loaded from the cache stays visible. When there is no error (e.g.
+	// the displayer is closed and the query is skipped) data must stay empty.
+	const taskData = data?.getTask ?? (error ? previousData?.getTask : undefined);
+
 	const task = useMemo(
 		() =>
 			// since we are accepting partial data, check that at least the task has the id valued
-			(data?.getTask?.id && data.getTask) || undefined,
-		[data?.getTask]
+			(taskData?.id && (taskData as Task)) || undefined,
+		[taskData]
 	);
 
 	return (

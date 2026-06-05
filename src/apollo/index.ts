@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: AGPL-3.0-only
  */
 
-import { ApolloClient, HttpLink, InMemoryCache, type NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 
 import { typePolicies } from './typePolicies';
 import { GRAPHQL_ENDPOINT } from '../constants';
@@ -15,9 +15,9 @@ const cache = new InMemoryCache({
 	typePolicies
 });
 
-let apolloClient: ApolloClient<NormalizedCacheObject>;
+let apolloClient: ApolloClient;
 
-const buildClient: () => ApolloClient<NormalizedCacheObject> = () => {
+const buildClient: () => ApolloClient = () => {
 	const uri = process.env.NODE_ENV === 'test' ? 'http://localhost:9000' : '';
 	if (apolloClient == null) {
 		const httpLink = new HttpLink({
@@ -25,7 +25,7 @@ const buildClient: () => ApolloClient<NormalizedCacheObject> = () => {
 			credentials: 'same-origin'
 		});
 
-		apolloClient = new ApolloClient<NormalizedCacheObject>({
+		apolloClient = new ApolloClient({
 			cache,
 			devtools: { enabled: process.env.NODE_ENV !== 'production' },
 			link: httpLink

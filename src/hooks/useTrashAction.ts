@@ -6,13 +6,14 @@
 
 import { useCallback } from 'react';
 
-import { type FetchResult, type Reference, useMutation } from '@apollo/client';
+import { type Reference, type ApolloLink } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 import { useActiveItem } from './useActiveItem';
 import { removeTaskFromList } from '../apollo/cacheUtils';
 import { TrashTaskDocument, type TrashTaskMutation } from '../gql/types';
 
-type TrashActionFn = () => Promise<FetchResult<TrashTaskMutation>>;
+type TrashActionFn = () => Promise<ApolloLink.Result<TrashTaskMutation>>;
 
 export const useTrashAction = (taskId: string): TrashActionFn => {
 	const { removeActive, isActive } = useActiveItem();
