@@ -20,17 +20,19 @@ const handler: GraphQLResponseResolver<UpdateTaskMutation, UpdateTaskMutationVar
 	const { updateTask } = variables;
 	return HttpResponse.json({
 		data: {
+			// Apollo needs `__typename` at runtime to normalize the result into the cache; the
+			// operation result type no longer models it, so we add it back and cast.
 			updateTask: {
 				id: updateTask.id,
 				status: updateTask.status || Status.Open,
 				title: updateTask.title || '',
-				reminderAt: updateTask.reminderAt,
-				reminderAllDay: updateTask.reminderAllDay,
-				description: updateTask.description,
+				reminderAt: updateTask.reminderAt ?? null,
+				reminderAllDay: updateTask.reminderAllDay ?? null,
+				description: updateTask.description ?? null,
 				priority: updateTask.priority || Priority.Low,
 				createdAt: 1,
 				__typename: 'Task'
-			}
+			} as UpdateTaskMutation['updateTask']
 		}
 	});
 };

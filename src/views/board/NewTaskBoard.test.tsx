@@ -26,13 +26,13 @@ import {
 	Status,
 	type Task
 } from '../../gql/types';
-import { mockCreateTask, populateTaskList } from '../../mocks/utils';
+import { mockCreateTask, type PopulatedTask, populateTaskList } from '../../mocks/utils';
 import { setup } from '../../utils/testUtils';
 
 vi.mock('@zextras/carbonio-shell-ui');
 
 describe('New task board', () => {
-	function prepareCache(tasks: Task[] = []): void {
+	function prepareCache(tasks: PopulatedTask[] = []): void {
 		global.apolloClient.writeQuery<FindTasksQuery, FindTasksQueryVariables>({
 			query: FindTasksDocument,
 			data: {

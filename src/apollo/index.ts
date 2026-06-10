@@ -8,10 +8,8 @@ import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 
 import { typePolicies } from './typePolicies';
 import { GRAPHQL_ENDPOINT } from '../constants';
-import introspection from '../gql/possible-types';
 
 const cache = new InMemoryCache({
-	possibleTypes: introspection.possibleTypes,
 	typePolicies
 });
 
