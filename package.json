@@ -3,10 +3,10 @@
 	"version": "0.1.1",
 	"description": "Tasks module",
 	"main": "src/app.tsx",
-	"packageManager": "pnpm@10.32.1",
+	"packageManager": "pnpm@11.9.0",
 	"engines": {
 		"node": "v22",
-		"pnpm": ">=10"
+		"pnpm": ">=11.9.0"
 	},
 	"scripts": {
 		"bump-version": "semantic-release",
