@@ -1,3 +1,9 @@
+## [0.1.2](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.1...v0.1.2) (2026-08-25)
+
+### Bug Fixes
+
+* **ci:** run Docker build stages as root ([dd29132](https://github.com/zextras/carbonio-tasks-ui/commit/dd29132adaf0113cbaeedeb2810cc87a38abcf0c))
+
 ## <small>0.1.1 (2026-06-02)</small>
 
 * build: migrate to buildah (FQDN images + jenkins-lib-common@2.10.0) (#346) ([36a1b6d](https://github.com/zextras/carbonio-tasks-ui/commit/36a1b6d)), closes [#346](https://github.com/zextras/carbonio-tasks-ui/issues/346)
