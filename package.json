@@ -63,7 +63,7 @@
 		"@vitest/coverage-v8": "4.1.9",
 		"@vitest/ui": "4.1.9",
 		"@zextras/carbonio-ui-configs": "2.1.0",
-		"@zextras/carbonio-ui-sdk": "2.3.6",
+		"@zextras/carbonio-ui-sdk": "2.3.12",
 		"dotenv": "17.4.2",
 		"eslint": "8.57.1",
 		"eslint-plugin-notice": "1.0.0",
