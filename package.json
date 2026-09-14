@@ -112,6 +112,9 @@
 		"icon": "CheckmarkCircle2Outline"
 	},
 	"pnpm": {
+		"overrides": {
+			"conventional-changelog-conventionalcommits": "9.3.1"
+		},
 		"onlyBuiltDependencies": [
 			"core-js",
 			"esbuild",
