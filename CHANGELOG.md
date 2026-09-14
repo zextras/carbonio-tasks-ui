@@ -1,3 +1,16 @@
+## [0.1.3](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.2...v0.1.3) (2026-09-14)
+
+### Other changes
+
+* **deps:** update dependency @zextras/carbonio-ui-sdk to v2.3.12 ([#384](https://github.com/zextras/carbonio-tasks-ui/issues/384)) ([63250ab](https://github.com/zextras/carbonio-tasks-ui/commit/63250ab7649f2da7c70c5404adadd762eeb0ee60))
+* **deps:** update dependency zextras/jenkins-lib-common to v4.10.10 ([#398](https://github.com/zextras/carbonio-tasks-ui/issues/398)) ([a703f21](https://github.com/zextras/carbonio-tasks-ui/commit/a703f21684732deee3bb80427c58cb8835a251af))
+* **deps:** update dependency zextras/jenkins-lib-common to v4.10.2 ([#390](https://github.com/zextras/carbonio-tasks-ui/issues/390)) ([955f1d9](https://github.com/zextras/carbonio-tasks-ui/commit/955f1d9b5fe55307732e8341269726abce22f3bd))
+* **deps:** update dependency zextras/jenkins-lib-common to v4.10.5 ([#393](https://github.com/zextras/carbonio-tasks-ui/issues/393)) ([a10acf0](https://github.com/zextras/carbonio-tasks-ui/commit/a10acf035d9693d4e5b829fb817a2c628cdc6ea6))
+* **deps:** update dependency zextras/jenkins-lib-common to v4.10.7 ([#394](https://github.com/zextras/carbonio-tasks-ui/issues/394)) ([0c6bff4](https://github.com/zextras/carbonio-tasks-ui/commit/0c6bff4078225a544f428a5242bff66ca304d89e))
+* **deps:** update dependency zextras/jenkins-lib-common to v4.9.2 ([#389](https://github.com/zextras/carbonio-tasks-ui/issues/389)) ([38e8265](https://github.com/zextras/carbonio-tasks-ui/commit/38e8265df21039872636fbf73db1effa8435a9df))
+* **deps:** update sonarqube-scanner to 4.4.0 ([#396](https://github.com/zextras/carbonio-tasks-ui/issues/396)) ([4b45c06](https://github.com/zextras/carbonio-tasks-ui/commit/4b45c060eb21fbc8ddda4f764039d8a475200ac8))
+* **deps:** update sonarqube-scanner to 5.0.0 ([#399](https://github.com/zextras/carbonio-tasks-ui/issues/399)) ([eb972ed](https://github.com/zextras/carbonio-tasks-ui/commit/eb972ed36e5084131f518e0870e4784b22f20192))
+
 ## [0.1.2](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.1...v0.1.2) (2026-08-25)
 
 ### Bug Fixes
