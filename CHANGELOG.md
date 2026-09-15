@@ -1,3 +1,9 @@
+## [0.1.4](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.3...v0.1.4) (2026-09-15)
+
+### Bug Fixes
+
+* **deps:** update dependency @apollo/client to v4.2.12 ([#385](https://github.com/zextras/carbonio-tasks-ui/issues/385)) ([29ae571](https://github.com/zextras/carbonio-tasks-ui/commit/29ae57101670bd7a83e3c767643171b5a14e1563))
+
 ## [0.1.3](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.2...v0.1.3) (2026-09-14)
 
 ### Other changes
