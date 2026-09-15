@@ -1,3 +1,13 @@
+## [0.1.5](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.4...v0.1.5) (2026-09-15)
+
+### Bug Fixes
+
+* **deps:** update dependency react-router-dom to v6.30.6 [security] ([#395](https://github.com/zextras/carbonio-tasks-ui/issues/395)) ([9512f62](https://github.com/zextras/carbonio-tasks-ui/commit/9512f621ce7c0fccc3de1913cfa353137b2976a5))
+
+### Other changes
+
+* **deps:** update dependency vitest to v4.1.11 [security] ([#397](https://github.com/zextras/carbonio-tasks-ui/issues/397)) ([2ff0dec](https://github.com/zextras/carbonio-tasks-ui/commit/2ff0dec4cc880c98740ebc9958e4eb18659cbfd9))
+
 ## [0.1.4](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.3...v0.1.4) (2026-09-15)
 
 ### Bug Fixes
