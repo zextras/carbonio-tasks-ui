@@ -1,3 +1,9 @@
+## [0.1.20](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.19...v0.1.20) (2026-10-19)
+
+### Other changes
+
+* **deps:** update devdependencies (weekly) ([#419](https://github.com/zextras/carbonio-tasks-ui/issues/419)) ([bfde1aa](https://github.com/zextras/carbonio-tasks-ui/commit/bfde1aa67484f902c659d5cb0daaae87fb62a5c7))
+
 ## [0.1.19](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.18...v0.1.19) (2026-10-16)
 
 ### Other changes
