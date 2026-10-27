@@ -1,3 +1,10 @@
+## [0.1.24](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.23...v0.1.24) (2026-10-27)
+
+### Other changes
+
+* **deps:** lock file maintenance ([#427](https://github.com/zextras/carbonio-tasks-ui/issues/427)) ([fb9a1e0](https://github.com/zextras/carbonio-tasks-ui/commit/fb9a1e0662f2a8cae4a6f17a89f8bbeac09723fe))
+* **deps:** update dependency @types/lodash to v4.17.27 ([#426](https://github.com/zextras/carbonio-tasks-ui/issues/426)) ([3c262ad](https://github.com/zextras/carbonio-tasks-ui/commit/3c262ad3fabd4298f7faa2ee4b4da907b146df06))
+
 ## [0.1.23](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.22...v0.1.23) (2026-10-23)
 
 ### Other changes
