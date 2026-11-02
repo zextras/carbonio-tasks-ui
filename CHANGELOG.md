@@ -1,3 +1,9 @@
+## [0.1.25](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.24...v0.1.25) (2026-11-02)
+
+### Other changes
+
+* **deps:** lock file maintenance ([#428](https://github.com/zextras/carbonio-tasks-ui/issues/428)) ([3017388](https://github.com/zextras/carbonio-tasks-ui/commit/3017388a75a34676880fec8546449129cf11e986))
+
 ## [0.1.24](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.23...v0.1.24) (2026-10-27)
 
 ### Other changes
