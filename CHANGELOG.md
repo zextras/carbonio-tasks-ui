@@ -1,3 +1,34 @@
+## [0.1.26](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.25...v0.1.26) (2026-11-03)
+
+### Other changes
+
+* **deps:** update dependency zextras/jenkins-lib-common to v5.3.1 ([#429](https://github.com/zextras/carbonio-tasks-ui/issues/429)) ([021eeef](https://github.com/zextras/carbonio-tasks-ui/commit/021eeef6861f84c691d166656e631618d02e0d32))
+
+## [0.1.25](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.24...v0.1.25) (2026-11-02)
+
+### Other changes
+
+* **deps:** lock file maintenance ([#428](https://github.com/zextras/carbonio-tasks-ui/issues/428)) ([3017388](https://github.com/zextras/carbonio-tasks-ui/commit/3017388a75a34676880fec8546449129cf11e986))
+
+## [0.1.24](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.23...v0.1.24) (2026-10-27)
+
+### Other changes
+
+* **deps:** lock file maintenance ([#427](https://github.com/zextras/carbonio-tasks-ui/issues/427)) ([fb9a1e0](https://github.com/zextras/carbonio-tasks-ui/commit/fb9a1e0662f2a8cae4a6f17a89f8bbeac09723fe))
+* **deps:** update dependency @types/lodash to v4.17.27 ([#426](https://github.com/zextras/carbonio-tasks-ui/issues/426)) ([3c262ad](https://github.com/zextras/carbonio-tasks-ui/commit/3c262ad3fabd4298f7faa2ee4b4da907b146df06))
+
+## [0.1.23](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.22...v0.1.23) (2026-10-23)
+
+### Other changes
+
+* **deps:** update dependency zextras/jenkins-lib-common to v5.1.0 ([#425](https://github.com/zextras/carbonio-tasks-ui/issues/425)) ([c7a3491](https://github.com/zextras/carbonio-tasks-ui/commit/c7a3491eba0152427603dd5b3cba08cb9b9b26c0))
+
+## [0.1.22](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.21...v0.1.22) (2026-10-21)
+
+### Other changes
+
+* **deps:** update dependency zextras/jenkins-lib-common to v5 ([b5fc28b](https://github.com/zextras/carbonio-tasks-ui/commit/b5fc28b6ecdd4cf1624c145c0b6655fdcfabcdfa))
+
 ## [0.1.21](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.20...v0.1.21) (2026-10-20)
 
 ### Other changes
