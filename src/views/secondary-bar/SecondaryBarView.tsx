@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 function buildCollapsedItem(item: AccordionItemType): React.JSX.Element[] {
 	const element = (
-		<Tooltip label={item.label}>
+		<Tooltip key={item.id} label={item.label}>
 			<Button
 				size={'extralarge'}
 				icon={item.icon ?? ''}
@@ -52,15 +52,9 @@ const SecondaryBarView = ({ expanded }: { expanded: boolean }): React.JSX.Elemen
 						id: 'id2',
 						icon: 'CheckmarkCircle2Outline',
 						label: t('secondaryBar.allTasks', 'All Tasks'),
-						onClick: (ev): void => {
-							ev.stopPropagation();
-						},
 						active: true
 					}
-				],
-				onClick: (ev: React.SyntheticEvent | KeyboardEvent): void => {
-					ev.stopPropagation();
-				}
+				]
 			}
 		],
 		[name, t]
