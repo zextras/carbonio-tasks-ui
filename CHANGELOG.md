@@ -1,3 +1,9 @@
+## [0.1.27](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.26...v0.1.27) (2026-11-06)
+
+### Other changes
+
+* remove obsolete stopPropagation from secondary bar items ([321124b](https://github.com/zextras/carbonio-tasks-ui/commit/321124b643cc5247cb1e5fb970d44ba3b5ee5b2c)), closes [#424](https://github.com/zextras/carbonio-tasks-ui/issues/424)
+
 ## [0.1.26](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.25...v0.1.26) (2026-11-03)
 
 ### Other changes
