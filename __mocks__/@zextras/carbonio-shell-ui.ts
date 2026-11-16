@@ -16,10 +16,12 @@ export const ACTION_TYPES = {
 	NEW: 'new'
 };
 
-export const useBoardHooks = (): shell.BoardHooksContext => ({
+// stable reference, so that the tests can assert on the calls
+const boardHooks: shell.BoardHooksContext = {
 	closeBoard: noop,
 	updateBoard: noop,
 	setCurrentBoard: noop,
+	setContentStatus: vi.fn(),
 	getBoardContext: <T>(): T => {
 		// implement the mock when required, for now leave it unimplemented
 		throw new Error('not implemented');
@@ -28,7 +30,9 @@ export const useBoardHooks = (): shell.BoardHooksContext => ({
 		// implement the mock when required, for now leave it unimplemented
 		throw new Error('not implemented');
 	}
-});
+};
+
+export const useBoardHooks = (): shell.BoardHooksContext => boardHooks;
 
 // eslint-disable-next-line arrow-body-style
 export const useBoard: <T>() => shell.Board<T> = () => {

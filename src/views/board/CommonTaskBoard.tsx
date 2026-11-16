@@ -154,7 +154,7 @@ export const CommonTaskBoard = ({
 	confirmLabel,
 	defaultBoardTabTitle
 }: CommonTaskBoardProps): React.JSX.Element => {
-	const { updateBoard } = useBoardHooks();
+	const { updateBoard, setContentStatus } = useBoardHooks();
 	useEffect(() => {
 		if (initialTitle) {
 			updateBoard({ title: initialTitle });
@@ -232,6 +232,35 @@ export const CommonTaskBoard = ({
 	const onChangeDescription = useCallback<NonNullable<TextAreaProps['onChange']>>((event) => {
 		setDescriptionValue(event.currentTarget.value);
 	}, []);
+
+	// Snapshot of the values the form has been initialized with, the same ones used by the states above.
+	// The props can change after the first render (e.g. the task is updated in the cache, or the initial
+	// date is a new Date created on each render of the parent), while the states keep the initial values.
+	const [initialValues] = useState(() => ({
+		title: initialTitle,
+		priority: initialPriority,
+		description: initialDescription,
+		enableReminder: initialEnableReminder,
+		isAllDay: initialIsAllDay,
+		dateTime: initialDate.getTime()
+	}));
+
+	const isDirty = useMemo(
+		() =>
+			titleValue !== initialValues.title ||
+			selectedPriority !== initialValues.priority ||
+			descriptionValue !== initialValues.description ||
+			enableReminder !== initialValues.enableReminder ||
+			(enableReminder &&
+				(isAllDay !== initialValues.isAllDay || date?.getTime() !== initialValues.dateTime)),
+		[date, descriptionValue, enableReminder, initialValues, isAllDay, selectedPriority, titleValue]
+	);
+
+	useEffect(() => {
+		// the shell asks for the confirmation on close: tell it whether the board has unsaved changes.
+		// It is optional because the shell may not provide it (e.g. an older shell)
+		setContentStatus?.(isDirty ? 'dirty' : 'pristine');
+	}, [setContentStatus, isDirty]);
 
 	const isConfirmDisabled = useMemo(
 		() =>

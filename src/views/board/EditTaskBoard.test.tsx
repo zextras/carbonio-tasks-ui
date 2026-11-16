@@ -513,4 +513,52 @@ describe('Edit task board', () => {
 			});
 		});
 	});
+
+	describe('Content status', () => {
+		beforeEach(() => {
+			vi.mocked(shell.useBoardHooks().setContentStatus!).mockClear();
+		});
+
+		test('The board is pristine when opened and dirty only after a change', async () => {
+			const task = populateTask({ title: 'previous title' });
+			spyUseBoard(task.id);
+			const mocks = [mockGetTask({ taskId: task.id }, task)];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+			expect(shell.useBoardHooks().setContentStatus).not.toHaveBeenCalledWith('dirty');
+
+			await user.type(screen.getByRole('textbox', { name: /title/i }), 'a');
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+		});
+
+		test.each([true, false])(
+			'The board is pristine when opened on a task with a reminder (all day: %s)',
+			async (reminderAllDay) => {
+				const task = populateTask({ reminderAt: new Date().getTime(), reminderAllDay });
+				spyUseBoard(task.id);
+				const mocks = [mockGetTask({ taskId: task.id }, task)];
+				setup(<EditTaskBoard />, { mocks });
+				await awaitEditBoardRender();
+
+				expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+				expect(shell.useBoardHooks().setContentStatus).not.toHaveBeenCalledWith('dirty');
+			}
+		);
+
+		test('The board is pristine again when the changes are reverted', async () => {
+			const task = populateTask({ title: 'previous title' });
+			spyUseBoard(task.id);
+			const mocks = [mockGetTask({ taskId: task.id }, task)];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+			const titleInput = screen.getByRole('textbox', { name: /title/i });
+
+			await user.type(titleInput, 'a');
+			await user.type(titleInput, '{Backspace}');
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
+	});
 });
