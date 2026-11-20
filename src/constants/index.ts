@@ -6,6 +6,8 @@
 
 export const TASKS_APP_ID = 'carbonio-tasks-ui';
 export const TASKS_ROUTE = 'tasks';
+export const TASK_BOARD_ICON = 'CheckmarkCircle2Outline';
+export const TASK_DIRTY_BOARD_ICON = 'CheckmarkCircle2EditingOutline';
 
 // endpoint
 // keep endpoint without trailing slash

@@ -8,6 +8,7 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen, waitFor } from '@testing-library/react';
+import * as shell from '@zextras/carbonio-shell-ui';
 import { subMonths, addMonths, format, getDate, subDays } from 'date-fns';
 
 import NewTaskBoard from './NewTaskBoard';
@@ -732,6 +733,85 @@ describe('New task board', () => {
 			const result = readQueryFindTasks();
 			expect(result?.findTasks[0]?.reminderAllDay).toBe(newTaskInput.reminderAllDay);
 			expect(result?.findTasks[0]?.reminderAt).toBe(newTaskInput.reminderAt);
+		});
+	});
+
+	describe('Content status', () => {
+		beforeEach(() => {
+			vi.mocked(shell.useBoardHooks().setContentStatus!).mockClear();
+		});
+
+		test('The board is pristine when opened', () => {
+			prepareCache();
+
+			setup(<NewTaskBoard />, { mocks: [] });
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+			expect(shell.useBoardHooks().setContentStatus).not.toHaveBeenCalledWith('dirty');
+		});
+
+		test('The board is dirty when the title is typed and pristine again when it is cleared', async () => {
+			prepareCache();
+			const { user } = setup(<NewTaskBoard />, { mocks: [] });
+			const titleInput = screen.getByRole('textbox', { name: /title/i });
+
+			await user.type(titleInput, 'a');
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+			await user.clear(titleInput);
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
+
+		test('The board is dirty when the description is typed', async () => {
+			prepareCache();
+			const { user } = setup(<NewTaskBoard />, { mocks: [] });
+
+			await user.type(screen.getByRole('textbox', { name: /task description/i }), 'a');
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+		});
+
+		test('The board is dirty when the priority is changed', async () => {
+			prepareCache();
+			const { user } = setup(<NewTaskBoard />, { mocks: [] });
+
+			await user.click(screen.getByText('Priority'));
+			await user.click(screen.getByText('High'));
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+		});
+
+		test('The board is pristine again when the reminder is enabled and then disabled', async () => {
+			prepareCache();
+			const { user } = setup(<NewTaskBoard />, { mocks: [] });
+
+			await user.click(screen.getByText(/enable reminder/i));
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOn));
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
+
+		test('The board is pristine again when the reminder is disabled after changing the all day checkbox', async () => {
+			prepareCache();
+			const { user } = setup(<NewTaskBoard />, { mocks: [] });
+
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+			await user.click(screen.getByText(/Remind me at every login throughout the day/i));
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+			// disabling the reminder discards the reminder changes
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOn));
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
+
+		test('The board is dirty when the reminder is enabled', async () => {
+			prepareCache();
+			const { user } = setup(<NewTaskBoard />, { mocks: [] });
+
+			await user.click(screen.getByText(/enable reminder/i));
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
 		});
 	});
 });
