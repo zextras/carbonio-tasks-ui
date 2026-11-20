@@ -560,5 +560,66 @@ describe('Edit task board', () => {
 
 			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
 		});
+
+		test('The board is dirty when the all day checkbox is changed on a task with a reminder', async () => {
+			const task = populateTask({ reminderAt: faker.date.soon().getTime(), reminderAllDay: false });
+			spyUseBoard(task.id);
+			const mocks = [mockGetTask({ taskId: task.id }, task)];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			await user.click(screen.getByText(checkboxLabelText));
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+			await user.click(screen.getByText(checkboxLabelText));
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
+
+		test('The board is dirty when the date is changed on a task with a reminder', async () => {
+			const task = populateTask({ reminderAt: new Date().getTime(), reminderAllDay: false });
+			spyUseBoard(task.id);
+			const mocks = [mockGetTask({ taskId: task.id }, task)];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			await user.click(screen.getByTestId('icon: CalendarOutline'));
+			await user.click(await screen.findByRole('button', { name: /next month/i }));
+			await user.click(screen.getAllByText('1')[0]);
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+		});
+
+		test('The board is pristine when the reminder is disabled and enabled again after the task is updated in the cache', async () => {
+			const task = populateTask({ reminderAt: faker.date.soon().getTime(), reminderAllDay: false });
+			spyUseBoard(task.id);
+			const mocks = [mockGetTask({ taskId: task.id }, task)];
+			const { user } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+
+			act(() => {
+				global.apolloClient.cache.modify({
+					id: global.apolloClient.cache.identify(task),
+					fields: { reminderAt: (reminderAt: number) => reminderAt + 60 * 60 * 1000 }
+				});
+			});
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOn));
+			await user.click(screen.getByTestId(ICON_REGEXP.switchOff));
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
+
+		test('The board is pristine when the form is unmounted with unsaved changes', async () => {
+			const task = populateTask({ title: 'previous title' });
+			spyUseBoard(task.id);
+			const mocks = [mockGetTask({ taskId: task.id }, task)];
+			const { user, unmount } = setup(<EditTaskBoard />, { mocks });
+			await awaitEditBoardRender();
+			await user.type(screen.getByRole('textbox', { name: /title/i }), 'a');
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('dirty');
+
+			unmount();
+
+			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
+		});
 	});
 });

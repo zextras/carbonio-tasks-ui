@@ -792,7 +792,7 @@ describe('New task board', () => {
 			expect(shell.useBoardHooks().setContentStatus).toHaveBeenLastCalledWith('pristine');
 		});
 
-		test('The board is dirty when the all day checkbox is changed with the reminder enabled', async () => {
+		test('The board is pristine again when the reminder is disabled after changing the all day checkbox', async () => {
 			prepareCache();
 			const { user } = setup(<NewTaskBoard />, { mocks: [] });
 

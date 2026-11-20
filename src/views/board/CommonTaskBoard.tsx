@@ -203,37 +203,7 @@ export const CommonTaskBoard = ({
 		setDate(newDateValue);
 	}, []);
 
-	const onClickEnableReminder = useCallback<NonNullable<SwitchProps['onClick']>>(
-		() =>
-			setEnableReminder((prevState) => {
-				if (prevState) {
-					setDate(initialDate);
-				}
-				return !prevState;
-			}),
-		[initialDate]
-	);
-
-	const [isAllDay, setIsAllDay] = useState(initialIsAllDay);
-
-	const onClickAllDayCheckbox = useCallback<NonNullable<CheckboxProps['onClick']>>(
-		() =>
-			setIsAllDay((prevState) => {
-				if (!prevState && date === null) {
-					setDate(initialDate);
-				}
-				return !prevState;
-			}),
-		[date, initialDate]
-	);
-
-	const [descriptionValue, setDescriptionValue] = useState(initialDescription);
-
-	const onChangeDescription = useCallback<NonNullable<TextAreaProps['onChange']>>((event) => {
-		setDescriptionValue(event.currentTarget.value);
-	}, []);
-
-	// Snapshot of the values the form has been initialized with, the same ones used by the states above.
+	// Snapshot of the values the form has been initialized with, the same ones used by the form states.
 	// The props can change after the first render (e.g. the task is updated in the cache, or the initial
 	// date is a new Date created on each render of the parent), while the states keep the initial values.
 	const [initialValues] = useState(() => ({
@@ -244,6 +214,36 @@ export const CommonTaskBoard = ({
 		isAllDay: initialIsAllDay,
 		dateTime: initialDate.getTime()
 	}));
+
+	const onClickEnableReminder = useCallback<NonNullable<SwitchProps['onClick']>>(
+		() =>
+			setEnableReminder((prevState) => {
+				if (prevState) {
+					setDate(new Date(initialValues.dateTime));
+				}
+				return !prevState;
+			}),
+		[initialValues]
+	);
+
+	const [isAllDay, setIsAllDay] = useState(initialIsAllDay);
+
+	const onClickAllDayCheckbox = useCallback<NonNullable<CheckboxProps['onClick']>>(
+		() =>
+			setIsAllDay((prevState) => {
+				if (!prevState && date === null) {
+					setDate(new Date(initialValues.dateTime));
+				}
+				return !prevState;
+			}),
+		[date, initialValues]
+	);
+
+	const [descriptionValue, setDescriptionValue] = useState(initialDescription);
+
+	const onChangeDescription = useCallback<NonNullable<TextAreaProps['onChange']>>((event) => {
+		setDescriptionValue(event.currentTarget.value);
+	}, []);
 
 	const isDirty = useMemo(
 		() =>
@@ -261,6 +261,13 @@ export const CommonTaskBoard = ({
 		// It is optional because the shell may not provide it (e.g. an older shell)
 		setContentStatus?.(isDirty ? 'dirty' : 'pristine');
 	}, [setContentStatus, isDirty]);
+
+	useEffect(
+		// the board can stay open without the form (e.g. the edit board while the task is missing):
+		// do not leave it marked as dirty
+		() => (): void => setContentStatus?.('pristine'),
+		[setContentStatus]
+	);
 
 	const isConfirmDisabled = useMemo(
 		() =>
