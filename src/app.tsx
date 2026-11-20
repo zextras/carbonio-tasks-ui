@@ -108,7 +108,7 @@ export const AuthenticatedApp = (): React.JSX.Element => {
 		(): NewAction => ({
 			id: 'new-task',
 			label: t('label.new', 'New Task'),
-			icon: 'CheckmarkCircle2Outline',
+			icon: TASK_BOARD_ICON,
 			execute: (): void => {
 				addBoard({
 					boardViewId: `${TASKS_ROUTE}/new`,

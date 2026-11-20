@@ -49,6 +49,14 @@ export const getBoardById: typeof shell.getBoardById = () => undefined;
 
 export const closeBoard: typeof shell.closeBoard = () => undefined;
 
+export const addBoard: typeof shell.addBoard = (board) => ({
+	id: board.id ?? '',
+	boardViewId: board.boardViewId,
+	title: board.title,
+	icon: board.icon ?? '',
+	app: ''
+});
+
 export const t = (key: string, defaultValue?: string | TOptions): string => {
 	if (typeof defaultValue === 'string') {
 		return defaultValue;
