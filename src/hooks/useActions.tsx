@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useCompleteAction } from './useCompleteAction';
 import { useReopenAction } from './useReopenAction';
 import { useTrashAction } from './useTrashAction';
-import { TASKS_ROUTE } from '../constants';
+import { TASK_BOARD_ICON, TASK_DIRTY_BOARD_ICON, TASKS_ROUTE } from '../constants';
 import { Status, type Task } from '../gql/types';
 
 function getSnackbarTitle(title: string): string {
@@ -122,6 +122,8 @@ export const useActions = (task: Pick<Task, 'id' | 'title' | 'status'>): Action[
 				id: `edit-task-${task.id}`,
 				boardViewId: `${TASKS_ROUTE}/edit`,
 				title: t('board.editTask.title', 'Edit Task'),
+				icon: TASK_BOARD_ICON,
+				dirtyIcon: TASK_DIRTY_BOARD_ICON,
 				context: { taskId: task.id }
 			});
 		}

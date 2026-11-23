@@ -7,8 +7,10 @@ import React from 'react';
 
 import { faker } from '@faker-js/faker';
 import { screen } from '@testing-library/react';
+import * as shell from '@zextras/carbonio-shell-ui';
 
 import { TaskDisplayer } from './TaskDisplayer';
+import { TASK_BOARD_ICON, TASK_DIRTY_BOARD_ICON, TASKS_ROUTE } from '../constants';
 import { ICON_REGEXP } from '../constants/tests';
 import { Status } from '../gql/types';
 import { populateTask } from '../mocks/utils';
@@ -90,6 +92,22 @@ describe('Task displayer', () => {
 				setup(<TaskDisplayer task={task} />);
 				expect(screen.getByRole('button', { name: /edit/i })).toBeVisible();
 				expect(screen.getByRole('button', { name: /edit/i })).toBeEnabled();
+			});
+			test('Edit action opens the edit board with the task icon and the dirty icon', async () => {
+				const addBoardMock = vi.spyOn(shell, 'addBoard');
+				const task = populateTask();
+				const { user } = setup(<TaskDisplayer task={task} />);
+
+				await user.click(screen.getByRole('button', { name: /edit/i }));
+
+				expect(addBoardMock).toHaveBeenCalledWith(
+					expect.objectContaining({
+						id: `edit-task-${task.id}`,
+						boardViewId: `${TASKS_ROUTE}/edit`,
+						icon: TASK_BOARD_ICON,
+						dirtyIcon: TASK_DIRTY_BOARD_ICON
+					})
+				);
 			});
 		});
 
