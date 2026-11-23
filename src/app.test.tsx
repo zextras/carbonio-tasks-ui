@@ -9,7 +9,7 @@ import React from 'react';
 import * as shell from '@zextras/carbonio-shell-ui';
 
 import App from './app';
-import { TASKS_APP_ID, TASKS_ROUTE } from './constants';
+import { TASK_BOARD_ICON, TASK_DIRTY_BOARD_ICON, TASKS_APP_ID, TASKS_ROUTE } from './constants';
 import { setup } from './utils/testUtils';
 import { ACTION_TYPES } from '../__mocks__/@zextras/carbonio-shell-ui';
 
@@ -59,6 +59,25 @@ describe('App', () => {
 					id: 'new-task',
 					type: ACTION_TYPES.NEW,
 					action: expect.anything()
+				})
+			);
+		});
+
+		it('should open the new task board with the task icon and the dirty icon', () => {
+			const registerActionsMock = vi.spyOn(shell, 'registerActions');
+			const addBoardMock = vi.spyOn(shell, 'addBoard');
+			setup(<App />);
+			const newTaskAction = registerActionsMock.mock.calls
+				.flat()
+				.find((item) => item.id === 'new-task');
+
+			newTaskAction?.action(undefined).execute();
+
+			expect(addBoardMock).toHaveBeenCalledWith(
+				expect.objectContaining({
+					boardViewId: `${TASKS_ROUTE}/new`,
+					icon: TASK_BOARD_ICON,
+					dirtyIcon: TASK_DIRTY_BOARD_ICON
 				})
 			);
 		});
