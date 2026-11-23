@@ -1,3 +1,9 @@
+## [0.2.0](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.31...v0.2.0) (2026-11-23)
+
+### Features
+
+* **board:** notify the shell of the board content status [CO-4698] ([#436](https://github.com/zextras/carbonio-tasks-ui/issues/436)) ([c823046](https://github.com/zextras/carbonio-tasks-ui/commit/c823046a1b7b2d42f33c41adc54ca50cbcf07cb7))
+
 ## [0.1.31](https://github.com/zextras/carbonio-tasks-ui/compare/v0.1.30...v0.1.31) (2026-11-18)
 
 ### Other changes
