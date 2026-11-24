@@ -1,3 +1,10 @@
+## [0.2.2](https://github.com/zextras/carbonio-tasks-ui/compare/v0.2.1...v0.2.2) (2026-11-24)
+
+### Other changes
+
+* **deps:** update dependency @testing-library/user-event to v14.6.13 ([#437](https://github.com/zextras/carbonio-tasks-ui/issues/437)) ([c225d6e](https://github.com/zextras/carbonio-tasks-ui/commit/c225d6e85f284cf10dca66f745ec216aabcf2852))
+* **deps:** weekly update dependencies (2026-11-24) ([#440](https://github.com/zextras/carbonio-tasks-ui/issues/440)) ([dc5a70c](https://github.com/zextras/carbonio-tasks-ui/commit/dc5a70cb85694f619d16a12ed7210b1163dad92e))
+
 ## [0.2.1](https://github.com/zextras/carbonio-tasks-ui/compare/v0.2.0...v0.2.1) (2026-11-24)
 
 ### Other changes
