@@ -83,13 +83,11 @@ export function mockGetTask(
 			query: GetTaskDocument,
 			variables
 		},
-		result: vi.fn(
-			(): ApolloLink.Result<GetTaskQuery> => ({
-				data: {
-					getTask: task
-				}
-			})
-		),
+		result: vi.fn((): ApolloLink.Result<GetTaskQuery> => ({
+			data: {
+				getTask: task
+			}
+		})),
 		error
 	};
 }
@@ -104,13 +102,11 @@ export function mockFindTasks(
 			query: FindTasksDocument,
 			variables
 		},
-		result: vi.fn(
-			(): ApolloLink.Result<FindTasksQuery> => ({
-				data: {
-					findTasks: tasks
-				}
-			})
-		),
+		result: vi.fn((): ApolloLink.Result<FindTasksQuery> => ({
+			data: {
+				findTasks: tasks
+			}
+		})),
 		error
 	};
 }
@@ -124,13 +120,11 @@ export function mockUpdateTaskStatus(
 			query: UpdateTaskStatusDocument,
 			variables
 		},
-		result: vi.fn(
-			(): ApolloLink.Result<UpdateTaskStatusMutation> => ({
-				data: {
-					updateTask
-				}
-			})
-		)
+		result: vi.fn((): ApolloLink.Result<UpdateTaskStatusMutation> => ({
+			data: {
+				updateTask
+			}
+		}))
 	};
 }
 
@@ -143,13 +137,11 @@ export function mockTrashTask(
 			query: TrashTaskDocument,
 			variables
 		},
-		result: vi.fn(
-			(): ApolloLink.Result<TrashTaskMutation> => ({
-				data: {
-					trashTask
-				}
-			})
-		)
+		result: vi.fn((): ApolloLink.Result<TrashTaskMutation> => ({
+			data: {
+				trashTask
+			}
+		}))
 	};
 }
 
@@ -171,13 +163,11 @@ export function mockCreateTask(
 				}
 			}
 		},
-		result: vi.fn(
-			(): ApolloLink.Result<CreateTaskMutation> => ({
-				data: {
-					createTask: task
-				}
-			})
-		)
+		result: vi.fn((): ApolloLink.Result<CreateTaskMutation> => ({
+			data: {
+				createTask: task
+			}
+		}))
 	};
 }
 
@@ -200,12 +190,10 @@ export function mockUpdateTask(
 				}
 			}
 		},
-		result: vi.fn(
-			(): ApolloLink.Result<UpdateTaskMutation> => ({
-				data: {
-					updateTask: task
-				}
-			})
-		)
+		result: vi.fn((): ApolloLink.Result<UpdateTaskMutation> => ({
+			data: {
+				updateTask: task
+			}
+		}))
 	};
 }

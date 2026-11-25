@@ -49,7 +49,7 @@ export const useRandomPlaceholder = <TReturnType extends string | object>(
 	useEffect(() => {
 		updateRandomPlaceholderDebounced(placeholders);
 
-		return () => {
+		return (): void => {
 			updateRandomPlaceholderDebounced.cancel();
 		};
 	}, [placeholders, updateRandomPlaceholderDebounced]);
