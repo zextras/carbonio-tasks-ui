@@ -514,7 +514,7 @@ export const RemindersManager = (): React.JSX.Element => {
 	}, []);
 
 	const completeTaskHandler = useCallback(
-		(task: Pick<Task, 'id'>) => (): ReturnType<typeof updateTaskStatus> =>
+		(task: Pick<Task, 'id'>) => (): void => {
 			updateTaskStatus({
 				variables: {
 					id: task.id,
@@ -526,12 +526,13 @@ export const RemindersManager = (): React.JSX.Element => {
 						status: Status.Complete
 					}
 				}
-			}),
+			});
+		},
 		[updateTaskStatus]
 	);
 
 	const updateTaskToOpen = useCallback(
-		(task: Pick<Task, 'id'>) => (): ReturnType<typeof updateTaskStatus> =>
+		(task: Pick<Task, 'id'>) => (): void => {
 			updateTaskStatus({
 				variables: {
 					id: task.id,
@@ -543,7 +544,8 @@ export const RemindersManager = (): React.JSX.Element => {
 						status: Status.Open
 					}
 				}
-			}),
+			});
+		},
 		[updateTaskStatus]
 	);
 
