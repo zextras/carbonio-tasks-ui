@@ -1,3 +1,9 @@
+## [0.2.3](https://github.com/zextras/carbonio-tasks-ui/compare/v0.2.2...v0.2.3) (2026-11-26)
+
+### Other changes
+
+* **deps:** update dependency zextras/jenkins-lib-common to v5.5.4 ([#442](https://github.com/zextras/carbonio-tasks-ui/issues/442)) ([da080f6](https://github.com/zextras/carbonio-tasks-ui/commit/da080f64e7b4c65796d06573434eaf15f1bffbb0))
+
 ## [0.2.2](https://github.com/zextras/carbonio-tasks-ui/compare/v0.2.1...v0.2.2) (2026-11-24)
 
 ### Other changes
