@@ -1,3 +1,9 @@
+## [0.2.4](https://github.com/zextras/carbonio-tasks-ui/compare/v0.2.3...v0.2.4) (2026-11-26)
+
+### Other changes
+
+* **deps-dev:** migrate to @zextras/carbonio-ui-configs 3.x ([#444](https://github.com/zextras/carbonio-tasks-ui/issues/444)) ([54e98fd](https://github.com/zextras/carbonio-tasks-ui/commit/54e98fde9b17949f6f9ed25a92a3235135b21269))
+
 ## [0.2.3](https://github.com/zextras/carbonio-tasks-ui/compare/v0.2.2...v0.2.3) (2026-11-26)
 
 ### Other changes
